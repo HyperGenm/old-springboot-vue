@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.pc.system.controller;
 
-import com.weiziplus.springboot.pc.system.service.SysUserService;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.pc.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;

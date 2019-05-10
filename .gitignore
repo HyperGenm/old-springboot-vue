@@ -25,3 +25,7 @@ hs_err_pid*
 #设置忽略文件
 *.imi
 *.idea
+
+#设置忽略文件夹
+target/
+node_modules/

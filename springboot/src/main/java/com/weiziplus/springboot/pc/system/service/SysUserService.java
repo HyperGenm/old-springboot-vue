@@ -1,8 +1,6 @@
 package com.weiziplus.springboot.pc.system.service;
 
 import com.github.pagehelper.PageHelper;
-import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
-import com.weiziplus.springboot.pc.system.mapper.SysUserRoleMapper;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.utils.Md5Util;
@@ -10,6 +8,8 @@ import com.weiziplus.springboot.common.utils.PageBean;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.common.utils.ValidateUtil;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
+import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
+import com.weiziplus.springboot.pc.system.mapper.SysUserRoleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
