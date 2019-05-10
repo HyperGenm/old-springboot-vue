@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 设置MyBatis全局变量 -->
+    <properties>
+        <!--文件存放域名前缀-->
+        <property name="filePathPrefix" value="http://localhost:8888/"/>
+    </properties>
+    <settings>
+        <!--返回类型为Map时，null也返回-->
+        <setting name="callSettersOnNulls" value="true"/>
+        <!--开启驼峰命名-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+</configuration>

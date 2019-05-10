@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper">
+    <select id="getMinParentIdMenuFunInfoByRoleId" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.type = 0 AND sf.id = srf.function_id
+        ORDER BY sf.parent_id ASC
+        LIMIT 1
+    </select>
+    <select id="getMenuListByRoleIdAndParentId" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.parent_id = #{parentId} AND sf.type = 0 AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+    <select id="getButtonListByRoleId" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT sf.id,sf.name
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.type = 1 AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+    <select id="getMinParentIdFunInfo" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT *
+        FROM sys_function
+        ORDER BY parent_id ASC
+        LIMIT 1
+    </select>
+    <select id="getFunListByParentId" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT *
+        FROM sys_function
+        WHERE parent_id = #{parentId}
+        ORDER BY sort ASC
+    </select>
+    <select id="getFunInfoByName" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT *
+        FROM sys_function
+        WHERE name = #{name}
+        LIMIT 1
+    </select>
+    <insert id="addFunction">
+        INSERT INTO
+        sys_function
+        (parent_id, name, title, type, icon, sort, description, create_time)
+        VALUES
+        (#{parentId},#{name},#{title},#{type},#{icon},#{sort},#{description},now())
+    </insert>
+    <update id="updateFunction">
+        UPDATE sys_function
+        SET
+        <if test="null != title and '' != title">
+            title = #{title},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != icon and '' != icon">
+            icon = #{icon},
+        </if>
+        <if test="null != sort">
+            sort = #{sort},
+        </if>
+        description = #{description}
+        WHERE
+        id = #{id}
+    </update>
+    <delete id="deleteFunctionByIds" parameterType="Long[]">
+        DELETE FROM sys_function
+        WHERE
+        id IN
+        <foreach collection="ids" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="getFunListByRoleId" resultType="com.weiziplus.springboot.common.models.SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+</mapper>

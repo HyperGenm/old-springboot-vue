@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.pc.system.mapper.SysUserMapper">
+    <select id="getInfoByUsername" resultType="com.weiziplus.springboot.common.models.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE username = #{username}
+        limit 1
+    </select>
+    <select id="getUserList" resultType="java.util.Map">
+        SELECT su.id,su.username,su.allow_login AS allowLogin,su.last_active_time AS lastActiveTime,
+        su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName
+        FROM sys_user su
+        LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+        LEFT JOIN sys_role sr ON sur.role_id = sr.id
+        <where>
+            <if test="null != userName and '' != userName">
+                position(#{userName} IN su.username)
+            </if>
+            <if test="null != allowLogin">
+                AND su.allow_login = #{allowLogin}
+            </if>
+            <if test="null != createTime and '' != createTime">
+                AND su.create_time LIKE concat(#{createTime},'%')
+            </if>
+        </where>
+        ORDER BY su.create_time ASC
+    </select>
+    <select id="getUserInfoByName" resultType="com.weiziplus.springboot.common.models.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE username = #{userName}
+        LIMIT 1
+    </select>
+    <insert id="addUser">
+        INSERT INTO sys_user
+        (username, password, real_name, allow_login, create_time)
+        VALUES
+        (#{username},#{password},#{realName},#{allowLogin},now())
+    </insert>
+    <update id="updateUser">
+        UPDATE sys_user
+        SET
+        <if test="null != username and '' != username">
+            username = #{username},
+        </if>
+        <if test="null != realName and '' != realName">
+            real_name = #{realName},
+        </if>
+        allow_login = #{allowLogin}
+        WHERE
+        id = #{id}
+    </update>
+    <delete id="deleteUserByIds" parameterType="Long[]">
+        DELETE FROM sys_user
+        WHERE
+        id IN
+        <foreach collection="ids" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="resetUserPassword">
+        UPDATE sys_user
+        SET
+        password = #{password}
+        WHERE id = #{userId}
+    </update>
+    <select id="getInfoById" resultType="com.weiziplus.springboot.common.models.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE id = #{id}
+    </select>
+    <update id="updateLastActiveTimeById">
+        UPDATE sys_user
+        SET last_active_time = now()
+        WHERE id = #{id}
+    </update>
+</mapper>
