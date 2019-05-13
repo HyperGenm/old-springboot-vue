@@ -87,4 +87,13 @@ public interface SysUserMapper {
      * @return
      */
     int updateLastActiveTimeById(@Param("id") Long id);
+
+    /**
+     * 更新用户角色
+     *
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    int updateRoleIdByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
 }

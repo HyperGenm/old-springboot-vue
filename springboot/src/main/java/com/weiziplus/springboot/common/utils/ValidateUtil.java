@@ -88,6 +88,27 @@ public class ValidateUtil {
     }
 
     /**
+     * 正常格式真实姓名:中文或英文包括空格和点
+     *
+     * @param name
+     * @return
+     */
+    public static boolean isRealName(String name) {
+        String regex = "^([\\u4e00-\\u9fa5]{2,5}|[a-zA-Z\\.\\s]{2,})$";
+        return baseValidate(regex, name);
+    }
+
+    /**
+     * 不正常格式真实姓名:2-30位--中英文开头
+     *
+     * @param name
+     * @return
+     */
+    public static boolean notRealName(String name) {
+        return !isRealName(name);
+    }
+
+    /**
      * 英文开头
      *
      * @param string

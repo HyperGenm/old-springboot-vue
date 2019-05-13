@@ -5,7 +5,8 @@
                  highlight-current default-expand-all
                  :expand-on-click-node="false" :data="roleData" :props="roleProps"
                  @node-click="handleRoleNodeClick"></el-tree>
-        <el-button type="primary" @click="saveRole">保存</el-button>
+        <el-button type="primary" @click="updateRole('save')">保存</el-button>
+        <el-button type="danger" @click="updateRole('delete')">删除角色</el-button>
     </div>
 </template>
 
@@ -39,26 +40,26 @@
             handleRoleNodeClick(row) {
                 this.chooseData = row;
             },
-            saveRole() {
-                let chooseData = this.chooseData;
-                if (null == chooseData.id) {
+            updateRole(status) {
+                let {id, name} = this.chooseData;
+                if (null == id && 'save' === status) {
                     this.$globalFun.errorMsg('请选择角色');
                     return;
                 }
-                if (('1' === chooseData.id + '') || '超级管理员' === chooseData.name) {
+                if (('1' === id + '') || '超级管理员' === name) {
                     this.$globalFun.errorMsg('超级管理员只能有一个');
                     return;
                 }
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.addUserRole,
+                    url: that.$global.URL.updateUserRole,
                     method: 'post',
                     data: {
-                        roleId: chooseData.id,
+                        roleId: 'save' === status ? id : 0,
                         userId: that.userData.id
                     },
                     success() {
-                        that.$globalFun.successMsg('角色保存成功');
+                        that.$globalFun.successMsg('角色成功');
                         that.$emit('closeDialogRole');
                         that.$emit('renderTable');
                     }

@@ -87,6 +87,18 @@ public class SysRoleService {
         if (null == roleId || 0 >= roleId) {
             return ResponseBean.error("roleId不能为空");
         }
+        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
+            boolean haveRoleId = false;
+            for (Long id : funIds) {
+                if (GlobalConfig.SYS_FUNCTION_ROLE_ID.equals(id)) {
+                    haveRoleId = true;
+                    break;
+                }
+            }
+            if (!haveRoleId) {
+                return ResponseBean.error("超级管理员角色管理权限一定要添加啊(*/ω＼*)");
+            }
+        }
         sysRoleFunctionMapper.deleteByRoleId(roleId);
         if (null == funIds || 0 >= funIds.length) {
             return ResponseBean.success("success");
@@ -167,8 +179,19 @@ public class SysRoleService {
         if (null == roleId || 0 >= roleId) {
             return ResponseBean.error("id不能为空");
         }
+        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
+            return ResponseBean.error("不能操作超级管理员");
+        }
         if (null == isStop) {
             return ResponseBean.error("状态不能为空");
+        }
+        //判断是否启用
+        if (GlobalConfig.IS_STOP.equals(isStop)) {
+            SysRole role = mapper.getInfoByRoleId(roleId);
+            SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
+            if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
+                return ResponseBean.error("父级当前处于禁用状态");
+            }
         }
         mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
         for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {

@@ -31,4 +31,14 @@ public class GlobalConfig {
      * 超级管理员id为1
      */
     public static final Long SUPER_ADMIN_ID = 1L;
+
+    /**
+     * 超级管理员角色id为1
+     */
+    public static final Long SUPER_ADMIN_ROLE_ID = 1L;
+
+    /**
+     * 系统功能表中角色管理id为3
+     */
+    public static final Long SYS_FUNCTION_ROLE_ID = 3L;
 }

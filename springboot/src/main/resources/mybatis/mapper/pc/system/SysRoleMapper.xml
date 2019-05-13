@@ -5,8 +5,8 @@
 <mapper namespace="com.weiziplus.springboot.pc.system.mapper.SysRoleMapper">
     <select id="getInfoByUserId" resultType="com.weiziplus.springboot.common.models.SysRole">
         SELECT sr.*
-        FROM sys_role sr ,sys_user_role sur
-        WHERE sur.user_id = #{userId} AND sr.id = sur.role_id
+        FROM sys_role sr,sys_user su
+        WHERE su.id = #{userId} AND sr.id = su.role_id
         LIMIT 1
     </select>
     <select id="getRoleListByParentId" resultType="com.weiziplus.springboot.common.models.SysRole">

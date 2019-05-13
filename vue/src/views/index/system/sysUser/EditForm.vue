@@ -4,6 +4,9 @@
             <el-form-item label="用户名" prop="username">
                 <el-input v-model="form.username"></el-input>
             </el-form-item>
+            <el-form-item label="真实姓名">
+                <el-input v-model="form.realName"></el-input>
+            </el-form-item>
             <el-form-item label="是否允许登录">
                 <el-radio-group v-model="form.allowLogin">
                     <el-radio :label="0">允许</el-radio>

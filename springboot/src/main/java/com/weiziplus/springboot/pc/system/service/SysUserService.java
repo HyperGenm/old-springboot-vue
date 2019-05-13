@@ -9,7 +9,6 @@ import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.common.utils.ValidateUtil;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
-import com.weiziplus.springboot.pc.system.mapper.SysUserRoleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +26,6 @@ import java.util.Map;
 public class SysUserService {
     @Autowired
     SysUserMapper mapper;
-
-    @Autowired
-    SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 获取用户列表
@@ -58,6 +54,9 @@ public class SysUserService {
         if (ValidateUtil.notPassword(sysUser.getPassword())) {
             return ResponseBean.error("密码为6-20位大小写和数字");
         }
+        if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
+            return ResponseBean.error("真实姓名不能包含特殊字符");
+        }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user) {
             return ResponseBean.error("用户名已存在");
@@ -80,6 +79,9 @@ public class SysUserService {
     public Map<String, Object> updateUser(SysUser sysUser) {
         if (ValidateUtil.notUsername(sysUser.getUsername())) {
             return ResponseBean.error("用户名不能包含特殊字符");
+        }
+        if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
+            return ResponseBean.error("真实姓名不能包含特殊字符");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user && !sysUser.getId().equals(user.getId())) {
@@ -107,21 +109,23 @@ public class SysUserService {
     }
 
     /**
-     * 新增用户角色
+     * 更新用户角色
      *
      * @param userId
      * @param roleId
      * @return
      */
-    public Map<String, Object> addUserRole(Long userId, Long roleId) {
+    public Map<String, Object> updateUserRole(Long userId, Long roleId) {
         if (null == userId || 0 >= userId) {
             return ResponseBean.error("userId不能为空");
         }
-        if (null == roleId || 0 >= roleId) {
+        if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
+            return ResponseBean.error("不能修改超级管理员角色");
+        }
+        if (null == roleId || 0 > roleId) {
             return ResponseBean.error("roleId不能为空");
         }
-        sysUserRoleMapper.deleteUserRoleByUserIdAndRoleId(userId, roleId);
-        return ResponseBean.success(sysUserRoleMapper.addUserRoleByUserIdAndRoleId(userId, roleId));
+        return ResponseBean.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
     }
 
     /**

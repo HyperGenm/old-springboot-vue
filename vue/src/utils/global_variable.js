@@ -31,6 +31,8 @@ const URL = {
     getRoleFunList: '/pc/getRoleFunList',
     /*新增角色功能*/
     addRoleFun: '/pc/addRoleFun',
+    /*更新角色功能*/
+    updateUserRole: '/pc/updateUserRole',
     /*新增角色*/
     addRole: '/pc/addRole',
     /*修改角色*/

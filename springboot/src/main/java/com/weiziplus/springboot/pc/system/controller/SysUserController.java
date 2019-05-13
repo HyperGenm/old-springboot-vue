@@ -77,15 +77,15 @@ public class SysUserController {
     }
 
     /**
-     * 新增用户角色
+     * 更新用户角色
      *
      * @param userId
      * @param roleId
      * @return
      */
-    @PostMapping("/addUserRole")
-    public Map addUserRole(Long userId, Long roleId) {
-        return service.addUserRole(userId, roleId);
+    @PostMapping("/updateUserRole")
+    public Map updateUserRole(Long userId, Long roleId) {
+        return service.updateUserRole(userId, roleId);
     }
 
     /**

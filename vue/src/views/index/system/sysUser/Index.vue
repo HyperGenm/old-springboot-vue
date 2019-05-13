@@ -70,6 +70,7 @@
                             that.handleType = 'add';
                             that.formData = {
                                 username: '',
+                                realName: '',
                                 password: '',
                                 allowLogin: 0
                             };
@@ -98,6 +99,7 @@
                 tableColumns: [
                     {prop: 'username', label: '用户名'},
                     {prop: 'roleName', label: '角色'},
+                    {prop: 'realName', label: '真实姓名'},
                     {
                         prop: 'title', label: '是否允许登录', formatter(row) {
                             return ('0' === row['allowLogin'] + '') ? '允许' : '禁止'
