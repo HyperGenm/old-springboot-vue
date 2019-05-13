@@ -6,7 +6,7 @@
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
                 <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
                            :type="btn.primary || 'primary'" size="mini"
-                           :icon="btn.icon" @click="btn.handleClick(selection)"
+                           :icon="btn.icon" @click="btn.handleClick(JSON.parse(JSON.stringify(selection)))"
                 >{{btn.name}}
                 </el-button>
             </el-row>
@@ -45,7 +45,7 @@
                                  :width="tableOperates.width || 170" fixed="right">
                     <template slot-scope="scope">
                         <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
-                                   @click="btn.handleClick(scope.row)"
+                                   @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
                                    size="mini"
                                    :type="btn.type">{{btn.name}}
                         </el-button>
@@ -186,6 +186,12 @@
                         console.warn(_url, '-----code:', res.data.code, '------请求出错-----res:', res);
                         return;
                     }
+                    /**判断返回格式是否正确*/
+                    if (null == res.data.data.list) {
+                        that.emptyText = '返回格式出错。示例:{"list":[],"pageNum":1,"pageSize":10}';
+                        return;
+                    }
+                    /**展示数据*/
                     that.emptyText = '暂无数据';
                     that.tableData = res.data.data.list;
                     that.total = res.data.data.total;

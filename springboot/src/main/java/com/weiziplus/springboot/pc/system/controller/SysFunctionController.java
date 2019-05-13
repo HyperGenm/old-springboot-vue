@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
+import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysFunction;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.pc.system.service.SysFunctionService;
@@ -28,6 +29,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getAllFunctionTree")
+    @SystemLog(description = "查看功能列表")
     public Map<String, Object> getAllFunctionTree() {
         return ResponseBean.success(service.getFunTree());
     }
@@ -55,6 +57,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/addFunction")
+    @SystemLog(description = "新增功能")
     public Map<String, Object> addFunction(SysFunction sysFunction) {
         return service.addFunction(sysFunction);
     }
@@ -66,6 +69,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/updateFunction")
+    @SystemLog(description = "修改功能")
     public Map<String, Object> updateFunction(SysFunction sysFunction) {
         return service.updateFunction(sysFunction);
     }
@@ -77,6 +81,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/deleteFunction")
+    @SystemLog(description = "删除功能")
     public Map<String, Object> deleteFunction(Long[] ids) {
         return service.deleteFunction(ids);
     }

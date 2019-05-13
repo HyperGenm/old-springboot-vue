@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
+import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.pc.system.service.SysUserService;
@@ -33,6 +34,7 @@ public class SysUserController {
      * @return
      */
     @GetMapping("/getUserList")
+    @SystemLog(description = "查看用户列表")
     public Map getUserList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
@@ -49,6 +51,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/addUser")
+    @SystemLog(description = "新增用户")
     public Map addUser(SysUser sysUser) {
         return service.addUser(sysUser);
     }
@@ -60,6 +63,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUser")
+    @SystemLog(description = "更新用户")
     public Map updateUser(SysUser sysUser) {
         return service.updateUser(sysUser);
     }
@@ -71,6 +75,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/deleteUser")
+    @SystemLog(description = "删除用户")
     public Map deleteUser(
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
         return service.deleteUser(ids);
@@ -84,6 +89,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUserRole")
+    @SystemLog(description = "更新用户角色")
     public Map updateUserRole(Long userId, Long roleId) {
         return service.updateUserRole(userId, roleId);
     }
@@ -92,6 +98,7 @@ public class SysUserController {
      * 重置密码
      */
     @PostMapping("/resetUserPassword")
+    @SystemLog(description = "重置用户密码")
     public Map<String, Object> resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
     }

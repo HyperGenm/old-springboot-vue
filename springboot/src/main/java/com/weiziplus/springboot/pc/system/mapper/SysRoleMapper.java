@@ -76,4 +76,11 @@ public interface SysRoleMapper {
      * @return
      */
     SysRole getInfoByRoleId(@Param("id") Long id);
+
+    /**
+     * 获取所有角色列表
+     *
+     * @return
+     */
+    List<SysRole> getRoleList();
 }

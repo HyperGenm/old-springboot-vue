@@ -62,6 +62,15 @@ public class SysRoleService {
     }
 
     /**
+     * 获取权限列表
+     *
+     * @return
+     */
+    public List<SysRole> getRoleList() {
+        return mapper.getRoleList();
+    }
+
+    /**
      * 根据角色id获取功能id列表
      *
      * @param roleId

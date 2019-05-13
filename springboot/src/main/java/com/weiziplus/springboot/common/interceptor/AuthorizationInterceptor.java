@@ -3,6 +3,7 @@ package com.weiziplus.springboot.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.api.mapper.UserMapper;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.models.SysLog;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.models.User;
 import com.weiziplus.springboot.common.utils.ResponseBean;
@@ -11,6 +12,7 @@ import com.weiziplus.springboot.common.utils.redis.RedisUtil;
 import com.weiziplus.springboot.common.utils.token.AdminTokenUtil;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
 import com.weiziplus.springboot.common.utils.token.WebTokenUtil;
+import com.weiziplus.springboot.pc.system.mapper.SysLogMapper;
 import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    SysLogMapper sysLogMapper;
 
     /**
      * 请求之前拦截
@@ -85,6 +90,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         switch (JwtTokenUtil.getUserAudienceByToken(token)) {
             //角色为admin
             case AdminTokenUtil.AUDIENCE: {
+                //查看是否有日志注解，有的话将日志信息放入数据库
+                SystemLog systemLog = method.getAnnotation(SystemLog.class);
+                if (null != systemLog) {
+                    sysLogMapper.addSysLog(JwtTokenUtil.getUserIdByToken(token), systemLog.description());
+                }
                 return handleAdminToken(response, token, adminAuthTokenClass, adminAuthTokenMethod);
             }
             //角色为web

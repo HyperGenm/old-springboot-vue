@@ -13,6 +13,7 @@
         SELECT *
         FROM sys_role
         WHERE parent_id = #{parentId}
+        ORDER BY sort ASC,parent_id ASC
     </select>
     <select id="getRoleInfoByName" resultType="com.weiziplus.springboot.common.models.SysRole">
         SELECT *
@@ -55,5 +56,10 @@
         SELECT *
         FROM sys_role
         WHERE id = #{id}
+    </select>
+    <select id="getRoleList" resultType="com.weiziplus.springboot.common.models.SysRole">
+        SELECT *
+        FROM sys_role
+        ORDER BY sort ASC,parent_id ASC
     </select>
 </mapper>

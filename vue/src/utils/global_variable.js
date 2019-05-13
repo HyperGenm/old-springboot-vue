@@ -27,6 +27,8 @@ const URL = {
     deleteFunction: '/pc/deleteFunction',
     /*获取角色树形列表*/
     getRoleTree: '/pc/getRoleTree',
+    /*获取角色所有功能列表*/
+    getRoleList: '/pc/getRoleList',
     /*获取角色的功能列表*/
     getRoleFunList: '/pc/getRoleFunList',
     /*新增角色功能*/
@@ -52,7 +54,9 @@ const URL = {
     /*新增用户角色*/
     addUserRole: '/pc/addUserRole',
     /*重置用户密码*/
-    resetUserPassword: '/pc/resetUserPassword'
+    resetUserPassword: '/pc/resetUserPassword',
+    /*查看日志列表*/
+    getLogList: '/pc/getLogList'
 };
 
 export default {

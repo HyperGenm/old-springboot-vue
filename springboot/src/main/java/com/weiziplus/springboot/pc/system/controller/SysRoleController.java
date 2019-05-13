@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
+import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.pc.system.service.SysRoleService;
@@ -29,8 +30,20 @@ public class SysRoleController {
      * @return
      */
     @GetMapping("/getRoleTree")
+    @SystemLog(description = "查看角色树")
     public Map getRoleTree() {
         return ResponseBean.success(service.getRoleTree());
+    }
+
+    /**
+     * 获取权限列表
+     *
+     * @return
+     */
+    @GetMapping("/getRoleList")
+    @SystemLog(description = "查看角色列表")
+    public Map getRoleList() {
+        return ResponseBean.success(service.getRoleList());
     }
 
     /**
@@ -52,6 +65,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRoleFun")
+    @SystemLog(description = "新增角色功能")
     public Map addRoleFun(
             @RequestParam(value = "roleId") Long roleId,
             @RequestParam(value = "funIds", defaultValue = "") Long[] funIds) {
@@ -65,6 +79,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRole")
+    @SystemLog(description = "新增角色")
     public Map addRole(SysRole sysRole) {
         return service.addRole(sysRole);
     }
@@ -76,6 +91,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/updateRole")
+    @SystemLog(description = "修改角色")
     public Map updateRole(SysRole sysRole) {
         return service.updateRole(sysRole);
     }
@@ -87,6 +103,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/deleteRole")
+    @SystemLog(description = "删除角色")
     public Map deleteRole(Long roleId) {
         return service.deleteRole(roleId);
     }
@@ -98,6 +115,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/changeRoleIsStop")
+    @SystemLog(description = "改变角色状态")
     public Map changeRoleIsStop(Long roleId, Integer isStop) {
         return service.changeRoleIsStop(roleId, isStop);
     }
