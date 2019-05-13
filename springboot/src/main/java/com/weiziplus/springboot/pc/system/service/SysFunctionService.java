@@ -113,7 +113,7 @@ public class SysFunctionService {
      */
     public Map<String, Object> addFunction(SysFunction sysFunction) {
         if (ValidateUtil.notEnglishNumberUnderLine(sysFunction.getName())) {
-            return ResponseBean.error("name为英文开头，英文和数字");
+            return ResponseBean.error("name为英文开头，英文、数字和下划线");
         }
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
             return ResponseBean.error("parentId不能为空");
