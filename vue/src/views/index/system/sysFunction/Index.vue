@@ -13,12 +13,9 @@
                        :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
             <div class="handle">
                 <div class="edit">
-                    <wei-dialog :show.sync="dialogEditForm" :title="handleType === 'add' ? '新增' : '编辑'">
-                        <edit-form :parentData="parentData" :handleType="handleType" :formData="formData"
-                                   @closeDialog="dialogEditForm = false"
-                                   @renderTable="$refs.table.renderTable()"
-                                   @renderTree="getAllFunctionTree"></edit-form>
-                    </wei-dialog>
+                    <edit-form :show.sync="dialogEditForm" :parentData="parentData" :handleType="handleType"
+                               :formData="formData"
+                               @renderTable="$refs.table.renderTable()" @renderTree="getAllFunctionTree"></edit-form>
                 </div>
             </div>
         </div>
@@ -30,8 +27,7 @@
         name: "Index",
         components: {
             'wei-table': () => import('@/components/table/Index.vue'),
-            'edit-form': () => import('./EditForm.vue'),
-            'wei-dialog': () => import('@/components/dialog/index/Index.vue')
+            'edit-form': () => import('./EditForm.vue')
         },
         data() {
             let that = this;

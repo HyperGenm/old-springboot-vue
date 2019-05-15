@@ -1,56 +1,22 @@
 <template>
     <div id="form">
-        <el-form ref="form" size="mini" :model="form" :rules="rules" :disabled="handleType === 'detail'">
-            <el-row>
-                <el-col :span="11">
-                    <el-form-item label="路由标题" prop="title">
-                        <el-input v-model="form.title"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11" :offset="2">
-                    <el-form-item label="路由名name" prop="name">
-                        <el-input :disabled="handleType === 'update'" v-model="form.name"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="11">
-                    <el-form-item label="上级路由">
-                        <el-input disabled v-model="parentData.title"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11" :offset="2">
-                    <el-form-item label="排序">
-                        <el-input type="number" v-model="form.sort"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="11">
-                    <el-form-item label="路由图标">
-                        <el-input v-model="form.icon" style="display: none;"></el-input>
-                        <el-button type="primary" @click="dialogIcons = true">选择图标
-                        </el-button>
-                        <i style="margin-left: 20px;font-size: 20px;" :class="form.icon"></i>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11" :offset="2">
-                    <el-form-item label="类型">
-                        <el-radio-group v-model="form.type">
-                            <el-radio :label="0">菜单</el-radio>
-                            <el-radio :label="1">按钮</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="路由描述">
-                <el-input type="textarea" v-model="form.description"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="$emit('closeDialog')">取 消</el-button>
-            <el-button v-show="handleType !== 'detail'" type="primary" @click="ok">确 定</el-button>
-        </div>
+        <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
+                     :formData="form" :formOptions="formOptions" :formRules="rules"
+                     @submit="submit">
+            <template v-slot:itemHead>
+                <el-form-item label="上级路由">
+                    <el-input disabled v-model="parentData.title"></el-input>
+                </el-form-item>
+            </template>
+            <template v-slot:itemTail>
+                <el-form-item label="路由图标">
+                    <el-input v-model="form.icon" style="display: none;"></el-input>
+                    <el-button type="primary" @click="dialogIcons = true">选择图标
+                    </el-button>
+                    <i style="margin-left: 20px;font-size: 20px;" :class="form.icon"></i>
+                </el-form-item>
+            </template>
+        </dialog-form>
         <div class="icons">
             <wei-icons :dialogIcons="dialogIcons" @chooseIconOk="chooseIconOk"></wei-icons>
         </div>
@@ -58,9 +24,22 @@
 </template>
 
 <script>
+    const baseOptions = [
+        {type: 'input', label: '标题', prop: 'title'},
+        {type: 'input', label: '功能名name', prop: 'name'},
+        {type: 'input', label: '排序', prop: 'sort', inputType: 'number'},
+        {
+            type: 'radio', label: '类型', prop: 'type', options: [
+                {label: '菜单', value: 0},
+                {label: '按钮', value: 1}
+            ]
+        },
+        {type: 'textarea', label: '路由描述', prop: 'description'}
+    ];
     export default {
         name: "EditForm",
         components: {
+            'dialog-form': () => import('@/components/dialog/form/Index.vue'),
             'wei-icons': () => import('@/components/dialog/icons/Index.vue')
         },
         props: {
@@ -73,15 +52,34 @@
             },
             formData: {
                 type: Object
+            },
+            show: {
+                type: Boolean,
+                default: false
             }
         },
         watch: {
+            show() {
+                this.visible = this.show;
+            },
+            visible() {
+                if (!this.visible) {
+                    this.$emit('update:show', false);
+                }
+            },
             formData() {
                 this.form = this.formData;
+            },
+            handleType() {
+                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
+                if ('update' === this.handleType) {
+                    this.formOptions[1]['disabled'] = true;
+                }
             }
         },
         data() {
             return {
+                visible: false,
                 rules: {
                     title: [
                         {required: true, message: '请输入标题', trigger: 'blur'},
@@ -91,29 +89,25 @@
                         {required: true, message: '请输入name', trigger: 'blur'}
                     ]
                 },
+                formOptions: JSON.parse(JSON.stringify(baseOptions)),
                 form: this.formData,
                 dialogIcons: false
             }
         },
         methods: {
-            ok() {
+            submit() {
                 let that = this;
-                this.$refs['form'].validate((valid) => {
-                    if (!valid) {
-                        return false;
+                let url = this.handleType === 'add' ? 'addFunction' : 'updateFunction';
+                that.$axios({
+                    url: that.$global.URL[url],
+                    method: 'post',
+                    data: that.form,
+                    success() {
+                        that.$globalFun.successMsg('成功');
+                        that.$emit('update:show', false);
+                        that.$emit('renderTable');
+                        that.$emit('renderTree');
                     }
-                    let url = this.handleType === 'add' ? 'addFunction' : 'updateFunction';
-                    that.$axios({
-                        url: that.$global.URL[url],
-                        method: 'post',
-                        data: that.form,
-                        success() {
-                            that.$globalFun.successMsg('成功');
-                            that.$emit('closeDialog');
-                            that.$emit('renderTable');
-                            that.$emit('renderTree');
-                        }
-                    })
                 });
             },
             chooseIconOk(icon) {

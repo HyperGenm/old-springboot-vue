@@ -1,47 +1,23 @@
 <template>
     <div id="form">
-        <el-form :model="form" ref="form" size="mini" :rules="rules">
-            <el-row>
-                <el-col :span="11">
-                    <el-form-item label="角色名称" prop="name">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11" :offset="2">
-                    <el-form-item label="上级角色名称">
-                        <el-input disabled v-model="parentData.name"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="11">
-                    <el-form-item label="排序">
-                        <el-input type="number" v-model="form.sort"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11" :offset="2">
-                    <el-form-item label="是否启用">
-                        <el-radio-group v-model="form.isStop">
-                            <el-radio :label="0">启用</el-radio>
-                            <el-radio :label="1">禁用</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="描述">
-                <el-input type="textarea" v-model="form.description"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="$emit('closeDialog')">取 消</el-button>
-            <el-button type="primary" @click="ok">确 定</el-button>
-        </div>
+        <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
+                     :formData="form" :formOptions="formOptions" :formRules="rules"
+                     @submit="submit">
+            <template v-slot:itemHead>
+                <el-form-item label="上级角色名称">
+                    <el-input disabled v-model="parentData.name"></el-input>
+                </el-form-item>
+            </template>
+        </dialog-form>
     </div>
 </template>
 
 <script>
     export default {
         name: "EditForm",
+        components: {
+            'dialog-form': () => import('@/components/dialog/form/Index.vue')
+        },
         props: {
             parentData: {
                 type: Object,
@@ -54,42 +30,61 @@
             },
             formData: {
                 type: Object
+            },
+            show: {
+                type: Boolean,
+                default: false
             }
         },
         watch: {
+            show() {
+                this.visible = this.show;
+            },
+            visible() {
+                if (!this.visible) {
+                    this.$emit('update:show', false);
+                }
+            },
             formData() {
                 this.form = this.formData;
             }
         },
         data() {
             return {
+                visible: false,
                 rules: {
                     name: [
                         {required: true, message: '请输入角色名称', trigger: 'blur'},
                         {min: 2, message: '最少两个字符', trigger: 'blur'}
                     ]
                 },
+                formOptions: [
+                    {type: 'input', label: '角色名', prop: 'name'},
+                    {type: 'input', label: '排序', prop: 'sort', inputType: 'number'},
+                    {
+                        type: 'radio', label: '是否启用', prop: 'isStop', options: [
+                            {label: '启用', value: 0},
+                            {label: '禁用', value: 1}
+                        ]
+                    },
+                    {type: 'textarea', label: '描述', prop: 'description'}
+                ],
                 form: this.formData
             }
         },
         methods: {
-            ok() {
+            submit() {
                 let that = this;
-                this.$refs['form'].validate((valid) => {
-                    if (!valid) {
-                        return false;
+                let url = this.handleType === 'add' ? 'addRole' : 'updateRole';
+                that.$axios({
+                    url: that.$global.URL[url],
+                    method: 'post',
+                    data: that.form,
+                    success() {
+                        that.$globalFun.successMsg('成功');
+                        that.$emit('update:show', false);
+                        that.$emit('renderTree');
                     }
-                    let url = this.handleType === 'add' ? 'addRole' : 'updateRole';
-                    that.$axios({
-                        url: that.$global.URL[url],
-                        method: 'post',
-                        data: that.form,
-                        success() {
-                            that.$globalFun.successMsg('成功');
-                            that.$emit('closeDialog');
-                            that.$emit('renderTree');
-                        }
-                    })
                 });
             }
         }

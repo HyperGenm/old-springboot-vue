@@ -1,32 +1,28 @@
 <template>
     <div id="form">
-        <el-form ref="form" :model="form" :rules="rules">
-            <el-form-item label="用户名" prop="username">
-                <el-input v-model="form.username"></el-input>
-            </el-form-item>
-            <el-form-item label="真实姓名">
-                <el-input v-model="form.realName"></el-input>
-            </el-form-item>
-            <el-form-item label="是否允许登录">
-                <el-radio-group v-model="form.allowLogin">
-                    <el-radio :label="0">允许</el-radio>
-                    <el-radio :label="1">禁止</el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item v-if="handleType === 'add'" label="密码" prop="password">
-                <el-input type="password" v-model="form.password"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="$emit('closeDialog')">取 消</el-button>
-            <el-button type="primary" @click="ok">确 定</el-button>
-        </div>
+        <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
+                     :formData="form" :formOptions="formOptions" :formRules="rules"
+                     @submit="submit">
+        </dialog-form>
     </div>
 </template>
 
 <script>
+    const baseOptions = [
+        {type: 'input', label: '用户名', prop: 'username'},
+        {type: 'input', label: '真实姓名', prop: 'realName'},
+        {
+            type: 'radio', label: '是否允许登录', prop: 'allowLogin', options: [
+                {label: '允许', value: 0},
+                {label: '禁止', value: 1}
+            ]
+        }
+    ];
     export default {
         name: "EditForm",
+        components: {
+            'dialog-form': () => import('@/components/dialog/form/Index.vue')
+        },
         props: {
             handleType: {
                 type: String,
@@ -34,15 +30,36 @@
             },
             formData: {
                 type: Object
+            },
+            show: {
+                type: Boolean,
+                default: false
             }
         },
         watch: {
+            show() {
+                this.visible = this.show;
+            },
+            visible() {
+                if (!this.visible) {
+                    this.$emit('update:show', false);
+                }
+            },
             formData() {
                 this.form = this.formData;
+            },
+            handleType() {
+                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
+                if ('add' === this.handleType) {
+                    this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
+                } else {
+                    this.formOptions[0]['disabled'] = true;
+                }
             }
         },
         data() {
             return {
+                visible: false,
                 rules: {
                     username: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -53,27 +70,23 @@
                         {min: 6, message: '密码最少6位', trigger: 'blur'}
                     ]
                 },
-                form: this.formData
+                form: this.formData,
+                formOptions: JSON.parse(JSON.stringify(baseOptions))
             }
         },
         methods: {
-            ok() {
+            submit() {
                 let that = this;
-                this.$refs['form'].validate((valid) => {
-                    if (!valid) {
-                        return false;
+                let url = this.handleType === 'add' ? 'addUser' : 'updateUser';
+                that.$axios({
+                    url: that.$global.URL[url],
+                    method: 'post',
+                    data: that.form,
+                    success() {
+                        that.$globalFun.successMsg('成功');
+                        that.$emit('update:show', false);
+                        that.$emit('renderTable');
                     }
-                    let url = this.handleType === 'add' ? 'addUser' : 'updateUser';
-                    that.$axios({
-                        url: that.$global.URL[url],
-                        method: 'post',
-                        data: that.form,
-                        success() {
-                            that.$globalFun.successMsg('成功');
-                            that.$emit('closeDialog');
-                            that.$emit('renderTable');
-                        }
-                    })
                 });
             }
         }

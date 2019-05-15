@@ -28,10 +28,8 @@
                        :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
         </div>
         <div class="edit">
-            <wei-dialog :show.sync="dialogEditForm" :title="handleType === 'add' ? '新增' : '编辑'">
-                <edit-form :handleType="handleType" :formData="formData"
-                           @closeDialog="dialogEditForm = false" @renderTable="$refs.table.renderTable()"></edit-form>
-            </wei-dialog>
+            <edit-form :handleType="handleType" :formData="formData" :show.sync="dialogEditForm"
+                       @renderTable="$refs.table.renderTable()"></edit-form>
             <wei-dialog :show.sync="dialogRole" :title="userData.username + ': 请选择角色'">
                 <role :userData="userData"
                       @closeDialogRole="dialogRole = false"

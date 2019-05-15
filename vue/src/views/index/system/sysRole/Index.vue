@@ -32,10 +32,8 @@
                      @node-click="handleRoleNodeClick"></el-tree>
             <div class="handle">
                 <div class="edit">
-                    <wei-dialog :show.sync="dialogEditForm" :title="handleType === 'add' ? '新增' : '编辑'">
-                        <edit-form :parentData="parentData" :handleType="handleType" :formData="formData"
-                                   @closeDialog="dialogEditForm = false" @renderTree="initGetRoleTree"></edit-form>
-                    </wei-dialog>
+                    <edit-form :show.sync="dialogEditForm" :parentData="parentData" :handleType="handleType"
+                               :formData="formData" @renderTree="initGetRoleTree"></edit-form>
                 </div>
             </div>
         </div>
@@ -59,8 +57,7 @@
     export default {
         name: "Index",
         components: {
-            'edit-form': () => import('./EditForm.vue'),
-            'wei-dialog': () => import('@/components/dialog/index/Index.vue')
+            'edit-form': () => import('./EditForm.vue')
         },
         data() {
             return {
