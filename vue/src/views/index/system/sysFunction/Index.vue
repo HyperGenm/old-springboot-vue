@@ -12,6 +12,9 @@
                        :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
                        :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
             <div class="handle">
+                <div class="show">
+                    <detail :show.sync="dialogDetail" :detailData="formData" :parentData="parentData"></detail>
+                </div>
                 <div class="edit">
                     <edit-form :show.sync="dialogEditForm" :parentData="parentData" :handleType="handleType"
                                :formData="formData"
@@ -27,7 +30,8 @@
         name: "Index",
         components: {
             'wei-table': () => import('@/components/table/Index.vue'),
-            'edit-form': () => import('./EditForm.vue')
+            'edit-form': () => import('./EditForm.vue'),
+            'detail': () => import('./Detail.vue')
         },
         data() {
             let that = this;
@@ -93,9 +97,8 @@
                     buttons: [
                         {
                             name: '查看', type: 'primary', show: true, handleClick(row) {
-                                that.handleType = 'detail';
                                 that.formData = row;
-                                that.dialogEditForm = true;
+                                that.dialogDetail = true;
                             }
                         },
                         {
@@ -122,7 +125,9 @@
                 parentData: {
                     id: 0,
                     title: '最高级'
-                }
+                },
+                //详情弹窗
+                dialogDetail: false
             };
         },
         mounted() {
@@ -178,7 +183,6 @@
 
 <style lang="less" scoped>
     #sysFunc {
-        overflow: hidden;
         display: flex;
         .tree {
             flex: 1;

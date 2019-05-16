@@ -27,7 +27,8 @@ public interface SysLogMapper {
      * @param username
      * @param roleId
      * @param createTime
+     * @param description
      * @return
      */
-    List<Map<String, Object>> getLogList(@Param("username") String username, @Param("roleId") Long roleId, @Param("createTime") String createTime);
+    List<Map<String, Object>> getLogList(@Param("username") String username, @Param("roleId") Long roleId, @Param("createTime") String createTime, @Param("description") String description);
 }

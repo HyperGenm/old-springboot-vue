@@ -1,31 +1,10 @@
 <template>
     <div id="sysUser">
         <div class="table">
-            <!--表格查询-->
-            <div class="header">
-                <el-row>
-                    <el-col :span="4">
-                        <el-input clearable size="mini" v-model="tableDataRequest.data.userName"
-                                  placeholder="用户名"></el-input>
-                    </el-col>
-                    <el-col :span="4" :offset="1">
-                        <el-select size="mini" v-model="tableDataRequest.data.allowLogin" placeholder="是否允许登录">
-                            <el-option label="请选择" value=""></el-option>
-                            <el-option label="允许" value="0"></el-option>
-                            <el-option label="禁止" value="1"></el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="5" :offset="1">
-                        <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" size="mini"
-                                        v-model="tableDataRequest.data.createTime"></el-date-picker>
-                    </el-col>
-                    <el-button type="primary" size="mini" icon="el-icon-refresh" @click="$refs.table.renderTable()">查询
-                    </el-button>
-                </el-row>
-            </div>
             <wei-table ref="table"
                        :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
-                       :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
+                       :tableColumns="tableColumns" :tableOperates="tableOperates" :tableSearch="tableSearch">
+            </wei-table>
         </div>
         <div class="edit">
             <edit-form :handleType="handleType" :formData="formData" :show.sync="dialogEditForm"
@@ -36,6 +15,9 @@
                       @renderTable="$refs.table.renderTable()"></role>
             </wei-dialog>
         </div>
+        <div class="show">
+            <detail :show.sync="dialogDetail" :detailData="formData"></detail>
+        </div>
     </div>
 </template>
 
@@ -45,6 +27,7 @@
         components: {
             'wei-table': () => import('@/components/table/Index.vue'),
             'edit-form': () => import('./EditForm.vue'),
+            'detail': () => import('./Detail.vue'),
             'role': () => import('./Role.vue'),
             'wei-dialog': () => import('@/components/dialog/index/Index.vue')
         },
@@ -107,9 +90,15 @@
                     {prop: 'createTime', label: '用户创建时间'}
                 ],
                 tableOperates: {
-                    width: 320,
+                    width: 370,
                     buttons:
                         [
+                            {
+                                name: '查看', type: 'primary', show: true, handleClick(row) {
+                                    that.formData = row;
+                                    that.dialogDetail = true;
+                                }
+                            },
                             {
                                 name: '编辑', type: 'success', show: sysUser_update, handleClick(row) {
                                     if (('0' === row.id + '') || '超级管理员' === row['roleName']) {
@@ -151,6 +140,16 @@
                             }
                         ]
                 },
+                tableSearch: [
+                    {type: 'input', prop: 'userName', placeholder: '用户名'},
+                    {
+                        type: 'select', prop: 'allowLogin', placeholder: '是否允许登录', options: [
+                            {label: '允许', value: 0},
+                            {label: '禁止', value: 1}
+                        ]
+                    },
+                    {type: 'datePicker', prop: 'createTime'}
+                ],
                 //操作弹出框
                 dialogEditForm: false,
                 //操作类型新增还是修改
@@ -158,7 +157,8 @@
                 //操作的form表单
                 formData: {},
                 dialogRole: false,
-                userData: {}
+                userData: {},
+                dialogDetail: false
             }
         },
         methods: {
@@ -214,9 +214,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .header {
-        margin-bottom: 10px;
-    }
-</style>

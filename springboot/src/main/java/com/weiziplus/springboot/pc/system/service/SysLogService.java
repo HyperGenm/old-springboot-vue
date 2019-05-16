@@ -24,8 +24,8 @@ public class SysLogService {
      * @param pageSize
      * @return
      */
-    public Map<String, Object> getLogList(Integer pageNum, Integer pageSize, String username, Long roleId, String createTime) {
+    public Map<String, Object> getLogList(Integer pageNum, Integer pageSize, String username, Long roleId, String createTime,String description) {
         PageHelper.startPage(pageNum, pageSize);
-        return PageBean.pageInfo(mapper.getLogList(username, roleId, createTime));
+        return PageBean.pageInfo(mapper.getLogList(username, roleId, createTime,description));
     }
 }

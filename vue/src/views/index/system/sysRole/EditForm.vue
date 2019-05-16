@@ -3,7 +3,7 @@
         <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
                      :formData="form" :formOptions="formOptions" :formRules="rules"
                      @submit="submit">
-            <template v-slot:itemHead>
+            <template v-if="'add' === handleType" v-slot:itemHead>
                 <el-form-item label="上级角色名称">
                     <el-input disabled v-model="parentData.name"></el-input>
                 </el-form-item>
@@ -76,6 +76,7 @@
             submit() {
                 let that = this;
                 let url = this.handleType === 'add' ? 'addRole' : 'updateRole';
+                delete that.form['children'];
                 that.$axios({
                     url: that.$global.URL[url],
                     method: 'post',

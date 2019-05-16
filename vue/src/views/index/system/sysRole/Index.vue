@@ -6,24 +6,28 @@
                            @click="initGetRoleTree">
                     刷新
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_add']" type="success" size="mini"
+                <el-button type="success" size="mini"
+                           @click="detailRole">
+                    查看角色
+                </el-button>
+                <el-button v-if="$store.state.role['buttons']['sysRole_add']" type="primary" size="mini"
                            @click="addRole">
                     新增角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_update']" type="primary" size="mini"
+                <el-button v-if="$store.state.role['buttons']['sysRole_update']" type="success" size="mini"
                            @click="updateRole">修改角色
                 </el-button>
                 <el-button v-if="$store.state.role['buttons']['sysRole_delete']" type="danger" size="mini"
                            @click="deleteRole">
                     删除角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_status']" type="danger" size="mini"
-                           @click="changeRoleIsStop(1)">
-                    禁用角色
-                </el-button>
                 <el-button v-if="$store.state.role['buttons']['sysRole_status']" type="success" size="mini"
                            @click="changeRoleIsStop(0)">
                     启用角色
+                </el-button>
+                <el-button v-if="$store.state.role['buttons']['sysRole_status']" type="danger" size="mini"
+                           @click="changeRoleIsStop(1)">
+                    禁用角色
                 </el-button>
             </div>
             <el-tree ref="roleTree" node-key="id"
@@ -31,6 +35,9 @@
                      :expand-on-click-node="false" :data="roleData" :props="roleProps"
                      @node-click="handleRoleNodeClick"></el-tree>
             <div class="handle">
+                <div class="show">
+                    <detail :show.sync="dialogDetail" :detailData="parentData"></detail>
+                </div>
                 <div class="edit">
                     <edit-form :show.sync="dialogEditForm" :parentData="parentData" :handleType="handleType"
                                :formData="formData" @renderTree="initGetRoleTree"></edit-form>
@@ -57,7 +64,8 @@
     export default {
         name: "Index",
         components: {
-            'edit-form': () => import('./EditForm.vue')
+            'edit-form': () => import('./EditForm.vue'),
+            'detail': () => import('./Detail.vue')
         },
         data() {
             return {
@@ -91,7 +99,8 @@
                     id: 1,
                     name: '超级管理员',
                     isStop: 0
-                }
+                },
+                dialogDetail: false
             }
         },
         mounted() {
@@ -140,11 +149,7 @@
                         that.$nextTick(() => {
                             that.$refs['roleTree'].setCurrentKey(1);
                         });
-                        that.parentData = {
-                            id: 1,
-                            name: '超级管理员',
-                            isStop: 0
-                        };
+                        that.parentData = data[0];
                         that.getRoleFunList();
                     }
                 });
@@ -176,6 +181,10 @@
                         that.checkedRoleFunctionData = checkedRoleFunctionData;
                     }
                 });
+            },
+            //查看详情
+            detailRole() {
+                this.dialogDetail = true;
             },
             //新增角色
             addRole() {
@@ -292,7 +301,6 @@
 
 <style lang="less" scoped>
     #sysRole {
-        overflow: hidden;
         display: flex;
         .role {
             flex: 1;

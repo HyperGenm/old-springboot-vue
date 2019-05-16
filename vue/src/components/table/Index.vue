@@ -1,5 +1,72 @@
 <template>
-    <div id="table">
+    <div id="weiTable">
+        <div class="search" v-show="tableSearch && 0 < tableSearch.length">
+            <!--表格查询-->
+            <el-form inline size="mini">
+                <el-form-item>
+                    <el-form-item v-for="(item,index) in tableSearch" :key="index">
+                        <template v-if="'input' === item.type">
+                            <el-input v-model="tableDataRequest.data[item.prop]" :type="item.inputType || 'text'"
+                                      :placeholder="item.placeholder" clearable
+                                      :disabled="item.disabled || false"></el-input>
+                        </template>
+                        <template v-else-if="'select' === item.type">
+                            <el-select v-model="tableDataRequest.data[item.prop]"
+                                       clearable :disabled="item.disabled || false"
+                                       :placeholder="item.placeholder || '请选择'">
+                                <el-option v-for="(option,index) in item.options" :key="index"
+                                           :label="option.label" :value="option.value"
+                                           :disabled="option.disabled || false"></el-option>
+                            </el-select>
+                        </template>
+                        <template v-else-if="'radio' === item.type">
+                            <el-radio-group v-model="tableDataRequest.data[item.prop]"
+                                            :disabled="item.disabled || false">
+                                <el-radio v-for="(option,index) in item.options" :key="index"
+                                          :label="option.value" :disabled="option.disabled || false">
+                                    {{option.label}}
+                                </el-radio>
+                            </el-radio-group>
+                        </template>
+                        <template v-else-if="'textarea' === item.type">
+                            <el-input type="textarea" v-model="tableDataRequest.data[item.prop]"
+                                      :disabled="item.disabled || false"></el-input>
+                        </template>
+                        <template v-else-if="'checkbox' === item.type">
+                            <el-checkbox-group v-model="tableDataRequest.data[item.prop]"
+                                               :disabled="item.disabled || false">
+                                <el-checkbox v-for="(option,index) in options" :key="index"
+                                             :label="option.value" :disabled="option.disabled || false">{{option.label}}
+                                </el-checkbox>
+                            </el-checkbox-group>
+                        </template>
+                        <template v-else-if="'switch' === item.type">
+                            <el-switch v-model="tableDataRequest.data[item.prop]"
+                                       :disabled="item.disabled || false"></el-switch>
+                        </template>
+                        <template v-else-if="'datePicker' === item.type">
+                            <el-date-picker :type="item['dateType'] || 'date'" :placeholder="item.placeholder || '选择日期'"
+                                            v-model="tableDataRequest.data[item.prop]"
+                                            :value-format="item.valueFormat || 'yyyy-MM-dd'"
+                                            :disabled="item.disabled || false"></el-date-picker>
+                        </template>
+                        <template v-else-if="'timePicker' === item.type">
+                            <el-date-picker :placeholder="item.placeholder || '选择日期'"
+                                            v-model="tableDataRequest.data[item.prop]"
+                                            :disabled="item.disabled || false"></el-date-picker>
+                        </template>
+                        <template v-else>
+                            {{item.label}}没有指定type
+                        </template>
+                    </el-form-item>
+                    <slot name="search"></slot>
+                    <el-button type="primary" size="mini" icon="el-icon-refresh"
+                               @click="renderTable">
+                        查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <div class="header">
             <!--表格头部按钮组-->
             <el-row>
@@ -13,8 +80,8 @@
         </div>
         <div class="content">
             <!--表格-->
-            <el-table ref="multipleTable"
-                      :data="tableData" :max-height="tableStyle.maxHeight" :height="tableStyle.height"
+            <el-table ref="table"
+                      :data="tableData" :max-height="tableStyle.maxHeight" height="10000px"
                       v-loading="loading" :empty-text="emptyText"
                       border stripe highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
@@ -82,6 +149,11 @@
                 default: () => {
                 }
             },
+            //表格搜索
+            tableSearch: {
+                type: Array,
+                default: () => []
+            },
             //表格顶部按钮
             tableHeaderButtons: {
                 type: Array,
@@ -92,8 +164,7 @@
                 type: Object,
                 default: () => {
                     return {
-                        height: '800',
-                        maxHeight: '720'
+                        maxHeight: '670'
                     }
                 }
             },
@@ -112,7 +183,7 @@
         data() {
             return {
                 tableData: [],
-                pageSize: 10,
+                pageSize: 20,
                 pageNum: 1,
                 total: 0,
                 //表格加载中动画
@@ -124,7 +195,7 @@
         computed: {
             // 所有选中的行
             selection() {
-                return this.$refs['multipleTable'].selection;
+                return this.$refs['table'].selection;
             }
         },
         mounted() {
@@ -218,8 +289,19 @@
     }
 </script>
 
+<style lang="less">
+    #weiTable {
+        overflow: hidden;
+        .search {
+            .el-form-item {
+                margin-bottom: 3px;
+            }
+        }
+    }
+</style>
+
 <style lang="less" scoped>
-    #table {
+    #weiTable {
         overflow: hidden;
         .header {
             margin-bottom: 10px;
