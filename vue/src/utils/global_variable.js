@@ -3,7 +3,7 @@
  * @type {{}}
  */
 const GLOBAL = {
-    base_url: 'http://localhost:8080'
+    base_url: process.env.VUE_APP_URL
 };
 
 /**
