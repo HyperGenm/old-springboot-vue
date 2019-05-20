@@ -62,30 +62,6 @@ public interface SysFunctionMapper {
     SysFunction getFunInfoByName(@Param("name") String name);
 
     /**
-     * 新增功能
-     *
-     * @param sysFunction
-     * @return
-     */
-    int addFunction(SysFunction sysFunction);
-
-    /**
-     * 修改功能
-     *
-     * @param sysFunction
-     * @return
-     */
-    int updateFunction(SysFunction sysFunction);
-
-    /**
-     * 根据id删除功能
-     *
-     * @param ids
-     * @return
-     */
-    int deleteFunctionByIds(@Param("ids") Long[] ids);
-
-    /**
      * 根据角色id获取功能列表
      *
      * @param roleId

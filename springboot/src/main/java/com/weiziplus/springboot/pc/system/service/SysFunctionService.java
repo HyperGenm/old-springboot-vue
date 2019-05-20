@@ -1,7 +1,9 @@
 package com.weiziplus.springboot.pc.system.service;
 
 import com.github.pagehelper.PageHelper;
+import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.models.SysFunction;
+import com.weiziplus.springboot.common.utils.DateUtil;
 import com.weiziplus.springboot.common.utils.PageBean;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.common.utils.ValidateUtil;
@@ -18,7 +20,7 @@ import java.util.Map;
  * @data 2019/5/9 15:18
  */
 @Service
-public class SysFunctionService {
+public class SysFunctionService extends BaseService {
 
     @Autowired
     SysFunctionMapper mapper;
@@ -122,7 +124,8 @@ public class SysFunctionService {
         if (null != sysFun) {
             return ResponseBean.error("name已存在");
         }
-        return ResponseBean.success(mapper.addFunction(sysFunction));
+        sysFunction.setCreateTime(DateUtil.getDate());
+        return ResponseBean.success(insert(sysFunction));
     }
 
     /**
@@ -132,7 +135,7 @@ public class SysFunctionService {
      * @return
      */
     public Map<String, Object> updateFunction(SysFunction sysFunction) {
-        return ResponseBean.success(mapper.updateFunction(sysFunction));
+        return ResponseBean.success(update(sysFunction));
     }
 
     /**
@@ -148,6 +151,6 @@ public class SysFunctionService {
                 return ResponseBean.error("目录下面含有子级目录");
             }
         }
-        return ResponseBean.success(mapper.deleteFunctionByIds(ids));
+        return ResponseBean.success(deleteByIds(SysFunction.class, ids));
     }
 }

@@ -1,12 +1,10 @@
 package com.weiziplus.springboot.pc.system.service;
 
 import com.github.pagehelper.PageHelper;
+import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
-import com.weiziplus.springboot.common.utils.Md5Util;
-import com.weiziplus.springboot.common.utils.PageBean;
-import com.weiziplus.springboot.common.utils.ResponseBean;
-import com.weiziplus.springboot.common.utils.ValidateUtil;
+import com.weiziplus.springboot.common.utils.*;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class SysUserService {
+public class SysUserService extends BaseService {
     @Autowired
     SysUserMapper mapper;
 
@@ -67,7 +65,8 @@ public class SysUserService {
             log.warn("添加用户密码MD5加密出错" + e);
             return ResponseBean.error("未知错误,请重试");
         }
-        return ResponseBean.success(mapper.addUser(sysUser));
+        sysUser.setCreateTime(DateUtil.getDate());
+        return ResponseBean.success(insert(sysUser));
     }
 
     /**
@@ -87,7 +86,7 @@ public class SysUserService {
         if (null != user && !sysUser.getId().equals(user.getId())) {
             return ResponseBean.error("用户名已存在");
         }
-        return ResponseBean.success(mapper.updateUser(sysUser));
+        return ResponseBean.success(update(sysUser));
     }
 
     /**
@@ -105,7 +104,7 @@ public class SysUserService {
                 return ResponseBean.error("不能删除超级管理员");
             }
         }
-        return ResponseBean.success(mapper.deleteUserByIds(ids));
+        return ResponseBean.success(deleteByIds(SysUser.class, ids));
     }
 
     /**

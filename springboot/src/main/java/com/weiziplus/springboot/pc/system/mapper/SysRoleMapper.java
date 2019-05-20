@@ -37,30 +37,6 @@ public interface SysRoleMapper {
     SysRole getRoleInfoByName(@Param("name") String name);
 
     /**
-     * 新增角色
-     *
-     * @param sysRole
-     * @return
-     */
-    int addRole(SysRole sysRole);
-
-    /**
-     * 修改角色
-     *
-     * @param sysRole
-     * @return
-     */
-    int updateRole(SysRole sysRole);
-
-    /**
-     * 根据id删除角色
-     *
-     * @param roleId
-     * @return
-     */
-    int deleteRoleByRoleId(@Param("id") Long roleId);
-
-    /**
      * 根据id和isStop修改角色状态
      *
      * @param id

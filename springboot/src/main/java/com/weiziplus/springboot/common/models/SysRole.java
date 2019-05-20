@@ -1,6 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.weiziplus.springboot.common.base.Column;
+import com.weiziplus.springboot.common.base.Id;
+import com.weiziplus.springboot.common.base.Table;
 import lombok.Data;
 
 import java.util.List;
@@ -12,13 +15,27 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@Table("sys_role")
 public class SysRole {
+    @Id("id")
     private Long id;
+
+    @Column("parent_id")
     private Long parentId;
+
+    @Column("name")
     private String name;
+
+    @Column("is_stop")
     private Integer isStop;
+
+    @Column("sort")
     private Long sort;
+
+    @Column("description")
     private String description;
+
+    @Column("create_time")
     private String createTime;
     private List<SysRole> children;
 }

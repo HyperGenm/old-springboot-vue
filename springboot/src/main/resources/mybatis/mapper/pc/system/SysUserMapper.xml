@@ -33,34 +33,6 @@
         WHERE username = #{userName}
         LIMIT 1
     </select>
-    <insert id="addUser">
-        INSERT INTO sys_user
-        (username, password, real_name, allow_login, create_time)
-        VALUES
-        (#{username},#{password},#{realName},#{allowLogin},now())
-    </insert>
-    <update id="updateUser">
-        UPDATE sys_user
-        SET
-        <if test="null != username and '' != username">
-            username = #{username},
-        </if>
-        <if test="null != realName and '' != realName">
-            real_name = #{realName},
-        </if>
-        allow_login = #{allowLogin}
-        WHERE
-        id = #{id}
-    </update>
-    <delete id="deleteUserByIds" parameterType="Long[]">
-        DELETE FROM sys_user
-        WHERE
-        id IN
-        <foreach collection="ids" item="id" open="("
-                 separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
     <update id="resetUserPassword">
         UPDATE sys_user
         SET

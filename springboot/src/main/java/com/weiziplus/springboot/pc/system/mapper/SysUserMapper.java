@@ -40,30 +40,6 @@ public interface SysUserMapper {
     SysUser getUserInfoByName(@Param("userName") String userName);
 
     /**
-     * 添加用户
-     *
-     * @param sysUser
-     * @return
-     */
-    int addUser(SysUser sysUser);
-
-    /**
-     * 更新用户
-     *
-     * @param sysUser
-     * @return
-     */
-    int updateUser(SysUser sysUser);
-
-    /**
-     * 根据ids删除用户
-     *
-     * @param ids
-     * @return
-     */
-    int deleteUserByIds(@Param("ids") Long[] ids);
-
-    /**
      * 根据用户id和密码重置密码
      *
      * @param userId

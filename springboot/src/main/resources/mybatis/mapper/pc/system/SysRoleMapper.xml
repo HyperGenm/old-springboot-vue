@@ -21,32 +21,6 @@
         WHERE name = #{name}
         LIMIT 1
     </select>
-    <insert id="addRole">
-        INSERT INTO sys_role
-        (parent_id, name, is_stop, sort, description, create_time)
-        VALUES
-        (#{parentId},#{name},#{isStop},#{sort,jdbcType=INTEGER},#{description},now())
-    </insert>
-    <update id="updateRole">
-        UPDATE sys_role
-        SET
-        <if test="null != name and '' != name">
-            name = #{name},
-        </if>
-        <if test="null != isStop">
-            is_stop = #{isStop},
-        </if>
-        <if test="null != sort">
-            sort = #{sort},
-        </if>
-        description = #{description}
-        WHERE
-        id = #{id}
-    </update>
-    <delete id="deleteRoleByRoleId">
-        DELETE FROM sys_role
-        WHERE id = #{id}
-    </delete>
     <update id="changeRoleIsStopByIdAndIsStop">
         UPDATE sys_role
         SET is_stop = #{isStop}

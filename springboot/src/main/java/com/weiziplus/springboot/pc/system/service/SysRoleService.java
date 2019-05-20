@@ -1,8 +1,10 @@
 package com.weiziplus.springboot.pc.system.service;
 
+import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysFunction;
 import com.weiziplus.springboot.common.models.SysRole;
+import com.weiziplus.springboot.common.utils.DateUtil;
 import com.weiziplus.springboot.common.utils.ResponseBean;
 import com.weiziplus.springboot.common.utils.ValidateUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper;
@@ -20,7 +22,7 @@ import java.util.Map;
  * @data 2019/5/10 8:39
  */
 @Service
-public class SysRoleService {
+public class SysRoleService extends BaseService {
     @Autowired
     SysRoleMapper mapper;
 
@@ -137,7 +139,8 @@ public class SysRoleService {
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
             return ResponseBean.error("操作失败，父级处于禁用状态");
         }
-        return ResponseBean.success(mapper.addRole(sysRole));
+        sysRole.setCreateTime(DateUtil.getDate());
+        return ResponseBean.success(insert(sysRole));
     }
 
     /**
@@ -161,7 +164,7 @@ public class SysRoleService {
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
             return ResponseBean.error("操作失败，父级处于禁用状态");
         }
-        return ResponseBean.success(mapper.updateRole(sysRole));
+        return ResponseBean.success(update(sysRole));
     }
 
     /**
@@ -175,7 +178,7 @@ public class SysRoleService {
         if (null != list && 0 < list.size()) {
             return ResponseBean.error("当前角色存在下级");
         }
-        return ResponseBean.success(mapper.deleteRoleByRoleId(roleId));
+        return ResponseBean.success(deleteById(SysRole.class, roleId));
     }
 
     /**

@@ -40,41 +40,6 @@
         WHERE name = #{name}
         LIMIT 1
     </select>
-    <insert id="addFunction">
-        INSERT INTO
-        sys_function
-        (parent_id, name, title, type, icon, sort, description, create_time)
-        VALUES
-        (#{parentId},#{name},#{title},#{type},#{icon},#{sort},#{description},now())
-    </insert>
-    <update id="updateFunction">
-        UPDATE sys_function
-        SET
-        <if test="null != title and '' != title">
-            title = #{title},
-        </if>
-        <if test="null != type">
-            type = #{type},
-        </if>
-        <if test="null != icon and '' != icon">
-            icon = #{icon},
-        </if>
-        <if test="null != sort">
-            sort = #{sort},
-        </if>
-        description = #{description}
-        WHERE
-        id = #{id}
-    </update>
-    <delete id="deleteFunctionByIds" parameterType="Long[]">
-        DELETE FROM sys_function
-        WHERE
-        id IN
-        <foreach collection="ids" item="id" open="("
-                 separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
     <select id="getFunListByRoleId" resultType="com.weiziplus.springboot.common.models.SysFunction">
         SELECT sf.*
         FROM sys_function sf,sys_role_function srf
