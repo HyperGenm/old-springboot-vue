@@ -98,6 +98,6 @@ public interface BaseMapper {
      */
     @Select("SELECT * " +
             "FROM ${TABLE_NAME} " +
-            "ORDER BY ${KEY_ID}")
+            "ORDER BY id")
     List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME);
 }
