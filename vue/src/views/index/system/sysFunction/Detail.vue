@@ -34,9 +34,10 @@
                 }
             },
             detailData() {
-                let {name, title, icon, sort, type, description} = this.detailData;
+                let {name, path, title, icon, sort, type, description} = this.detailData;
                 this.rows = [
                     {title: '功能名', content: name},
+                    {title: '路径', content: path},
                     {title: '标题', content: title},
                     {title: '上级', content: this.parentData.title},
                     {

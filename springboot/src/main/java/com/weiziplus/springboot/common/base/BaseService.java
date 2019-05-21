@@ -42,7 +42,7 @@ public class BaseService {
      */
     private Map<String, Object> handleTable(Object object) {
         if (null == object || null == object.getClass()) {
-            throw new RuntimeException("将实体对象转为map===Object为null==========" + object);
+            throw new RuntimeException("将实体对象转为map===Object为null");
         }
         //获取实体类对应数据库的表名
         if (null == object.getClass().getAnnotation(Table.class)) {

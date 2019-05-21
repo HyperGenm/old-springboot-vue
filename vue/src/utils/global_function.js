@@ -25,22 +25,26 @@ function notPhone(phone) {
 /**
  * 错误警告
  * @param msg
+ * @param time
  */
-function errorMsg(msg) {
+function errorMsg(msg = '失败', time = 3000) {
     Message({
         message: msg,
-        type: 'error'
+        type: 'error',
+        duration: time
     });
 }
 
 /**
  * 成功提示
  * @param msg
+ * @param time
  */
-function successMsg(msg) {
+function successMsg(msg = '成功', time = 3000) {
     Message({
         message: msg,
-        type: 'success'
+        type: 'success',
+        duration: time
     });
 }
 

@@ -26,6 +26,9 @@ public class SysFunction {
     @Column("name")
     private String name;
 
+    @Column("path")
+    private String path;
+
     @Column("title")
     private String title;
 

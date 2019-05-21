@@ -1,7 +1,7 @@
 <template>
     <div id="form">
         <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
-                     :formData="form" :formOptions="formOptions" :formRules="rules"
+                     :formData="form" :formOptions="formOptions"
                      @submit="submit">
             <template v-slot:itemHead>
                 <el-form-item label="上级路由">
@@ -25,11 +25,12 @@
 
 <script>
     const baseOptions = [
-        {type: 'input', label: '标题', prop: 'title'},
-        {type: 'input', label: '功能名name', prop: 'name'},
-        {type: 'input', label: '排序', prop: 'sort', inputType: 'number'},
+        {type: 'input', label: '标题', prop: 'title', required: true},
+        {type: 'input', label: '功能名name', prop: 'name', required: true},
+        {type: 'input', label: '功能路径', prop: 'path', required: true},
+        {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
         {
-            type: 'radio', label: '类型', prop: 'type', options: [
+            type: 'radio', label: '类型', prop: 'type', required: true, options: [
                 {label: '菜单', value: 0},
                 {label: '按钮', value: 1}
             ]
@@ -80,15 +81,6 @@
         data() {
             return {
                 visible: false,
-                rules: {
-                    title: [
-                        {required: true, message: '请输入标题', trigger: 'blur'},
-                        {min: 2, message: '最少两个字符', trigger: 'blur'}
-                    ],
-                    name: [
-                        {required: true, message: '请输入name', trigger: 'blur'}
-                    ]
-                },
                 formOptions: JSON.parse(JSON.stringify(baseOptions)),
                 form: this.formData,
                 dialogIcons: false

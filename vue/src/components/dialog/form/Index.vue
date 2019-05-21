@@ -6,7 +6,7 @@
                      :model="formData" :rules="formRules">
                 <slot name="itemHead"></slot>
                 <el-form-item v-for="(item,index) in formOptions" :key="index"
-                              :label='item.label' :prop="item.prop">
+                              :label='item.label' :prop="item.prop" :required="item.required || false">
                     <template v-if="'input' === item.type">
                         <el-input v-model="formData[item.prop]" :size="item.size" :type="item.inputType || 'text'"
                                   :placeholder="item.placeholder" clearable

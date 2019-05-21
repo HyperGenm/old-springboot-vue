@@ -25,6 +25,7 @@ CREATE TABLE `sys_function`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '系统功能表主键，自增',
   `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '上级id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能唯一标识',
+  `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能路径',
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能标题',
   `type` int(2) NOT NULL DEFAULT 0 COMMENT '功能类型;0:菜单,1:按钮',
   `icon` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'el-icon-info' COMMENT '功能图标',
@@ -38,24 +39,24 @@ CREATE TABLE `sys_function`  (
 -- ----------------------------
 -- Records of sys_function
 -- ----------------------------
-INSERT INTO `sys_function` VALUES (1, 0, 'system', '系统管理', 0, 'el-icon-info', 0, '描述', '2019-05-09 16:55:47');
-INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', '功能管理', 0, 'el-icon-info', 0, '', '2019-05-09 16:56:10');
-INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', '角色管理', 0, 'el-icon-info', 1, '', '2019-05-09 16:56:26');
-INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', '用户管理', 0, 'el-icon-info', 2, '', '2019-05-09 16:56:52');
-INSERT INTO `sys_function` VALUES (5, 2, 'sysFunc_add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:20:41');
-INSERT INTO `sys_function` VALUES (6, 2, 'sysFunc_update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
-INSERT INTO `sys_function` VALUES (7, 2, 'sysFunc_delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:34');
-INSERT INTO `sys_function` VALUES (8, 3, 'sysRole_add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
-INSERT INTO `sys_function` VALUES (9, 3, 'sysRole_update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');
-INSERT INTO `sys_function` VALUES (10, 3, 'sysRole_delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:53');
-INSERT INTO `sys_function` VALUES (11, 3, 'sysRole_save', '保存', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:07');
-INSERT INTO `sys_function` VALUES (12, 4, 'sysUser_add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:43');
-INSERT INTO `sys_function` VALUES (13, 4, 'sysUser_update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:55');
-INSERT INTO `sys_function` VALUES (14, 4, 'sysUser_delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
-INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_role', '角色', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
-INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_resetPwd', '重置密码', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
-INSERT INTO `sys_function` VALUES (21, 3, 'sysRole_status', '修改角色状态(启用/禁用)', 1, '', 4, '', '2019-05-10 15:58:15');
-INSERT INTO `sys_function` VALUES (22, 1, 'sysLog', '日志管理', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (1, 0, 'system', 'system', '系统管理', 0, 'el-icon-info', 0, '描述', '2019-05-09 16:55:47');
+INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', 0, 'el-icon-info', 0, '', '2019-05-09 16:56:10');
+INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', 0, 'el-icon-info', 1, '', '2019-05-09 16:56:26');
+INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', 0, 'el-icon-info', 2, '', '2019-05-09 16:56:52');
+INSERT INTO `sys_function` VALUES (5, 2, 'sysFunc_add', 'add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:20:41');
+INSERT INTO `sys_function` VALUES (6, 2, 'sysFunc_update', 'update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
+INSERT INTO `sys_function` VALUES (7, 2, 'sysFunc_delete', 'delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:34');
+INSERT INTO `sys_function` VALUES (8, 3, 'sysRole_add', 'add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
+INSERT INTO `sys_function` VALUES (9, 3, 'sysRole_update', 'update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');
+INSERT INTO `sys_function` VALUES (10, 3, 'sysRole_delete', 'delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:53');
+INSERT INTO `sys_function` VALUES (11, 3, 'sysRole_save', 'save', '保存', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:07');
+INSERT INTO `sys_function` VALUES (12, 4, 'sysUser_add', 'add', '新增', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:43');
+INSERT INTO `sys_function` VALUES (13, 4, 'sysUser_update', 'update', '修改', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:55');
+INSERT INTO `sys_function` VALUES (14, 4, 'sysUser_delete', 'delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
+INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_role', 'role', '角色', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
+INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_resetPwd', 'resetPwd', '重置密码', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
+INSERT INTO `sys_function` VALUES (21, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', 1, '', 4, '', '2019-05-10 15:58:15');
+INSERT INTO `sys_function` VALUES (22, 1, 'sysLog', 'sysLog', '日志管理', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
 
 -- ----------------------------
 -- Table structure for sys_log

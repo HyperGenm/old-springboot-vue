@@ -57,6 +57,7 @@
                             that.handleType = 'add';
                             that.formData = {
                                 name: '',
+                                path: '',
                                 title: '',
                                 icon: '',
                                 sort: 0,
