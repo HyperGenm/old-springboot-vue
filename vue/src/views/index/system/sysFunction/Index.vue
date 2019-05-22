@@ -84,6 +84,7 @@
                 ],
                 tableColumns: [
                     {prop: 'name', label: '功能名'},
+                    {prop: 'path', label: '路径'},
                     {prop: 'title', label: '路由标题'},
                     {
                         prop: 'icon', label: '路由图标', formatter(row) {

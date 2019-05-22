@@ -105,7 +105,7 @@ public class BaseService {
      * @param object
      * @return
      */
-    public int insert(Object object) {
+    public int insertObject(Object object) {
         return mapper.insert(handleTable(object));
     }
 
@@ -137,7 +137,7 @@ public class BaseService {
      * @param object
      * @return
      */
-    public int update(Object object) {
+    public int updateObject(Object object) {
         return mapper.update(handleTable(object));
     }
 

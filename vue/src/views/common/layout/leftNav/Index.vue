@@ -5,7 +5,7 @@
                 <el-menu
                         class="el-menu-vertical-demo"
                         :default-active="defaultActive"
-                        router :collapse="menuCollapse"
+                        router unique-opened :collapse="menuCollapse"
                         background-color="#545c64"
                         text-color="#fff"
                         active-text-color="#ffd04b">

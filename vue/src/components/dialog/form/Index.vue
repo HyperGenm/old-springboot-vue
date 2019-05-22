@@ -49,11 +49,13 @@
                     <template v-else-if="'datePicker' === item.type">
                         <el-date-picker :type="item['dateType'] || 'date'" :placeholder="item.placeholder || '选择日期'"
                                         v-model="formData[item.prop]" :size="item.size"
+                                        :value-format="item.valueFormat || 'yyyy-MM-dd'"
                                         :disabled="item.disabled || false"></el-date-picker>
                     </template>
                     <template v-else-if="'timePicker' === item.type">
-                        <el-date-picker :placeholder="item.placeholder || '选择日期'"
+                        <el-date-picker :placeholder="item.placeholder || '选择时间'"
                                         v-model="formData[item.prop]" :size="item.size"
+                                        :format="item.format || 'HH:mm:ss'"
                                         :disabled="item.disabled || false"></el-date-picker>
                     </template>
                     <template v-else>

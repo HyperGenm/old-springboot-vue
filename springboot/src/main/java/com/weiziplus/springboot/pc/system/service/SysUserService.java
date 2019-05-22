@@ -66,7 +66,7 @@ public class SysUserService extends BaseService {
             return ResponseBean.error("未知错误,请重试");
         }
         sysUser.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insert(sysUser));
+        return ResponseBean.success(insertObject(sysUser));
     }
 
     /**
@@ -86,7 +86,7 @@ public class SysUserService extends BaseService {
         if (null != user && !sysUser.getId().equals(user.getId())) {
             return ResponseBean.error("用户名已存在");
         }
-        return ResponseBean.success(update(sysUser));
+        return ResponseBean.success(updateObject(sysUser));
     }
 
     /**

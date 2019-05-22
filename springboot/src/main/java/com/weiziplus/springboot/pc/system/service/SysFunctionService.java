@@ -125,7 +125,7 @@ public class SysFunctionService extends BaseService {
             return ResponseBean.error("name已存在");
         }
         sysFunction.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insert(sysFunction));
+        return ResponseBean.success(insertObject(sysFunction));
     }
 
     /**
@@ -135,7 +135,7 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     public Map<String, Object> updateFunction(SysFunction sysFunction) {
-        return ResponseBean.success(update(sysFunction));
+        return ResponseBean.success(updateObject(sysFunction));
     }
 
     /**

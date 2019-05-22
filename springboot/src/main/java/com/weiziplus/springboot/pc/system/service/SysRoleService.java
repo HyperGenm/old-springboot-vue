@@ -140,7 +140,7 @@ public class SysRoleService extends BaseService {
             return ResponseBean.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insert(sysRole));
+        return ResponseBean.success(insertObject(sysRole));
     }
 
     /**
@@ -164,7 +164,7 @@ public class SysRoleService extends BaseService {
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
             return ResponseBean.error("操作失败，父级处于禁用状态");
         }
-        return ResponseBean.success(update(sysRole));
+        return ResponseBean.success(updateObject(sysRole));
     }
 
     /**
