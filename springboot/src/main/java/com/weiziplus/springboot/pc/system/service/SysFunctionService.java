@@ -3,10 +3,7 @@ package com.weiziplus.springboot.pc.system.service;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.models.SysFunction;
-import com.weiziplus.springboot.common.utils.DateUtil;
-import com.weiziplus.springboot.common.utils.PageBean;
-import com.weiziplus.springboot.common.utils.ResponseBean;
-import com.weiziplus.springboot.common.utils.ValidateUtil;
+import com.weiziplus.springboot.common.utils.*;
 import com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,7 +101,7 @@ public class SysFunctionService extends BaseService {
      */
     public Map<String, Object> getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return PageBean.pageInfo(mapper.getFunListByParentId(parentId));
+        return PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
     }
 
     /**
@@ -115,17 +112,17 @@ public class SysFunctionService extends BaseService {
      */
     public Map<String, Object> addFunction(SysFunction sysFunction) {
         if (ValidateUtil.notEnglishNumberUnderLine(sysFunction.getName())) {
-            return ResponseBean.error("name为英文开头，英文、数字和下划线");
+            return ResultUtil.error("name为英文开头，英文、数字和下划线");
         }
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
-            return ResponseBean.error("parentId不能为空");
+            return ResultUtil.error("parentId不能为空");
         }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun) {
-            return ResponseBean.error("name已存在");
+            return ResultUtil.error("name已存在");
         }
         sysFunction.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insertObject(sysFunction));
+        return ResultUtil.success(insertObject(sysFunction));
     }
 
     /**
@@ -135,7 +132,7 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     public Map<String, Object> updateFunction(SysFunction sysFunction) {
-        return ResponseBean.success(updateObject(sysFunction));
+        return ResultUtil.success(updateObject(sysFunction));
     }
 
     /**
@@ -148,9 +145,9 @@ public class SysFunctionService extends BaseService {
         for (Long id : ids) {
             List<SysFunction> list = mapper.getFunListByParentId(id);
             if (null != list && 0 < list.size()) {
-                return ResponseBean.error("目录下面含有子级目录");
+                return ResultUtil.error("目录下面含有子级目录");
             }
         }
-        return ResponseBean.success(deleteByIds(SysFunction.class, ids));
+        return ResultUtil.success(deleteByIds(SysFunction.class, ids));
     }
 }

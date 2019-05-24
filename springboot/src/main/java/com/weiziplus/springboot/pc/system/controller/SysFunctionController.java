@@ -3,7 +3,7 @@ package com.weiziplus.springboot.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysFunction;
-import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.pc.system.service.SysFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class SysFunctionController {
     @GetMapping("/getAllFunctionTree")
     @SystemLog(description = "查看功能列表")
     public Map<String, Object> getAllFunctionTree() {
-        return ResponseBean.success(service.getFunTree());
+        return ResultUtil.success(service.getFunTree());
     }
 
     /**
@@ -47,7 +47,7 @@ public class SysFunctionController {
             @RequestParam(value = "parentId", defaultValue = "0L") Long parentId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return ResponseBean.success(service.getFunctionListByParentId(parentId, pageNum, pageSize));
+        return ResultUtil.success(service.getFunctionListByParentId(parentId, pageNum, pageSize));
     }
 
     /**

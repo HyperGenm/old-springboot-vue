@@ -3,7 +3,7 @@ package com.weiziplus.springboot.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysRole;
-import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.pc.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ public class SysRoleController {
     @GetMapping("/getRoleTree")
     @SystemLog(description = "查看角色树")
     public Map getRoleTree() {
-        return ResponseBean.success(service.getRoleTree());
+        return ResultUtil.success(service.getRoleTree());
     }
 
     /**
@@ -43,7 +43,7 @@ public class SysRoleController {
     @GetMapping("/getRoleList")
     @SystemLog(description = "查看角色列表")
     public Map getRoleList() {
-        return ResponseBean.success(service.getRoleList());
+        return ResultUtil.success(service.getRoleList());
     }
 
     /**
@@ -54,7 +54,7 @@ public class SysRoleController {
      */
     @GetMapping("/getRoleFunList")
     public Map getRoleFunList(Long roleId) {
-        return ResponseBean.success(service.getRoleFunList(roleId));
+        return ResultUtil.success(service.getRoleFunList(roleId));
     }
 
     /**

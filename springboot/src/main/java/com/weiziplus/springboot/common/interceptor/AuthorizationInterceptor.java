@@ -3,10 +3,9 @@ package com.weiziplus.springboot.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.api.mapper.UserMapper;
 import com.weiziplus.springboot.common.config.GlobalConfig;
-import com.weiziplus.springboot.common.models.SysLog;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.models.User;
-import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.common.utils.StringUtil;
 import com.weiziplus.springboot.common.utils.redis.RedisUtil;
 import com.weiziplus.springboot.common.utils.token.AdminTokenUtil;
@@ -72,7 +71,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         //获取头部的token
         String token = request.getHeader(GlobalConfig.TOKEN);
         if (StringUtil.isBlank(token)) {
-            handleResponse(response, ResponseBean.errorToken("token不存在"));
+            handleResponse(response, ResultUtil.errorToken("token不存在"));
             return false;
         }
         //判断jwtToken是否过期
@@ -83,7 +82,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             isExpiration = true;
         }
         if (isExpiration) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //获取角色
@@ -121,23 +120,23 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Long userId = JwtTokenUtil.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis是否过期
         if (!RedisUtil.hasKye(AdminTokenUtil.getAudienceRedisKey(userId))) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
         if (!RedisUtil.get(AdminTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看是否存在该用户
         SysUser sysUser = sysUserMapper.getInfoById(userId);
         if (null == sysUser) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //更新用户最后活跃时间
@@ -161,23 +160,23 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Long userId = JwtTokenUtil.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis是否过期
         if (!RedisUtil.hasKye(WebTokenUtil.getAudienceRedisKey(userId))) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
         if (!RedisUtil.get(WebTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看是否存在该用户
         User user = userMapper.getUserInfoByUserId(userId);
         if (null == user) {
-            handleResponse(response, ResponseBean.errorToken("token失效"));
+            handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //更新token过期时间

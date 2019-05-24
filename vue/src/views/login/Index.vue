@@ -8,6 +8,18 @@
             <el-form-item prop="password">
                 <el-input name="password" type="password" show-password v-model="form.password" placeholder="密码"/>
             </el-form-item>
+            <el-row>
+                <el-col :span="16">
+                    <el-form-item prop="code">
+                        <el-input v-model="form.code" placeholder="验证码"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6" :offset="2">
+                    <div class="code" @click="changeCode">
+                        <img :src="imgCodeUrl" alt="验证码">
+                    </div>
+                </el-col>
+            </el-row>
             <el-form-item>
                 <el-button type="primary" class="btn" @click="handleLogin">
                     登录
@@ -21,10 +33,13 @@
     export default {
         name: "login",
         data() {
+            let that = this;
             return {
+                imgCodeUrl: that.$global.GLOBAL.base_url + that.$global.URL.loginValidateCode,
                 form: {
                     username: '',
-                    password: ''
+                    password: '',
+                    code: ''
                 },
                 rules: {
                     username: [
@@ -34,6 +49,10 @@
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
                         {min: 6, message: '密码最少6位', trigger: 'blur'}
+                    ],
+                    code: [
+                        {required: true, message: '请输入验证码', trigger: 'blur'},
+                        {min: 4, max: 4, message: '验证码为4位', trigger: 'blur'}
                     ]
                 }
             };
@@ -50,6 +69,9 @@
             }
         },
         methods: {
+            changeCode() {
+                this.imgCodeUrl = this.$global.GLOBAL.base_url + this.$global.URL.loginValidateCode + '?__t' + Math.random();
+            },
             handleLogin() {
                 const that = this;
                 this.$refs['form'].validate((valid) => {
@@ -57,12 +79,19 @@
                         return false;
                     }
                     this.$axios({
+                        allSuccess: true,
                         url: that.$global.URL.login,
                         method: 'post',
                         data: that.form,
-                        success(data) {
-                            that.$store.dispatch('setToken', data['token']);
+                        success(res) {
+                            if ('200' !== res.code + '') {
+                                that.$globalFun.errorMsg(res.msg);
+                                that.changeCode();
+                                return;
+                            }
+                            let data = res.data;
                             that.$store.dispatch('setUserInfo', data['userInfo']);
+                            that.$store.dispatch('setToken', data['token']);
                             let roleButtons = {};
                             data['roleButtons'].forEach((value) => {
                                 roleButtons[value.name] = true;
@@ -191,6 +220,19 @@
             margin: 0 auto 40px auto;
             text-align: center;
             font-weight: bold;
+        }
+        .code {
+            border-radius: 5px;
+            height: 47px;
+            line-height: 47px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 47px;
+                line-height: 47px;
+            }
         }
     }
 </style>

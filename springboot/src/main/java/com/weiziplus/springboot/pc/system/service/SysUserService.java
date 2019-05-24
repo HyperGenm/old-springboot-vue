@@ -36,7 +36,7 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> getUserList(Integer pageNum, Integer pageSize, String userName, Integer allowLogin, String createTime) {
         PageHelper.startPage(pageNum, pageSize);
-        return PageBean.pageInfo(mapper.getUserList(userName, allowLogin, createTime));
+        return PageUtil.pageInfo(mapper.getUserList(userName, allowLogin, createTime));
     }
 
     /**
@@ -47,26 +47,26 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> addUser(SysUser sysUser) {
         if (ValidateUtil.notUsername(sysUser.getUsername())) {
-            return ResponseBean.error("用户名不能包含特殊字符");
+            return ResultUtil.error("用户名不能包含特殊字符");
         }
         if (ValidateUtil.notPassword(sysUser.getPassword())) {
-            return ResponseBean.error("密码为6-20位大小写和数字");
+            return ResultUtil.error("密码为6-20位大小写和数字");
         }
         if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResponseBean.error("真实姓名不能包含特殊字符");
+            return ResultUtil.error("真实姓名不能包含特殊字符");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user) {
-            return ResponseBean.error("用户名已存在");
+            return ResultUtil.error("用户名已存在");
         }
         try {
             sysUser.setPassword(Md5Util.encode(sysUser.getPassword()));
         } catch (UnsupportedEncodingException e) {
             log.warn("添加用户密码MD5加密出错" + e);
-            return ResponseBean.error("未知错误,请重试");
+            return ResultUtil.error("未知错误,请重试");
         }
         sysUser.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insertObject(sysUser));
+        return ResultUtil.success(insertObject(sysUser));
     }
 
     /**
@@ -77,16 +77,16 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> updateUser(SysUser sysUser) {
         if (ValidateUtil.notUsername(sysUser.getUsername())) {
-            return ResponseBean.error("用户名不能包含特殊字符");
+            return ResultUtil.error("用户名不能包含特殊字符");
         }
         if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResponseBean.error("真实姓名不能包含特殊字符");
+            return ResultUtil.error("真实姓名不能包含特殊字符");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user && !sysUser.getId().equals(user.getId())) {
-            return ResponseBean.error("用户名已存在");
+            return ResultUtil.error("用户名已存在");
         }
-        return ResponseBean.success(updateObject(sysUser));
+        return ResultUtil.success(updateObject(sysUser));
     }
 
     /**
@@ -97,14 +97,14 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> deleteUser(Long[] ids) {
         if (0 >= ids.length) {
-            return ResponseBean.error("ids为空");
+            return ResultUtil.error("ids为空");
         }
         for (Long id : ids) {
             if (GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
-                return ResponseBean.error("不能删除超级管理员");
+                return ResultUtil.error("不能删除超级管理员");
             }
         }
-        return ResponseBean.success(deleteByIds(SysUser.class, ids));
+        return ResultUtil.success(deleteByIds(SysUser.class, ids));
     }
 
     /**
@@ -116,15 +116,15 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> updateUserRole(Long userId, Long roleId) {
         if (null == userId || 0 >= userId) {
-            return ResponseBean.error("userId不能为空");
+            return ResultUtil.error("userId不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
-            return ResponseBean.error("不能修改超级管理员角色");
+            return ResultUtil.error("不能修改超级管理员角色");
         }
         if (null == roleId || 0 > roleId) {
-            return ResponseBean.error("roleId不能为空");
+            return ResultUtil.error("roleId不能为空");
         }
-        return ResponseBean.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
+        return ResultUtil.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
     }
 
     /**
@@ -137,21 +137,21 @@ public class SysUserService extends BaseService {
      */
     public Map<String, Object> resetUserPassword(HttpServletRequest request, Long userId, String password) {
         if (null == userId || 0 > userId) {
-            return ResponseBean.error("id不能为空");
+            return ResultUtil.error("id不能为空");
         }
         if (ValidateUtil.notPassword(password)) {
-            return ResponseBean.error("密码为6-20位大小写和数字");
+            return ResultUtil.error("密码为6-20位大小写和数字");
         }
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(JwtTokenUtil.getUserIdByHttpServletRequest(request))) {
-            return ResponseBean.error("您没有权限");
+            return ResultUtil.error("您没有权限");
         }
         String newPwd = null;
         try {
             newPwd = Md5Util.encode(password);
         } catch (UnsupportedEncodingException e) {
             log.warn("重置用户密码MD5加密出错" + e);
-            return ResponseBean.error("未知错误,请重试");
+            return ResultUtil.error("未知错误,请重试");
         }
-        return ResponseBean.success(mapper.resetUserPassword(userId, newPwd));
+        return ResultUtil.success(mapper.resetUserPassword(userId, newPwd));
     }
 }

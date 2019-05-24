@@ -5,7 +5,7 @@ import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysFunction;
 import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.utils.DateUtil;
-import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.common.utils.ValidateUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.pc.system.mapper.SysRoleFunctionMapper;
@@ -96,7 +96,7 @@ public class SysRoleService extends BaseService {
      */
     public Map<String, Object> addRoleFun(Long roleId, Long[] funIds) {
         if (null == roleId || 0 >= roleId) {
-            return ResponseBean.error("roleId不能为空");
+            return ResultUtil.error("roleId不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             boolean haveRoleId = false;
@@ -107,14 +107,14 @@ public class SysRoleService extends BaseService {
                 }
             }
             if (!haveRoleId) {
-                return ResponseBean.error("超级管理员角色管理权限一定要添加啊(*/ω＼*)");
+                return ResultUtil.error("超级管理员角色管理权限一定要添加啊(*/ω＼*)");
             }
         }
         sysRoleFunctionMapper.deleteByRoleId(roleId);
         if (null == funIds || 0 >= funIds.length) {
-            return ResponseBean.success("success");
+            return ResultUtil.success("success");
         }
-        return ResponseBean.success(sysRoleFunctionMapper.addRoleFunction(roleId, funIds));
+        return ResultUtil.success(sysRoleFunctionMapper.addRoleFunction(roleId, funIds));
     }
 
     /**
@@ -125,22 +125,22 @@ public class SysRoleService extends BaseService {
      */
     public Map<String, Object> addRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
-            return ResponseBean.error("角色名不能包含特殊字符");
+            return ResultUtil.error("角色名不能包含特殊字符");
         }
         //因为超级管理员只有一个所以角色父级id从1开始
         if (null == sysRole.getParentId() || GlobalConfig.SUPER_ADMIN_ID > sysRole.getParentId()) {
-            return ResponseBean.error("parentId不能为空");
+            return ResultUtil.error("parentId不能为空");
         }
         SysRole role = mapper.getRoleInfoByName(sysRole.getName());
         if (null != role && null != role.getId()) {
-            return ResponseBean.error("角色名已存在");
+            return ResultUtil.error("角色名已存在");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
-            return ResponseBean.error("操作失败，父级处于禁用状态");
+            return ResultUtil.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtil.getDate());
-        return ResponseBean.success(insertObject(sysRole));
+        return ResultUtil.success(insertObject(sysRole));
     }
 
     /**
@@ -151,20 +151,20 @@ public class SysRoleService extends BaseService {
      */
     public Map<String, Object> updateRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
-            return ResponseBean.error("角色名不能包含特殊字符");
+            return ResultUtil.error("角色名不能包含特殊字符");
         }
         SysRole role = mapper.getRoleInfoByName(sysRole.getName());
         if (null != role && null != role.getId() && !role.getId().equals(sysRole.getId())) {
-            return ResponseBean.error("角色名已存在");
+            return ResultUtil.error("角色名已存在");
         }
         if (!GlobalConfig.IS_STOP.equals(sysRole.getIsStop())) {
-            return ResponseBean.error("操作失败，角色处于禁用状态");
+            return ResultUtil.error("操作失败，角色处于禁用状态");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
-            return ResponseBean.error("操作失败，父级处于禁用状态");
+            return ResultUtil.error("操作失败，父级处于禁用状态");
         }
-        return ResponseBean.success(updateObject(sysRole));
+        return ResultUtil.success(updateObject(sysRole));
     }
 
     /**
@@ -176,9 +176,9 @@ public class SysRoleService extends BaseService {
     public Map<String, Object> deleteRole(Long roleId) {
         List<SysRole> list = mapper.getRoleListByParentId(roleId);
         if (null != list && 0 < list.size()) {
-            return ResponseBean.error("当前角色存在下级");
+            return ResultUtil.error("当前角色存在下级");
         }
-        return ResponseBean.success(deleteById(SysRole.class, roleId));
+        return ResultUtil.success(deleteById(SysRole.class, roleId));
     }
 
     /**
@@ -189,27 +189,27 @@ public class SysRoleService extends BaseService {
      */
     public Map<String, Object> changeRoleIsStop(Long roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
-            return ResponseBean.error("id不能为空");
+            return ResultUtil.error("id不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
-            return ResponseBean.error("不能操作超级管理员");
+            return ResultUtil.error("不能操作超级管理员");
         }
         if (null == isStop) {
-            return ResponseBean.error("状态不能为空");
+            return ResultUtil.error("状态不能为空");
         }
         //判断是否启用
         if (GlobalConfig.IS_STOP.equals(isStop)) {
             SysRole role = mapper.getInfoByRoleId(roleId);
             SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
             if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
-                return ResponseBean.error("父级当前处于禁用状态");
+                return ResultUtil.error("父级当前处于禁用状态");
             }
         }
         mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
         for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
             findChildrenChangeIsStop(sysRole.getId(), isStop);
         }
-        return ResponseBean.success();
+        return ResultUtil.success();
     }
 
     /**

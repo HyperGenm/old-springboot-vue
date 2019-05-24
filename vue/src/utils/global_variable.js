@@ -13,6 +13,8 @@ const GLOBAL = {
 const URL = {
     /*登录 */
     login: '/pc/login',
+    /*登录验证码*/
+    loginValidateCode: '/pc/getValidateCode',
     /*退出登录*/
     logout: '/pc/logout',
     /*获取所有功能菜单树*/

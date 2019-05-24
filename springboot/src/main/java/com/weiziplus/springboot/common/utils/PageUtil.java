@@ -12,7 +12,7 @@ import java.util.Map;
  * @author wanglongwei
  * @data 2019/5/7 17:06
  */
-public class PageBean {
+public class PageUtil {
     public static Map<String, Object> pageInfo(List list) {
         Map<String, Object> map = new HashMap<>(4);
         PageInfo pageInfo = new PageInfo(list);

@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.pc.system.service;
 
 import com.github.pagehelper.PageHelper;
-import com.weiziplus.springboot.common.utils.PageBean;
+import com.weiziplus.springboot.common.utils.PageUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,6 @@ public class SysLogService {
      */
     public Map<String, Object> getLogList(Integer pageNum, Integer pageSize, String username, Long roleId, String createTime,String description) {
         PageHelper.startPage(pageNum, pageSize);
-        return PageBean.pageInfo(mapper.getLogList(username, roleId, createTime,description));
+        return PageUtil.pageInfo(mapper.getLogList(username, roleId, createTime,description));
     }
 }

@@ -258,7 +258,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'admin', 1, 0, '2019-05-13 17:10:20', '2019-05-09 16:26:15');
+INSERT INTO `sys_user` VALUES (1, 'superadmin', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'superadmin', 1, 0, '2019-05-13 17:10:20', '2019-05-09 16:26:15');
 INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 0, '2019-05-13 17:09:20', '2019-05-10 14:30:04');
 INSERT INTO `sys_user` VALUES (1000000, 'ss', 'b6eaced172f2ae2c94eb5c1de8c72921', '666', 0, 0, '2019-05-13 09:14:32', '2019-05-13 09:14:32');
 

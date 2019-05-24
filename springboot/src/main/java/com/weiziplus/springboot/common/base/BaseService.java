@@ -1,9 +1,7 @@
 package com.weiziplus.springboot.common.base;
 
-import com.weiziplus.springboot.common.utils.ResponseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

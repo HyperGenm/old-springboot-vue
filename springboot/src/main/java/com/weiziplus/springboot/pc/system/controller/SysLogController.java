@@ -2,7 +2,7 @@ package com.weiziplus.springboot.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
-import com.weiziplus.springboot.common.utils.ResponseBean;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.pc.system.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +34,6 @@ public class SysLogController {
             @RequestParam(value = "roleId", required = false) Long roleId,
             @RequestParam(value = "createTime", required = false) String createTime,
             @RequestParam(value = "description", required = false) String description) {
-        return ResponseBean.success(service.getLogList(pageNum, pageSize, username, roleId, createTime,description));
+        return ResultUtil.success(service.getLogList(pageNum, pageSize, username, roleId, createTime,description));
     }
 }

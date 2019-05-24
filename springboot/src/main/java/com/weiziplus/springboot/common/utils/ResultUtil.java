@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 封装result返回
+ * 处理返回结果
  *
  * @author wanglongwei
- * @data 2019/4/22 9:35
+ * @data 2019/5/24 15:58
  */
-public class ResponseBean {
+public class ResultUtil {
 
     /**
      * 成功状态的code
@@ -25,6 +25,7 @@ public class ResponseBean {
      * token出错的code
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
+
 
     public static Map<String, Object> content(Integer code, String msg, Object data) {
         Map<String, Object> map = new HashMap<>(3);

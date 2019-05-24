@@ -11,6 +11,7 @@ import {Loading} from 'element-ui';
 
 /**axios默认配置*/
 axios.defaults.timeout = 30000;//设置超时时间，规定时间内没有响应则执行失败回调
+axios.defaults.withCredentials = true;
 
 /**
  * 封装axios请求

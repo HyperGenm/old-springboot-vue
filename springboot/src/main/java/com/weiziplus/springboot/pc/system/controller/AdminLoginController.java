@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -25,6 +27,18 @@ public class AdminLoginController {
     AdminLoginService service;
 
     /**
+     * 生成验证码
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping("/getValidateCode")
+    public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
+        service.getValidateCode(request, response);
+    }
+
+    /**
      * 系统用户登录
      *
      * @param username
@@ -33,8 +47,8 @@ public class AdminLoginController {
      */
     @PostMapping("/login")
     @SystemLog(description = "系统用户登录")
-    public Map<String, Object> login(String username, String password) {
-        return service.login(username, password);
+    public Map<String, Object> login(HttpSession session, String username, String password, String code) {
+        return service.login(session, username, password, code);
     }
 
     /**

@@ -1,12 +1,17 @@
 package com.weiziplus.springboot.common.filter;
 
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.utils.StringUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 过滤器
@@ -30,16 +35,25 @@ public class CorsFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Accept,Content-Type" + "," + GlobalConfig.TOKEN);
-        //如果是options请求，直接放过
-        final String options = "OPTIONS";
-        if (options.equals(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
+        String originHeader = request.getHeader(HttpHeaders.ORIGIN);
+        //如果不需要跨域
+        if (StringUtil.isBlank(originHeader)) {
+            chain.doFilter(req, res);
             return;
         }
+        //配置可以跨域的域名
+        String[] allowDomain = {"http://localhost:8088"};
+        Set<String> allowedOrigins = new HashSet<>(Arrays.asList(allowDomain));
+        if (!allowedOrigins.contains(originHeader)) {
+            //如果域名不存在，直接返回404
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Accept,Content-Type,Origin," + GlobalConfig.TOKEN);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         chain.doFilter(req, res);
     }
 }
