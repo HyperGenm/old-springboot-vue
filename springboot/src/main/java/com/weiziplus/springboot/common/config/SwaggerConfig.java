@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.common.config;
 
 import io.swagger.annotations.Api;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
+@ConditionalOnProperty(prefix = "swagger",value = {"enable"},havingValue = "true")
 public class SwaggerConfig {
     @Bean
     public Docket apiDocument() {

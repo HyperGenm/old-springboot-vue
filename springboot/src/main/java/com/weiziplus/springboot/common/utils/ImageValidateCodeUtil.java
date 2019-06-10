@@ -77,9 +77,9 @@ public class ImageValidateCodeUtil {
             drawLine(graphics);
         }
         //绘制随机字符
-        StringBuilder randomString = new StringBuilder();
+        String randomString = "";
         for (int i = 0; i < RANDOM_NUM; i++) {
-            randomString.append(drawString(graphics, i));
+            randomString = randomString.concat(drawString(graphics, i));
         }
         result.put("random", randomString);
         result.put("image", bufferedImage);

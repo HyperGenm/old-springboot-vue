@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.common.utils.token;
 
+import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.utils.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,13 +15,14 @@ public class TokenUtil {
 
     /**
      * 根据用户id获取用户Redis的key值
+     * --------------:为文件夹
      *
      * @param audience---用户角色
      * @param userId---用户ID
      * @return
      */
     public static String getAudienceRedisKey(String audience, Long userId) {
-        return audience + userId;
+        return GlobalConfig.TOKEN.concat(":").concat(audience).concat(":") + userId;
     }
 
     /**

@@ -118,7 +118,7 @@
                     };
                     let children = value.children;
                     if (null == children || 0 >= children.length) {
-                        router['components'] = require('@/views/index/' + value.path + '/Index');
+                        router['components'] = require(`@/views/index/${value.path}/Index`);
                         router['components_bak'] = value.path;
                         routers.push(router);
                     } else {
@@ -152,7 +152,7 @@
                     };
                     let children = value.children;
                     if (null == children || 0 >= children.length) {
-                        router['components'] = require('@/views/index/' + parentName + '/' + value.path + '/Index');
+                        router['components'] = require(`@/views/index/${parentName}/${value.path}/Index`);
                         router['components_bak'] = parentName + '/' + value.path;
                         routers.push(router);
                     } else {

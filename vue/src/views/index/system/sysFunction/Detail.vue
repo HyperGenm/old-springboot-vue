@@ -42,7 +42,7 @@
                     {title: '上级', content: this.parentData.title},
                     {
                         title: '图标', formatter() {
-                            return `<i class="` + icon + `"></i>`;
+                            return `<i class="${icon}"></i>`;
                         }
                     },
                     {title: '排序', content: sort},

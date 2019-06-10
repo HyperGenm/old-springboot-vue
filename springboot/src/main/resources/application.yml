@@ -44,3 +44,6 @@ pagehelper:
   reasonable: false
   support-methods-arguments: true
   params: count=countSql
+#是否启用swagger
+swagger:
+  enable: true

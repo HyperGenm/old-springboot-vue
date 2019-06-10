@@ -118,7 +118,7 @@ public class AdminLoginService {
         if (null == token) {
             return ResultUtil.error("登录失败，请重试");
         }
-        Map<String, Object> map = new HashMap<>(1);
+        Map<String, Object> map = new HashMap<>(5);
         map.put("token", token);
         map.put("userInfo", sysUser);
         map.put("role", sysRole.getName());

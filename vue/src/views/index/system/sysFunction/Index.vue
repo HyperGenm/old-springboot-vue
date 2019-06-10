@@ -88,7 +88,7 @@
                     {prop: 'title', label: '路由标题'},
                     {
                         prop: 'icon', label: '路由图标', formatter(row) {
-                            return `<i class="` + row.icon + `"></i>`;
+                            return `<i class="${row.icon}"></i>`;
                         }
                     },
                     {prop: 'sort', label: '排序', sortable: true},
