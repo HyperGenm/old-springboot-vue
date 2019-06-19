@@ -37,16 +37,15 @@ public class CorsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         String originHeader = request.getHeader(HttpHeaders.ORIGIN);
-        //如果不需要跨域
+        //如果不需要跨域直接放行
         if (StringUtil.isBlank(originHeader)) {
             chain.doFilter(req, res);
             return;
         }
-        //如果是swagger-ui.html
+        //如果是swagger-ui.html直接放行
         String referer = request.getHeader(HttpHeaders.REFERER);
         String pattern = "^(http://|https://)([a-zA-Z0-9\\.\\:]+)(\\/swagger-ui.html)";
-        boolean matches = Pattern.compile(pattern).matcher(referer).matches();
-        if (matches) {
+        if (Pattern.compile(pattern).matcher(referer).matches()) {
             chain.doFilter(req, res);
             return;
         }
@@ -58,7 +57,7 @@ public class CorsFilter implements Filter {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Accept,Content-Type,Origin," + GlobalConfig.TOKEN);
