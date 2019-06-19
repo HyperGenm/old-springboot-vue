@@ -44,7 +44,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getFunctionList")
     public Map<String, Object> getFunctionList(
-            @RequestParam(value = "parentId", defaultValue = "0L") Long parentId,
+            @RequestParam(value = "parentId", defaultValue = "0") Long parentId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         return ResultUtil.success(service.getFunctionListByParentId(parentId, pageNum, pageSize));

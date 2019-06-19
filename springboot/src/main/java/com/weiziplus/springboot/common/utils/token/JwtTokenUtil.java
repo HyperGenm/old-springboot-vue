@@ -37,7 +37,6 @@ public class JwtTokenUtil {
      *
      * @param userId
      * @return
-     * @throws Exception
      */
     public static String createToken(Long userId, String audience) {
         return Jwts.builder()
@@ -55,7 +54,6 @@ public class JwtTokenUtil {
      *
      * @param token
      * @return
-     * @throws Exception
      */
     public static Boolean isExpiration(String token){
         return getTokenBody(token).getExpiration().before(new Date());

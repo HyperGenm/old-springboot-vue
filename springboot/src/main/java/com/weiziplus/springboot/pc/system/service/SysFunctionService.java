@@ -35,7 +35,7 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    @Cacheable
+    @Cacheable(condition = "#roleId > 1")
     public List<SysFunction> getMenuTreeByRoleId(Long roleId) {
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdMenuFunInfoByRoleId(roleId);
