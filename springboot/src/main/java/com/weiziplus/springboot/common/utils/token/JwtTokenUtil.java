@@ -39,7 +39,7 @@ public class JwtTokenUtil {
      * @return
      * @throws Exception
      */
-    public static String createToken(Long userId, String audience) throws Exception {
+    public static String createToken(Long userId, String audience) {
         return Jwts.builder()
                 .setIssuer(ISSUER)
                 .setAudience(audience)
@@ -57,7 +57,7 @@ public class JwtTokenUtil {
      * @return
      * @throws Exception
      */
-    public static Boolean isExpiration(String token) throws Exception {
+    public static Boolean isExpiration(String token){
         return getTokenBody(token).getExpiration().before(new Date());
     }
 

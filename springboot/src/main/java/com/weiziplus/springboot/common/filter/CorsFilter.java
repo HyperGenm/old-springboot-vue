@@ -50,7 +50,7 @@ public class CorsFilter implements Filter {
             chain.doFilter(req, res);
             return;
         }
-        //配置可以跨域的域名
+        //配置可以跨域访问的域名
         String[] allowDomain = {"http://localhost:8088"};
         Set<String> allowedOrigins = new HashSet<>(Arrays.asList(allowDomain));
         if (!allowedOrigins.contains(originHeader)) {

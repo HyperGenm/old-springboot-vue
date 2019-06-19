@@ -75,12 +75,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         //判断jwtToken是否过期
-        Boolean isExpiration;
-        try {
-            isExpiration = JwtTokenUtil.isExpiration(token);
-        } catch (Exception e) {
-            isExpiration = true;
-        }
+        Boolean isExpiration = JwtTokenUtil.isExpiration(token);
         if (isExpiration) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;

@@ -34,13 +34,7 @@ public class TokenUtil {
      * @return
      */
     protected static String createToken(String audience, Long userId, Long expireTime) {
-        String token = null;
-        try {
-            token = JwtTokenUtil.createToken(userId, audience);
-        } catch (Exception e) {
-            log.error(audience.concat("用户token创建失败,userId:") + userId + e);
-            return null;
-        }
+        String token = JwtTokenUtil.createToken(userId, audience);
         StringRedisUtil.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;
     }
