@@ -3,9 +3,15 @@ package com.weiziplus.springboot.pc.system.service;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.models.SysFunction;
-import com.weiziplus.springboot.common.utils.*;
+import com.weiziplus.springboot.common.utils.DateUtil;
+import com.weiziplus.springboot.common.utils.PageUtil;
+import com.weiziplus.springboot.common.utils.ResultUtil;
+import com.weiziplus.springboot.common.utils.ValidateUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +23,7 @@ import java.util.Map;
  * @data 2019/5/9 15:18
  */
 @Service
+@CacheConfig(cacheNames = "pc:system:sysFunctionService")
 public class SysFunctionService extends BaseService {
 
     @Autowired
@@ -28,6 +35,7 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
+    @Cacheable
     public List<SysFunction> getMenuTreeByRoleId(Long roleId) {
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdMenuFunInfoByRoleId(roleId);
@@ -64,6 +72,7 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
+    @Cacheable
     public List<SysFunction> getFunTree() {
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
@@ -99,6 +108,7 @@ public class SysFunctionService extends BaseService {
      * @param pageSize
      * @return
      */
+    @Cacheable
     public Map<String, Object> getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
@@ -110,9 +120,10 @@ public class SysFunctionService extends BaseService {
      * @param sysFunction
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> addFunction(SysFunction sysFunction) {
         if (ValidateUtil.notEnglishNumberUnderLine(sysFunction.getName())) {
-            return ResultUtil.error("name为英文开头，英文、数字和下划线");
+            return ResultUtil.error("name为英文开头，英文、数字和下划线且最少两位");
         }
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
             return ResultUtil.error("parentId不能为空");
@@ -122,7 +133,7 @@ public class SysFunctionService extends BaseService {
             return ResultUtil.error("name已存在");
         }
         sysFunction.setCreateTime(DateUtil.getDate());
-        return ResultUtil.success(insertObject(sysFunction));
+        return ResultUtil.success(baseInsert(sysFunction));
     }
 
     /**
@@ -131,8 +142,9 @@ public class SysFunctionService extends BaseService {
      * @param sysFunction
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> updateFunction(SysFunction sysFunction) {
-        return ResultUtil.success(updateObject(sysFunction));
+        return ResultUtil.success(baseUpdate(sysFunction));
     }
 
     /**
@@ -141,6 +153,7 @@ public class SysFunctionService extends BaseService {
      * @param ids
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> deleteFunction(Long[] ids) {
         for (Long id : ids) {
             List<SysFunction> list = mapper.getFunListByParentId(id);
@@ -148,6 +161,6 @@ public class SysFunctionService extends BaseService {
                 return ResultUtil.error("目录下面含有子级目录");
             }
         }
-        return ResultUtil.success(deleteByIds(SysFunction.class, ids));
+        return ResultUtil.success(baseDeleteByClassAndIds(SysFunction.class, ids));
     }
 }

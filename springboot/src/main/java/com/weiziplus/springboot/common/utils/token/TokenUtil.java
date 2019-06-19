@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.common.utils.token;
 
 import com.weiziplus.springboot.common.config.GlobalConfig;
-import com.weiziplus.springboot.common.utils.redis.RedisUtil;
+import com.weiziplus.springboot.common.utils.redis.StringRedisUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,7 +41,7 @@ public class TokenUtil {
             log.error(audience.concat("用户token创建失败,userId:") + userId + e);
             return null;
         }
-        RedisUtil.set(getAudienceRedisKey(audience, userId), token, expireTime);
+        StringRedisUtil.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;
     }
 }

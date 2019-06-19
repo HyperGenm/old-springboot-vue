@@ -96,13 +96,8 @@ public class AdminLoginService {
             return ResultUtil.error("验证码错误");
         }
         SysUser sysUser = sysUserMapper.getInfoByUsername(username);
-        try {
-            if (null == sysUser || !sysUser.getPassword().equals(Md5Util.encode(password))) {
-                return ResultUtil.error("用户名或密码错误");
-            }
-        } catch (UnsupportedEncodingException e) {
-            log.warn("系统用户登录MD5加密出错" + e);
-            return ResultUtil.error("未知错误，请重试");
+        if (null == sysUser || !sysUser.getPassword().equals(Md5Util.encode(password))) {
+            return ResultUtil.error("用户名或密码错误");
         }
         if (!GlobalConfig.ALLOW_LOGIN.equals(sysUser.getAllowLogin())) {
             return ResultUtil.error("账号被禁用，请联系管理员");

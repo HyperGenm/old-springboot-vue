@@ -53,20 +53,15 @@ public class SysUserService extends BaseService {
             return ResultUtil.error("密码为6-20位大小写和数字");
         }
         if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResultUtil.error("真实姓名不能包含特殊字符");
+            return ResultUtil.error("真实姓名格式错误");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user) {
             return ResultUtil.error("用户名已存在");
         }
-        try {
-            sysUser.setPassword(Md5Util.encode(sysUser.getPassword()));
-        } catch (UnsupportedEncodingException e) {
-            log.warn("添加用户密码MD5加密出错" + e);
-            return ResultUtil.error("未知错误,请重试");
-        }
+        sysUser.setPassword(Md5Util.encode(sysUser.getPassword()));
         sysUser.setCreateTime(DateUtil.getDate());
-        return ResultUtil.success(insertObject(sysUser));
+        return ResultUtil.success(baseInsert(sysUser));
     }
 
     /**
@@ -80,13 +75,13 @@ public class SysUserService extends BaseService {
             return ResultUtil.error("用户名不能包含特殊字符");
         }
         if (null != sysUser.getRealName() && ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResultUtil.error("真实姓名不能包含特殊字符");
+            return ResultUtil.error("真实姓名格式错误");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user && !sysUser.getId().equals(user.getId())) {
             return ResultUtil.error("用户名已存在");
         }
-        return ResultUtil.success(updateObject(sysUser));
+        return ResultUtil.success(baseUpdate(sysUser));
     }
 
     /**
@@ -104,7 +99,7 @@ public class SysUserService extends BaseService {
                 return ResultUtil.error("不能删除超级管理员");
             }
         }
-        return ResultUtil.success(deleteByIds(SysUser.class, ids));
+        return ResultUtil.success(baseDeleteByClassAndIds(SysUser.class, ids));
     }
 
     /**
@@ -145,13 +140,7 @@ public class SysUserService extends BaseService {
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(JwtTokenUtil.getUserIdByHttpServletRequest(request))) {
             return ResultUtil.error("您没有权限");
         }
-        String newPwd = null;
-        try {
-            newPwd = Md5Util.encode(password);
-        } catch (UnsupportedEncodingException e) {
-            log.warn("重置用户密码MD5加密出错" + e);
-            return ResultUtil.error("未知错误,请重试");
-        }
+        String newPwd = Md5Util.encode(password);
         return ResultUtil.success(mapper.resetUserPassword(userId, newPwd));
     }
 }

@@ -6,13 +6,15 @@ import com.weiziplus.springboot.common.base.Id;
 import com.weiziplus.springboot.common.base.Table;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author wanglongwei
  * @data 2019/5/9 11:26
  */
 @Data
 @Table("sys_user")
-public class SysUser {
+public class SysUser implements Serializable {
     @Id("id")
     private Long id;
 

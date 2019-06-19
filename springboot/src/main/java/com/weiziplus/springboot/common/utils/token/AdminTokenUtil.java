@@ -1,6 +1,6 @@
 package com.weiziplus.springboot.common.utils.token;
 
-import com.weiziplus.springboot.common.utils.redis.RedisUtil;
+import com.weiziplus.springboot.common.utils.redis.StringRedisUtil;
 
 /**
  * 系统用户token配置
@@ -47,7 +47,7 @@ public class AdminTokenUtil {
      * @return
      */
     public static Boolean updateExpireTime(Long userId) {
-        return RedisUtil.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
+        return StringRedisUtil.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
     }
 
     /**
@@ -57,6 +57,6 @@ public class AdminTokenUtil {
      * @return
      */
     public static Boolean deleteToken(Long userId) {
-        return RedisUtil.delete(getAudienceRedisKey(userId));
+        return StringRedisUtil.delete(getAudienceRedisKey(userId));
     }
 }

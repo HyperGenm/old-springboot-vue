@@ -2,7 +2,7 @@ package com.weiziplus.springboot.common.utils;
 
 import org.springframework.util.DigestUtils;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * MD5加密
@@ -22,10 +22,10 @@ public class Md5Util {
      * @param str
      * @return
      */
-    public static String encode(String str) throws UnsupportedEncodingException {
+    public static String encode(String str) {
         //在字符串基础上添加加密盐
         str = SALT + str;
-        return DigestUtils.md5DigestAsHex(str.getBytes("GBK"));
+        return DigestUtils.md5DigestAsHex(str.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -34,7 +34,7 @@ public class Md5Util {
      * @param object
      * @return
      */
-    public static String encode(Object object) throws UnsupportedEncodingException {
+    public static String encode(Object object)  {
         return encode(object.toString());
     }
 }

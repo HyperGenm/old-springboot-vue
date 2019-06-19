@@ -6,7 +6,7 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/weiziplus?serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/template?serverTimezone=GMT%2B8
     ###################以下为druid增加的配置###########################
     type: com.alibaba.druid.pool.DruidDataSource
     # 下面为连接池的补充设置，应用到上面所有数据源中
@@ -31,7 +31,7 @@ spring:
     port: 6379
     #password: 123456
     #连接超时时间
-    timeout: 10000
+    timeout: 10000ms
 mybatis:
   #指定全局配置文件位置
   config-location: classpath:mybatis/mybatis-config.xml

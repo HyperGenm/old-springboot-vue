@@ -5,13 +5,15 @@ import com.weiziplus.springboot.common.base.Id;
 import com.weiziplus.springboot.common.base.Table;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author wanglongwei
  * @data 2019/5/9 11:58
  */
 @Data
 @Table("sys_role_function")
-public class SysRoleFunction {
+public class SysRoleFunction implements Serializable {
     @Id("id")
     private Long id;
 

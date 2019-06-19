@@ -6,6 +6,7 @@ import com.weiziplus.springboot.common.base.Id;
 import com.weiziplus.springboot.common.base.Table;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("sys_role")
-public class SysRole {
+public class SysRole implements Serializable {
     @Id("id")
     private Long id;
 

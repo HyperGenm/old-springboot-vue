@@ -43,13 +43,8 @@ public class LoginService {
         if (null == user) {
             return ResultUtil.error("用户名或密码错误");
         }
-        try {
-            if (!user.getPassword().equals(Md5Util.encode(password))) {
-                return ResultUtil.error("用户名或密码错误");
-            }
-        } catch (UnsupportedEncodingException e) {
-            log.warn("web用户登录MD5加密出错" + e);
-            return ResultUtil.error("未知错误，请重试");
+        if (!user.getPassword().equals(Md5Util.encode(password))) {
+            return ResultUtil.error("用户名或密码错误");
         }
         Map<String, Object> resMap = new HashMap<>(1);
         String token = WebTokenUtil.createToken(user.getId());
@@ -78,13 +73,7 @@ public class LoginService {
         if (null != user) {
             return ResultUtil.error("用户名已存在");
         }
-        String md5Pwd;
-        try {
-            md5Pwd = Md5Util.encode(password);
-        } catch (UnsupportedEncodingException e) {
-            log.warn("web用户注册MD5加密出错" + e);
-            return ResultUtil.error("未知错误，请重试");
-        }
+        String md5Pwd = Md5Util.encode(password);
         return ResultUtil.success(userMapper.addUser(username, md5Pwd));
     }
 

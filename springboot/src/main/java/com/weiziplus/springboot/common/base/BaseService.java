@@ -103,7 +103,7 @@ public class BaseService {
      * @param object
      * @return
      */
-    public int insertObject(Object object) {
+    public int baseInsert(Object object) {
         return mapper.insert(handleTable(object));
     }
 
@@ -114,7 +114,7 @@ public class BaseService {
      * @param id
      * @return
      */
-    public int deleteById(Class nowClass, Long id) {
+    public int baseDeleteByClassAndId(Class nowClass, Long id) {
         return mapper.deleteById(getTableName(nowClass), id);
     }
 
@@ -125,7 +125,7 @@ public class BaseService {
      * @param ids
      * @return
      */
-    public int deleteByIds(Class nowClass, Long[] ids) {
+    public int baseDeleteByClassAndIds(Class nowClass, Long[] ids) {
         return mapper.deleteByIds(getTableName(nowClass), ids);
     }
 
@@ -135,7 +135,7 @@ public class BaseService {
      * @param object
      * @return
      */
-    public int updateObject(Object object) {
+    public int baseUpdate(Object object) {
         return mapper.update(handleTable(object));
     }
 
@@ -146,7 +146,7 @@ public class BaseService {
      * @param id
      * @return
      */
-    public Map<String, Object> findById(Class nowClass, Long id) {
+    public Map<String, Object> baseFindByClassAndId(Class nowClass, Long id) {
         return mapper.findById(getTableName(nowClass), id);
     }
 
@@ -156,7 +156,7 @@ public class BaseService {
      * @param nowClass
      * @return
      */
-    public List<Map<String, Object>> findAll(Class nowClass) {
+    public List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
         return mapper.findAll(getTableName(nowClass));
     }
 }

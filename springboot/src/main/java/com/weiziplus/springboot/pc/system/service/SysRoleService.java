@@ -11,6 +11,9 @@ import com.weiziplus.springboot.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.pc.system.mapper.SysRoleFunctionMapper;
 import com.weiziplus.springboot.pc.system.mapper.SysRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +25,9 @@ import java.util.Map;
  * @data 2019/5/10 8:39
  */
 @Service
+@CacheConfig(cacheNames = "pc:system:sysRoleService")
 public class SysRoleService extends BaseService {
+
     @Autowired
     SysRoleMapper mapper;
 
@@ -37,6 +42,7 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
+    @Cacheable
     public List<SysRole> getRoleTree() {
         List<SysRole> resultList = new ArrayList<>();
         List<SysRole> menuList = mapper.getRoleListByParentId(0L);
@@ -68,6 +74,7 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
+    @Cacheable
     public List<SysRole> getRoleList() {
         return mapper.getRoleList();
     }
@@ -123,6 +130,7 @@ public class SysRoleService extends BaseService {
      * @param sysRole
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> addRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
             return ResultUtil.error("角色名不能包含特殊字符");
@@ -140,7 +148,7 @@ public class SysRoleService extends BaseService {
             return ResultUtil.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtil.getDate());
-        return ResultUtil.success(insertObject(sysRole));
+        return ResultUtil.success(baseInsert(sysRole));
     }
 
     /**
@@ -149,6 +157,7 @@ public class SysRoleService extends BaseService {
      * @param sysRole
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> updateRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
             return ResultUtil.error("角色名不能包含特殊字符");
@@ -164,7 +173,7 @@ public class SysRoleService extends BaseService {
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
             return ResultUtil.error("操作失败，父级处于禁用状态");
         }
-        return ResultUtil.success(updateObject(sysRole));
+        return ResultUtil.success(baseUpdate(sysRole));
     }
 
     /**
@@ -173,12 +182,13 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> deleteRole(Long roleId) {
         List<SysRole> list = mapper.getRoleListByParentId(roleId);
         if (null != list && 0 < list.size()) {
             return ResultUtil.error("当前角色存在下级");
         }
-        return ResultUtil.success(deleteById(SysRole.class, roleId));
+        return ResultUtil.success(baseDeleteByClassAndId(SysRole.class, roleId));
     }
 
     /**
@@ -187,6 +197,7 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @return
      */
+    @CacheEvict(allEntries = true)
     public Map<String, Object> changeRoleIsStop(Long roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtil.error("id不能为空");

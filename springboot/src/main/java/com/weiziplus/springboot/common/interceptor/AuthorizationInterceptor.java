@@ -7,7 +7,7 @@ import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.models.User;
 import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.common.utils.StringUtil;
-import com.weiziplus.springboot.common.utils.redis.RedisUtil;
+import com.weiziplus.springboot.common.utils.redis.StringRedisUtil;
 import com.weiziplus.springboot.common.utils.token.AdminTokenUtil;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
 import com.weiziplus.springboot.common.utils.token.WebTokenUtil;
@@ -124,12 +124,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         //查看redis是否过期
-        if (!RedisUtil.hasKye(AdminTokenUtil.getAudienceRedisKey(userId))) {
+        if (!StringRedisUtil.hasKye(AdminTokenUtil.getAudienceRedisKey(userId))) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
-        if (!RedisUtil.get(AdminTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
+        if (!StringRedisUtil.get(AdminTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
@@ -164,12 +164,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         //查看redis是否过期
-        if (!RedisUtil.hasKye(WebTokenUtil.getAudienceRedisKey(userId))) {
+        if (!StringRedisUtil.hasKye(WebTokenUtil.getAudienceRedisKey(userId))) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
-        if (!RedisUtil.get(WebTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
+        if (!StringRedisUtil.get(WebTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * 过滤器
@@ -38,6 +39,14 @@ public class CorsFilter implements Filter {
         String originHeader = request.getHeader(HttpHeaders.ORIGIN);
         //如果不需要跨域
         if (StringUtil.isBlank(originHeader)) {
+            chain.doFilter(req, res);
+            return;
+        }
+        //如果是swagger-ui.html
+        String referer = request.getHeader(HttpHeaders.REFERER);
+        String pattern = "^(http://|https://)([a-zA-Z0-9\\.\\:]+)(\\/swagger-ui.html)";
+        boolean matches = Pattern.compile(pattern).matcher(referer).matches();
+        if (matches) {
             chain.doFilter(req, res);
             return;
         }
