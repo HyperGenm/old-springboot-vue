@@ -35,8 +35,12 @@ public class SysUserService extends BaseService {
      * @return
      */
     public Map<String, Object> getUserList(Integer pageNum, Integer pageSize, String userName, Integer allowLogin, String createTime) {
+        if (0 >= pageNum || 0 >= pageSize) {
+            return ResultUtil.error("pageNum,pageSize错误");
+        }
         PageHelper.startPage(pageNum, pageSize);
-        return PageUtil.pageInfo(mapper.getUserList(userName, allowLogin, createTime));
+        Map<String, Object> map = PageUtil.pageInfo(mapper.getUserList(userName, allowLogin, createTime));
+        return ResultUtil.success(map);
     }
 
     /**

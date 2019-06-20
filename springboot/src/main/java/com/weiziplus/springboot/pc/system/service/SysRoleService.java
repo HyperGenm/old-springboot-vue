@@ -87,6 +87,9 @@ public class SysRoleService extends BaseService {
      */
     public List<Long> getRoleFunList(Long roleId) {
         List<Long> resultList = new ArrayList<>();
+        if (null == roleId || 0 > roleId) {
+            return resultList;
+        }
         List<SysFunction> list = sysFunctionMapper.getFunListByRoleId(roleId);
         for (SysFunction sysFunction : list) {
             resultList.add(sysFunction.getId());
@@ -108,6 +111,9 @@ public class SysRoleService extends BaseService {
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             boolean haveRoleId = false;
             for (Long id : funIds) {
+                if (null == id || 0 > id) {
+                    return ResultUtil.error("ids错误");
+                }
                 if (GlobalConfig.SYS_FUNCTION_ROLE_ID.equals(id)) {
                     haveRoleId = true;
                     break;
@@ -119,7 +125,7 @@ public class SysRoleService extends BaseService {
         }
         sysRoleFunctionMapper.deleteByRoleId(roleId);
         if (null == funIds || 0 >= funIds.length) {
-            return ResultUtil.success("success");
+            return ResultUtil.success();
         }
         return ResultUtil.success(sysRoleFunctionMapper.addRoleFunction(roleId, funIds));
     }
@@ -184,6 +190,9 @@ public class SysRoleService extends BaseService {
      */
     @CacheEvict(allEntries = true)
     public Map<String, Object> deleteRole(Long roleId) {
+        if (null == roleId || 0 > roleId) {
+            return ResultUtil.error("roleId为null");
+        }
         List<SysRole> list = mapper.getRoleListByParentId(roleId);
         if (null != list && 0 < list.size()) {
             return ResultUtil.error("当前角色存在下级");

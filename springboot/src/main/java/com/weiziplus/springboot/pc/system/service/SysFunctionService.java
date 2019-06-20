@@ -38,6 +38,9 @@ public class SysFunctionService extends BaseService {
     @Cacheable(condition = "#roleId > 1")
     public List<SysFunction> getMenuTreeByRoleId(Long roleId) {
         List<SysFunction> resultList = new ArrayList<>();
+        if (null == roleId || 0 > roleId) {
+            return resultList;
+        }
         SysFunction sysFunction = mapper.getMinParentIdMenuFunInfoByRoleId(roleId);
         if (null == sysFunction) {
             return resultList;
@@ -110,8 +113,15 @@ public class SysFunctionService extends BaseService {
      */
     @Cacheable
     public Map<String, Object> getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
+        if (null == parentId || 0 > parentId) {
+            return ResultUtil.error("parentId错误");
+        }
+        if (0 >= pageNum || 0 >= pageSize) {
+            return ResultUtil.error("pageNum,pageSize格式错误");
+        }
         PageHelper.startPage(pageNum, pageSize);
-        return PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
+        Map<String, Object> map = PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
+        return ResultUtil.success(map);
     }
 
     /**
@@ -156,6 +166,9 @@ public class SysFunctionService extends BaseService {
     @CacheEvict(allEntries = true)
     public Map<String, Object> deleteFunction(Long[] ids) {
         for (Long id : ids) {
+            if (null == id || 0 > id) {
+                return ResultUtil.error("ids错误");
+            }
             List<SysFunction> list = mapper.getFunListByParentId(id);
             if (null != list && 0 < list.size()) {
                 return ResultUtil.error("目录下面含有子级目录");

@@ -47,7 +47,7 @@ public class SysFunctionController {
             @RequestParam(value = "parentId", defaultValue = "0") Long parentId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return ResultUtil.success(service.getFunctionListByParentId(parentId, pageNum, pageSize));
+        return service.getFunctionListByParentId(parentId, pageNum, pageSize);
     }
 
     /**

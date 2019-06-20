@@ -3,7 +3,6 @@ package com.weiziplus.springboot.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysUser;
-import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.pc.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,7 @@ public class SysUserController {
             @RequestParam(value = "userName", required = false) String userName,
             @RequestParam(value = "allowLogin", required = false) Integer allowLogin,
             @RequestParam(value = "createTime", required = false) String createTime) {
-        return ResultUtil.success(service.getUserList(pageNum, pageSize, userName, allowLogin, createTime));
+        return service.getUserList(pageNum, pageSize, userName, allowLogin, createTime);
     }
 
     /**
