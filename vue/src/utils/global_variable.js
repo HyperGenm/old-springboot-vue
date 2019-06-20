@@ -3,6 +3,7 @@
  * @type {{}}
  */
 const GLOBAL = {
+    //请求前缀
     base_url: process.env.VUE_APP_URL
 };
 
@@ -18,47 +19,45 @@ const URL = {
     /*退出登录*/
     logout: '/pc/logout',
     /*获取所有功能菜单树*/
-    getAllFunctionTree: '/pc/getAllFunctionTree',
+    getAllFunctionTree: '/pc/sysFunction/getAllFunctionTree',
     /*获取功能列表*/
-    getFunctionList: '/pc/getFunctionList',
+    getFunctionList: '/pc/sysFunction/getFunctionList',
     /*新增功能*/
-    addFunction: '/pc/addFunction',
+    addFunction: '/pc/sysFunction/addFunction',
     /*修改功能*/
-    updateFunction: '/pc/updateFunction',
+    updateFunction: '/pc/sysFunction/updateFunction',
     /*删除功能*/
-    deleteFunction: '/pc/deleteFunction',
+    deleteFunction: '/pc/sysFunction/deleteFunction',
     /*获取角色树形列表*/
-    getRoleTree: '/pc/getRoleTree',
+    getRoleTree: '/pc/sysRole/getRoleTree',
     /*获取角色所有功能列表*/
-    getRoleList: '/pc/getRoleList',
+    getRoleList: '/pc/sysRole/getRoleList',
     /*获取角色的功能列表*/
-    getRoleFunList: '/pc/getRoleFunList',
+    getRoleFunList: '/pc/sysRole/getRoleFunList',
     /*新增角色功能*/
-    addRoleFun: '/pc/addRoleFun',
-    /*更新角色功能*/
-    updateUserRole: '/pc/updateUserRole',
+    addRoleFun: '/pc/sysRole/addRoleFun',
     /*新增角色*/
-    addRole: '/pc/addRole',
+    addRole: '/pc/sysRole/addRole',
     /*修改角色*/
-    updateRole: '/pc/updateRole',
+    updateRole: '/pc/sysRole/updateRole',
     /*删除角色*/
-    deleteRole: '/pc/deleteRole',
+    deleteRole: '/pc/sysRole/deleteRole',
     /*改变角色状态*/
-    changeRoleIsStop: '/pc/changeRoleIsStop',
+    changeRoleIsStop: '/pc/sysRole/changeRoleIsStop',
+    /*更新角色功能*/
+    updateUserRole: '/pc/sysUser/updateUserRole',
     /*获取用户列表*/
-    getUserList: '/pc/getUserList',
+    getUserList: '/pc/sysUser/getUserList',
     /*新增用户*/
-    addUser: '/pc/addUser',
+    addUser: '/pc/sysUser/addUser',
     /*更新用户*/
-    updateUser: '/pc/updateUser',
+    updateUser: '/pc/sysUser/updateUser',
     /*删除用户*/
-    deleteUser: '/pc/deleteUser',
-    /*新增用户角色*/
-    addUserRole: '/pc/addUserRole',
+    deleteUser: '/pc/sysUser/deleteUser',
     /*重置用户密码*/
-    resetUserPassword: '/pc/resetUserPassword',
+    resetUserPassword: '/pc/sysUser/resetUserPassword',
     /*查看日志列表*/
-    getLogList: '/pc/getLogList'
+    getLogList: '/pc/sysLog/getLogList'
 };
 
 export default {

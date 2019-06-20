@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @ApiIgnore
 @AdminAuthToken
-@RequestMapping("/pc")
+@RequestMapping("/pc/sysRole")
 public class SysRoleController {
 
     @Autowired
