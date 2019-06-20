@@ -2,6 +2,7 @@ package com.weiziplus.springboot.api.controller;
 
 import com.weiziplus.springboot.api.service.UserService;
 import com.weiziplus.springboot.common.interceptor.WebAuthToken;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * @author wanglongwei
@@ -26,7 +26,7 @@ public class UserController {
 
     @ApiOperation(value = "获取用户信息")
     @GetMapping("/getInfo")
-    public Map<String, Object> getInfo(HttpServletRequest request) {
+    public ResultUtil getInfo(HttpServletRequest request) {
         return service.getInfo(request);
     }
 }

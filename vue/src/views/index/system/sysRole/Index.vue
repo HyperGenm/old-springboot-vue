@@ -227,7 +227,7 @@
                 }
                 let that = this;
                 this.$globalFun.messageBox({
-                    message: '确定删除',
+                    message: '确定删除,该操作无法撤销',
                     confirm() {
                         that.$axios({
                             url: that.$global.URL.deleteRole,

@@ -2,6 +2,7 @@ package com.weiziplus.springboot.api.controller;
 
 import com.weiziplus.springboot.api.service.LoginService;
 import com.weiziplus.springboot.common.interceptor.WebAuthToken;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,7 +32,7 @@ public class LoginController {
             @ApiImplicitParam(name = "password", value = "密码", dataType = "String", required = true, paramType = "form")
     })
     @PostMapping("/login")
-    public Map<String, Object> login(String username, String password) {
+    public ResultUtil login(String username, String password) {
         return service.login(username, password);
     }
 
@@ -41,14 +42,14 @@ public class LoginController {
             @ApiImplicitParam(name = "password", value = "密码", dataType = "String", required = true, paramType = "form")
     })
     @PostMapping("/register")
-    public Map<String, Object> register(String username, String password) {
+    public ResultUtil register(String username, String password) {
         return service.register(username, password);
     }
 
     @WebAuthToken
     @ApiOperation(value = "退出")
     @PostMapping("/logout")
-    public Map<String, Object> logout(HttpServletRequest request) {
+    public ResultUtil logout(HttpServletRequest request) {
         return service.logout(request);
     }
 }

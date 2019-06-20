@@ -34,7 +34,7 @@ public class SysUserService extends BaseService {
      * @param allowLogin
      * @return
      */
-    public Map<String, Object> getUserList(Integer pageNum, Integer pageSize, String userName, Integer allowLogin, String createTime) {
+    public ResultUtil getUserList(Integer pageNum, Integer pageSize, String userName, Integer allowLogin, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtil.error("pageNum,pageSize错误");
         }
@@ -49,7 +49,7 @@ public class SysUserService extends BaseService {
      * @param sysUser
      * @return
      */
-    public Map<String, Object> addUser(SysUser sysUser) {
+    public ResultUtil addUser(SysUser sysUser) {
         if (ValidateUtil.notUsername(sysUser.getUsername())) {
             return ResultUtil.error("用户名不能包含特殊字符");
         }
@@ -74,7 +74,7 @@ public class SysUserService extends BaseService {
      * @param sysUser
      * @return
      */
-    public Map<String, Object> updateUser(SysUser sysUser) {
+    public ResultUtil updateUser(SysUser sysUser) {
         if (ValidateUtil.notUsername(sysUser.getUsername())) {
             return ResultUtil.error("用户名不能包含特殊字符");
         }
@@ -94,8 +94,8 @@ public class SysUserService extends BaseService {
      * @param ids
      * @return
      */
-    public Map<String, Object> deleteUser(Long[] ids) {
-        if (0 >= ids.length) {
+    public ResultUtil deleteUser(Long[] ids) {
+        if (null == ids || 0 >= ids.length) {
             return ResultUtil.error("ids为空");
         }
         for (Long id : ids) {
@@ -113,7 +113,7 @@ public class SysUserService extends BaseService {
      * @param roleId
      * @return
      */
-    public Map<String, Object> updateUserRole(Long userId, Long roleId) {
+    public ResultUtil updateUserRole(Long userId, Long roleId) {
         if (null == userId || 0 >= userId) {
             return ResultUtil.error("userId不能为空");
         }
@@ -134,7 +134,7 @@ public class SysUserService extends BaseService {
      * @param password
      * @return
      */
-    public Map<String, Object> resetUserPassword(HttpServletRequest request, Long userId, String password) {
+    public ResultUtil resetUserPassword(HttpServletRequest request, Long userId, String password) {
         if (null == userId || 0 > userId) {
             return ResultUtil.error("id不能为空");
         }

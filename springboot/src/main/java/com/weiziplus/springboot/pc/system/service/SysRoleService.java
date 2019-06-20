@@ -104,7 +104,7 @@ public class SysRoleService extends BaseService {
      * @param funIds
      * @return
      */
-    public Map<String, Object> addRoleFun(Long roleId, Long[] funIds) {
+    public ResultUtil addRoleFun(Long roleId, Long[] funIds) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtil.error("roleId不能为空");
         }
@@ -137,7 +137,7 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> addRole(SysRole sysRole) {
+    public ResultUtil addRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
             return ResultUtil.error("角色名不能包含特殊字符");
         }
@@ -164,7 +164,7 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> updateRole(SysRole sysRole) {
+    public ResultUtil updateRole(SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
             return ResultUtil.error("角色名不能包含特殊字符");
         }
@@ -189,7 +189,7 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> deleteRole(Long roleId) {
+    public ResultUtil deleteRole(Long roleId) {
         if (null == roleId || 0 > roleId) {
             return ResultUtil.error("roleId为null");
         }
@@ -207,7 +207,7 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> changeRoleIsStop(Long roleId, Integer isStop) {
+    public ResultUtil changeRoleIsStop(Long roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtil.error("id不能为空");
         }

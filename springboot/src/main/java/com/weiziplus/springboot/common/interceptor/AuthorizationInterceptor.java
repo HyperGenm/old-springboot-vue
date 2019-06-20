@@ -182,15 +182,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * 将token出错信息输入到前端页面
      *
      * @param response
-     * @param errMap
+     * @param errResult
      */
-    private void handleResponse(HttpServletResponse response, Map errMap) {
+    private void handleResponse(HttpServletResponse response, ResultUtil errResult) {
         PrintWriter out = null;
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=utf-8");
             out = response.getWriter();
-            out.print(JSON.toJSONString(errMap));
+            out.print(JSON.toJSONString(errResult));
         } catch (Exception e) {
             log.warn("token失效输入到前端页面出错，catch" + e);
         } finally {

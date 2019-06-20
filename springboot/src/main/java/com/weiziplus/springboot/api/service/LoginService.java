@@ -35,7 +35,7 @@ public class LoginService {
      * @param password
      * @return
      */
-    public Map<String, Object> login(String username, String password) {
+    public ResultUtil login(String username, String password) {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
             return ResultUtil.error("用户名或密码为空");
         }
@@ -59,7 +59,7 @@ public class LoginService {
      * @param password
      * @return
      */
-    public Map<String, Object> register(String username, String password) {
+    public ResultUtil register(String username, String password) {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
             return ResultUtil.error("用户名或密码为空");
         }
@@ -82,7 +82,7 @@ public class LoginService {
      *
      * @return
      */
-    public Map<String, Object> logout(HttpServletRequest request) {
+    public ResultUtil logout(HttpServletRequest request) {
         Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
         WebTokenUtil.deleteToken(userId);
         return ResultUtil.success();

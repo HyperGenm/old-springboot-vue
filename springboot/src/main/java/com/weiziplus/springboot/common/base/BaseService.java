@@ -115,6 +115,9 @@ public class BaseService {
      * @return
      */
     public int baseDeleteByClassAndId(Class nowClass, Long id) {
+        if (null == nowClass || null == id) {
+            return 0;
+        }
         return mapper.deleteById(getTableName(nowClass), id);
     }
 
@@ -126,6 +129,9 @@ public class BaseService {
      * @return
      */
     public int baseDeleteByClassAndIds(Class nowClass, Long[] ids) {
+        if (null == nowClass || null == ids) {
+            return 0;
+        }
         return mapper.deleteByIds(getTableName(nowClass), ids);
     }
 
@@ -147,6 +153,9 @@ public class BaseService {
      * @return
      */
     public Map<String, Object> baseFindByClassAndId(Class nowClass, Long id) {
+        if (null == nowClass || null == id) {
+            return null;
+        }
         return mapper.findById(getTableName(nowClass), id);
     }
 

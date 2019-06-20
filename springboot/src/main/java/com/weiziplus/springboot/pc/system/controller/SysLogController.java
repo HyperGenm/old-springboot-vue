@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Map;
-
 /**
  * @author wanglongwei
  * @data 2019/5/13 15:33
@@ -27,7 +25,7 @@ public class SysLogController {
 
     @GetMapping("/getLogList")
     @SystemLog(description = "查看系统日志")
-    public Map<String, Object> getLogList(
+    public ResultUtil getLogList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,

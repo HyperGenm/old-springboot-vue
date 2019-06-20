@@ -164,15 +164,20 @@
         methods: {
             deleteUsers(ids) {
                 let that = this;
-                this.$axios({
-                    url: that.$global.URL.deleteUser,
-                    method: 'post',
-                    data: {
-                        ids
-                    },
-                    success() {
-                        that.$globalFun.successMsg('删除成功');
-                        that.$refs['table'].renderTable();
+                this.$globalFun.messageBox({
+                    message: '确定删除,该操作无法撤销',
+                    confirm() {
+                        that.$axios({
+                            url: that.$global.URL.deleteUser,
+                            method: 'post',
+                            data: {
+                                ids
+                            },
+                            success() {
+                                that.$globalFun.successMsg('删除成功');
+                                that.$refs['table'].renderTable();
+                            }
+                        });
                     }
                 });
             },

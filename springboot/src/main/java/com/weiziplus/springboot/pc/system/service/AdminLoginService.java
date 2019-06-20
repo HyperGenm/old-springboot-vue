@@ -82,7 +82,7 @@ public class AdminLoginService {
      * @param password
      * @return
      */
-    public Map<String, Object> login(HttpSession session, String username, String password, String code) {
+    public ResultUtil login(HttpSession session, String username, String password, String code) {
         if (StringUtil.isBlank(username) || StringUtil.isBlank(password)) {
             return ResultUtil.error("用户名或密码为空");
         }
@@ -128,7 +128,7 @@ public class AdminLoginService {
      * @param request
      * @return
      */
-    public Map<String, Object> logout(HttpServletRequest request) {
+    public ResultUtil logout(HttpServletRequest request) {
         Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
         AdminTokenUtil.deleteToken(userId);
         return ResultUtil.success();

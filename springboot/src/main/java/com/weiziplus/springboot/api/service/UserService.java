@@ -24,7 +24,7 @@ public class UserService {
      * @param request
      * @return
      */
-    public Map<String, Object> getInfo(HttpServletRequest request) {
+    public ResultUtil getInfo(HttpServletRequest request) {
         Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
         return ResultUtil.success(mapper.getUserInfoByUserId(userId));
     }

@@ -1,15 +1,32 @@
 package com.weiziplus.springboot.common.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
- * 处理返回结果
+ * 统一返回结果
  *
  * @author wanglongwei
  * @data 2019/5/24 15:58
  */
-public class ResultUtil {
+@Data
+public class ResultUtil implements Serializable {
+
+    /**
+     * 返回状态码code
+     */
+    private Integer code;
+
+    /**
+     * 返回提示信息
+     */
+    private String msg;
+
+    /**
+     * 返回数据
+     */
+    private Object data;
 
     /**
      * 成功状态的code
@@ -26,68 +43,75 @@ public class ResultUtil {
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
 
-
-    public static Map<String, Object> content(Integer code, String msg, Object data) {
-        Map<String, Object> map = new HashMap<>(3);
-        map.put("code", code);
-        map.put("msg", msg);
-        map.put("data", data);
-        return map;
+    /**
+     * 基础返回处理
+     *
+     * @param code
+     * @param msg
+     * @param data
+     * @return
+     */
+    private static ResultUtil content(Integer code, String msg, Object data) {
+        ResultUtil resultUtil = new ResultUtil();
+        resultUtil.setCode(code);
+        resultUtil.setMsg(msg);
+        resultUtil.setData(data);
+        return resultUtil;
     }
 
-    public static Map<String, Object> success(String msg, Object data) {
+    public static ResultUtil success(String msg, Object data) {
         return content(SUCCESS_CODE, msg, data);
     }
 
-    public static Map<String, Object> success(Object data) {
+    public static ResultUtil success(Object data) {
         return content(SUCCESS_CODE, "success", data);
     }
 
-    public static Map<String, Object> success(String msg) {
+    public static ResultUtil success(String msg) {
         return content(SUCCESS_CODE, msg, null);
     }
 
-    public static Map<String, Object> success() {
+    public static ResultUtil success() {
         return content(SUCCESS_CODE, "success", null);
     }
 
-    public static Map<String, Object> error(Integer code, String msg, Object data) {
+    public static ResultUtil error(Integer code, String msg, Object data) {
         return content(code, msg, data);
     }
 
-    public static Map<String, Object> error(Integer code, String msg) {
+    public static ResultUtil error(Integer code, String msg) {
         return content(code, msg, null);
     }
 
-    public static Map<String, Object> error(Integer code, Object data) {
+    public static ResultUtil error(Integer code, Object data) {
         return content(code, "error", data);
     }
 
-    public static Map<String, Object> error(Integer code) {
+    public static ResultUtil error(Integer code) {
         return content(code, "error", null);
     }
 
-    public static Map<String, Object> error(String msg, Object data) {
+    public static ResultUtil error(String msg, Object data) {
         return content(ERROR_CODE, msg, data);
     }
 
-    public static Map<String, Object> error(String msg) {
+    public static ResultUtil error(String msg) {
         return content(ERROR_CODE, msg, null);
     }
 
-    public static Map<String, Object> error() {
+    public static ResultUtil error() {
         return content(ERROR_CODE, "error", null);
     }
 
-    public static Map<String, Object> errorToken(String msg, Object data) {
+    public static ResultUtil errorToken(String msg, Object data) {
         return error(ERROR_TOKEN_CODE, msg, data);
     }
 
-    public static Map<String, Object> errorToken(String msg) {
+    public static ResultUtil errorToken(String msg) {
         return error(ERROR_TOKEN_CODE, msg, null);
     }
 
-    public static Map<String, Object> errorToken() {
+    public static ResultUtil errorToken() {
         return error(ERROR_TOKEN_CODE, "token失效", null);
     }
 }

@@ -112,7 +112,7 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @Cacheable
-    public Map<String, Object> getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
+    public ResultUtil getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
         if (null == parentId || 0 > parentId) {
             return ResultUtil.error("parentId错误");
         }
@@ -131,7 +131,7 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> addFunction(SysFunction sysFunction) {
+    public ResultUtil addFunction(SysFunction sysFunction) {
         if (ValidateUtil.notEnglishNumberUnderLine(sysFunction.getName())) {
             return ResultUtil.error("name为英文开头，英文、数字和下划线且最少两位");
         }
@@ -153,7 +153,7 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> updateFunction(SysFunction sysFunction) {
+    public ResultUtil updateFunction(SysFunction sysFunction) {
         return ResultUtil.success(baseUpdate(sysFunction));
     }
 
@@ -164,7 +164,10 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public Map<String, Object> deleteFunction(Long[] ids) {
+    public ResultUtil deleteFunction(Long[] ids) {
+        if (null == ids) {
+            return ResultUtil.error("ids不能为空");
+        }
         for (Long id : ids) {
             if (null == id || 0 > id) {
                 return ResultUtil.error("ids错误");

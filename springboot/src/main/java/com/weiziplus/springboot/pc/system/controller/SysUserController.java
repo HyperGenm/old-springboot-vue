@@ -3,6 +3,7 @@ package com.weiziplus.springboot.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysUser;
+import com.weiziplus.springboot.common.utils.ResultUtil;
 import com.weiziplus.springboot.pc.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class SysUserController {
      */
     @GetMapping("/getUserList")
     @SystemLog(description = "查看用户列表")
-    public Map getUserList(
+    public ResultUtil getUserList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,
@@ -51,7 +52,7 @@ public class SysUserController {
      */
     @PostMapping("/addUser")
     @SystemLog(description = "新增用户")
-    public Map addUser(SysUser sysUser) {
+    public ResultUtil addUser(SysUser sysUser) {
         return service.addUser(sysUser);
     }
 
@@ -63,7 +64,7 @@ public class SysUserController {
      */
     @PostMapping("/updateUser")
     @SystemLog(description = "更新用户")
-    public Map updateUser(SysUser sysUser) {
+    public ResultUtil updateUser(SysUser sysUser) {
         return service.updateUser(sysUser);
     }
 
@@ -75,7 +76,7 @@ public class SysUserController {
      */
     @PostMapping("/deleteUser")
     @SystemLog(description = "删除用户")
-    public Map deleteUser(
+    public ResultUtil deleteUser(
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
         return service.deleteUser(ids);
     }
@@ -89,7 +90,7 @@ public class SysUserController {
      */
     @PostMapping("/updateUserRole")
     @SystemLog(description = "更新用户角色")
-    public Map updateUserRole(Long userId, Long roleId) {
+    public ResultUtil updateUserRole(Long userId, Long roleId) {
         return service.updateUserRole(userId, roleId);
     }
 
@@ -98,7 +99,7 @@ public class SysUserController {
      */
     @PostMapping("/resetUserPassword")
     @SystemLog(description = "重置用户密码")
-    public Map<String, Object> resetUserPassword(HttpServletRequest request, Long userId, String password) {
+    public ResultUtil resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
     }
 }

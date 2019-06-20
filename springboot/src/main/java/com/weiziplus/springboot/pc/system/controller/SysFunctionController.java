@@ -30,7 +30,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTree")
     @SystemLog(description = "查看功能列表")
-    public Map<String, Object> getAllFunctionTree() {
+    public ResultUtil getAllFunctionTree() {
         return ResultUtil.success(service.getFunTree());
     }
 
@@ -43,7 +43,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getFunctionList")
-    public Map<String, Object> getFunctionList(
+    public ResultUtil getFunctionList(
             @RequestParam(value = "parentId", defaultValue = "0") Long parentId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
@@ -58,7 +58,7 @@ public class SysFunctionController {
      */
     @PostMapping("/addFunction")
     @SystemLog(description = "新增功能")
-    public Map<String, Object> addFunction(SysFunction sysFunction) {
+    public ResultUtil addFunction(SysFunction sysFunction) {
         return service.addFunction(sysFunction);
     }
 
@@ -70,7 +70,7 @@ public class SysFunctionController {
      */
     @PostMapping("/updateFunction")
     @SystemLog(description = "修改功能")
-    public Map<String, Object> updateFunction(SysFunction sysFunction) {
+    public ResultUtil updateFunction(SysFunction sysFunction) {
         return service.updateFunction(sysFunction);
     }
 
@@ -82,7 +82,7 @@ public class SysFunctionController {
      */
     @PostMapping("/deleteFunction")
     @SystemLog(description = "删除功能")
-    public Map<String, Object> deleteFunction(Long[] ids) {
+    public ResultUtil deleteFunction(Long[] ids) {
         return service.deleteFunction(ids);
     }
 }
