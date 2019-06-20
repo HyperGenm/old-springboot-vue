@@ -1,7 +1,5 @@
 package com.weiziplus.springboot.common.utils;
 
-import lombok.Data;
-
 import java.io.Serializable;
 
 /**
@@ -10,7 +8,6 @@ import java.io.Serializable;
  * @author wanglongwei
  * @data 2019/5/24 15:58
  */
-@Data
 public class ResultUtil implements Serializable {
 
     /**
@@ -29,6 +26,64 @@ public class ResultUtil implements Serializable {
     private Object data;
 
     /**
+     * 获取状态码
+     *
+     * @return
+     */
+    public Integer getCode() {
+        return code;
+    }
+
+    /**
+     * 获取提示信息
+     *
+     * @return
+     */
+    public String getMsg() {
+        return msg;
+    }
+
+    /**
+     * 获取返回数据
+     *
+     * @return
+     */
+    public Object getData() {
+        return data;
+    }
+
+    /**
+     * 创建无参数ResultUtil对象---fastjson反序列化需要无参数
+     */
+    public ResultUtil() {
+    }
+
+    /**
+     * 创建ResultUtil对象
+     *
+     * @param code
+     * @param msg
+     * @param data
+     */
+    private ResultUtil(Integer code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    /**
+     * 基础返回处理
+     *
+     * @param code
+     * @param msg
+     * @param data
+     * @return
+     */
+    private static ResultUtil content(Integer code, String msg, Object data) {
+        return new ResultUtil(code, msg, data);
+    }
+
+    /**
      * 成功状态的code
      */
     private static final Integer SUCCESS_CODE = 200;
@@ -42,22 +97,6 @@ public class ResultUtil implements Serializable {
      * token出错的code
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
-
-    /**
-     * 基础返回处理
-     *
-     * @param code
-     * @param msg
-     * @param data
-     * @return
-     */
-    private static ResultUtil content(Integer code, String msg, Object data) {
-        ResultUtil resultUtil = new ResultUtil();
-        resultUtil.setCode(code);
-        resultUtil.setMsg(msg);
-        resultUtil.setData(data);
-        return resultUtil;
-    }
 
     public static ResultUtil success(String msg, Object data) {
         return content(SUCCESS_CODE, msg, data);
@@ -75,22 +114,6 @@ public class ResultUtil implements Serializable {
         return content(SUCCESS_CODE, "success", null);
     }
 
-    public static ResultUtil error(Integer code, String msg, Object data) {
-        return content(code, msg, data);
-    }
-
-    public static ResultUtil error(Integer code, String msg) {
-        return content(code, msg, null);
-    }
-
-    public static ResultUtil error(Integer code, Object data) {
-        return content(code, "error", data);
-    }
-
-    public static ResultUtil error(Integer code) {
-        return content(code, "error", null);
-    }
-
     public static ResultUtil error(String msg, Object data) {
         return content(ERROR_CODE, msg, data);
     }
@@ -104,14 +127,14 @@ public class ResultUtil implements Serializable {
     }
 
     public static ResultUtil errorToken(String msg, Object data) {
-        return error(ERROR_TOKEN_CODE, msg, data);
+        return content(ERROR_TOKEN_CODE, msg, data);
     }
 
     public static ResultUtil errorToken(String msg) {
-        return error(ERROR_TOKEN_CODE, msg, null);
+        return content(ERROR_TOKEN_CODE, msg, null);
     }
 
     public static ResultUtil errorToken() {
-        return error(ERROR_TOKEN_CODE, "token失效", null);
+        return content(ERROR_TOKEN_CODE, "token失效", null);
     }
 }
