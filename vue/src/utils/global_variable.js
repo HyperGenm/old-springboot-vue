@@ -57,6 +57,8 @@ const URL = {
     updateUser: '/pc/sysUser/updateUser',
     /*删除用户*/
     deleteUser: '/pc/sysUser/deleteUser',
+    /*修改密码密码*/
+    updateUserPassword: '/pc/sysUser/updatePassword',
     /*重置用户密码*/
     resetUserPassword: '/pc/sysUser/resetUserPassword',
     /*********************日志管理*****************/
