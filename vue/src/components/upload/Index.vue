@@ -63,7 +63,7 @@
             //允许的最大上传个数
             limit: {
                 type: Number,
-                default: 3
+                default: 1
             },
             //文件上传提示
             tip: {
