@@ -3,6 +3,7 @@
         <el-upload
                 ref="upload"
                 :action="action"
+                :headers="headers"
                 :multiple="multiple"
                 :show-file-list="showFileList"
                 :drag="drag"
@@ -10,7 +11,6 @@
                 :on-remove="onRemove"
                 :on-success="onSuccess"
                 :on-error="onError"
-                :on-change="onChange"
                 :before-upload="beforeUpload"
                 :list-type="listType"
                 :auto-upload="autoUpload"
@@ -19,12 +19,8 @@
                 :on-exceed="onExceed"
                 :accept="accept">
             <el-button size="small" type="primary">点击上传</el-button>
-            <el-button v-if="!autoUpload && listType !== 'picture-card'" style="margin-top: 10px;" size="small"
-                       type="success" @click="submitUpload">
-                上传到服务器
-            </el-button>
         </el-upload>
-        <el-button v-if="!autoUpload && listType === 'picture-card'" style="margin-top: 10px;" size="small"
+        <el-button v-if="!autoUpload" style="margin-top: 10px;" size="small"
                    type="success" @click="submitUpload">
             上传到服务器
         </el-button>
@@ -42,6 +38,16 @@
             //上传的地址
             action: {
                 type: String
+            },
+            //设置请求头
+            headers: {
+                type: Object,
+                default() {
+                    let that = this;
+                    return {
+                        'token': that.$store.state.token || ''
+                    }
+                }
             },
             //是否支持多文件上传
             multiple: {
@@ -66,7 +72,7 @@
             //是否在文件选择后立即上传
             autoUpload: {
                 type: Boolean,
-                default: false
+                default: true
             },
             //允许的最大上传个数
             limit: {
@@ -115,7 +121,7 @@
              * @param fileList
              */
             onRemove(file, fileList) {
-                this.$emit('onRemove', fileList);
+                this.$emit('onRemove', file);
             },
             /**
              * 文件上传成功
@@ -124,7 +130,22 @@
              * @param fileList
              */
             onSuccess(res, file, fileList) {
-                this.$emit('onSuccess', res, file, fileList);
+                if (200 !== res['code']) {
+                    this.$globalFun.errorMsg(res['msg']);
+                    let uid = file['uid'];
+                    for (let i = 0; i < fileList.length; i++) {
+                        let _uid = fileList[i]['uid'];
+                        if (uid === _uid) {
+                            fileList.splice(i, 1);
+                            return;
+                        }
+                    }
+                    return;
+                }
+                this.$emit('onSuccess', {
+                    data: res['data'],
+                    file
+                });
             },
             /**
              * 文件上传失败
@@ -134,74 +155,74 @@
              */
             onError(error, file, fileList) {
                 this.$globalFun.errorMsg("文件上传失败，请重试");
-                console.warn("文件上传失败---error:", error, '-----file:', file, '-----fileList', fileList);
-            },
-            /**
-             * 文件改变时触发
-             * @param file
-             * @param fileList
-             */
-            onChange(file, fileList) {
-                let that = this;
-                for (let i = 0; i < fileList.length; i++) {
-                    let {type, size} = fileList[i]['raw'];
-                    //判断文件是否超出尺寸
-                    if (size > that.maxSize) {
-                        fileList.splice(i, 1);
-                        that.$globalFun.errorMsg('图片超出最大尺寸');
-                        continue;
-                    }
-                    //如果为全部类型，不做处理
-                    if ("*" === that.accept) {
-                        continue;
-                    }
-                    //如果存在该类型
-                    if (-1 !== that.accept.indexOf(type)) {
-                        continue;
-                    }
-                    //如果有图片类型，并且是所有图片类型
-                    if (-1 !== that.accept.indexOf("image/*")) {
-                        if (0 === type.indexOf("image/")) {
-                            continue;
-                        }
-                    }
-                    //如果有音频类型，并且是所有音频类型
-                    if (-1 !== that.accept.indexOf("audio/*")) {
-                        if (0 === type.indexOf("audio/")) {
-                            continue;
-                        }
-                    }
-                    //如果有视频类型，并且是所有视频类型
-                    if (-1 !== that.accept.indexOf("video/*")) {
-                        if (0 === type.indexOf("video/")) {
-                            continue;
-                        }
-                    }
-                    if (-1 !== that.accept.indexOf("application/*")) {
-                        if (0 === type.indexOf("application/")) {
-                            continue;
-                        }
-                    }
-                    if (-1 !== that.accept.indexOf("text/*")) {
-                        if (0 === type.indexOf("text/")) {
-                            continue;
-                        }
-                    }
-                    fileList.splice(i, 1);
-                    that.$globalFun.errorMsg('文件类型错误');
-                }
+                console.warn("文件上传失败---error:", JSON.parse(JSON.stringify(error)), '-----file:', file, '-----fileList', fileList);
             },
             /**
              * 文件上传之前
              * @param file
              */
             beforeUpload(file) {
-                //默认文件正常上传
-                let flag = true;
+                let {maxSize, accept} = this;
+                let {type, size} = file;
+                //判断文件是否超出尺寸
+                if (size > maxSize) {
+                    this.$globalFun.errorMsg('图片超出最大尺寸');
+                    return false;
+                }
+                //默认文件格式不正确
+                let flag = false;
+                //如果为全部类型，不做处理
+                if ("*" === accept) {
+                    flag = true;
+                }
+                //无法识别文件类型
+                if (null == type || '' === type) {
+                    this.$globalFun.errorMsg('图片文件格式不正确');
+                    console.log('图片上传文件格式不正确file:', file);
+                    return false;
+                }
+                //如果存在该类型
+                if (!flag && -1 !== accept.indexOf(type)) {
+                    flag = true;
+                }
+                //如果有图片类型，并且是所有图片类型
+                if (!flag && -1 !== accept.indexOf("image/*")) {
+                    if (0 === type.indexOf("image/")) {
+                        flag = true;
+                    }
+                }
+                //如果有音频类型，并且是所有音频类型
+                if (!flag && -1 !== accept.indexOf("audio/*")) {
+                    if (0 === type.indexOf("audio/")) {
+                        flag = true;
+                    }
+                }
+                //如果有视频类型，并且是所有视频类型
+                if (!flag && -1 !== accept.indexOf("video/*")) {
+                    if (0 === type.indexOf("video/")) {
+                        flag = true;
+                    }
+                }
+                if (!flag && -1 !== accept.indexOf("application/*")) {
+                    if (0 === type.indexOf("application/")) {
+                        flag = true;
+                    }
+                }
+                if (!flag && -1 !== accept.indexOf("text/*")) {
+                    if (0 === type.indexOf("text/")) {
+                        flag = true;
+                    }
+                }
+                //如果文件格式不正确
+                if (!flag) {
+                    this.$globalFun.errorMsg('图片文件格式不正确');
+                    console.log('图片上传文件格式不正确file:', file);
+                    return false;
+                }
                 //向父组件抛出beforeUpload---接受回调
                 this.$emit('beforeUpload', file, function (res) {
                     //根据回调判断是否继续上传
-                    flag = res;
+                    flag = null == res ? true : res;
                 });
                 return flag;
             },
