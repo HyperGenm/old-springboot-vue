@@ -14,7 +14,8 @@
                 :list-type="listType"
                 :auto-upload="autoUpload"
                 :file-list="fileList"
-                :limit="limit">
+                :limit="limit"
+                :on-exceed="onExceed">
             <el-button size="small" type="primary">点击上传</el-button>
         </el-upload>
         <el-button v-if="!autoUpload" style="margin-top: 10px;" size="small" type="success" @click="submitUpload">
@@ -38,7 +39,7 @@
             //是否支持多文件上传
             multiple: {
                 type: Boolean,
-                default: false
+                default: true
             },
             //是否展示上传的文件列表
             showFileList: {
@@ -134,6 +135,15 @@
              */
             submitUpload() {
                 this.$refs.upload.submit();
+            },
+            /**
+             * 超出最大数量时
+             * @param files
+             * @param fileList
+             */
+            onExceed(files, fileList) {
+                this.$globalFun.errorMsg("超出最大数量限制");
+                console.warn("文件上传超出数量限制---files:", files, '-----fileList:', fileList);
             }
         }
     }
