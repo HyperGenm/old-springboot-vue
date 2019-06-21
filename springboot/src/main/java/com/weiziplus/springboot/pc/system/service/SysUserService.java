@@ -5,6 +5,7 @@ import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.utils.*;
+import com.weiziplus.springboot.common.utils.token.AdminTokenUtil;
 import com.weiziplus.springboot.common.utils.token.JwtTokenUtil;
 import com.weiziplus.springboot.pc.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -124,6 +124,29 @@ public class SysUserService extends BaseService {
             return ResultUtil.error("roleId不能为空");
         }
         return ResultUtil.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
+    }
+
+    /**
+     * 修改用户密码
+     *
+     * @param request
+     * @param oldPwd
+     * @param newPwd
+     * @return
+     */
+    public ResultUtil updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
+        if (ValidateUtil.notPassword(oldPwd) || ValidateUtil.notPassword(newPwd)) {
+            return ResultUtil.error("密码为6-20位大小写和数字");
+        }
+        Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Map<String, Object> map = baseFindByClassAndId(SysUser.class, userId);
+        String passwordFiled = "password";
+        if (null == map || null == map.get(passwordFiled) || !Md5Util.encode(oldPwd).equals(map.get(passwordFiled).toString())) {
+            return ResultUtil.error("原密码错误");
+        }
+        mapper.resetUserPassword(userId, Md5Util.encode(newPwd));
+        AdminTokenUtil.deleteToken(userId);
+        return ResultUtil.success();
     }
 
     /**

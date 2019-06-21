@@ -16,10 +16,14 @@
                     </div>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>{{$store.state.role.name}}</el-dropdown-item>
+                        <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
                         <el-dropdown-item command="logout">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
+        </div>
+        <div class="edit">
+            <edit-form :show.sync="dialogEditForm"></edit-form>
         </div>
     </div>
 </template>
@@ -28,7 +32,8 @@
     export default {
         name: "Index",
         components: {
-            'wei-tabs': () => import('./Tabs.vue')
+            'wei-tabs': () => import('./Tabs.vue'),
+            'edit-form': () => import('./EditForm.vue')
         },
         props: {
             menuCollapse: {
@@ -36,11 +41,20 @@
                 default: false
             }
         },
+        data() {
+            return {
+                dialogEditForm: false
+            }
+        },
         methods: {
             handleCommand(command) {
                 switch (command) {
                     case 'logout': {
                         this.logout();
+                    }
+                        break;
+                    case 'updatePassword': {
+                        this.updatePassword();
                     }
                         break;
                     default: {
@@ -63,6 +77,15 @@
                             clearTimeout(timer);
                             that.$router.replace('login');
                         }, 3000);
+                    }
+                });
+            },
+            updatePassword() {
+                let that = this;
+                this.$globalFun.messageBox({
+                    message: '是否要修改密码!!!',
+                    confirm() {
+                        that.dialogEditForm = true;
                     }
                 });
             }

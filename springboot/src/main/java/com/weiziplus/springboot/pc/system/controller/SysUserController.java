@@ -95,6 +95,20 @@ public class SysUserController {
     }
 
     /**
+     * 修改密码
+     *
+     * @param request
+     * @param oldPwd
+     * @param newPwd
+     * @return
+     */
+    @PostMapping("/updatePassword")
+    @SystemLog(description = "修改密码")
+    public ResultUtil updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
+        return service.updatePassword(request, oldPwd, newPwd);
+    }
+
+    /**
      * 重置密码
      */
     @PostMapping("/resetUserPassword")
