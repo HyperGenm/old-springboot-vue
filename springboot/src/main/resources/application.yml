@@ -32,6 +32,12 @@ spring:
     #password: 123456
     #连接超时时间
     timeout: 10000ms
+  servlet:
+    multipart:
+      #设置单个文件上传最大限制
+      max-file-size: 5MB
+      #设置多个文件上传最大限制
+      max-request-size: 100MB
 mybatis:
   #指定全局配置文件位置
   config-location: classpath:mybatis/mybatis-config.xml
@@ -47,3 +53,7 @@ pagehelper:
 #是否启用swagger
 swagger:
   enable: true
+
+#自定义全局变量*******注意:  :后面要有空格
+global:
+  base-file-path: E:\Tomcat\restaurant\

@@ -1,11 +1,15 @@
 package com.weiziplus.springboot.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * 设置全局静态常量
  *
  * @author wanglongwei
  * @data 2019/5/6 15:50
  */
+@Component
 public class GlobalConfig {
     /**
      * 身份验证，请求头，token
@@ -41,4 +45,14 @@ public class GlobalConfig {
      * 系统功能表中角色管理id为3
      */
     public static final Long SYS_FUNCTION_ROLE_ID = 3L;
+
+    /**
+     * 设置图片上传基础路径
+     */
+    public static String BASE_FILE_PATH;
+
+    @Value("${global.base-file-path}")
+    public void setBaseFilePath(String baseFilePath) {
+        GlobalConfig.BASE_FILE_PATH = baseFilePath;
+    }
 }
