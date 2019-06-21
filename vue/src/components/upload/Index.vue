@@ -14,7 +14,7 @@
                 :before-upload="beforeUpload"
                 :list-type="listType"
                 :auto-upload="autoUpload"
-                :file-list="fileList"
+                :file-list="newFileList"
                 :limit="limit"
                 :on-exceed="onExceed"
                 :accept="accept">
@@ -93,12 +93,21 @@
             maxSize: {
                 type: Number,
                 default: 2097152
+            },
+            //文件列表******************************必填
+            fileList: {
+                type: Array
+            }
+        },
+        watch: {
+            fileList(data) {
+                this.newFileList = data;
             }
         },
         data() {
             return {
                 //上传的文件列表
-                fileList: [],
+                newFileList: this.fileList,
                 dialogImageUrl: '',
                 dialogVisible: false
             }
@@ -121,7 +130,7 @@
              * @param fileList
              */
             onRemove(file, fileList) {
-                this.$emit('onRemove', file);
+                this.$emit('update:fileList', fileList);
             },
             /**
              * 文件上传成功
@@ -137,15 +146,11 @@
                         let _uid = fileList[i]['uid'];
                         if (uid === _uid) {
                             fileList.splice(i, 1);
-                            return;
+                            break;
                         }
                     }
-                    return;
                 }
-                this.$emit('onSuccess', {
-                    data: res['data'],
-                    file
-                });
+                this.$emit('update:fileList', fileList);
             },
             /**
              * 文件上传失败
