@@ -10,15 +10,22 @@
                 :on-remove="onRemove"
                 :on-success="onSuccess"
                 :on-error="onError"
+                :on-change="onChange"
                 :before-upload="beforeUpload"
                 :list-type="listType"
                 :auto-upload="autoUpload"
                 :file-list="fileList"
                 :limit="limit"
-                :on-exceed="onExceed">
+                :on-exceed="onExceed"
+                :accept="accept">
             <el-button size="small" type="primary">点击上传</el-button>
+            <el-button v-if="!autoUpload && listType !== 'picture-card'" style="margin-top: 10px;" size="small"
+                       type="success" @click="submitUpload">
+                上传到服务器
+            </el-button>
         </el-upload>
-        <el-button v-if="!autoUpload" style="margin-top: 10px;" size="small" type="success" @click="submitUpload">
+        <el-button v-if="!autoUpload && listType === 'picture-card'" style="margin-top: 10px;" size="small"
+                   type="success" @click="submitUpload">
             上传到服务器
         </el-button>
         <div slot="tip" class="el-upload__tip">{{tip}}</div>
@@ -39,7 +46,7 @@
             //是否支持多文件上传
             multiple: {
                 type: Boolean,
-                default: true
+                default: false
             },
             //是否展示上传的文件列表
             showFileList: {
@@ -54,7 +61,7 @@
             //文件列表的类型
             listType: {
                 type: String,
-                default: 'picture-card'
+                default: 'picture'
             },
             //是否在文件选择后立即上传
             autoUpload: {
@@ -70,6 +77,16 @@
             tip: {
                 type: String,
                 default: ''
+            },
+            //文件类型
+            accept: {
+                type: String,
+                default: 'image/*'
+            },
+            //最大尺寸---默认2M
+            maxSize: {
+                type: Number,
+                default: 2097152
             }
         },
         data() {
@@ -82,12 +99,15 @@
         },
         methods: {
             /**
-             * 点击上传的文件
+             * 点击上传的文件--如果是图片显示缩略图
              * @param file
              */
             onPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+                let type = file['raw']['type'];
+                if (0 === type.indexOf('image/')) {
+                    this.dialogImageUrl = file['url'];
+                    this.dialogVisible = true;
+                }
             },
             /**
              * 文件列表删除时触发的事件
@@ -115,6 +135,61 @@
             onError(error, file, fileList) {
                 this.$globalFun.errorMsg("文件上传失败，请重试");
                 console.warn("文件上传失败---error:", error, '-----file:', file, '-----fileList', fileList);
+            },
+            /**
+             * 文件改变时触发
+             * @param file
+             * @param fileList
+             */
+            onChange(file, fileList) {
+                let that = this;
+                for (let i = 0; i < fileList.length; i++) {
+                    let {type, size} = fileList[i]['raw'];
+                    //判断文件是否超出尺寸
+                    if (size > that.maxSize) {
+                        fileList.splice(i, 1);
+                        that.$globalFun.errorMsg('图片超出最大尺寸');
+                        continue;
+                    }
+                    //如果为全部类型，不做处理
+                    if ("*" === that.accept) {
+                        continue;
+                    }
+                    //如果存在该类型
+                    if (-1 !== that.accept.indexOf(type)) {
+                        continue;
+                    }
+                    //如果有图片类型，并且是所有图片类型
+                    if (-1 !== that.accept.indexOf("image/*")) {
+                        if (0 === type.indexOf("image/")) {
+                            continue;
+                        }
+                    }
+                    //如果有音频类型，并且是所有音频类型
+                    if (-1 !== that.accept.indexOf("audio/*")) {
+                        if (0 === type.indexOf("audio/")) {
+                            continue;
+                        }
+                    }
+                    //如果有视频类型，并且是所有视频类型
+                    if (-1 !== that.accept.indexOf("video/*")) {
+                        if (0 === type.indexOf("video/")) {
+                            continue;
+                        }
+                    }
+                    if (-1 !== that.accept.indexOf("application/*")) {
+                        if (0 === type.indexOf("application/")) {
+                            continue;
+                        }
+                    }
+                    if (-1 !== that.accept.indexOf("text/*")) {
+                        if (0 === type.indexOf("text/")) {
+                            continue;
+                        }
+                    }
+                    fileList.splice(i, 1);
+                    that.$globalFun.errorMsg('文件类型错误');
+                }
             },
             /**
              * 文件上传之前
