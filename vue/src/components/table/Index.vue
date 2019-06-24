@@ -271,7 +271,11 @@
                     that.loading = false;
                     that.$globalFun.errorMsg('请求失败');
                     that.emptyText = error.response.data.message;
-                    console.warn(_url, '------请求失败-----error:', error.response);
+                    if (error.response) {
+                        console.warn(_url, '------请求失败-----error:', error, '---失败详情:', error.response);
+                    } else {
+                        console.warn(_url, '------请求失败-----error:', error);
+                    }
                 });
             },
             handleSizeChange(pageSize) {

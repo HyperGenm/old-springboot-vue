@@ -101,7 +101,11 @@ export function weiAxios({
             /**关闭加载中动画*/
             loading.close();
             _Vue.$globalFun.errorMsg('请求失败');
-            console.warn(url, '------请求失败-----error:', error.response || error);
+            if (error.response) {
+                console.warn(url, '------请求失败-----error:', error, '---失败详情:', error.response);
+            } else {
+                console.warn(url, '------请求失败-----error:', error);
+            }
             fail(error);
         });
     });

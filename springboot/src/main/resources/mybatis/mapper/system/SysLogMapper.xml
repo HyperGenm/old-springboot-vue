@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.mapper.system.SysLogMapper">
+    <insert id="addSysLog">
+        INSERT INTO sys_log
+        (user_id,description)
+        VALUES
+        (#{userId},#{description})
+    </insert>
+    <select id="getLogList" resultType="java.util.Map">
+        SELECT sl.*,su.username,su.real_name as realName,sr.name as roleName
+        FROM sys_log sl ,sys_user su
+        LEFT JOIN sys_role sr ON sr.id = su.role_id
+        WHERE sl.user_id = su.id
+        <if test="null != username and '' != username">
+            AND position(#{username} IN su.username)
+        </if>
+        <if test="null != roleId">
+            AND sr.id = #{roleId}
+        </if>
+        <if test="null != createTime and '' != createTime">
+            AND sl.create_time LIKE concat(#{createTime},'%')
+        </if>
+        <if test="null != description and '' != description">
+            AND position(#{description} IN sl.description)
+        </if>
+        ORDER BY sl.create_time DESC
+    </select>
+</mapper>

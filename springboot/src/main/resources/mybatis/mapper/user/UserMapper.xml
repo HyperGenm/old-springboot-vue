@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.mapper.user.UserMapper">
+    <select id="getUserInfoByUsername" resultType="com.weiziplus.springboot.models.User">
+        SELECT *
+        FROM w_user
+        WHERE username = #{username}
+        LIMIT 1
+    </select>
+    <select id="getUserInfoByUserId" resultType="com.weiziplus.springboot.models.User">
+        SELECT *
+        FROM w_user
+        WHERE id = #{userId}
+        LIMIT 1
+    </select>
+    <insert id="addUser">
+        INSERT INTO w_user
+        (username,password,create_time)
+        VALUES
+        (#{username},#{password},now())
+    </insert>
+</mapper>
