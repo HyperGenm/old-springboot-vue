@@ -120,8 +120,8 @@ public class SysFunctionService extends BaseService {
             return ResultUtil.error("pageNum,pageSize格式错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        Map<String, Object> map = PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
-        return ResultUtil.success(map);
+        PageUtil pageUtil = PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
+        return ResultUtil.success(pageUtil);
     }
 
     /**

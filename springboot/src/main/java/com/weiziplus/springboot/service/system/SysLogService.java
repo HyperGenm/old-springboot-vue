@@ -6,8 +6,6 @@ import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * @author wanglongwei
  * @data 2019/5/13 15:34
@@ -24,7 +22,7 @@ public class SysLogService {
      * @param pageSize
      * @return
      */
-    public Map<String, Object> getLogList(Integer pageNum, Integer pageSize, String username, Long roleId, String createTime,String description) {
+    public PageUtil getLogList(Integer pageNum, Integer pageSize, String username, Long roleId, String createTime, String description) {
         PageHelper.startPage(pageNum, pageSize);
         return PageUtil.pageInfo(mapper.getLogList(username, roleId, createTime,description));
     }

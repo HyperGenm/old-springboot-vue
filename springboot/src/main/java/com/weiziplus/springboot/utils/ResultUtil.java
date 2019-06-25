@@ -1,5 +1,7 @@
 package com.weiziplus.springboot.utils;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author wanglongwei
  * @data 2019/5/24 15:58
  */
+@Getter
 public class ResultUtil implements Serializable {
 
     /**
@@ -24,33 +27,6 @@ public class ResultUtil implements Serializable {
      * 返回数据
      */
     private Object data;
-
-    /**
-     * 获取状态码
-     *
-     * @return
-     */
-    public Integer getCode() {
-        return code;
-    }
-
-    /**
-     * 获取提示信息
-     *
-     * @return
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 获取返回数据
-     *
-     * @return
-     */
-    public Object getData() {
-        return data;
-    }
 
     /**
      * 创建无参数ResultUtil对象---fastjson反序列化需要无参数

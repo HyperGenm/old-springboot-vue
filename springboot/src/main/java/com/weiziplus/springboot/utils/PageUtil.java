@@ -1,10 +1,11 @@
 package com.weiziplus.springboot.utils;
 
 import com.github.pagehelper.PageInfo;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 分页返回结果处理
@@ -12,14 +13,25 @@ import java.util.Map;
  * @author wanglongwei
  * @data 2019/5/7 17:06
  */
-public class PageUtil {
-    public static Map<String, Object> pageInfo(List list) {
-        Map<String, Object> map = new HashMap<>(4);
+@Getter
+@Setter
+public class PageUtil implements Serializable {
+
+    private Integer pageNum;
+
+    private Integer pageSize;
+
+    private Long total;
+
+    private List list;
+
+    public static PageUtil pageInfo(List list) {
         PageInfo pageInfo = new PageInfo(list);
-        map.put("pageNum", pageInfo.getPageNum());
-        map.put("pageSize", pageInfo.getPageSize());
-        map.put("total", pageInfo.getTotal());
-        map.put("list", pageInfo.getList());
-        return map;
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setPageNum(pageInfo.getPageNum());
+        pageUtil.setPageSize(pageInfo.getSize());
+        pageUtil.setTotal(pageInfo.getTotal());
+        pageUtil.setList(pageInfo.getList());
+        return pageUtil;
     }
 }

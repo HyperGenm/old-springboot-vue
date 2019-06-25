@@ -53,8 +53,8 @@ public class CorsFilter implements Filter {
         String[] allowDomain = {"http://localhost:8088"};
         Set<String> allowedOrigins = new HashSet<>(Arrays.asList(allowDomain));
         if (!allowedOrigins.contains(originHeader)) {
-            //如果域名不存在，直接返回404
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            //如果域名不存在，返回403拒绝访问
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
         response.setHeader("Access-Control-Allow-Origin", originHeader);
