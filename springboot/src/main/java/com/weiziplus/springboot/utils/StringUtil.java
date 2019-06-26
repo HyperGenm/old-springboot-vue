@@ -18,7 +18,11 @@ public class StringUtil {
      * @return
      */
     public static boolean isBlank(String str) {
-        return null == str || 0 >= str.length() || str.equals(GlobalConfig.UNDEFINED);
+        if (null == str) {
+            return true;
+        }
+        str = str.trim();
+        return 0 >= str.length() || str.equals(GlobalConfig.UNDEFINED);
     }
 
     /**
