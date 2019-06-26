@@ -1,5 +1,5 @@
 <template>
-    <div id="detail">
+    <div id="wei-dialog-detail">
         <el-dialog :title="title" :visible.sync="visible" :modal-append-to-body="modelAppendToBody"
                    @close="$emit('update:show', false)">
             <slot name="rowHead"></slot>
@@ -63,7 +63,7 @@
 </script>
 
 <style lang="less">
-    #detail {
+    #wei-dialog-detail {
         .el-row {
             color: #666;
             margin-bottom: 5px;
