@@ -62,7 +62,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
     #detail {
         .el-row {
             color: #666;
