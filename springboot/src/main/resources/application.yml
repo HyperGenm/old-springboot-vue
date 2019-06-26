@@ -39,8 +39,16 @@ spring:
       #设置多个文件上传最大限制
       max-request-size: 100MB
 mybatis:
-  #指定全局配置文件位置
-  config-location: classpath:mybatis/mybatis-config.xml
+  #设置MyBatis配置
+  configuration:
+    #返回类型为Map时，null也返回
+    call-setters-on-nulls: true
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+  #设置MyBatis全局变量
+  configuration-properties:
+    #文件存放域名前缀
+    filePathPrefix: http://localhost:8888/restaurant/
   #指定sql映射文件位置
   mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
 #pagehelper分页插件配置
