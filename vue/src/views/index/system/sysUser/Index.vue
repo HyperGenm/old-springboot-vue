@@ -153,7 +153,7 @@
                 //操作弹出框
                 dialogEditForm: false,
                 //操作类型新增还是修改
-                handleType: 'add',
+                handleType: null,
                 //操作的form表单
                 formData: {},
                 dialogRole: false,
