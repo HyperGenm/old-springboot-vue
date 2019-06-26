@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
+ * Cors过滤器
  * 过滤器
  *
  * @author wanglongwei
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
 public class CorsFilter implements Filter {
 
     /**
-     * 过滤器配置--重写父类过滤器
+     * 配置跨域
      *
      * @param req
      * @param res
