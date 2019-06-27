@@ -37,4 +37,4 @@ logging:
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
-  base-file-path: E:\idea\WeiziPlus\restaurant\springboot\src\main\resources\static\
+  base-file-path: E:\idea\WeiziPlus\restaurant\springboot\target\classes\static\
