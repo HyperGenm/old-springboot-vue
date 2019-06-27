@@ -97,6 +97,7 @@
                     <excludes>
                         <exclude>**/*.properties</exclude>
                         <exclude>**/*.yml</exclude>
+                        <exclude>static/**</exclude>
                     </excludes>
                     <archive>
                         <manifest>
@@ -131,11 +132,12 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--将配置文件复制到config目录-->
+            <!--复制文件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
+                    <!--将配置文件复制到config目录-->
                     <execution>
                         <id>copy-resources</id>
                         <phase>package</phase>

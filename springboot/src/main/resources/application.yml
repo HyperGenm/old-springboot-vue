@@ -1,12 +1,11 @@
-server:
-  port: 8080
+#########通用配置
 spring:
+  #启动什么配置
+  profiles:
+    active: dev
   #配置数据源
   datasource:
-    username: root
-    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/template?serverTimezone=GMT%2B8
     ###################以下为druid增加的配置###########################
     type: com.alibaba.druid.pool.DruidDataSource
     # 下面为连接池的补充设置，应用到上面所有数据源中
@@ -19,25 +18,17 @@ spring:
       max-wait: 60000
       # 配置一个连接在池中最小生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 300000
-  jackson:
-    #配置时间格式
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
   #指定使用redis数据库
   redis:
     #索引(默认为0)
     database: 0
     host: 127.0.0.1
-    port: 6379
-    #password: 123456
-    #连接超时时间
-    timeout: 10000ms
-  servlet:
-    multipart:
-      #设置单个文件上传最大限制
-      max-file-size: 5MB
-      #设置多个文件上传最大限制
-      max-request-size: 100MB
+  jackson:
+    #配置时间格式
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  resources:
+    static-locations: classpath:static/,classpath:public/,file:static/
 mybatis:
   #设置MyBatis配置
   configuration:
@@ -45,10 +36,6 @@ mybatis:
     call-setters-on-nulls: true
     #开启驼峰命名
     map-underscore-to-camel-case: true
-  #设置MyBatis全局变量
-  configuration-properties:
-    #文件存放域名前缀
-    filePathPrefix: http://localhost:8888/restaurant/
   #指定sql映射文件位置
   mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
 #pagehelper分页插件配置
@@ -58,16 +45,3 @@ pagehelper:
   reasonable: false
   support-methods-arguments: true
   params: count=countSql
-
-################################以下为自定义配置
-
-#是否启用swagger
-swagger:
-  enable: true
-
-#自定义全局变量*******注意:  :后面要有空格
-global:
-  #配置跨域域名，用，分隔开
-  cors-filter-origins: http://localhost:8088,http://localhost:8089
-  #配置图片存放路径
-  base-file-path: E:\Tomcat\restaurant\

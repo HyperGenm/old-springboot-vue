@@ -1,0 +1,40 @@
+##########开发版配置
+server:
+  port: 8080
+spring:
+  #开发版配置
+  profiles: dev
+  #配置数据源
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/restaurant?serverTimezone=GMT%2B8
+  #指定使用redis数据库
+  redis:
+    port: 6379
+    #password: 123456
+    #连接超时时间
+    timeout: 10000ms
+  servlet:
+    multipart:
+      #设置单个文件上传最大限制
+      max-file-size: 5MB
+      #设置多个文件上传最大限制
+      max-request-size: 100MB
+mybatis:
+  #设置MyBatis全局变量
+  configuration-properties:
+    #文件存放域名前缀
+    filePathPrefix: http://192.168.3.233:8080/
+#是否启用swagger
+swagger:
+  enable: true
+
+#开启sql打印
+logging:
+  level:
+    com.weiziplus.springboot: debug
+
+#自定义全局变量*******注意:  :后面要有空格
+global:
+  base-file-path: E:\idea\WeiziPlus\restaurant\springboot\src\main\resources\static\
