@@ -9,9 +9,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -50,10 +47,8 @@ public class CorsFilter implements Filter {
             chain.doFilter(req, res);
             return;
         }
-        //配置可以跨域访问的域名
-        String[] allowDomain = {"http://localhost:8088"};
-        Set<String> allowedOrigins = new HashSet<>(Arrays.asList(allowDomain));
-        if (!allowedOrigins.contains(originHeader)) {
+        //当前域名是否存在允许跨域域名内
+        if (!GlobalConfig.CORS_FILTER_ORIGINS.contains(originHeader)) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;

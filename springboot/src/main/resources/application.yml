@@ -58,10 +58,14 @@ pagehelper:
   reasonable: false
   support-methods-arguments: true
   params: count=countSql
+
+################################以下为自定义配置
+
 #是否启用swagger
 swagger:
   enable: true
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
+  cors-filter-origins: http://localhost:8088
   base-file-path: E:\Tomcat\restaurant\

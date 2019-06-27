@@ -47,6 +47,16 @@ public class GlobalConfig {
     public static final Long SYS_FUNCTION_ROLE_ID = 3L;
 
     /**
+     * 设置可以跨域访问的地址
+     */
+    public static String CORS_FILTER_ORIGINS;
+
+    @Value("${global.cors-filter-origins}")
+    public void setCorsFilterOrigins(String corsFilterOrigins) {
+        GlobalConfig.CORS_FILTER_ORIGINS = corsFilterOrigins;
+    }
+
+    /**
      * 设置图片上传基础路径
      */
     public static String BASE_FILE_PATH;
