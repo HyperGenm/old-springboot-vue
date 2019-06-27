@@ -67,5 +67,7 @@ swagger:
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
-  cors-filter-origins: http://localhost:8088
+  #配置跨域域名，用，分隔开
+  cors-filter-origins: http://localhost:8088,http://localhost:8089
+  #配置图片存放路径
   base-file-path: E:\Tomcat\restaurant\
