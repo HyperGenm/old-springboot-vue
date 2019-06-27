@@ -1,4 +1,4 @@
-##########开发版配置
+#####################################开发版配置####################################
 server:
   port: 8080
 spring:
@@ -37,4 +37,7 @@ logging:
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
+  #图片存放路径
   base-file-path: E:\idea\WeiziPlus\restaurant\springboot\target\classes\static\
+  #允许跨域地址
+  cors-filter-origins: http://localhost:8088,http://localhost:8088
