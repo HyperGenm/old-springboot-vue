@@ -4,8 +4,8 @@
                  v-model="tabValue"
                  @tab-remove="removeTab"
                  @tab-click="clickTab">
-            <el-tab-pane v-for="item in tabs" :key="item.name" :label="item.title"
-                         :name="item.name">
+            <el-tab-pane v-for="item in tabs" :key="item.name" :name="item.name">
+                <span slot="label"><i class="el-icon-s-help"></i> {{item.title}}</span>
             </el-tab-pane>
         </el-tabs>
     </div>
