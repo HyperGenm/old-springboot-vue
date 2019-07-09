@@ -43,7 +43,7 @@ public class CorsFilter implements Filter {
         //如果是swagger-ui.html直接放行
         String referer = request.getHeader(HttpHeaders.REFERER);
         String pattern = "^(http://|https://)([a-zA-Z0-9\\.\\:]+)(\\/swagger-ui.html)";
-        if (Pattern.compile(pattern).matcher(referer).matches()) {
+        if (StringUtil.notBlank(referer) && Pattern.compile(pattern).matcher(referer).matches()) {
             chain.doFilter(req, res);
             return;
         }

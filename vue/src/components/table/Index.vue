@@ -83,7 +83,9 @@
             <el-table ref="table"
                       :data="tableData" :max-height="tableStyle.maxHeight" height="10000px"
                       v-loading="loading" :empty-text="emptyText"
-                      border stripe highlight-current-row size="small">
+                      :stripe="null == selection || 0 >= selection.length"
+                      @selection-change="selectionChange" :row-style="rowStyle"
+                      border highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
                 <el-table-column type="index" width="50"></el-table-column>
                 <el-table-column
@@ -189,13 +191,9 @@
                 //表格加载中动画
                 loading: false,
                 //空数据时显示的内容
-                emptyText: ''
-            }
-        },
-        computed: {
-            // 所有选中的行
-            selection() {
-                return this.$refs['table'].selection;
+                emptyText: '',
+                //当前选中行
+                selection: []
             }
         },
         mounted() {
@@ -288,6 +286,14 @@
             },
             renderTable() {
                 this.getCourseList();
+            },
+            selectionChange(selection) {
+                this.selection = selection;
+            },
+            rowStyle({row, rowIndex}) {
+                if (this.selection.includes(row)) {
+                    return {'background-color': 'rgba(185, 221, 249, 0.75)'};
+                }
             }
         }
     }
