@@ -1,6 +1,6 @@
 <template>
-    <div id="weiTable">
-        <div class="search" v-show="tableSearch && 0 < tableSearch.length">
+    <div id="weiTable" ref="weiTable">
+        <div class="search" v-show="tableSearch && 0 < tableSearch.length" ref="search">
             <!--表格查询-->
             <el-form inline size="mini">
                 <el-form-item>
@@ -12,7 +12,7 @@
                         </template>
                         <template v-else-if="'select' === item.type">
                             <el-select v-model="tableDataRequest.data[item.prop]"
-                                       clearable :disabled="item.disabled || false"
+                                       clearable filterable :disabled="item.disabled || false"
                                        :placeholder="item.placeholder || '请选择'">
                                 <el-option v-for="(option,index) in item.options" :key="index"
                                            :label="option.label" :value="option.value"
@@ -67,7 +67,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="header">
+        <div class="header" ref="header">
             <!--表格头部按钮组-->
             <el-row>
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
@@ -80,9 +80,10 @@
         </div>
         <div class="content">
             <!--表格-->
-            <el-table ref="table"
-                      :data="tableData" :max-height="tableStyle.maxHeight" height="10000px"
-                      v-loading="loading" :empty-text="emptyText"
+            <el-table ref="table" :show-summary="tableShowSummary" :summary-method="summaryMethod"
+                      :data="tableData" height="10000px"
+                      :max-height="maxHeight || tableMaxHeight"
+                      v-loading="loading" :empty-text="emptyText" @header-click="headerClick"
                       :stripe="null == selection || 0 >= selection.length"
                       @selection-change="selectionChange" :row-style="rowStyle"
                       border highlight-current-row size="small">
@@ -122,7 +123,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="pagination">
+        <div class="pagination" ref="pagination">
             <!--表格分页-->
             <el-pagination background layout="total, sizes, prev, pager, next, jumper"
                            :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total"
@@ -140,7 +141,7 @@
     import Qs from 'qs';
 
     /**axios默认配置*/
-    axios.defaults.timeout = 20000;//设置超时时间，规定时间内没有响应则执行失败回调
+    axios.defaults.timeout = 50000;//设置超时时间，规定时间内没有响应则执行失败回调
 
     export default {
         name: "Index",
@@ -162,13 +163,8 @@
                 default: () => []
             },
             //表格样式
-            tableStyle: {
-                type: Object,
-                default: () => {
-                    return {
-                        maxHeight: '670'
-                    }
-                }
+            maxHeight: {
+                type: Number
             },
             // 表格的字段展示
             tableColumns: {
@@ -180,6 +176,11 @@
                 type: Object,
                 default: () => {
                 }
+            },
+            // 是否展示合计行
+            tableShowSummary: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -188,6 +189,7 @@
                 pageSize: 20,
                 pageNum: 1,
                 total: 0,
+                tableMaxHeight: 0,
                 //表格加载中动画
                 loading: false,
                 //空数据时显示的内容
@@ -198,8 +200,19 @@
         },
         mounted() {
             this.getCourseList();
+            this.initTableMaxHeight();
         },
         methods: {
+            initTableMaxHeight() {
+                let that = this;
+                this.$nextTick(() => {
+                    let weiTableHeight = that.$refs['weiTable'].getBoundingClientRect().height;
+                    let searchHeight = that.$refs['search'].getBoundingClientRect().height;
+                    let headerHeight = that.$refs['header'].getBoundingClientRect().height;
+                    let paginationHeight = that.$refs['pagination'].getBoundingClientRect().height;
+                    that.tableMaxHeight = weiTableHeight - searchHeight - headerHeight - paginationHeight - 20;
+                });
+            },
             // 获取数据
             getCourseList() {
                 /**开启加载中动画*/
@@ -268,11 +281,12 @@
                     /**关闭加载中动画*/
                     that.loading = false;
                     that.$globalFun.errorMsg('请求失败');
-                    that.emptyText = error.response.data.message;
                     if (error.response) {
                         console.warn(_url, '------请求失败-----error:', error, '---失败详情:', error.response);
+                        that.emptyText = error.response.data.message;
                     } else {
                         console.warn(_url, '------请求失败-----error:', error);
+                        that.emptyText = 'error:' + error;
                     }
                 });
             },
@@ -287,12 +301,26 @@
             renderTable() {
                 this.getCourseList();
             },
+            summaryMethod(param) {
+                let sums = [];
+                let that = this;
+                this.$emit('summaryMethod', {
+                    param,
+                    total: that.total
+                }, function (res) {
+                    sums = res;
+                });
+                return sums;
+            },
+            headerClick(column, event) {
+                this.$emit('headerClick', column);
+            },
             selectionChange(selection) {
                 this.selection = selection;
             },
             rowStyle({row, rowIndex}) {
                 if (this.selection.includes(row)) {
-                    return {'background-color': 'rgba(185, 221, 249, 0.75)'};
+                    return {'background-color': 'rgba(185, 221, 249, 0.75) !important'};
                 }
             }
         }
@@ -312,6 +340,7 @@
 
 <style lang="less" scoped>
     #weiTable {
+        height: 100%;
         overflow: hidden;
         .header {
             margin-bottom: 10px;

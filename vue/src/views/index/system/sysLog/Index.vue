@@ -1,6 +1,6 @@
 <template>
     <div id="sysLog">
-        <div class="table">
+        <div class="table" style="height: 100%;">
             <wei-table ref="table" :tableDataRequest="tableDataRequest" :tableColumns="tableColumns"
                        :tableOperates="tableOperates" :tableSearch="tableSearch">
             </wei-table>
@@ -75,9 +75,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .header {
-        margin-bottom: 10px;
-    }
-</style>

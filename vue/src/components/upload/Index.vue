@@ -139,6 +139,18 @@
              * @param fileList
              */
             onSuccess(res, file, fileList) {
+                /**token过期处理*/
+                if (401 === res['code']) {
+                    this.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
+                    this.$store.dispatch('resetState');
+                    sessionStorage.setItem('loginStatus', 'logout');
+                    let that = this;
+                    let timer = setTimeout(() => {
+                        that.$router.replace('login');
+                        clearTimeout(timer);
+                    }, 3000);
+                    return;
+                }
                 if (200 !== res['code']) {
                     this.$globalFun.errorMsg(res['msg']);
                     let uid = file['uid'];

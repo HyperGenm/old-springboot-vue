@@ -149,4 +149,66 @@ public class ValidateUtil {
     public static boolean notEmail(String email) {
         return !isEmail(email);
     }
+
+    /**
+     * 是excel2007格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean isExcel2007(String file) {
+        String regex = "^.+\\.(?i)(xlsx)$";
+        return baseValidate(regex, file);
+    }
+
+    /**
+     * 不是excel2007格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean notExcel2007(String file) {
+        return !isExcel2007(file);
+    }
+
+    /**
+     * 是excel2003格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean isExcel2003(String file) {
+        String regex = "^.+\\.(?i)(xls)$";
+        return baseValidate(regex, file);
+    }
+
+    /**
+     * 不是excel2003格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean notExcel2003(String file) {
+        return !isExcel2003(file);
+    }
+
+    /**
+     * 是excel格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean isExcel(String file) {
+        return isExcel2007(file) || isExcel2003(file);
+    }
+
+    /**
+     * 不是excel格式
+     *
+     * @param file
+     * @return
+     */
+    public static boolean notExcel(String file) {
+        return !isExcel(file);
+    }
 }
