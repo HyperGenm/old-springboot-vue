@@ -151,7 +151,6 @@
                                     <includes>
                                         <include>**/*.properties</include>
                                         <include>**/*.yml</include>
-                                        <include>logback.xml</include>
                                     </includes>
                                 </resource>
                             </resources>

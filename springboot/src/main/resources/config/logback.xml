@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="3 seconds">
+<configuration scan="true" scanPeriod="30 seconds">
     <contextName>logback</contextName>
 
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使“${}”来使用变量。 -->
@@ -15,6 +14,10 @@
 
     <!-- 输出到控制台-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
         <encoder>
             <Pattern>
                 %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n
@@ -59,7 +62,6 @@
         </root>
     </springProfile>
 
-
     <!-- 生产环境:输出到文档-->
     <springProfile name="pro">
         <root level="info">
@@ -67,7 +69,9 @@
         </root>
     </springProfile>
 
-    <!--开启sql日志打印-->
-    <logger name="com.weiziplus.springboot.mapper" level="DEBUG" />
+    <!--开启日志打印-->
+    <logger name="com.weiziplus.springboot" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
 </configuration>
