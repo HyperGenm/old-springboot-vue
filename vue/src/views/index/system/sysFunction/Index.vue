@@ -7,7 +7,7 @@
                      :expand-on-click-node="false" :data="[{title:'最高级',id:0,children:data}]" :props="treeProps"
                      @node-click="handleNodeClick"></el-tree>
         </div>
-        <div class="table">
+        <div class="wei-table">
             <wei-table ref="table"
                        :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
                        :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>

@@ -26,4 +26,8 @@
     img{
         width: 100%;
     }
+
+    .wei-table {
+        height: 100%;
+    }
 </style>

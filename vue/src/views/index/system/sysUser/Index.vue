@@ -1,6 +1,6 @@
 <template>
     <div id="sysUser">
-        <div class="table" style="height: 100%;">
+        <div class="wei-table">
             <wei-table ref="table"
                        :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
                        :tableColumns="tableColumns" :tableOperates="tableOperates" :tableSearch="tableSearch">
