@@ -64,7 +64,7 @@ public class SysUserService extends BaseService {
             return ResultUtil.error("用户名已存在");
         }
         sysUser.setPassword(Md5Util.encode(sysUser.getPassword()));
-        sysUser.setCreateTime(DateUtil.getDate());
+        sysUser.setCreateTime(DateUtil.getNowDate());
         return ResultUtil.success(baseInsert(sysUser));
     }
 

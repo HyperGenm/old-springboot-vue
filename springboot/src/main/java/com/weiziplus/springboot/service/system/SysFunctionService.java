@@ -142,7 +142,7 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun) {
             return ResultUtil.error("name已存在");
         }
-        sysFunction.setCreateTime(DateUtil.getDate());
+        sysFunction.setCreateTime(DateUtil.getNowDate());
         return ResultUtil.success(baseInsert(sysFunction));
     }
 

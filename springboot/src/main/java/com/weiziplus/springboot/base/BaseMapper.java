@@ -22,7 +22,7 @@ public interface BaseMapper {
     @Insert("<script>" +
             "INSERT INTO ${TABLE_NAME} ( " +
             "<foreach collection='COLUMNS' item='column' separator=','> " +
-            "${column} " +
+            "`${column}` " +
             "</foreach> " +
             ") VALUES ( " +
             "<foreach collection='VALUES' item='value' separator=','> " +
@@ -70,7 +70,7 @@ public interface BaseMapper {
             "UPDATE ${TABLE_NAME} " +
             "SET " +
             "<foreach collection='COLUMNS_VALUES' item='item' index='index'> " +
-            "${item.column} = #{item.value} " +
+            "`${item.column}` = #{item.value} " +
             "      <if test='index != VALUES.size() - 1'> " +
             "        , " +
             "      </if> " +
@@ -100,6 +100,6 @@ public interface BaseMapper {
      */
     @Select("SELECT * " +
             "FROM ${TABLE_NAME} " +
-            "ORDER BY id")
+            "ORDER BY id DESC")
     List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME);
 }
