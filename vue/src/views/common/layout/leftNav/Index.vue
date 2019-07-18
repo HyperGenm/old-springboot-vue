@@ -59,9 +59,8 @@
         .tac {
             position: absolute;
             top: 61px;
-            bottom: 0;
+            bottom: 30px;
             left: 0;
-            height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
         }

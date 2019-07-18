@@ -5,9 +5,11 @@
             <slot name="rowHead"></slot>
             <el-row v-for="(row,index) in rows" :key="index">
                 <el-col :span="5">
-                    <div class="title">
-                        {{row.title || '标题'}}
-                    </div>
+                    <el-tooltip class="item" effect="dark" :content="row.title || '标题'" placement="top">
+                        <div class="title">
+                            {{row.title || '标题'}}
+                        </div>
+                    </el-tooltip>
                 </el-col>
                 <el-col :span="19">
                     <div class="content">
@@ -74,6 +76,7 @@
             text-align: center;
             height: 35px;
             line-height: 35px;
+            overflow: hidden;
         }
         .content {
             font-size: 0.8rem;
