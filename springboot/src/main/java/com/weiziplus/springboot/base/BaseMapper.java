@@ -90,7 +90,7 @@ public interface BaseMapper {
             "FROM ${TABLE_NAME} " +
             "WHERE id = #{id} " +
             "LIMIT 1")
-    <T> T findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
+    Map<String, Object> findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
 
     /**
      * 获取所有数据
@@ -101,5 +101,5 @@ public interface BaseMapper {
     @Select("SELECT * " +
             "FROM ${TABLE_NAME} " +
             "ORDER BY id DESC")
-    <T> List<T> findAll(@Param("TABLE_NAME") String TABLE_NAME);
+    List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME);
 }
