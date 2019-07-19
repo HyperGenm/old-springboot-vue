@@ -154,7 +154,7 @@ public class BaseService {
      * @param id
      * @return
      */
-    public Map<String, Object> baseFindByClassAndId(Class nowClass, Long id) {
+    public <T> T baseFindByClassAndId(Class nowClass, Long id) {
         if (null == nowClass || null == id) {
             return null;
         }
@@ -167,7 +167,7 @@ public class BaseService {
      * @param nowClass
      * @return
      */
-    public List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
+    public <T> List<T> baseFindAllByClass(Class nowClass) {
         return mapper.findAll(getTableName(nowClass));
     }
 }

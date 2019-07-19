@@ -1,4 +1,4 @@
-﻿package com.weiziplus.springboot.utils.redis;
+package com.weiziplus.springboot.utils.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author wanglongwei
- * @data 2019/7/4 9:41
+ * @data 2019/7/19 10:52
  */
 @Component
 public class RedisUtil {
