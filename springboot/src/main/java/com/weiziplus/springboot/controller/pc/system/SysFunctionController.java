@@ -33,6 +33,17 @@ public class SysFunctionController {
     }
 
     /**
+     * 获取所有功能树形列表
+     *
+     * @return
+     */
+    @GetMapping("/getAllFunctionTreeNotButton")
+    @SystemLog(description = "查看功能列表")
+    public ResultUtil getAllFunctionTreeNotButton() {
+        return ResultUtil.success(service.getAllFunctionTreeNotButton());
+    }
+
+    /**
      * 根据parentId获取功能列表
      *
      * @param parentId

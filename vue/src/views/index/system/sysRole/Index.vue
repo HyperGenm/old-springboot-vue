@@ -108,7 +108,7 @@
             this.initGetRoleTree();
             //获取功能树形列表
             this.$axios({
-                url: that.$global.URL.getAllFunctionTree,
+                url: that.$global.URL.sysFunctionGetAllFunctionTree,
                 success(data) {
                     that.funData = data;
                     that.handleFunParent(data);
@@ -143,7 +143,7 @@
             initGetRoleTree() {
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.getRoleTree,
+                    url: that.$global.URL.sysRoleGetRoleTree,
                     success(data) {
                         that.roleData = data;
                         that.$nextTick(() => {
@@ -158,7 +158,7 @@
             getRoleFunList() {
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.getRoleFunList,
+                    url: that.$global.URL.sysRoleGetRoleFunList,
                     data: {
                         roleId: that.parentData.id
                     },
@@ -230,7 +230,7 @@
                     message: '确定删除,该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.deleteRole,
+                            url: that.$global.URL.sysRoleDelete,
                             method: 'post',
                             data: {
                                 roleId: data.id
@@ -264,7 +264,7 @@
                 });
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.addRoleFun,
+                    url: that.$global.URL.sysRoleAddRoleFun,
                     method: 'post',
                     data: {
                         roleId: that.parentData.id,
@@ -281,7 +281,7 @@
                     message: '是否' + ('0' === isStop + '' ? '启用' : '禁用') + '角色,该操作将会同时改变下级状态',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.changeRoleIsStop,
+                            url: that.$global.URL.sysRoleChangeRoleIsStop,
                             method: 'post',
                             data: {
                                 roleId: that.parentData.id,

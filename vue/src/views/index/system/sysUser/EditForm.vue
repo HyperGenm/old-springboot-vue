@@ -77,7 +77,7 @@
         methods: {
             submit() {
                 let that = this;
-                let url = this.handleType === 'add' ? 'addUser' : 'updateUser';
+                let url = this.handleType === 'add' ? 'sysUserAdd' : 'sysUserUpdate';
                 that.$axios({
                     url: that.$global.URL[url],
                     method: 'post',

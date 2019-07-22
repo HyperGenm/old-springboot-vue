@@ -54,6 +54,14 @@ public interface SysFunctionMapper {
     List<SysFunction> getFunListByParentId(@Param("parentId") Long parentId);
 
     /**
+     * 根据父级id获取功能列表不包含按钮
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysFunction> getFunNotButtonListByParentId(@Param("parentId") Long parentId);
+
+    /**
      * 根据name获取功能信息
      *
      * @param name

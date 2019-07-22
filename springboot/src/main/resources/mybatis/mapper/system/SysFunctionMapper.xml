@@ -34,6 +34,12 @@
         WHERE parent_id = #{parentId}
         ORDER BY sort ASC
     </select>
+    <select id="getFunNotButtonListByParentId" resultType="com.weiziplus.springboot.models.SysFunction">
+        SELECT *
+        FROM sys_function
+        WHERE parent_id = #{parentId} AND type = 0
+        ORDER BY sort ASC
+    </select>
     <select id="getFunInfoByName" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
         FROM sys_function

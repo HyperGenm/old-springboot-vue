@@ -20,50 +20,52 @@ const URL = {
     logout: '/pc/logout',
     /*********************功能管理*****************/
     /*获取所有功能菜单树*/
-    getAllFunctionTree: '/pc/sysFunction/getAllFunctionTree',
+    sysFunctionGetAllFunctionTree: '/pc/sysFunction/getAllFunctionTree',
+    /*获取所有功能菜单树*/
+    sysFunctionGetAllFunctionTreeNotButton: '/pc/sysFunction/getAllFunctionTreeNotButton',
     /*获取功能列表*/
-    getFunctionList: '/pc/sysFunction/getFunctionList',
+    sysFunctionGetList: '/pc/sysFunction/getFunctionList',
     /*新增功能*/
-    addFunction: '/pc/sysFunction/addFunction',
+    sysFunctionAdd: '/pc/sysFunction/addFunction',
     /*修改功能*/
-    updateFunction: '/pc/sysFunction/updateFunction',
+    sysFunctionUpdate: '/pc/sysFunction/updateFunction',
     /*删除功能*/
-    deleteFunction: '/pc/sysFunction/deleteFunction',
+    sysFunctionDelete: '/pc/sysFunction/deleteFunction',
     /*********************角色管理*****************/
     /*获取角色树形列表*/
-    getRoleTree: '/pc/sysRole/getRoleTree',
+    sysRoleGetRoleTree: '/pc/sysRole/getRoleTree',
     /*获取角色所有功能列表*/
-    getRoleList: '/pc/sysRole/getRoleList',
+    sysRoleGetList: '/pc/sysRole/getRoleList',
     /*获取角色的功能列表*/
-    getRoleFunList: '/pc/sysRole/getRoleFunList',
+    sysRoleGetRoleFunList: '/pc/sysRole/getRoleFunList',
     /*新增角色功能*/
-    addRoleFun: '/pc/sysRole/addRoleFun',
+    sysRoleAddRoleFun: '/pc/sysRole/addRoleFun',
     /*新增角色*/
-    addRole: '/pc/sysRole/addRole',
+    sysRoleAdd: '/pc/sysRole/addRole',
     /*修改角色*/
-    updateRole: '/pc/sysRole/updateRole',
+    sysRoleUpdate: '/pc/sysRole/updateRole',
     /*删除角色*/
-    deleteRole: '/pc/sysRole/deleteRole',
+    sysRoleDelete: '/pc/sysRole/deleteRole',
     /*改变角色状态*/
-    changeRoleIsStop: '/pc/sysRole/changeRoleIsStop',
+    sysRoleChangeRoleIsStop: '/pc/sysRole/changeRoleIsStop',
     /*更新角色功能*/
-    updateUserRole: '/pc/sysUser/updateUserRole',
+    sysRoleUpdateUserRole: '/pc/sysUser/updateUserRole',
     /*********************用户管理*****************/
     /*获取用户列表*/
-    getUserList: '/pc/sysUser/getUserList',
+    sysUserGetUserList: '/pc/sysUser/getUserList',
     /*新增用户*/
-    addUser: '/pc/sysUser/addUser',
+    sysUserAdd: '/pc/sysUser/addUser',
     /*更新用户*/
-    updateUser: '/pc/sysUser/updateUser',
+    sysUserUpdate: '/pc/sysUser/updateUser',
     /*删除用户*/
-    deleteUser: '/pc/sysUser/deleteUser',
+    sysUserDelete: '/pc/sysUser/deleteUser',
     /*修改密码密码*/
-    updateUserPassword: '/pc/sysUser/updatePassword',
+    sysUserUpdateUserPassword: '/pc/sysUser/updatePassword',
     /*重置用户密码*/
-    resetUserPassword: '/pc/sysUser/resetUserPassword',
+    sysUserResetUserPassword: '/pc/sysUser/resetUserPassword',
     /*********************日志管理*****************/
     /*查看日志列表*/
-    getLogList: '/pc/sysLog/getLogList'
+    sysLogGetLogList: '/pc/sysLog/getLogList'
 };
 
 export default {

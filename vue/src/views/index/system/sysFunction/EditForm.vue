@@ -89,7 +89,7 @@
         methods: {
             submit() {
                 let that = this;
-                let url = this.handleType === 'add' ? 'addFunction' : 'updateFunction';
+                let url = this.handleType === 'add' ? 'sysFunctionAdd' : 'sysFunctionUpdate';
                 that.$axios({
                     url: that.$global.URL[url],
                     method: 'post',

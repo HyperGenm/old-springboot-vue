@@ -104,6 +104,39 @@ public class SysFunctionService extends BaseService {
     }
 
     /**
+     * 获取所有功能列表树形结构
+     *
+     * @return
+     */
+    @Cacheable
+    public List<SysFunction> getAllFunctionTreeNotButton() {
+        List<SysFunction> resultList = new ArrayList<>();
+        SysFunction sysFunction = mapper.getMinParentIdFunInfo();
+        List<SysFunction> menuList = mapper.getFunNotButtonListByParentId(sysFunction.getParentId());
+        for (SysFunction sysFun : menuList) {
+            sysFun.setChildren(findChildrenNotButton(sysFun));
+            resultList.add(sysFun);
+        }
+        return resultList;
+    }
+
+    /**
+     * 获取子级功能列表
+     *
+     * @param sysFunction
+     * @return
+     */
+    private List<SysFunction> findChildrenNotButton(SysFunction sysFunction) {
+        List<SysFunction> childrenList = new ArrayList<>();
+        List<SysFunction> menuList = mapper.getFunNotButtonListByParentId(sysFunction.getId());
+        for (SysFunction sysFun : menuList) {
+            sysFun.setChildren(findChildrenNotButton(sysFun));
+            childrenList.add(sysFun);
+        }
+        return childrenList;
+    }
+
+    /**
      * 根据父级id获取子级列表
      *
      * @param parentId

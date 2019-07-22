@@ -70,7 +70,7 @@
             submit() {
                 let that = this;
                 that.$axios({
-                    url: that.$global.URL.updateUserPassword,
+                    url: that.$global.URL.sysUserUpdateUserPassword,
                     method: 'post',
                     data: that.form,
                     success() {

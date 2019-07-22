@@ -38,7 +38,7 @@
             } = that.$store.state.role['buttons'];
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.getUserList,
+                    url: that.$global.URL.sysUserGetUserList,
                     data: {
                         userName: '',
                         allowLogin: '',
@@ -168,7 +168,7 @@
                     message: '确定删除,该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.deleteUser,
+                            url: that.$global.URL.sysUserDelete,
                             method: 'post',
                             data: {
                                 ids
@@ -200,7 +200,7 @@
                                     return;
                                 }
                                 that.$axios({
-                                    url: that.$global.URL.resetUserPassword,
+                                    url: that.$global.URL.sysUserResetUserPassword,
                                     method: 'post',
                                     data: {
                                         userId: row.id,

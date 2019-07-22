@@ -22,7 +22,7 @@
             let that = this;
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.getLogList,
+                    url: that.$global.URL.sysLogGetLogList,
                     data: {
                         username: '',
                         roleId: '',
@@ -60,7 +60,7 @@
         mounted() {
             let that = this;
             this.$axios({
-                url: that.$global.URL.getRoleList,
+                url: that.$global.URL.sysRoleGetList,
                 success(data) {
                     let options = [];
                     data.forEach((value) => {

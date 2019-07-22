@@ -141,7 +141,8 @@
     import Qs from 'qs';
 
     /**axios默认配置*/
-    axios.defaults.timeout = 50000;//设置超时时间，规定时间内没有响应则执行失败回调
+    //设置超时时间，规定时间内没有响应则执行失败回调
+    axios.defaults.timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT);
 
     export default {
         name: "Index",
