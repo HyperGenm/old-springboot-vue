@@ -2,19 +2,22 @@ package com.weiziplus.springboot.service.system;
 
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
+import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
+import com.weiziplus.springboot.mapper.system.SysRoleFunctionMapper;
+import com.weiziplus.springboot.mapper.system.SysRoleMapper;
 import com.weiziplus.springboot.models.SysFunction;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.utils.DateUtil;
 import com.weiziplus.springboot.utils.ResultUtil;
 import com.weiziplus.springboot.utils.ValidateUtil;
-import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
-import com.weiziplus.springboot.mapper.system.SysRoleFunctionMapper;
-import com.weiziplus.springboot.mapper.system.SysRoleMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.List;
  * @author wanglongwei
  * @data 2019/5/10 8:39
  */
+@Slf4j
 @Service
 @CacheConfig(cacheNames = "pc:system:sysRoleService")
 public class SysRoleService extends BaseService {
@@ -103,6 +107,7 @@ public class SysRoleService extends BaseService {
      * @param funIds
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResultUtil addRoleFun(Long roleId, Long[] funIds) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtil.error("roleId不能为空");
@@ -122,11 +127,19 @@ public class SysRoleService extends BaseService {
                 return ResultUtil.error("超级管理员角色管理权限一定要添加啊(*/ω＼*)");
             }
         }
-        sysRoleFunctionMapper.deleteByRoleId(roleId);
-        if (null == funIds || 0 >= funIds.length) {
-            return ResultUtil.success();
+        Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
+        try {
+            sysRoleFunctionMapper.deleteByRoleId(roleId);
+            if (null == funIds || 0 >= funIds.length) {
+                return ResultUtil.success();
+            }
+            sysRoleFunctionMapper.addRoleFunction(roleId, funIds);
+        } catch (Exception e) {
+            log.warn("系统用户角色更新失败---" + e);
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
+            return ResultUtil.error("系统错误，请重试");
         }
-        return ResultUtil.success(sysRoleFunctionMapper.addRoleFunction(roleId, funIds));
+        return ResultUtil.success();
     }
 
     /**
