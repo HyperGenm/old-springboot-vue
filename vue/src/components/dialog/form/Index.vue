@@ -2,7 +2,7 @@
     <div id="dialogForm">
         <el-dialog :title="title" :visible.sync="visible" :modal-append-to-body="modelAppendToBody"
                    @close="$emit('update:show', false)">
-            <el-form ref="form" size="mini" label-width="7rem"
+            <el-form ref="form" size="mini" label-width="10rem"
                      :model="formData" :rules="formRules">
                 <slot name="itemHead"></slot>
                 <el-form-item v-for="(item,index) in formOptions" :key="index"
@@ -42,12 +42,8 @@
                             </el-checkbox>
                         </el-checkbox-group>
                     </template>
-                    <template v-else-if="'switch' === item.type">
-                        <el-switch v-model="formData[item.prop]" :size="item.size"
-                                   :disabled="item.disabled || false"></el-switch>
-                    </template>
                     <template v-else-if="'datePicker' === item.type">
-                        <el-date-picker :type="item['dateType'] || 'date'" :placeholder="item.placeholder || '选择日期'"
+                        <el-date-picker type="date" :placeholder="item.placeholder || '选择日期'"
                                         v-model="formData[item.prop]" :size="item.size"
                                         :value-format="item.valueFormat || 'yyyy-MM-dd'"
                                         :disabled="item.disabled || false"></el-date-picker>
@@ -55,7 +51,13 @@
                     <template v-else-if="'timePicker' === item.type">
                         <el-date-picker :placeholder="item.placeholder || '选择时间'"
                                         v-model="formData[item.prop]" :size="item.size"
-                                        :format="item.format || 'HH:mm:ss'"
+                                        :value-format="item.valueFormat || 'HH:mm:ss'"
+                                        :disabled="item.disabled || false"></el-date-picker>
+                    </template>
+                    <template v-else-if="'dateTimePicker' === item.type">
+                        <el-date-picker type="datetime" :placeholder="item.placeholder || '选择时间'"
+                                        v-model="formData[item.prop]" :size="item.size"
+                                        :value-format="item.valueFormat || 'yyyy-MM-dd HH:mm:ss'"
                                         :disabled="item.disabled || false"></el-date-picker>
                     </template>
                     <template v-else>

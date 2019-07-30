@@ -3,6 +3,7 @@ package com.weiziplus.springboot.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * 时间工具类
@@ -26,6 +27,7 @@ public class DateUtil {
      */
     public static Date stringToDate(String date, String pattern) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return sdf.parse(date);
     }
 
@@ -38,6 +40,7 @@ public class DateUtil {
      */
     public static Date stringToDate(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return sdf.parse(date);
     }
 
@@ -51,6 +54,7 @@ public class DateUtil {
     public static String dateToString(Date date, String pattern) {
         //设置时间格式
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(date);
     }
 
@@ -63,6 +67,7 @@ public class DateUtil {
     public static String dateToString(Date date) {
         //设置时间格式
         SimpleDateFormat dateFormat = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(date);
     }
 
@@ -74,6 +79,7 @@ public class DateUtil {
     public static String getNowDate() {
         //设置时间格式
         SimpleDateFormat dateFormat = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(new Date());
     }
 }
