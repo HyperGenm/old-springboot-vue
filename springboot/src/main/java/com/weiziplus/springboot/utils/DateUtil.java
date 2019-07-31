@@ -12,10 +12,6 @@ import java.util.TimeZone;
  * @data 2019/5/7 17:44
  */
 public class DateUtil {
-    /**
-     * 时间格式
-     */
-    private final static String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 时间字符串转时间
@@ -26,6 +22,12 @@ public class DateUtil {
      * @throws ParseException
      */
     public static Date stringToDate(String date, String pattern) throws ParseException {
+        if (StringUtil.isBlank(date)) {
+            return null;
+        }
+        if (StringUtil.isBlank(pattern)) {
+            return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return sdf.parse(date);
@@ -39,7 +41,11 @@ public class DateUtil {
      * @throws ParseException
      */
     public static Date stringToDate(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        if (StringUtil.isBlank(date)) {
+            return null;
+        }
+        String basePattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(basePattern.substring(0, date.length()));
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return sdf.parse(date);
     }
@@ -52,6 +58,12 @@ public class DateUtil {
      * @return
      */
     public static String dateToString(Date date, String pattern) {
+        if (null == date) {
+            return null;
+        }
+        if (StringUtil.isBlank(pattern)) {
+            return null;
+        }
         //设置时间格式
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
@@ -65,8 +77,11 @@ public class DateUtil {
      * @return
      */
     public static String dateToString(Date date) {
+        if (null == date) {
+            return null;
+        }
         //设置时间格式
-        SimpleDateFormat dateFormat = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(date);
     }
@@ -76,9 +91,21 @@ public class DateUtil {
      *
      * @return
      */
+    public static String getNowDateTime() {
+        //设置时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        return dateFormat.format(new Date());
+    }
+
+    /**
+     * 获取当前日期
+     *
+     * @return
+     */
     public static String getNowDate() {
         //设置时间格式
-        SimpleDateFormat dateFormat = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(new Date());
     }

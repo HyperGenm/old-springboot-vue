@@ -71,7 +71,7 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addJavaDocLine(sb.toString());
         sb.setLength(0);
         sb.append(" * @date ");
-        sb.append(DateUtil.getNowDate());
+        sb.append(DateUtil.getNowDateTime());
         topLevelClass.addJavaDocLine(sb.toString());
         topLevelClass.addJavaDocLine(" */");
         return true;

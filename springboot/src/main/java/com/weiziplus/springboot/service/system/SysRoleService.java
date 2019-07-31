@@ -165,7 +165,7 @@ public class SysRoleService extends BaseService {
         if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
             return ResultUtil.error("操作失败，父级处于禁用状态");
         }
-        sysRole.setCreateTime(DateUtil.getNowDate());
+        sysRole.setCreateTime(DateUtil.getNowDateTime());
         return ResultUtil.success(baseInsert(sysRole));
     }
 
