@@ -22,9 +22,14 @@ public class GlobalConfig {
     public static final String UNDEFINED = "undefined";
 
     /**
-     * 用户允许登录为0，禁止为1
+     * 用户允许禁止登录
      */
-    public static final Integer ALLOW_LOGIN = 0;
+    public static final Integer ALLOW_LOGIN_ONE = 1;
+
+    /**
+     * 用户允许封号中
+     */
+    public static final Integer ALLOW_LOGIN_TWO = 2;
 
     /**
      * 允许使用为0，禁止为1

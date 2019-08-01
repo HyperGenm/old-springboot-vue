@@ -45,26 +45,27 @@
         </rollingPolicy>
     </appender>
 
-    <!-- 开发环境:打印控制台-->
+    <!-- 开发环境-->
     <springProfile name="dev">
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="CONSOLE"/>
         </root>
-        <root level="info">
+        <logger name="com.weiziplus.springboot" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="com.weiziplus.springboot" level="debug" additivity="false">
             <appender-ref ref="LOGFILE"/>
-        </root>
+        </logger>
     </springProfile>
 
-    <!-- 生产环境:输出到文档-->
+    <!-- 生产环境-->
     <springProfile name="pro">
         <root level="info">
             <appender-ref ref="LOGFILE"/>
         </root>
+        <logger name="com.weiziplus.springboot" level="info" additivity="false">
+            <appender-ref ref="LOGFILE"/>
+        </logger>
     </springProfile>
-
-    <!--开启日志打印-->
-    <logger name="com.weiziplus.springboot" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
 
 </configuration>

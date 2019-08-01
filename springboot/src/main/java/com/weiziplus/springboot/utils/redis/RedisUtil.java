@@ -32,6 +32,9 @@ public class RedisUtil {
      * @param value
      */
     public static void set(String key, Object value) {
+        if (null == key) {
+            return;
+        }
         that.redisTemplate.opsForValue().set(key, value, 60 * 60L, TimeUnit.SECONDS);
     }
 
@@ -43,7 +46,26 @@ public class RedisUtil {
      * @param timeout 过期时间：单位秒
      */
     public static void set(String key, Object value, Long timeout) {
+        if (null == key) {
+            return;
+        }
+        if (null == timeout) {
+            timeout = 60 * 60L;
+        }
         that.redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 根据key和value存入redis---不改变原来过期时间，只改变值
+     *
+     * @param key
+     * @param value
+     */
+    public static void setNotChangeTimeOut(String key, Object value) {
+        if (null == key) {
+            return;
+        }
+        that.redisTemplate.opsForValue().set(key, value, 0L);
     }
 
     /**
@@ -53,6 +75,9 @@ public class RedisUtil {
      * @return
      */
     public static Object get(String key) {
+        if (null == key) {
+            return null;
+        }
         return that.redisTemplate.opsForValue().get(key);
     }
 
@@ -68,6 +93,19 @@ public class RedisUtil {
             return false;
         }
         return that.redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 根据key获取内容
+     *
+     * @param key
+     * @return
+     */
+    public static Long getExpire(String key) {
+        if (null == key) {
+            return null;
+        }
+        return that.redisTemplate.getExpire(key);
     }
 
     /**
@@ -103,6 +141,9 @@ public class RedisUtil {
      * @return
      */
     public static Long delete(Set<String> keys) {
+        if (null == keys) {
+            return null;
+        }
         return that.redisTemplate.delete(keys);
     }
 
@@ -113,6 +154,9 @@ public class RedisUtil {
      * @return
      */
     public static Long deleteLikeKey(String key) {
+        if (null == key) {
+            return null;
+        }
         Set<String> keys = that.redisTemplate.keys(key + "*");
         if (null == keys || 0 >= keys.size()) {
             return 0L;

@@ -10,21 +10,20 @@
         limit 1
     </select>
     <select id="getUserList" resultType="java.util.Map">
-        SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,
+        SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.suspend_num AS suspendNum,
         su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName
         FROM sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
-        <where>
-            <if test="null != userName and '' != userName">
-                position(#{userName} IN su.username)
-            </if>
-            <if test="null != allowLogin">
-                AND su.allow_login = #{allowLogin}
-            </if>
-            <if test="null != createTime and '' != createTime">
-                AND su.create_time LIKE concat(#{createTime},'%')
-            </if>
-        </where>
+        WHERE su.id <![CDATA[<>]]> 1
+        <if test="null != userName and '' != userName">
+            AND position(#{userName} IN su.username)
+        </if>
+        <if test="null != allowLogin">
+            AND su.allow_login = #{allowLogin}
+        </if>
+        <if test="null != createTime and '' != createTime">
+            AND su.create_time LIKE concat(#{createTime},'%')
+        </if>
         ORDER BY su.create_time ASC
     </select>
     <select id="getUserInfoByName" resultType="com.weiziplus.springboot.models.SysUser">
@@ -52,6 +51,16 @@
     <update id="updateRoleIdByUserIdAndRoleId">
         UPDATE sys_user
         SET role_id = #{roleId}
+        WHERE id = #{userId}
+    </update>
+    <update id="suspendSysUser">
+        UPDATE sys_user
+        SET allow_login = 2,suspend_num = suspend_num + 1
+        WHERE id = #{userId}
+    </update>
+    <update id="relieveSuspend">
+        UPDATE sys_user
+        SET allow_login = 0
         WHERE id = #{userId}
     </update>
 </mapper>

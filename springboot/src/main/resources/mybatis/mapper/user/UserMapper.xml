@@ -5,18 +5,18 @@
 <mapper namespace="com.weiziplus.springboot.mapper.user.UserMapper">
     <select id="getUserInfoByUsername" resultType="com.weiziplus.springboot.models.User">
         SELECT *
-        FROM w_user
+        FROM user
         WHERE username = #{username}
         LIMIT 1
     </select>
     <select id="getUserInfoByUserId" resultType="com.weiziplus.springboot.models.User">
         SELECT *
-        FROM w_user
+        FROM user
         WHERE id = #{userId}
         LIMIT 1
     </select>
     <insert id="addUser">
-        INSERT INTO w_user
+        INSERT INTO user
         (username,password,create_time)
         VALUES
         (#{username},#{password},now())

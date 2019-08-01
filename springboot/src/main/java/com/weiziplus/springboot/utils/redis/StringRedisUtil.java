@@ -34,6 +34,9 @@ public class StringRedisUtil {
      * @param value
      */
     public static void set(String key, String value) {
+        if (null == key) {
+            return;
+        }
         that.stringRedisTemplate.opsForValue().set(key, value, 3 * 60L, TimeUnit.SECONDS);
     }
 
@@ -45,7 +48,26 @@ public class StringRedisUtil {
      * @param timeout 过期时间：单位秒
      */
     public static void set(String key, String value, Long timeout) {
+        if (null == key) {
+            return;
+        }
+        if (null == timeout) {
+            timeout = 3 * 60L;
+        }
         that.stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 根据key和value存入redis---不改变原来过期时间，只改变值
+     *
+     * @param key
+     * @param value
+     */
+    public static void setNotChangeTimeOut(String key, String value) {
+        if (null == key) {
+            return;
+        }
+        that.stringRedisTemplate.opsForValue().set(key, value, 0L);
     }
 
     /**
@@ -55,6 +77,9 @@ public class StringRedisUtil {
      * @return
      */
     public static String get(String key) {
+        if (null == key) {
+            return null;
+        }
         return that.stringRedisTemplate.opsForValue().get(key);
     }
 
@@ -105,6 +130,9 @@ public class StringRedisUtil {
      * @return
      */
     public static Long delete(Collection<String> keys) {
+        if (null == keys) {
+            return null;
+        }
         return that.stringRedisTemplate.delete(keys);
     }
 }

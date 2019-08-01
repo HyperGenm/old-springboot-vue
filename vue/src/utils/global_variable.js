@@ -4,7 +4,11 @@
  */
 const GLOBAL = {
     //请求前缀
-    base_url: process.env.VUE_APP_URL
+    base_url: process.env.VUE_APP_URL,
+    //超级管理员id
+    super_admin_id: 1,
+    //超级管理员roleId
+    super_admin_role_id: 1
 };
 
 /**
@@ -13,59 +17,61 @@ const GLOBAL = {
  */
 const URL = {
     /*登录 */
-    login: '/pc/login',
+    login: '/login',
     /*登录验证码*/
-    loginValidateCode: '/pc/getValidateCode',
+    loginValidateCode: '/getValidateCode',
     /*退出登录*/
-    logout: '/pc/logout',
+    logout: '/logout',
     /*********************功能管理*****************/
     /*获取所有功能菜单树*/
-    sysFunctionGetAllFunctionTree: '/pc/sysFunction/getAllFunctionTree',
+    sysFunctionGetAllFunctionTree: '/sysFunction/getAllFunctionTree',
     /*获取所有功能菜单树*/
-    sysFunctionGetAllFunctionTreeNotButton: '/pc/sysFunction/getAllFunctionTreeNotButton',
+    sysFunctionGetAllFunctionTreeNotButton: '/sysFunction/getAllFunctionTreeNotButton',
     /*获取功能列表*/
-    sysFunctionGetList: '/pc/sysFunction/getFunctionList',
+    sysFunctionGetList: '/sysFunction/getFunctionList',
     /*新增功能*/
-    sysFunctionAdd: '/pc/sysFunction/addFunction',
+    sysFunctionAdd: '/sysFunction/addFunction',
     /*修改功能*/
-    sysFunctionUpdate: '/pc/sysFunction/updateFunction',
+    sysFunctionUpdate: '/sysFunction/updateFunction',
     /*删除功能*/
-    sysFunctionDelete: '/pc/sysFunction/deleteFunction',
+    sysFunctionDelete: '/sysFunction/deleteFunction',
     /*********************角色管理*****************/
     /*获取角色树形列表*/
-    sysRoleGetRoleTree: '/pc/sysRole/getRoleTree',
+    sysRoleGetRoleTree: '/sysRole/getRoleTree',
     /*获取角色所有功能列表*/
-    sysRoleGetList: '/pc/sysRole/getRoleList',
+    sysRoleGetList: '/sysRole/getRoleList',
     /*获取角色的功能列表*/
-    sysRoleGetRoleFunList: '/pc/sysRole/getRoleFunList',
+    sysRoleGetRoleFunList: '/sysRole/getRoleFunList',
     /*新增角色功能*/
-    sysRoleAddRoleFun: '/pc/sysRole/addRoleFun',
+    sysRoleAddRoleFun: '/sysRole/addRoleFun',
     /*新增角色*/
-    sysRoleAdd: '/pc/sysRole/addRole',
+    sysRoleAdd: '/sysRole/addRole',
     /*修改角色*/
-    sysRoleUpdate: '/pc/sysRole/updateRole',
+    sysRoleUpdate: '/sysRole/updateRole',
     /*删除角色*/
-    sysRoleDelete: '/pc/sysRole/deleteRole',
+    sysRoleDelete: '/sysRole/deleteRole',
     /*改变角色状态*/
-    sysRoleChangeRoleIsStop: '/pc/sysRole/changeRoleIsStop',
+    sysRoleChangeRoleIsStop: '/sysRole/changeRoleIsStop',
     /*更新角色功能*/
-    sysRoleUpdateUserRole: '/pc/sysUser/updateUserRole',
+    sysRoleUpdateUserRole: '/sysUser/updateUserRole',
     /*********************用户管理*****************/
     /*获取用户列表*/
-    sysUserGetUserList: '/pc/sysUser/getUserList',
+    sysUserGetUserList: '/sysUser/getUserList',
     /*新增用户*/
-    sysUserAdd: '/pc/sysUser/addUser',
+    sysUserAdd: '/sysUser/addUser',
     /*更新用户*/
-    sysUserUpdate: '/pc/sysUser/updateUser',
+    sysUserUpdate: '/sysUser/updateUser',
     /*删除用户*/
-    sysUserDelete: '/pc/sysUser/deleteUser',
+    sysUserDelete: '/sysUser/deleteUser',
     /*修改密码密码*/
-    sysUserUpdateUserPassword: '/pc/sysUser/updatePassword',
+    sysUserUpdateUserPassword: '/sysUser/updatePassword',
     /*重置用户密码*/
-    sysUserResetUserPassword: '/pc/sysUser/resetUserPassword',
+    sysUserResetUserPassword: '/sysUser/resetUserPassword',
+    /*解除封号*/
+    sysUserRelieveSuspend: '/sysUser/relieveSuspend',
     /*********************日志管理*****************/
     /*查看日志列表*/
-    sysLogGetLogList: '/pc/sysLog/getLogList'
+    sysLogGetLogList: '/sysLog/getLogList'
 };
 
 export default {

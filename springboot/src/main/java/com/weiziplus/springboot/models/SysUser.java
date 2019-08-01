@@ -52,10 +52,16 @@ public class SysUser implements Serializable {
     private Long roleId;
 
     /**
-     * 是否允许登录;0:允许，1:禁止
+     * 是否允许登录;0:允许，1:禁止，2:封号
      */
     @Column("allow_login")
     private Integer allowLogin;
+
+    /**
+     * 账户封号次数
+     */
+    @Column("suspend_num")
+    private Integer suspendNum;
 
     /**
      * 用户最后活跃时间

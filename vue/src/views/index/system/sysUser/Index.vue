@@ -36,6 +36,10 @@
             let {
                 sysUser_add, sysUser_update, sysUser_delete, sysUser_role, sysUser_resetPwd
             } = that.$store.state.role['buttons'];
+            let SUPER_ADMIN_ID = that.$global.GLOBAL.super_admin_id;
+            let SUPER_ADMIN_ROLE_ID = that.$global.GLOBAL.super_admin_role_id;
+            let showRelieveSuspend = (SUPER_ADMIN_ID === that.$store.state.userInfo['id']
+                || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
                 tableDataRequest: {
                     url: that.$global.URL.sysUserGetUserList,
@@ -67,7 +71,7 @@
                             let ids = [];
                             for (let i = 0; i < rows.length; i++) {
                                 let value = rows[i];
-                                if (('0' === value.id + '') || '超级管理员' === value['roleName']) {
+                                if ((SUPER_ADMIN_ID === value.id) || '超级管理员' === value['roleName']) {
                                     that.$globalFun.errorMsg('不能删除超级管理员');
                                     return;
                                 }
@@ -83,14 +87,22 @@
                     {prop: 'realName', label: '真实姓名'},
                     {
                         prop: 'title', label: '是否允许登录', formatter(row) {
-                            return ('0' === row['allowLogin'] + '') ? '允许' : '禁止'
+                            let {allowLogin} = row;
+                            if ('0' === '' + allowLogin) {
+                                return '允许';
+                            } else if ('1' === '' + allowLogin) {
+                                return '禁止';
+                            } else {
+                                return '封号中';
+                            }
                         }
                     },
+                    {prop: 'suspendNum', label: '封号次数'},
                     {prop: 'lastActiveTime', label: '用户最后活跃时间'},
                     {prop: 'createTime', label: '用户创建时间'}
                 ],
                 tableOperates: {
-                    width: 370,
+                    width: showRelieveSuspend ? 500 : 370,
                     buttons:
                         [
                             {
@@ -101,7 +113,7 @@
                             },
                             {
                                 name: '编辑', type: 'success', show: sysUser_update, handleClick(row) {
-                                    if (('0' === row.id + '') || '超级管理员' === row['roleName']) {
+                                    if ((SUPER_ADMIN_ID === row.id) || '超级管理员' === row['roleName']) {
                                         that.$globalFun.errorMsg('不能编辑超级管理员');
                                         return;
                                     }
@@ -112,7 +124,7 @@
                             },
                             {
                                 name: '角色', type: 'primary', show: sysUser_role, handleClick(row) {
-                                    if (('0' === row.id + '') || '超级管理员' === row['roleName']) {
+                                    if ((SUPER_ADMIN_ID === row.id) || '超级管理员' === row['roleName']) {
                                         that.$globalFun.errorMsg('不能操作超级管理员');
                                         return;
                                     }
@@ -122,7 +134,7 @@
                             },
                             {
                                 name: '重置密码', type: 'warning', show: sysUser_resetPwd, handleClick(row) {
-                                    if ((('0' === row.id + '') || '超级管理员' === row['roleName']) && that.$store.state.role.name !== '超级管理员') {
+                                    if (((SUPER_ADMIN_ID === row.id) || '超级管理员' === row['roleName'])) {
                                         that.$globalFun.errorMsg('不能编辑超级管理员');
                                         return;
                                     }
@@ -130,8 +142,16 @@
                                 }
                             },
                             {
+                                name: '解除封号',
+                                type: 'danger',
+                                show: showRelieveSuspend,
+                                handleClick(row) {
+                                    that.relieveSuspend(row['id']);
+                                }
+                            },
+                            {
                                 name: '删除', type: 'danger', show: sysUser_delete, handleClick(row) {
-                                    if (('0' === row.id + '') || '超级管理员' === row['roleName']) {
+                                    if ((SUPER_ADMIN_ID === row.id) || '超级管理员' === row['roleName']) {
                                         that.$globalFun.errorMsg('不能删除超级管理员');
                                         return;
                                     }
@@ -145,7 +165,8 @@
                     {
                         type: 'select', prop: 'allowLogin', placeholder: '是否允许登录', options: [
                             {label: '允许', value: 0},
-                            {label: '禁止', value: 1}
+                            {label: '禁止', value: 1},
+                            {label: '封号中', value: 2},
                         ]
                     },
                     {type: 'datePicker', prop: 'createTime'}
@@ -175,6 +196,25 @@
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
+                                that.$refs['table'].renderTable();
+                            }
+                        });
+                    }
+                });
+            },
+            relieveSuspend(id) {
+                let that = this;
+                this.$globalFun.messageBox({
+                    message: '确定解封该账号,该操作无法撤销',
+                    confirm() {
+                        that.$axios({
+                            url: that.$global.URL.sysUserRelieveSuspend,
+                            method: 'post',
+                            data: {
+                                userId: id
+                            },
+                            success() {
+                                that.$globalFun.successMsg('解封成功');
                                 that.$refs['table'].renderTable();
                             }
                         });

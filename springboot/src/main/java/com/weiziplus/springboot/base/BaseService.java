@@ -35,6 +35,25 @@ public class BaseService {
     }
 
     /**
+     * 根据实体类class获取数据库表名
+     *
+     * @param nowClass
+     * @return
+     */
+    private String getPrimaryKey(Class nowClass) {
+        if (null == nowClass.getAnnotation(Table.class)) {
+            throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
+        }
+        Field[] fields = nowClass.getFields();
+        for (Field field : fields) {
+            if (null != field.getAnnotation(Id.class)) {
+                return field.getAnnotation(Id.class).value();
+            }
+        }
+        throw new RuntimeException("当前实体类没有设置主键==========" + nowClass);
+    }
+
+    /**
      * 将实体对象转为map
      *
      * @param object
@@ -168,6 +187,6 @@ public class BaseService {
      * @return
      */
     public List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
-        return mapper.findAll(getTableName(nowClass));
+        return mapper.findAll(getTableName(nowClass), getPrimaryKey(nowClass));
     }
 }

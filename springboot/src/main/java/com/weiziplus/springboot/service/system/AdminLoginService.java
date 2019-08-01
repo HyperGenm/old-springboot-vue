@@ -98,8 +98,11 @@ public class AdminLoginService {
         if (null == sysUser || !sysUser.getPassword().equals(Md5Util.encode(password))) {
             return ResultUtil.error("用户名或密码错误");
         }
-        if (!GlobalConfig.ALLOW_LOGIN.equals(sysUser.getAllowLogin())) {
+        if (GlobalConfig.ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
             return ResultUtil.error("账号被禁用，请联系管理员");
+        }
+        if (GlobalConfig.ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
+            return ResultUtil.error("账号封号中，请联系管理员");
         }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
@@ -112,6 +115,7 @@ public class AdminLoginService {
         if (null == token) {
             return ResultUtil.error("登录失败，请重试");
         }
+        sysUser.setPassword(null);
         Map<String, Object> map = new HashMap<>(5);
         map.put("token", token);
         map.put("userInfo", sysUser);

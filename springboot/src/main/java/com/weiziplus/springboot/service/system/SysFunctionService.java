@@ -3,10 +3,7 @@ package com.weiziplus.springboot.service.system;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.models.SysFunction;
-import com.weiziplus.springboot.utils.DateUtil;
-import com.weiziplus.springboot.utils.PageUtil;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.ValidateUtil;
+import com.weiziplus.springboot.utils.*;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -172,6 +169,9 @@ public class SysFunctionService extends BaseService {
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
             return ResultUtil.error("parentId不能为空");
         }
+        if (StringUtil.isBlank(sysFunction.getTitle())) {
+            return ResultUtil.error("标题不能为空");
+        }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun) {
             return ResultUtil.error("name已存在");
@@ -188,6 +188,13 @@ public class SysFunctionService extends BaseService {
      */
     @CacheEvict(allEntries = true)
     public ResultUtil updateFunction(SysFunction sysFunction) {
+        if (StringUtil.isBlank(sysFunction.getTitle())) {
+            return ResultUtil.error("标题不能为空");
+        }
+        SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
+        if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
+            return ResultUtil.error("name已存在");
+        }
         return ResultUtil.success(baseUpdate(sysFunction));
     }
 

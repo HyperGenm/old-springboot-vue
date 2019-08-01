@@ -7,6 +7,7 @@ import com.weiziplus.springboot.models.SysUser;
 import com.weiziplus.springboot.models.User;
 import com.weiziplus.springboot.utils.ResultUtil;
 import com.weiziplus.springboot.utils.StringUtil;
+import com.weiziplus.springboot.utils.redis.RedisUtil;
 import com.weiziplus.springboot.utils.redis.StringRedisUtil;
 import com.weiziplus.springboot.utils.token.AdminTokenUtil;
 import com.weiziplus.springboot.utils.token.JwtTokenUtil;
@@ -52,7 +53,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) {
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
@@ -135,6 +136,28 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (null == sysUser) {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
+        }
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
+            String redisKey = "visit:number:admin:" + userId;
+            int number = 0;
+            Object numberObject = RedisUtil.get(redisKey);
+            if (null != numberObject) {
+                number = (int) numberObject;
+            }
+            number += 1;
+            //10秒内最多请求27次，不然会被封号
+            int maxNumber = 27;
+            if (number >= maxNumber) {
+                sysUserMapper.suspendSysUser(userId);
+                AdminTokenUtil.deleteToken(userId);
+                handleResponse(response, ResultUtil.errorSuspend());
+                return false;
+            }
+            if (null != numberObject) {
+                RedisUtil.setNotChangeTimeOut(redisKey, number);
+            } else {
+                RedisUtil.set(redisKey, number, 10L);
+            }
         }
         //更新用户最后活跃时间
         sysUserMapper.updateLastActiveTimeById(userId);

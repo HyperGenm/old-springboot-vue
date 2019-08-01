@@ -70,6 +70,11 @@ public class ResultUtil implements Serializable {
     private static final Integer ERROR_CODE = 403;
 
     /**
+     * 封号的code
+     */
+    private static final Integer ERROR_SUSPEND_CODE = 404;
+
+    /**
      * token出错的code
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
@@ -100,6 +105,10 @@ public class ResultUtil implements Serializable {
 
     public static ResultUtil error() {
         return content(ERROR_CODE, "error", null);
+    }
+
+    public static ResultUtil errorSuspend() {
+        return content(ERROR_SUSPEND_CODE, "Rider Kick", null);
     }
 
     public static ResultUtil errorToken(String msg, Object data) {

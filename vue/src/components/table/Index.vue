@@ -72,6 +72,7 @@
             <el-row>
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
                 <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
+                           v-if="btn['show'] || false"
                            :type="btn.primary || 'primary'" size="mini"
                            :icon="btn.icon" @click="btn.handleClick(JSON.parse(JSON.stringify(selection)))"
                 >{{btn.name}}
@@ -115,6 +116,7 @@
                                  :width="tableOperates.width || 170" fixed="right">
                     <template slot-scope="scope">
                         <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
+                                   v-if="btn['show'] || false"
                                    @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
                                    size="mini"
                                    :type="btn.type">{{btn.name}}

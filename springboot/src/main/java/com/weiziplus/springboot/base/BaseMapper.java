@@ -20,7 +20,7 @@ public interface BaseMapper {
      * @return
      */
     @Insert("<script>" +
-            "INSERT INTO ${TABLE_NAME} ( " +
+            "INSERT INTO `${TABLE_NAME}` ( " +
             "<foreach collection='COLUMNS' item='column' separator=','> " +
             "`${column}` " +
             "</foreach> " +
@@ -39,7 +39,7 @@ public interface BaseMapper {
      * @param id
      * @return
      */
-    @Delete("DELETE FROM ${TABLE_NAME} " +
+    @Delete("DELETE FROM `${TABLE_NAME}` " +
             "WHERE id = #{id}")
     int deleteById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
 
@@ -51,8 +51,8 @@ public interface BaseMapper {
      * @return
      */
     @Delete("<script>" +
-            "DELETE FROM ${TABLE_NAME} " +
-            "WHERE id IN (" +
+            "DELETE FROM `${TABLE_NAME}` " +
+            "WHERE `id` IN (" +
             "<foreach collection='ids' item='id' separator=','> " +
             "#{id} " +
             "</foreach>" +
@@ -67,7 +67,7 @@ public interface BaseMapper {
      * @return
      */
     @Update("<script>" +
-            "UPDATE ${TABLE_NAME} " +
+            "UPDATE `${TABLE_NAME}` " +
             "SET " +
             "<foreach collection='COLUMNS_VALUES' item='item' index='index'> " +
             "`${item.column}` = #{item.value} " +
@@ -75,7 +75,7 @@ public interface BaseMapper {
             "        , " +
             "      </if> " +
             "</foreach> " +
-            "WHERE ${KEY_ID} = #{KEY_VALUE}" +
+            "WHERE `${KEY_ID}` = #{KEY_VALUE}" +
             "</script>")
     int update(Map<String, Object> map);
 
@@ -87,8 +87,8 @@ public interface BaseMapper {
      * @return
      */
     @Select("SELECT * " +
-            "FROM ${TABLE_NAME} " +
-            "WHERE id = #{id} " +
+            "FROM `${TABLE_NAME}` " +
+            "WHERE `id` = #{id} " +
             "LIMIT 1")
     Map<String, Object> findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
 
@@ -96,10 +96,11 @@ public interface BaseMapper {
      * 获取所有数据
      *
      * @param TABLE_NAME
+     * @param PRIMARY_KEY
      * @return
      */
     @Select("SELECT * " +
-            "FROM ${TABLE_NAME} " +
-            "ORDER BY id DESC")
-    List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME);
+            "FROM `${TABLE_NAME}` " +
+            "ORDER BY `${PRIMARY_KEY}` DESC")
+    List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME, @Param("PRIMARY_KEY") String PRIMARY_KEY);
 }

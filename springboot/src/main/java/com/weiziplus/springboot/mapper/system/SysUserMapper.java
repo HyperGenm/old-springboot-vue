@@ -72,4 +72,20 @@ public interface SysUserMapper {
      * @return
      */
     int updateRoleIdByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
+
+    /**
+     * 封号系统用户
+     *
+     * @param userId
+     * @return
+     */
+    int suspendSysUser(@Param("userId") Long userId);
+
+    /**
+     * 解除封号
+     *
+     * @param userId
+     * @return
+     */
+    int relieveSuspend(@Param("userId") Long userId);
 }

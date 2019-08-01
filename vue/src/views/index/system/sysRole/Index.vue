@@ -206,7 +206,7 @@
             //修改角色
             updateRole() {
                 let data = this.parentData;
-                if (null != data && (1 === data.id || '超级管理员' === data.name)) {
+                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
                     this.$globalFun.errorMsg('超级管理员不能修改');
                     return;
                 }
@@ -221,7 +221,7 @@
             },
             deleteRole() {
                 let data = this.parentData;
-                if (null != data && (1 === data.id || '超级管理员' === data.name)) {
+                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
                     this.$globalFun.errorMsg('超级管理员不能删除');
                     return;
                 }
@@ -276,6 +276,11 @@
                 });
             },
             changeRoleIsStop(isStop) {
+                let data = this.parentData;
+                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
+                    this.$globalFun.errorMsg('超级管理员禁止操作');
+                    return;
+                }
                 let that = this;
                 this.$globalFun.messageBox({
                     message: '是否' + ('0' === isStop + '' ? '启用' : '禁用') + '角色,该操作将会同时改变下级状态',

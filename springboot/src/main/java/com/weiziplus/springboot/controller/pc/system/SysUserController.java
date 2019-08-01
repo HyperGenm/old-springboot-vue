@@ -63,8 +63,8 @@ public class SysUserController {
      */
     @PostMapping("/updateUser")
     @SystemLog(description = "更新用户")
-    public ResultUtil updateUser(SysUser sysUser) {
-        return service.updateUser(sysUser);
+    public ResultUtil updateUser(HttpServletRequest request, SysUser sysUser) {
+        return service.updateUser(request, sysUser);
     }
 
     /**
@@ -76,8 +76,9 @@ public class SysUserController {
     @PostMapping("/deleteUser")
     @SystemLog(description = "删除用户")
     public ResultUtil deleteUser(
+            HttpServletRequest request,
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
-        return service.deleteUser(ids);
+        return service.deleteUser(request, ids);
     }
 
     /**
@@ -89,8 +90,8 @@ public class SysUserController {
      */
     @PostMapping("/updateUserRole")
     @SystemLog(description = "更新用户角色")
-    public ResultUtil updateUserRole(Long userId, Long roleId) {
-        return service.updateUserRole(userId, roleId);
+    public ResultUtil updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
+        return service.updateUserRole(request, userId, roleId);
     }
 
     /**
@@ -114,5 +115,14 @@ public class SysUserController {
     @SystemLog(description = "重置用户密码")
     public ResultUtil resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
+    }
+
+    /**
+     * 解除封号
+     */
+    @PostMapping("/relieveSuspend")
+    @SystemLog(description = "解除封号")
+    public ResultUtil relieveSuspend(HttpServletRequest request, Long userId) {
+        return service.relieveSuspend(request, userId);
     }
 }

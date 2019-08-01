@@ -3,11 +3,13 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysRole;
-import com.weiziplus.springboot.utils.ResultUtil;
 import com.weiziplus.springboot.service.system.SysRoleService;
+import com.weiziplus.springboot.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wanglongwei
@@ -90,8 +92,8 @@ public class SysRoleController {
      */
     @PostMapping("/updateRole")
     @SystemLog(description = "修改角色")
-    public ResultUtil updateRole(SysRole sysRole) {
-        return service.updateRole(sysRole);
+    public ResultUtil updateRole(HttpServletRequest request, SysRole sysRole) {
+        return service.updateRole(request, sysRole);
     }
 
     /**
@@ -102,8 +104,8 @@ public class SysRoleController {
      */
     @PostMapping("/deleteRole")
     @SystemLog(description = "删除角色")
-    public ResultUtil deleteRole(Long roleId) {
-        return service.deleteRole(roleId);
+    public ResultUtil deleteRole(HttpServletRequest request, Long roleId) {
+        return service.deleteRole(request, roleId);
     }
 
     /**
@@ -114,7 +116,7 @@ public class SysRoleController {
      */
     @PostMapping("/changeRoleIsStop")
     @SystemLog(description = "改变角色状态")
-    public ResultUtil changeRoleIsStop(Long roleId, Integer isStop) {
-        return service.changeRoleIsStop(roleId, isStop);
+    public ResultUtil changeRoleIsStop(HttpServletRequest request, Long roleId, Integer isStop) {
+        return service.changeRoleIsStop(request, roleId, isStop);
     }
 }

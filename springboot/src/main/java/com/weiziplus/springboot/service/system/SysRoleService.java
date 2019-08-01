@@ -5,11 +5,14 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleMapper;
+import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.SysFunction;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.utils.DateUtil;
 import com.weiziplus.springboot.utils.ResultUtil;
 import com.weiziplus.springboot.utils.ValidateUtil;
+import com.weiziplus.springboot.utils.token.AdminTokenUtil;
+import com.weiziplus.springboot.utils.token.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,9 @@ public class SysRoleService extends BaseService {
 
     @Autowired
     SysRoleFunctionMapper sysRoleFunctionMapper;
+
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     /**
      * 获取权限树形结构
@@ -124,7 +131,7 @@ public class SysRoleService extends BaseService {
                 }
             }
             if (!haveRoleId) {
-                return ResultUtil.error("超级管理员角色管理权限一定要添加啊(*/ω＼*)");
+                return ResultUtil.error("超级管理员:角色管理权限一定要添加啊(*/ω＼*)");
             }
         }
         Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
@@ -176,9 +183,19 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil updateRole(SysRole sysRole) {
+    public ResultUtil updateRole(HttpServletRequest request, SysRole sysRole) {
         if (ValidateUtil.notUsername(sysRole.getName())) {
             return ResultUtil.error("角色名不能包含特殊字符");
+        }
+        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(sysRole.getId())) {
+            Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                sysUserMapper.suspendSysUser(nowUserId);
+                AdminTokenUtil.deleteToken(nowUserId);
+                return ResultUtil.errorSuspend();
+            } else {
+                return ResultUtil.error("不能修改超级管理员角色");
+            }
         }
         SysRole role = mapper.getRoleInfoByName(sysRole.getName());
         if (null != role && null != role.getId() && !role.getId().equals(sysRole.getId())) {
@@ -201,9 +218,19 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil deleteRole(Long roleId) {
-        if (null == roleId || 0 > roleId) {
-            return ResultUtil.error("roleId为null");
+    public ResultUtil deleteRole(HttpServletRequest request, Long roleId) {
+        if (null == roleId || 0 >= roleId) {
+            return ResultUtil.error("roleId错误");
+        }
+        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
+            Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                sysUserMapper.suspendSysUser(nowUserId);
+                AdminTokenUtil.deleteToken(nowUserId);
+                return ResultUtil.errorSuspend();
+            } else {
+                return ResultUtil.error("不能删除超级管理员角色");
+            }
         }
         List<SysRole> list = mapper.getRoleListByParentId(roleId);
         if (null != list && 0 < list.size()) {
@@ -219,12 +246,19 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil changeRoleIsStop(Long roleId, Integer isStop) {
+    public ResultUtil changeRoleIsStop(HttpServletRequest request, Long roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtil.error("id不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
-            return ResultUtil.error("不能操作超级管理员");
+            Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                sysUserMapper.suspendSysUser(nowUserId);
+                AdminTokenUtil.deleteToken(nowUserId);
+                return ResultUtil.errorSuspend();
+            } else {
+                return ResultUtil.error("不能操作超级管理员");
+            }
         }
         if (null == isStop) {
             return ResultUtil.error("状态不能为空");
