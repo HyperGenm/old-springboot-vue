@@ -151,9 +151,10 @@ public class StringRedisUtil {
         if (null == keys || 0 >= keys.size()) {
             return 0L;
         }
+        Long delete = that.stringRedisTemplate.delete(keys);
         for (String k : keys) {
             that.stringRedisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
-        return that.stringRedisTemplate.delete(keys);
+        return delete;
     }
 }
