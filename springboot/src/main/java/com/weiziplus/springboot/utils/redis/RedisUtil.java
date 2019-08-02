@@ -162,7 +162,7 @@ public class RedisUtil {
             return 0L;
         }
         for (String k : keys) {
-            that.redisTemplate.expire(k, 7L, TimeUnit.SECONDS);
+            that.redisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
         return that.redisTemplate.delete(keys);
     }

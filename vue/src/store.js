@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex);
+// Vue.use(Vuex);
 
 // 获取session中的state信息，如果有说明是浏览器刷新，然后赋值，如果没有，重新声明
 let state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {

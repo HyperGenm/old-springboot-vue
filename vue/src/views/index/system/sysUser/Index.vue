@@ -169,7 +169,7 @@
                             {label: '封号中', value: 2},
                         ]
                     },
-                    {type: 'datePicker', prop: 'createTime'}
+                    {type: 'datePicker', prop: 'createTime', placeholder: '创建时间'}
                 ],
                 //操作弹出框
                 dialogEditForm: false,

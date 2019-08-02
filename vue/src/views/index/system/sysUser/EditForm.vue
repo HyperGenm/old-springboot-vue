@@ -10,7 +10,7 @@
 <script>
     const baseOptions = [
         {type: 'input', label: '用户名', prop: 'username'},
-        {type: 'input', label: '真实姓名', prop: 'realName'},
+        {type: 'input', label: '真实姓名', prop: 'realName', required: true},
         {
             type: 'radio', label: '是否允许登录', prop: 'allowLogin', options: [
                 {label: '允许', value: 0},

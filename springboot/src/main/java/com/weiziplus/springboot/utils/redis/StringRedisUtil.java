@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -132,6 +133,26 @@ public class StringRedisUtil {
     public static Long delete(Collection<String> keys) {
         if (null == keys) {
             return null;
+        }
+        return that.stringRedisTemplate.delete(keys);
+    }
+
+    /**
+     * 模糊删除
+     *
+     * @param key
+     * @return
+     */
+    public static Long deleteLikeKey(String key) {
+        if (null == key) {
+            return null;
+        }
+        Set<String> keys = that.stringRedisTemplate.keys(key + "*");
+        if (null == keys || 0 >= keys.size()) {
+            return 0L;
+        }
+        for (String k : keys) {
+            that.stringRedisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
         return that.stringRedisTemplate.delete(keys);
     }
