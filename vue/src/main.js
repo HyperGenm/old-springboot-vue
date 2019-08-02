@@ -3,11 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-/**引入element-ui-----更换为cdn引入加快打包后访问速度
- import ElementUI from "element-ui";
- import "element-ui/lib/theme-chalk/index.css";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 
- Vue.use(ElementUI);*/
+if (process.env.NODE_ENV !== 'production') {
+    Vue.use(ElementUI);
+}
 
 /**引入iconfont字体库*/
 import "./assets/font/iconfont/iconfont.css";

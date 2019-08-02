@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 
-// Vue.use(Router);
+if (process.env.NODE_ENV !== 'production') {
+    Vue.use(Router);
+}
 
 const baseRouters = [
     {path: '/login', name: 'login', component: () => import('@/views/login/Index')}
