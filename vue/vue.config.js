@@ -28,6 +28,15 @@ module.exports = {
         // 启用 CSS modules for all css / pre-processor files.
         modules: false
     },
+    chainWebpack: config => {
+        //如果是生产环境
+        if (IS_Production) {
+            // 移除 prefetch 插件
+            config.plugins.delete('prefetch');
+            // 移除 preload 插件
+            config.plugins.delete('preload');
+        }
+    },
     configureWebpack: config => {
         //如果是生产环境
         if (IS_Production) {
