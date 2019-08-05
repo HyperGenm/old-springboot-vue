@@ -5,6 +5,7 @@ import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.models.SysUser;
 import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.utils.HttpRequestUtil;
 import com.weiziplus.springboot.utils.ResultUtil;
 import com.weiziplus.springboot.utils.StringUtil;
 import com.weiziplus.springboot.utils.redis.RedisUtil;
@@ -90,9 +91,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 //查看是否有日志注解，有的话将日志信息放入数据库
                 SystemLog systemLog = method.getAnnotation(SystemLog.class);
                 if (null != systemLog) {
-                    sysLogMapper.addSysLog(JwtTokenUtil.getUserIdByToken(token), systemLog.description());
+                    sysLogMapper.addSysLog(JwtTokenUtil.getUserIdByToken(token), systemLog.description(), HttpRequestUtil.getIpAddress(request));
                 }
-                return handleAdminToken(response, token, adminAuthTokenClass, adminAuthTokenMethod);
+                return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
             }
             //角色为web
             case WebTokenUtil.AUDIENCE: {
@@ -113,7 +114,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * @param authTokenMethod
      * @return
      */
-    private boolean handleAdminToken(HttpServletResponse response, String token, AdminAuthToken authTokenClass, AdminAuthToken authTokenMethod) {
+    private boolean handleAdminToken(HttpServletRequest request, HttpServletResponse response, String token, AdminAuthToken authTokenClass, AdminAuthToken authTokenMethod) {
         //获取用户id
         Long userId = JwtTokenUtil.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
@@ -138,7 +139,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         //更新用户最后活跃时间
-        sysUserMapper.updateLastActiveTimeById(userId);
+        sysUserMapper.updateLastActiveTimeByIdAndIp(userId, HttpRequestUtil.getIpAddress(request));
         //更新token过期时间
         AdminTokenUtil.updateExpireTime(userId);
         return true;

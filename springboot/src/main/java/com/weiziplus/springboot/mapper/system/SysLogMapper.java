@@ -17,9 +17,10 @@ public interface SysLogMapper {
      *
      * @param userId
      * @param description
+     * @param ip
      * @return
      */
-    int addSysLog(@Param("userId") Long userId, @Param("description") String description);
+    int addSysLog(@Param("userId") Long userId, @Param("description") String description, @Param("ip") String ip);
 
     /**
      * 获取日志列表

@@ -30,14 +30,14 @@
                     this.$emit('update:show', false);
                 }
             },
-            detailData() {
-                let {username, realName, roleName, description, createTime} = this.detailData;
+            detailData(data) {
                 this.rows = [
-                    {title: '用户名', content: username},
-                    {title: '真实姓名', content: realName},
-                    {title: '角色名', content: roleName},
-                    {title: '日志记录', content: description},
-                    {title: '操作时间', content: createTime}
+                    {title: '用户名', content: data['username']},
+                    {title: '真实姓名', content: data['realName']},
+                    {title: '角色名', content: data['roleName']},
+                    {title: '日志记录', content: data['description']},
+                    {title: 'ip地址', content: data['ipAddress']},
+                    {title: '操作时间', content: data['createTime']}
                 ];
             }
         },

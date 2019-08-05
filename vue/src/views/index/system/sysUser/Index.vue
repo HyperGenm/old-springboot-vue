@@ -98,7 +98,7 @@
                         }
                     },
                     {prop: 'suspendNum', label: '封号次数'},
-                    {prop: 'lastActiveTime', label: '用户最后活跃时间'},
+                    {prop: 'laseIpAddress', label: '用户最后活跃ip地址'},
                     {prop: 'createTime', label: '用户创建时间'}
                 ],
                 tableOperates: {

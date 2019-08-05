@@ -60,9 +60,10 @@ public interface SysUserMapper {
      * 根据id更新用户最后活跃时间
      *
      * @param id
+     * @param ip
      * @return
      */
-    int updateLastActiveTimeById(@Param("id") Long id);
+    int updateLastActiveTimeByIdAndIp(@Param("id") Long id, @Param("ip") String ip);
 
     /**
      * 更新用户角色

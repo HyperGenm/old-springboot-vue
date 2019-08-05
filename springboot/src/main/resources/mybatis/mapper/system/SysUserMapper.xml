@@ -11,7 +11,8 @@
     </select>
     <select id="getUserList" resultType="java.util.Map">
         SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.suspend_num AS suspendNum,
-        su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName
+        su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName,
+        su.last_ip_address AS laseIpAddress
         FROM sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
         WHERE su.id <![CDATA[<>]]> 1
@@ -43,9 +44,9 @@
         FROM sys_user
         WHERE id = #{id}
     </select>
-    <update id="updateLastActiveTimeById">
+    <update id="updateLastActiveTimeByIdAndIp">
         UPDATE sys_user
-        SET last_active_time = now()
+        SET last_active_time = now(),last_ip_address = #{ip}
         WHERE id = #{id}
     </update>
     <update id="updateRoleIdByUserIdAndRoleId">

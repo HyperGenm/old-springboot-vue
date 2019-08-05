@@ -16,8 +16,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>
-                %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread]
-                %cyan(%-50logger{50}) - %highlight(%msg) %n
+                %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n
             </Pattern>
             <!-- 设置字符集 -->
             <charset>UTF-8</charset>

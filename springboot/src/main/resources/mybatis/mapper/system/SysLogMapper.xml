@@ -5,12 +5,12 @@
 <mapper namespace="com.weiziplus.springboot.mapper.system.SysLogMapper">
     <insert id="addSysLog">
         INSERT INTO sys_log
-        (user_id,description)
+        (user_id,description,ip_address)
         VALUES
-        (#{userId},#{description})
+        (#{userId},#{description},#{ip})
     </insert>
     <select id="getLogList" resultType="java.util.Map">
-        SELECT sl.*,su.username,su.real_name as realName,sr.name as roleName
+        SELECT sl.*,su.username,su.real_name AS realName,sr.name AS roleName
         FROM sys_log sl ,sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
         WHERE sl.user_id = su.id

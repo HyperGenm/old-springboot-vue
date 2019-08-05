@@ -34,6 +34,7 @@
                     {prop: 'realName', label: '真实姓名'},
                     {prop: 'roleName', label: '角色'},
                     {prop: 'description', label: '操作'},
+                    {prop: 'ipAddress', label: 'ip地址'},
                     {prop: 'createTime', label: '创建时间'}
                 ],
                 tableOperates: {

@@ -38,6 +38,12 @@ public class SysLog implements Serializable {
     private String description;
 
     /**
+     * 用户最后活跃ip地址
+     */
+    @Column("last_ip_address")
+    private String lastIpAddress;
+
+    /**
      * 创建时间
      */
     @Column("create_time")

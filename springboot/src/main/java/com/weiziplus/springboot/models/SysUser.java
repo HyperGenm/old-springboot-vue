@@ -64,6 +64,12 @@ public class SysUser implements Serializable {
     private Integer suspendNum;
 
     /**
+     * 用户最后活跃ip地址
+     */
+    @Column("last_ip_address")
+    private String lastIpAddress;
+
+    /**
      * 用户最后活跃时间
      */
     @Column("last_active_time")
