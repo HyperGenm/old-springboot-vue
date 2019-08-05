@@ -5,9 +5,9 @@
 <mapper namespace="com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper">
     <insert id="addAbnormalIp">
         INSERT INTO sys_abnormal_ip
-        (ip,lase_time,create_time)
+        (ip,number,lase_time,create_time)
         VALUES
-        (#{ip},now(),now())
+        (#{ip},1,now(),now())
     </insert>
     <select id="getOneInfoByIp" resultType="com.weiziplus.springboot.models.SysAbnormalIp">
         SELECT *
