@@ -14,10 +14,10 @@
 
     <!-- 输出到控制台-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <encoder>
             <Pattern>
-                %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n
+                %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread]
+                %cyan(%-50logger{50}) - %highlight(%msg) %n
             </Pattern>
             <!-- 设置字符集 -->
             <charset>UTF-8</charset>
@@ -45,25 +45,22 @@
         </rollingPolicy>
     </appender>
 
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
     <!-- 开发环境-->
     <springProfile name="dev">
-        <root level="info">
+        <logger name="com.weiziplus" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
-        </root>
-        <logger name="com.weiziplus.springboot" level="debug" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-        </logger>
-        <logger name="com.weiziplus.springboot" level="debug" additivity="false">
             <appender-ref ref="LOGFILE"/>
         </logger>
     </springProfile>
 
     <!-- 生产环境-->
     <springProfile name="pro">
-        <root level="info">
-            <appender-ref ref="LOGFILE"/>
-        </root>
-        <logger name="com.weiziplus.springboot" level="info" additivity="false">
+        <logger name="com.weiziplus" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGFILE"/>
         </logger>
     </springProfile>

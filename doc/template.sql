@@ -11,11 +11,72 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 23/07/2019 14:25:39
+ Date: 05/08/2019 15:13:36
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for data_dictionary
+-- ----------------------------
+DROP TABLE IF EXISTS `data_dictionary`;
+CREATE TABLE `data_dictionary`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典标识',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典名字',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典备注',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '字典创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `code`(`code`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of data_dictionary
+-- ----------------------------
+INSERT INTO `data_dictionary` VALUES (1, 'ipFilterWhite', 'ipFilterWhite', 'ip白名单', '2019-08-05 09:44:41');
+INSERT INTO `data_dictionary` VALUES (2, 'ipFilterBlack', 'ipFilterBlack', 'ip黑名单', '2019-08-05 09:45:00');
+
+-- ----------------------------
+-- Table structure for data_dictionary_value
+-- ----------------------------
+DROP TABLE IF EXISTS `data_dictionary_value`;
+CREATE TABLE `data_dictionary_value`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `dictionary_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典编号',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '值',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `order` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `dictionary_code`(`dictionary_code`) USING BTREE,
+  CONSTRAINT `data_dictionary_value_ibfk_1` FOREIGN KEY (`dictionary_code`) REFERENCES `data_dictionary` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of data_dictionary_value
+-- ----------------------------
+INSERT INTO `data_dictionary_value` VALUES (7, 'ipFilterwhite', '127.0.0.1', '127.0.0.1', '', 0, '2019-08-05 14:15:14');
+
+-- ----------------------------
+-- Table structure for sys_abnormal_ip
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_abnormal_ip`;
+CREATE TABLE `sys_abnormal_ip`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `number` int(10) NOT NULL DEFAULT 0 COMMENT '次数',
+  `lase_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近违规时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `ip`(`ip`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '异常ip记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_abnormal_ip
+-- ----------------------------
+INSERT INTO `sys_abnormal_ip` VALUES (1, '1.1.1.1', 0, '2019-08-05 14:55:59', '2019-08-05 14:55:59');
 
 -- ----------------------------
 -- Table structure for sys_function
@@ -34,7 +95,7 @@ CREATE TABLE `sys_function`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '功能创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE COMMENT '功能名唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_function
@@ -57,6 +118,9 @@ INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_role', 'role', '角色', 1, '
 INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_resetPwd', 'resetPwd', '重置密码', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
 INSERT INTO `sys_function` VALUES (21, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', 1, '', 4, '', '2019-05-10 15:58:15');
 INSERT INTO `sys_function` VALUES (22, 1, 'sysLog', 'sysLog', '日志管理', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (24, 0, 'dataDictionary', 'dataDictionary', '数据字典', 0, '', 0, '数据字典', '2019-08-05 10:12:54');
+INSERT INTO `sys_function` VALUES (25, 24, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', 0, '', 0, '', '2019-08-05 10:13:42');
+INSERT INTO `sys_function` VALUES (27, 1, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', 0, '', 0, '', '2019-08-05 14:39:33');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -66,11 +130,11 @@ CREATE TABLE `sys_log`  (
   `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '系统日志表主键，自增',
   `user_id` bigint(11) NOT NULL DEFAULT 0 COMMENT '用户表id',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '操作描述',
-  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `sys_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 351 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 751 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
@@ -478,6 +542,392 @@ INSERT INTO `sys_log` VALUES (400, 1, '查看系统日志', '2019-07-23 14:21:49
 INSERT INTO `sys_log` VALUES (401, 1, '查看角色列表', '2019-07-23 14:21:49');
 INSERT INTO `sys_log` VALUES (402, 1, '查看用户列表', '2019-07-23 14:21:50');
 INSERT INTO `sys_log` VALUES (403, 1, '查看功能列表', '2019-07-23 14:21:54');
+INSERT INTO `sys_log` VALUES (404, 1, '查看角色列表', '2019-08-01 14:33:13');
+INSERT INTO `sys_log` VALUES (405, 1, '查看系统日志', '2019-08-01 14:33:14');
+INSERT INTO `sys_log` VALUES (406, 1, '查看用户列表', '2019-08-01 14:33:15');
+INSERT INTO `sys_log` VALUES (407, 1, '查看角色树', '2019-08-01 14:33:18');
+INSERT INTO `sys_log` VALUES (408, 1, '查看用户列表', '2019-08-01 15:04:37');
+INSERT INTO `sys_log` VALUES (409, 1, '查看用户列表', '2019-08-01 15:05:02');
+INSERT INTO `sys_log` VALUES (410, 1, '查看角色树', '2019-08-01 15:05:41');
+INSERT INTO `sys_log` VALUES (411, 1, '查看功能列表', '2019-08-01 15:05:41');
+INSERT INTO `sys_log` VALUES (412, 1, '查看角色树', '2019-08-01 15:06:12');
+INSERT INTO `sys_log` VALUES (413, 1, '查看用户列表', '2019-08-01 15:08:18');
+INSERT INTO `sys_log` VALUES (414, 1, '查看功能列表', '2019-08-01 15:08:19');
+INSERT INTO `sys_log` VALUES (415, 1, '查看角色树', '2019-08-01 15:08:19');
+INSERT INTO `sys_log` VALUES (416, 1, '查看角色树', '2019-08-01 15:08:19');
+INSERT INTO `sys_log` VALUES (417, 1, '查看功能列表', '2019-08-01 15:08:19');
+INSERT INTO `sys_log` VALUES (418, 1, '查看角色树', '2019-08-01 15:08:37');
+INSERT INTO `sys_log` VALUES (419, 1, '查看功能列表', '2019-08-01 15:08:37');
+INSERT INTO `sys_log` VALUES (420, 1, '查看角色树', '2019-08-01 15:09:33');
+INSERT INTO `sys_log` VALUES (421, 1, '查看功能列表', '2019-08-01 15:09:33');
+INSERT INTO `sys_log` VALUES (422, 1, '查看用户列表', '2019-08-01 15:13:03');
+INSERT INTO `sys_log` VALUES (423, 1, '查看用户列表', '2019-08-01 15:14:50');
+INSERT INTO `sys_log` VALUES (424, 1, '查看用户列表', '2019-08-01 15:25:19');
+INSERT INTO `sys_log` VALUES (425, 1, '查看用户列表', '2019-08-01 15:26:31');
+INSERT INTO `sys_log` VALUES (426, 1, '查看用户列表', '2019-08-01 15:35:44');
+INSERT INTO `sys_log` VALUES (427, 1, '查看用户列表', '2019-08-01 15:35:58');
+INSERT INTO `sys_log` VALUES (428, 1, '查看用户列表', '2019-08-01 15:37:01');
+INSERT INTO `sys_log` VALUES (429, 1, '查看用户列表', '2019-08-01 15:37:21');
+INSERT INTO `sys_log` VALUES (430, 1, '查看用户列表', '2019-08-01 15:37:47');
+INSERT INTO `sys_log` VALUES (431, 1, '查看用户列表', '2019-08-01 15:38:30');
+INSERT INTO `sys_log` VALUES (432, 1, '查看用户列表', '2019-08-01 15:39:23');
+INSERT INTO `sys_log` VALUES (433, 1, '查看用户列表', '2019-08-01 15:39:41');
+INSERT INTO `sys_log` VALUES (434, 1, '查看用户列表', '2019-08-01 15:40:48');
+INSERT INTO `sys_log` VALUES (435, 1, '查看用户列表', '2019-08-01 15:41:13');
+INSERT INTO `sys_log` VALUES (436, 1, '解除封号', '2019-08-01 15:41:18');
+INSERT INTO `sys_log` VALUES (437, 1, '查看用户列表', '2019-08-01 15:41:19');
+INSERT INTO `sys_log` VALUES (438, 1, '查看用户列表', '2019-08-01 15:41:31');
+INSERT INTO `sys_log` VALUES (439, 1, '查看用户列表', '2019-08-01 15:41:33');
+INSERT INTO `sys_log` VALUES (440, 1, '查看用户列表', '2019-08-01 15:41:33');
+INSERT INTO `sys_log` VALUES (441, 1, '查看用户列表', '2019-08-01 15:41:33');
+INSERT INTO `sys_log` VALUES (442, 1, '查看用户列表', '2019-08-01 15:41:33');
+INSERT INTO `sys_log` VALUES (443, 1, '查看用户列表', '2019-08-01 15:41:34');
+INSERT INTO `sys_log` VALUES (444, 1, '解除封号', '2019-08-01 15:41:55');
+INSERT INTO `sys_log` VALUES (445, 1, '查看用户列表', '2019-08-01 15:41:55');
+INSERT INTO `sys_log` VALUES (446, 1, '查看用户列表', '2019-08-01 15:42:24');
+INSERT INTO `sys_log` VALUES (447, 1, '解除封号', '2019-08-01 15:42:27');
+INSERT INTO `sys_log` VALUES (448, 1, '查看用户列表', '2019-08-01 15:42:27');
+INSERT INTO `sys_log` VALUES (449, 1, '解除封号', '2019-08-01 15:43:17');
+INSERT INTO `sys_log` VALUES (450, 1, '查看用户列表', '2019-08-01 15:43:24');
+INSERT INTO `sys_log` VALUES (451, 1, '查看用户列表', '2019-08-01 15:44:27');
+INSERT INTO `sys_log` VALUES (452, 1, '解除封号', '2019-08-01 15:44:30');
+INSERT INTO `sys_log` VALUES (453, 1, '查看用户列表', '2019-08-01 15:44:30');
+INSERT INTO `sys_log` VALUES (454, 1, '系统用户退出登录', '2019-08-01 15:44:40');
+INSERT INTO `sys_log` VALUES (455, 666, '系统用户退出登录', '2019-08-01 15:47:01');
+INSERT INTO `sys_log` VALUES (456, 666, '查看用户列表', '2019-08-01 15:49:01');
+INSERT INTO `sys_log` VALUES (457, 666, '查看用户列表', '2019-08-01 15:50:54');
+INSERT INTO `sys_log` VALUES (458, 666, '查看用户列表', '2019-08-01 15:53:51');
+INSERT INTO `sys_log` VALUES (459, 666, '查看用户列表', '2019-08-01 15:54:21');
+INSERT INTO `sys_log` VALUES (460, 666, '查看用户列表', '2019-08-01 15:55:34');
+INSERT INTO `sys_log` VALUES (461, 666, '查看用户列表', '2019-08-01 15:56:20');
+INSERT INTO `sys_log` VALUES (462, 666, '查看用户列表', '2019-08-01 15:56:29');
+INSERT INTO `sys_log` VALUES (463, 666, '查看用户列表', '2019-08-01 15:56:38');
+INSERT INTO `sys_log` VALUES (464, 666, '查看用户列表', '2019-08-01 15:57:01');
+INSERT INTO `sys_log` VALUES (465, 666, '查看用户列表', '2019-08-01 15:58:58');
+INSERT INTO `sys_log` VALUES (466, 666, '系统用户退出登录', '2019-08-01 15:59:23');
+INSERT INTO `sys_log` VALUES (467, 1, '查看用户列表', '2019-08-01 16:00:14');
+INSERT INTO `sys_log` VALUES (468, 1, '查看角色树', '2019-08-01 16:00:19');
+INSERT INTO `sys_log` VALUES (469, 1, '查看功能列表', '2019-08-01 16:00:19');
+INSERT INTO `sys_log` VALUES (470, 1, '查看系统日志', '2019-08-01 16:00:21');
+INSERT INTO `sys_log` VALUES (471, 1, '查看角色列表', '2019-08-01 16:00:21');
+INSERT INTO `sys_log` VALUES (472, 1, '查看功能列表', '2019-08-01 16:00:26');
+INSERT INTO `sys_log` VALUES (473, 1, '查看功能列表', '2019-08-01 16:00:30');
+INSERT INTO `sys_log` VALUES (474, 1, '查看角色树', '2019-08-01 16:00:30');
+INSERT INTO `sys_log` VALUES (475, 1, '查看用户列表', '2019-08-01 16:00:32');
+INSERT INTO `sys_log` VALUES (476, 1, '查看角色树', '2019-08-01 16:00:33');
+INSERT INTO `sys_log` VALUES (477, 1, '查看功能列表', '2019-08-01 16:00:33');
+INSERT INTO `sys_log` VALUES (478, 1, '查看用户列表', '2019-08-01 16:00:38');
+INSERT INTO `sys_log` VALUES (479, 1, '解除封号', '2019-08-01 16:00:42');
+INSERT INTO `sys_log` VALUES (480, 1, '查看用户列表', '2019-08-01 16:00:43');
+INSERT INTO `sys_log` VALUES (481, 1, '查看用户列表', '2019-08-01 16:01:04');
+INSERT INTO `sys_log` VALUES (482, 1, '查看用户列表', '2019-08-01 16:01:56');
+INSERT INTO `sys_log` VALUES (483, 1, '查看用户列表', '2019-08-01 16:03:49');
+INSERT INTO `sys_log` VALUES (484, 1, '查看用户列表', '2019-08-01 16:07:44');
+INSERT INTO `sys_log` VALUES (485, 1, '查看用户列表', '2019-08-01 16:07:58');
+INSERT INTO `sys_log` VALUES (486, 1, '查看用户列表', '2019-08-01 16:08:05');
+INSERT INTO `sys_log` VALUES (487, 1, '查看用户列表', '2019-08-01 16:08:55');
+INSERT INTO `sys_log` VALUES (488, 1, '查看用户列表', '2019-08-01 16:08:57');
+INSERT INTO `sys_log` VALUES (489, 1, '解除封号', '2019-08-01 16:09:04');
+INSERT INTO `sys_log` VALUES (490, 1, '查看用户列表', '2019-08-01 16:09:04');
+INSERT INTO `sys_log` VALUES (491, 666, '查看用户列表', '2019-08-01 16:28:00');
+INSERT INTO `sys_log` VALUES (492, 666, '查看用户列表', '2019-08-01 16:28:53');
+INSERT INTO `sys_log` VALUES (493, 1, '查看用户列表', '2019-08-01 16:29:18');
+INSERT INTO `sys_log` VALUES (494, 1, '解除封号', '2019-08-01 16:29:20');
+INSERT INTO `sys_log` VALUES (495, 1, '查看用户列表', '2019-08-01 16:29:21');
+INSERT INTO `sys_log` VALUES (496, 666, '查看用户列表', '2019-08-01 16:29:41');
+INSERT INTO `sys_log` VALUES (497, 666, '查看用户列表', '2019-08-01 16:30:38');
+INSERT INTO `sys_log` VALUES (498, 666, '查看用户列表', '2019-08-01 16:30:51');
+INSERT INTO `sys_log` VALUES (499, 666, '查看用户列表', '2019-08-01 16:30:52');
+INSERT INTO `sys_log` VALUES (500, 666, '查看用户列表', '2019-08-01 16:30:52');
+INSERT INTO `sys_log` VALUES (501, 666, '查看用户列表', '2019-08-01 16:30:52');
+INSERT INTO `sys_log` VALUES (502, 666, '查看用户列表', '2019-08-01 16:30:52');
+INSERT INTO `sys_log` VALUES (503, 666, '查看用户列表', '2019-08-01 16:30:52');
+INSERT INTO `sys_log` VALUES (504, 666, '查看用户列表', '2019-08-01 16:31:00');
+INSERT INTO `sys_log` VALUES (505, 666, '查看用户列表', '2019-08-01 16:31:01');
+INSERT INTO `sys_log` VALUES (506, 666, '查看用户列表', '2019-08-01 16:31:01');
+INSERT INTO `sys_log` VALUES (507, 666, '查看用户列表', '2019-08-01 16:31:01');
+INSERT INTO `sys_log` VALUES (508, 666, '查看用户列表', '2019-08-01 16:31:01');
+INSERT INTO `sys_log` VALUES (509, 666, '查看用户列表', '2019-08-01 16:31:01');
+INSERT INTO `sys_log` VALUES (510, 666, '查看用户列表', '2019-08-01 16:31:02');
+INSERT INTO `sys_log` VALUES (511, 666, '查看用户列表', '2019-08-01 16:31:02');
+INSERT INTO `sys_log` VALUES (512, 666, '查看用户列表', '2019-08-01 16:31:02');
+INSERT INTO `sys_log` VALUES (513, 666, '查看用户列表', '2019-08-01 16:31:02');
+INSERT INTO `sys_log` VALUES (514, 666, '查看用户列表', '2019-08-01 16:31:02');
+INSERT INTO `sys_log` VALUES (515, 666, '查看用户列表', '2019-08-01 16:31:21');
+INSERT INTO `sys_log` VALUES (516, 666, '查看用户列表', '2019-08-01 16:31:21');
+INSERT INTO `sys_log` VALUES (517, 666, '查看用户列表', '2019-08-01 16:31:21');
+INSERT INTO `sys_log` VALUES (518, 666, '查看用户列表', '2019-08-01 16:31:21');
+INSERT INTO `sys_log` VALUES (519, 666, '查看用户列表', '2019-08-01 16:31:21');
+INSERT INTO `sys_log` VALUES (520, 666, '查看用户列表', '2019-08-01 16:31:32');
+INSERT INTO `sys_log` VALUES (521, 666, '查看用户列表', '2019-08-01 16:31:32');
+INSERT INTO `sys_log` VALUES (522, 666, '查看用户列表', '2019-08-01 16:31:33');
+INSERT INTO `sys_log` VALUES (523, 666, '查看用户列表', '2019-08-01 16:31:33');
+INSERT INTO `sys_log` VALUES (524, 666, '查看用户列表', '2019-08-01 16:31:33');
+INSERT INTO `sys_log` VALUES (525, 666, '查看用户列表', '2019-08-01 16:31:33');
+INSERT INTO `sys_log` VALUES (526, 666, '查看用户列表', '2019-08-01 16:31:33');
+INSERT INTO `sys_log` VALUES (527, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (528, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (529, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (530, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (531, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (532, 666, '查看用户列表', '2019-08-01 16:31:34');
+INSERT INTO `sys_log` VALUES (533, 666, '查看用户列表', '2019-08-01 16:31:35');
+INSERT INTO `sys_log` VALUES (534, 666, '查看用户列表', '2019-08-01 16:31:35');
+INSERT INTO `sys_log` VALUES (535, 666, '查看用户列表', '2019-08-01 16:31:35');
+INSERT INTO `sys_log` VALUES (536, 666, '查看用户列表', '2019-08-01 16:32:09');
+INSERT INTO `sys_log` VALUES (537, 666, '查看用户列表', '2019-08-01 16:32:09');
+INSERT INTO `sys_log` VALUES (538, 666, '查看用户列表', '2019-08-01 16:32:10');
+INSERT INTO `sys_log` VALUES (539, 666, '查看用户列表', '2019-08-01 16:32:10');
+INSERT INTO `sys_log` VALUES (540, 666, '查看用户列表', '2019-08-01 16:32:10');
+INSERT INTO `sys_log` VALUES (541, 666, '查看用户列表', '2019-08-01 16:32:10');
+INSERT INTO `sys_log` VALUES (542, 666, '查看用户列表', '2019-08-01 16:32:10');
+INSERT INTO `sys_log` VALUES (543, 666, '查看用户列表', '2019-08-01 16:32:11');
+INSERT INTO `sys_log` VALUES (544, 666, '查看用户列表', '2019-08-01 16:32:11');
+INSERT INTO `sys_log` VALUES (545, 666, '查看用户列表', '2019-08-01 16:32:11');
+INSERT INTO `sys_log` VALUES (546, 666, '查看用户列表', '2019-08-01 16:32:11');
+INSERT INTO `sys_log` VALUES (547, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (548, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (549, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (550, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (551, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (552, 666, '查看用户列表', '2019-08-01 16:32:12');
+INSERT INTO `sys_log` VALUES (553, 666, '查看用户列表', '2019-08-01 16:32:13');
+INSERT INTO `sys_log` VALUES (554, 666, '查看用户列表', '2019-08-01 16:32:13');
+INSERT INTO `sys_log` VALUES (555, 666, '查看用户列表', '2019-08-01 16:32:24');
+INSERT INTO `sys_log` VALUES (556, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (557, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (558, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (559, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (560, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (561, 666, '查看用户列表', '2019-08-01 16:32:25');
+INSERT INTO `sys_log` VALUES (562, 666, '查看用户列表', '2019-08-01 16:32:26');
+INSERT INTO `sys_log` VALUES (563, 666, '查看用户列表', '2019-08-01 16:32:26');
+INSERT INTO `sys_log` VALUES (564, 666, '查看用户列表', '2019-08-01 16:32:26');
+INSERT INTO `sys_log` VALUES (565, 666, '查看用户列表', '2019-08-01 16:32:26');
+INSERT INTO `sys_log` VALUES (566, 666, '查看用户列表', '2019-08-01 16:32:26');
+INSERT INTO `sys_log` VALUES (567, 666, '查看用户列表', '2019-08-01 16:32:27');
+INSERT INTO `sys_log` VALUES (568, 666, '查看用户列表', '2019-08-01 16:32:27');
+INSERT INTO `sys_log` VALUES (569, 666, '查看用户列表', '2019-08-01 16:32:27');
+INSERT INTO `sys_log` VALUES (570, 666, '查看用户列表', '2019-08-01 16:32:27');
+INSERT INTO `sys_log` VALUES (571, 666, '查看用户列表', '2019-08-01 16:32:36');
+INSERT INTO `sys_log` VALUES (572, 666, '查看用户列表', '2019-08-01 16:32:36');
+INSERT INTO `sys_log` VALUES (573, 666, '查看用户列表', '2019-08-01 16:32:36');
+INSERT INTO `sys_log` VALUES (574, 666, '查看用户列表', '2019-08-01 16:32:36');
+INSERT INTO `sys_log` VALUES (575, 666, '查看用户列表', '2019-08-01 16:32:37');
+INSERT INTO `sys_log` VALUES (576, 666, '查看用户列表', '2019-08-01 16:32:37');
+INSERT INTO `sys_log` VALUES (577, 666, '查看用户列表', '2019-08-01 16:32:37');
+INSERT INTO `sys_log` VALUES (578, 666, '查看用户列表', '2019-08-01 16:32:43');
+INSERT INTO `sys_log` VALUES (579, 666, '查看用户列表', '2019-08-01 16:32:43');
+INSERT INTO `sys_log` VALUES (580, 666, '查看用户列表', '2019-08-01 16:32:44');
+INSERT INTO `sys_log` VALUES (581, 666, '查看用户列表', '2019-08-01 16:32:44');
+INSERT INTO `sys_log` VALUES (582, 666, '查看用户列表', '2019-08-01 16:32:44');
+INSERT INTO `sys_log` VALUES (583, 666, '查看用户列表', '2019-08-01 16:32:44');
+INSERT INTO `sys_log` VALUES (584, 666, '查看用户列表', '2019-08-01 16:32:49');
+INSERT INTO `sys_log` VALUES (585, 666, '查看用户列表', '2019-08-01 16:32:49');
+INSERT INTO `sys_log` VALUES (586, 1, '查看用户列表', '2019-08-01 16:40:54');
+INSERT INTO `sys_log` VALUES (587, 1, '解除封号', '2019-08-01 16:40:58');
+INSERT INTO `sys_log` VALUES (588, 1, '查看用户列表', '2019-08-01 16:40:59');
+INSERT INTO `sys_log` VALUES (589, 666, '查看用户列表', '2019-08-01 16:41:13');
+INSERT INTO `sys_log` VALUES (590, 666, '查看用户列表', '2019-08-01 16:41:17');
+INSERT INTO `sys_log` VALUES (591, 666, '查看用户列表', '2019-08-01 16:41:18');
+INSERT INTO `sys_log` VALUES (592, 666, '查看用户列表', '2019-08-01 16:41:18');
+INSERT INTO `sys_log` VALUES (593, 666, '查看用户列表', '2019-08-01 16:41:18');
+INSERT INTO `sys_log` VALUES (594, 666, '查看用户列表', '2019-08-01 16:41:18');
+INSERT INTO `sys_log` VALUES (595, 666, '查看用户列表', '2019-08-01 16:41:38');
+INSERT INTO `sys_log` VALUES (596, 666, '查看用户列表', '2019-08-01 16:41:38');
+INSERT INTO `sys_log` VALUES (597, 666, '查看用户列表', '2019-08-01 16:41:38');
+INSERT INTO `sys_log` VALUES (598, 666, '查看用户列表', '2019-08-01 16:42:02');
+INSERT INTO `sys_log` VALUES (599, 666, '查看用户列表', '2019-08-01 16:42:02');
+INSERT INTO `sys_log` VALUES (600, 666, '查看用户列表', '2019-08-01 16:42:02');
+INSERT INTO `sys_log` VALUES (601, 666, '查看用户列表', '2019-08-01 16:42:02');
+INSERT INTO `sys_log` VALUES (602, 666, '查看用户列表', '2019-08-01 16:42:02');
+INSERT INTO `sys_log` VALUES (603, 666, '查看用户列表', '2019-08-01 16:42:18');
+INSERT INTO `sys_log` VALUES (604, 666, '查看用户列表', '2019-08-01 16:42:18');
+INSERT INTO `sys_log` VALUES (605, 666, '查看用户列表', '2019-08-01 16:42:19');
+INSERT INTO `sys_log` VALUES (606, 666, '查看用户列表', '2019-08-01 16:42:19');
+INSERT INTO `sys_log` VALUES (607, 666, '查看用户列表', '2019-08-01 16:43:24');
+INSERT INTO `sys_log` VALUES (608, 666, '查看用户列表', '2019-08-01 16:43:25');
+INSERT INTO `sys_log` VALUES (609, 666, '查看用户列表', '2019-08-01 16:43:30');
+INSERT INTO `sys_log` VALUES (610, 666, '查看用户列表', '2019-08-01 16:43:51');
+INSERT INTO `sys_log` VALUES (611, 666, '查看用户列表', '2019-08-01 16:43:51');
+INSERT INTO `sys_log` VALUES (612, 666, '查看用户列表', '2019-08-01 16:43:51');
+INSERT INTO `sys_log` VALUES (613, 666, '查看用户列表', '2019-08-01 16:44:46');
+INSERT INTO `sys_log` VALUES (614, 666, '查看用户列表', '2019-08-01 16:45:22');
+INSERT INTO `sys_log` VALUES (615, 666, '查看用户列表', '2019-08-01 16:45:31');
+INSERT INTO `sys_log` VALUES (616, 666, '查看用户列表', '2019-08-01 16:53:25');
+INSERT INTO `sys_log` VALUES (617, 666, '查看用户列表', '2019-08-01 16:53:25');
+INSERT INTO `sys_log` VALUES (618, 666, '查看用户列表', '2019-08-01 16:53:25');
+INSERT INTO `sys_log` VALUES (619, 666, '查看用户列表', '2019-08-01 16:53:25');
+INSERT INTO `sys_log` VALUES (620, 666, '查看用户列表', '2019-08-01 16:53:25');
+INSERT INTO `sys_log` VALUES (621, 666, '查看用户列表', '2019-08-01 16:54:08');
+INSERT INTO `sys_log` VALUES (622, 666, '查看用户列表', '2019-08-01 17:01:42');
+INSERT INTO `sys_log` VALUES (623, 666, '查看用户列表', '2019-08-01 17:02:03');
+INSERT INTO `sys_log` VALUES (624, 666, '查看用户列表', '2019-08-01 17:05:45');
+INSERT INTO `sys_log` VALUES (625, 666, '查看用户列表', '2019-08-01 17:05:45');
+INSERT INTO `sys_log` VALUES (626, 666, '查看用户列表', '2019-08-01 17:06:26');
+INSERT INTO `sys_log` VALUES (627, 666, '查看用户列表', '2019-08-01 17:06:35');
+INSERT INTO `sys_log` VALUES (628, 666, '查看用户列表', '2019-08-01 17:06:45');
+INSERT INTO `sys_log` VALUES (629, 666, '查看用户列表', '2019-08-01 17:06:52');
+INSERT INTO `sys_log` VALUES (630, 666, '查看用户列表', '2019-08-01 17:07:34');
+INSERT INTO `sys_log` VALUES (631, 666, '查看用户列表', '2019-08-01 17:07:34');
+INSERT INTO `sys_log` VALUES (632, 666, '查看用户列表', '2019-08-01 17:07:34');
+INSERT INTO `sys_log` VALUES (633, 666, '查看用户列表', '2019-08-01 17:08:03');
+INSERT INTO `sys_log` VALUES (634, 666, '查看用户列表', '2019-08-01 17:08:08');
+INSERT INTO `sys_log` VALUES (635, 666, '查看用户列表', '2019-08-01 17:08:12');
+INSERT INTO `sys_log` VALUES (636, 666, '查看用户列表', '2019-08-01 17:08:17');
+INSERT INTO `sys_log` VALUES (637, 666, '查看用户列表', '2019-08-01 17:08:21');
+INSERT INTO `sys_log` VALUES (638, 666, '查看用户列表', '2019-08-01 17:08:21');
+INSERT INTO `sys_log` VALUES (639, 666, '查看用户列表', '2019-08-01 17:08:21');
+INSERT INTO `sys_log` VALUES (640, 666, '查看用户列表', '2019-08-01 17:08:21');
+INSERT INTO `sys_log` VALUES (641, 666, '查看用户列表', '2019-08-01 17:08:22');
+INSERT INTO `sys_log` VALUES (642, 666, '查看用户列表', '2019-08-01 17:08:22');
+INSERT INTO `sys_log` VALUES (643, 666, '查看用户列表', '2019-08-01 17:08:22');
+INSERT INTO `sys_log` VALUES (644, 666, '查看用户列表', '2019-08-01 17:08:44');
+INSERT INTO `sys_log` VALUES (645, 666, '查看用户列表', '2019-08-01 17:08:44');
+INSERT INTO `sys_log` VALUES (646, 666, '查看用户列表', '2019-08-01 17:08:44');
+INSERT INTO `sys_log` VALUES (647, 666, '查看用户列表', '2019-08-01 17:08:52');
+INSERT INTO `sys_log` VALUES (648, 666, '查看用户列表', '2019-08-01 17:08:52');
+INSERT INTO `sys_log` VALUES (649, 666, '查看用户列表', '2019-08-01 17:08:52');
+INSERT INTO `sys_log` VALUES (650, 666, '查看用户列表', '2019-08-01 17:08:58');
+INSERT INTO `sys_log` VALUES (651, 666, '查看用户列表', '2019-08-01 17:08:59');
+INSERT INTO `sys_log` VALUES (652, 666, '查看用户列表', '2019-08-01 17:08:59');
+INSERT INTO `sys_log` VALUES (653, 666, '查看用户列表', '2019-08-01 17:08:59');
+INSERT INTO `sys_log` VALUES (654, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (655, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (656, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (657, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (658, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (659, 666, '查看用户列表', '2019-08-01 17:16:15');
+INSERT INTO `sys_log` VALUES (660, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (661, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (662, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (663, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (664, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (665, 666, '查看用户列表', '2019-08-01 17:16:18');
+INSERT INTO `sys_log` VALUES (666, 666, '查看用户列表', '2019-08-01 17:16:19');
+INSERT INTO `sys_log` VALUES (667, 666, '查看用户列表', '2019-08-01 17:16:19');
+INSERT INTO `sys_log` VALUES (668, 666, '查看用户列表', '2019-08-01 17:16:19');
+INSERT INTO `sys_log` VALUES (669, 666, '查看用户列表', '2019-08-01 17:16:19');
+INSERT INTO `sys_log` VALUES (670, 666, '查看用户列表', '2019-08-01 17:16:19');
+INSERT INTO `sys_log` VALUES (671, 666, '查看用户列表', '2019-08-01 17:16:21');
+INSERT INTO `sys_log` VALUES (672, 666, '查看用户列表', '2019-08-01 17:16:21');
+INSERT INTO `sys_log` VALUES (673, 666, '查看用户列表', '2019-08-01 17:16:21');
+INSERT INTO `sys_log` VALUES (674, 666, '查看用户列表', '2019-08-01 17:16:22');
+INSERT INTO `sys_log` VALUES (675, 666, '查看用户列表', '2019-08-01 17:16:22');
+INSERT INTO `sys_log` VALUES (676, 666, '查看用户列表', '2019-08-01 17:16:22');
+INSERT INTO `sys_log` VALUES (677, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (678, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (679, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (680, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (681, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (682, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (683, 666, '查看用户列表', '2019-08-01 17:16:23');
+INSERT INTO `sys_log` VALUES (684, 666, '查看用户列表', '2019-08-01 17:16:24');
+INSERT INTO `sys_log` VALUES (685, 666, '查看用户列表', '2019-08-01 17:16:24');
+INSERT INTO `sys_log` VALUES (686, 666, '查看用户列表', '2019-08-01 17:16:24');
+INSERT INTO `sys_log` VALUES (687, 666, '查看用户列表', '2019-08-01 17:16:24');
+INSERT INTO `sys_log` VALUES (688, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (689, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (690, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (691, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (692, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (693, 666, '查看用户列表', '2019-08-01 17:16:25');
+INSERT INTO `sys_log` VALUES (694, 666, '查看用户列表', '2019-08-01 17:16:26');
+INSERT INTO `sys_log` VALUES (695, 666, '查看用户列表', '2019-08-01 17:16:26');
+INSERT INTO `sys_log` VALUES (696, 666, '查看用户列表', '2019-08-01 17:16:26');
+INSERT INTO `sys_log` VALUES (697, 666, '查看用户列表', '2019-08-01 17:16:27');
+INSERT INTO `sys_log` VALUES (698, 1, '查看用户列表', '2019-08-01 17:20:05');
+INSERT INTO `sys_log` VALUES (699, 1, '查看用户列表', '2019-08-01 17:23:20');
+INSERT INTO `sys_log` VALUES (700, 1, '查看角色列表', '2019-08-01 17:23:22');
+INSERT INTO `sys_log` VALUES (701, 1, '查看系统日志', '2019-08-01 17:23:22');
+INSERT INTO `sys_log` VALUES (702, 1, '查看用户列表', '2019-08-01 17:23:30');
+INSERT INTO `sys_log` VALUES (703, 1, '查看功能列表', '2019-08-02 08:47:00');
+INSERT INTO `sys_log` VALUES (704, 1, '查看角色树', '2019-08-02 08:47:03');
+INSERT INTO `sys_log` VALUES (705, 1, '查看功能列表', '2019-08-02 08:47:03');
+INSERT INTO `sys_log` VALUES (706, 1, '查看用户列表', '2019-08-02 08:47:05');
+INSERT INTO `sys_log` VALUES (707, 1, '查看角色树', '2019-08-02 08:47:13');
+INSERT INTO `sys_log` VALUES (708, 1, '查看角色列表', '2019-08-02 08:47:15');
+INSERT INTO `sys_log` VALUES (709, 1, '查看系统日志', '2019-08-02 08:47:15');
+INSERT INTO `sys_log` VALUES (710, 1, '查看功能列表', '2019-08-02 08:55:52');
+INSERT INTO `sys_log` VALUES (711, 1, '查看角色树', '2019-08-02 08:55:53');
+INSERT INTO `sys_log` VALUES (712, 1, '查看功能列表', '2019-08-02 08:55:53');
+INSERT INTO `sys_log` VALUES (713, 1, '查看功能列表', '2019-08-02 08:55:59');
+INSERT INTO `sys_log` VALUES (714, 1, '查看用户列表', '2019-08-02 08:56:00');
+INSERT INTO `sys_log` VALUES (715, 1, '查看角色列表', '2019-08-02 08:56:01');
+INSERT INTO `sys_log` VALUES (716, 1, '查看系统日志', '2019-08-02 08:56:01');
+INSERT INTO `sys_log` VALUES (717, 1, '查看功能列表', '2019-08-02 11:11:50');
+INSERT INTO `sys_log` VALUES (718, 1, '查看角色树', '2019-08-02 11:11:53');
+INSERT INTO `sys_log` VALUES (719, 1, '查看功能列表', '2019-08-02 11:11:53');
+INSERT INTO `sys_log` VALUES (720, 1, '查看系统日志', '2019-08-02 11:11:54');
+INSERT INTO `sys_log` VALUES (721, 1, '查看角色列表', '2019-08-02 11:11:54');
+INSERT INTO `sys_log` VALUES (722, 1, '查看用户列表', '2019-08-02 11:11:55');
+INSERT INTO `sys_log` VALUES (723, 1, '查看用户列表', '2019-08-02 11:12:06');
+INSERT INTO `sys_log` VALUES (724, 1, '查看用户列表', '2019-08-02 11:12:11');
+INSERT INTO `sys_log` VALUES (725, 1, '查看用户列表', '2019-08-02 11:12:12');
+INSERT INTO `sys_log` VALUES (726, 1, '查看用户列表', '2019-08-02 11:12:22');
+INSERT INTO `sys_log` VALUES (727, 1, '查看用户列表', '2019-08-02 11:13:41');
+INSERT INTO `sys_log` VALUES (728, 1, '系统用户退出登录', '2019-08-02 11:35:00');
+INSERT INTO `sys_log` VALUES (729, 1, '查看用户列表', '2019-08-05 08:29:33');
+INSERT INTO `sys_log` VALUES (730, 1, '查看用户列表', '2019-08-05 08:31:40');
+INSERT INTO `sys_log` VALUES (731, 1, '查看用户列表', '2019-08-05 08:35:37');
+INSERT INTO `sys_log` VALUES (732, 1, '查看用户列表', '2019-08-05 08:45:23');
+INSERT INTO `sys_log` VALUES (733, 1, '查看角色树', '2019-08-05 08:45:55');
+INSERT INTO `sys_log` VALUES (734, 1, '查看功能列表', '2019-08-05 08:45:56');
+INSERT INTO `sys_log` VALUES (735, 1, '查看用户列表', '2019-08-05 08:45:57');
+INSERT INTO `sys_log` VALUES (736, 1, '查看角色树', '2019-08-05 08:46:26');
+INSERT INTO `sys_log` VALUES (737, 1, '查看功能列表', '2019-08-05 08:46:26');
+INSERT INTO `sys_log` VALUES (738, 1, '查看用户列表', '2019-08-05 08:46:28');
+INSERT INTO `sys_log` VALUES (739, 1, '查看用户列表', '2019-08-05 08:46:37');
+INSERT INTO `sys_log` VALUES (740, 1, '查看用户列表', '2019-08-05 08:47:36');
+INSERT INTO `sys_log` VALUES (741, 1, '查看用户列表', '2019-08-05 08:47:58');
+INSERT INTO `sys_log` VALUES (742, 1, '查看用户列表', '2019-08-05 08:48:38');
+INSERT INTO `sys_log` VALUES (743, 1, '查看用户列表', '2019-08-05 08:51:18');
+INSERT INTO `sys_log` VALUES (744, 1, '查看用户列表', '2019-08-05 08:52:38');
+INSERT INTO `sys_log` VALUES (745, 1, '查看功能列表', '2019-08-05 08:53:03');
+INSERT INTO `sys_log` VALUES (746, 1, '查看角色树', '2019-08-05 08:53:03');
+INSERT INTO `sys_log` VALUES (747, 1, '查看用户列表', '2019-08-05 08:53:05');
+INSERT INTO `sys_log` VALUES (748, 1, '查看用户列表', '2019-08-05 08:53:51');
+INSERT INTO `sys_log` VALUES (749, 1, '查看用户列表', '2019-08-05 09:00:02');
+INSERT INTO `sys_log` VALUES (750, 1, '查看用户列表', '2019-08-05 09:11:53');
+INSERT INTO `sys_log` VALUES (751, 1, '查看功能列表', '2019-08-05 10:12:20');
+INSERT INTO `sys_log` VALUES (752, 1, '新增功能', '2019-08-05 10:12:54');
+INSERT INTO `sys_log` VALUES (753, 1, '查看功能列表', '2019-08-05 10:12:54');
+INSERT INTO `sys_log` VALUES (754, 1, '新增功能', '2019-08-05 10:13:42');
+INSERT INTO `sys_log` VALUES (755, 1, '查看功能列表', '2019-08-05 10:13:42');
+INSERT INTO `sys_log` VALUES (756, 1, '新增功能', '2019-08-05 10:14:13');
+INSERT INTO `sys_log` VALUES (757, 1, '查看功能列表', '2019-08-05 10:14:13');
+INSERT INTO `sys_log` VALUES (758, 1, '查看角色树', '2019-08-05 10:14:16');
+INSERT INTO `sys_log` VALUES (759, 1, '查看功能列表', '2019-08-05 10:14:16');
+INSERT INTO `sys_log` VALUES (760, 1, '新增角色功能', '2019-08-05 10:14:19');
+INSERT INTO `sys_log` VALUES (761, 1, '系统用户退出登录', '2019-08-05 10:14:21');
+INSERT INTO `sys_log` VALUES (762, 1, '查看功能列表', '2019-08-05 11:58:58');
+INSERT INTO `sys_log` VALUES (763, 1, '查看功能列表', '2019-08-05 14:39:09');
+INSERT INTO `sys_log` VALUES (764, 1, '新增功能', '2019-08-05 14:39:33');
+INSERT INTO `sys_log` VALUES (765, 1, '查看功能列表', '2019-08-05 14:39:33');
+INSERT INTO `sys_log` VALUES (766, 1, '查看角色树', '2019-08-05 14:39:35');
+INSERT INTO `sys_log` VALUES (767, 1, '查看功能列表', '2019-08-05 14:39:35');
+INSERT INTO `sys_log` VALUES (768, 1, '新增角色功能', '2019-08-05 14:39:40');
+INSERT INTO `sys_log` VALUES (769, 1, '系统用户退出登录', '2019-08-05 14:39:48');
+INSERT INTO `sys_log` VALUES (770, 1, '查看角色树', '2019-08-05 14:42:20');
+INSERT INTO `sys_log` VALUES (771, 1, '查看功能列表', '2019-08-05 14:42:20');
+INSERT INTO `sys_log` VALUES (772, 1, '查看异常ip列表', '2019-08-05 14:44:40');
+INSERT INTO `sys_log` VALUES (773, 1, '查看异常ip列表', '2019-08-05 14:45:51');
+INSERT INTO `sys_log` VALUES (774, 1, '查看异常ip列表', '2019-08-05 14:54:42');
+INSERT INTO `sys_log` VALUES (775, 1, '查看异常ip列表', '2019-08-05 14:55:30');
+INSERT INTO `sys_log` VALUES (776, 1, '查看异常ip列表', '2019-08-05 14:55:39');
+INSERT INTO `sys_log` VALUES (777, 1, '查看异常ip列表', '2019-08-05 14:55:40');
+INSERT INTO `sys_log` VALUES (778, 1, '查看异常ip列表', '2019-08-05 14:55:40');
+INSERT INTO `sys_log` VALUES (779, 1, '查看异常ip列表', '2019-08-05 14:55:40');
+INSERT INTO `sys_log` VALUES (780, 1, '查看异常ip列表', '2019-08-05 14:55:40');
+INSERT INTO `sys_log` VALUES (781, 1, '查看异常ip列表', '2019-08-05 14:55:40');
+INSERT INTO `sys_log` VALUES (782, 1, '查看异常ip列表', '2019-08-05 14:55:41');
+INSERT INTO `sys_log` VALUES (783, 1, '查看异常ip列表', '2019-08-05 14:55:41');
+INSERT INTO `sys_log` VALUES (784, 1, '查看异常ip列表', '2019-08-05 14:55:41');
+INSERT INTO `sys_log` VALUES (785, 1, '查看异常ip列表', '2019-08-05 14:55:41');
+INSERT INTO `sys_log` VALUES (786, 1, '查看异常ip列表', '2019-08-05 14:55:41');
+INSERT INTO `sys_log` VALUES (787, 1, '查看异常ip列表', '2019-08-05 14:56:02');
+INSERT INTO `sys_log` VALUES (788, 1, '查看异常ip列表', '2019-08-05 15:00:41');
+INSERT INTO `sys_log` VALUES (789, 1, '查看异常ip列表', '2019-08-05 15:06:42');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -490,10 +940,10 @@ CREATE TABLE `sys_role`  (
   `is_stop` int(2) NOT NULL DEFAULT 0 COMMENT '是否启用;0:启用,1:禁用',
   `sort` int(2) NOT NULL DEFAULT 0 COMMENT '排序，数字越小越靠前',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '角色描述',
-  `create_time` datetime(0) NOT NULL COMMENT '角色创建时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '角色创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1000003 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000004 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -517,7 +967,7 @@ CREATE TABLE `sys_role_function`  (
   INDEX `function_id`(`function_id`) USING BTREE,
   CONSTRAINT `sys_role_function_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_role_function_ibfk_2` FOREIGN KEY (`function_id`) REFERENCES `sys_function` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 151 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 185 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_function
@@ -527,24 +977,27 @@ INSERT INTO `sys_role_function` VALUES (103, 666, 15);
 INSERT INTO `sys_role_function` VALUES (104, 666, 16);
 INSERT INTO `sys_role_function` VALUES (105, 666, 1);
 INSERT INTO `sys_role_function` VALUES (106, 666, 4);
-INSERT INTO `sys_role_function` VALUES (167, 1, 1);
-INSERT INTO `sys_role_function` VALUES (168, 1, 2);
-INSERT INTO `sys_role_function` VALUES (169, 1, 5);
-INSERT INTO `sys_role_function` VALUES (170, 1, 6);
-INSERT INTO `sys_role_function` VALUES (171, 1, 7);
-INSERT INTO `sys_role_function` VALUES (172, 1, 3);
-INSERT INTO `sys_role_function` VALUES (173, 1, 8);
-INSERT INTO `sys_role_function` VALUES (174, 1, 9);
-INSERT INTO `sys_role_function` VALUES (175, 1, 10);
-INSERT INTO `sys_role_function` VALUES (176, 1, 11);
-INSERT INTO `sys_role_function` VALUES (177, 1, 21);
-INSERT INTO `sys_role_function` VALUES (178, 1, 4);
-INSERT INTO `sys_role_function` VALUES (179, 1, 12);
-INSERT INTO `sys_role_function` VALUES (180, 1, 13);
-INSERT INTO `sys_role_function` VALUES (181, 1, 14);
-INSERT INTO `sys_role_function` VALUES (182, 1, 15);
-INSERT INTO `sys_role_function` VALUES (183, 1, 16);
-INSERT INTO `sys_role_function` VALUES (184, 1, 22);
+INSERT INTO `sys_role_function` VALUES (206, 1, 1);
+INSERT INTO `sys_role_function` VALUES (207, 1, 2);
+INSERT INTO `sys_role_function` VALUES (208, 1, 5);
+INSERT INTO `sys_role_function` VALUES (209, 1, 6);
+INSERT INTO `sys_role_function` VALUES (210, 1, 7);
+INSERT INTO `sys_role_function` VALUES (211, 1, 27);
+INSERT INTO `sys_role_function` VALUES (212, 1, 3);
+INSERT INTO `sys_role_function` VALUES (213, 1, 8);
+INSERT INTO `sys_role_function` VALUES (214, 1, 9);
+INSERT INTO `sys_role_function` VALUES (215, 1, 10);
+INSERT INTO `sys_role_function` VALUES (216, 1, 11);
+INSERT INTO `sys_role_function` VALUES (217, 1, 21);
+INSERT INTO `sys_role_function` VALUES (218, 1, 4);
+INSERT INTO `sys_role_function` VALUES (219, 1, 12);
+INSERT INTO `sys_role_function` VALUES (220, 1, 13);
+INSERT INTO `sys_role_function` VALUES (221, 1, 14);
+INSERT INTO `sys_role_function` VALUES (222, 1, 15);
+INSERT INTO `sys_role_function` VALUES (223, 1, 16);
+INSERT INTO `sys_role_function` VALUES (224, 1, 22);
+INSERT INTO `sys_role_function` VALUES (225, 1, 24);
+INSERT INTO `sys_role_function` VALUES (226, 1, 25);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -554,23 +1007,23 @@ CREATE TABLE `sys_user`  (
   `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '系统用户表主键id，自增',
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录用户名',
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录密码',
-  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户真实姓名',
+  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户真实姓名',
   `role_id` bigint(11) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
   `allow_login` int(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止，2:封号中',
   `suspend_num` int(5) NOT NULL DEFAULT 0 COMMENT '账户封号次数',
-  `last_active_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户最后活跃时间',
-  `create_time` datetime(0) NOT NULL COMMENT '用户创建时间',
+  `last_active_time` datetime(0) NULL DEFAULT NULL COMMENT '用户最后活跃时间',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE COMMENT '登录名唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 1000003 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000004 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0,0, '2019-07-23 14:21:57', '2019-05-09 16:26:15');
-INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 0,0, '2019-05-13 17:09:20', '2019-05-10 14:30:04');
-INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 0, 0,0, '2019-05-13 09:14:32', '2019-05-13 09:14:32');
-INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0,0, '2019-06-28 17:21:07', '2019-06-28 17:18:24');
+INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0, 0, '2019-08-05 15:06:42', '2019-05-09 16:26:15');
+INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 2, 7, '2019-08-01 17:16:24', '2019-05-10 14:30:04');
+INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 0, 0, 0, '2019-05-13 09:14:32', '2019-08-07 09:38:16');
+INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0, 0, '2019-06-28 17:21:07', '2019-06-28 17:18:24');
 
 -- ----------------------------
 -- Table structure for user
