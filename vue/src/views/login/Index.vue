@@ -235,4 +235,17 @@
             }
         }
     }
+
+    @media screen and (min-width: 666px) {
+        #login .login-form {
+            width: 520px;
+        }
+    }
+
+    @media screen and (max-width: 666px) {
+        #login .login-form {
+            width: 72%;
+        }
+    }
+
 </style>

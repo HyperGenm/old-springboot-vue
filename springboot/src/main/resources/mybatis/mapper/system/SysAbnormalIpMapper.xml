@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper">
+    <insert id="addAbnormalIp">
+        INSERT INTO sys_abnormal_ip
+        (ip,lase_time,create_time)
+        VALUES
+        (#{ip},now(),now())
+    </insert>
+    <select id="getOneInfoByIp" resultType="com.weiziplus.springboot.models.SysAbnormalIp">
+        SELECT *
+        FROM sys_abnormal_ip
+        WHERE ip = #{ip}
+        LIMIT 1
+    </select>
+    <update id="updateAbnormalIp">
+        UPDATE sys_abnormal_ip
+        SET number = number + 1,lase_time = now()
+        WHERE ip = #{ip}
+    </update>
+</mapper>

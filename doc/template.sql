@@ -567,10 +567,10 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0, '2019-07-23 14:21:57', '2019-05-09 16:26:15');
-INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 0, '2019-05-13 17:09:20', '2019-05-10 14:30:04');
-INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 0, 0, '2019-05-13 09:14:32', '2019-05-13 09:14:32');
-INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0, '2019-06-28 17:21:07', '2019-06-28 17:18:24');
+INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0,0, '2019-07-23 14:21:57', '2019-05-09 16:26:15');
+INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 0,0, '2019-05-13 17:09:20', '2019-05-10 14:30:04');
+INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 0, 0,0, '2019-05-13 09:14:32', '2019-05-13 09:14:32');
+INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0,0, '2019-06-28 17:21:07', '2019-06-28 17:18:24');
 
 -- ----------------------------
 -- Table structure for user

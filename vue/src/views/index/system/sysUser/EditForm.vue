@@ -45,8 +45,14 @@
                     this.$emit('update:show', false);
                 }
             },
-            formData() {
-                this.form = this.formData;
+            formData(data) {
+                this.form = data;
+                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
+                this.formOptions[0]['disabled'] = true;
+                //如果当前用户被封号
+                if ('update' === this.handleType && 2 === data['allowLogin']) {
+                    this.formOptions.splice(2);
+                }
             },
             handleType() {
                 this.formOptions = JSON.parse(JSON.stringify(baseOptions));
@@ -54,6 +60,10 @@
                     this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
                 } else {
                     this.formOptions[0]['disabled'] = true;
+                    //如果当前用户被封号
+                    if (2 === this.formData['allowLogin']) {
+                        this.formOptions.splice(2);
+                    }
                 }
             }
         },

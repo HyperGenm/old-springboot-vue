@@ -137,28 +137,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtil.errorToken("token失效"));
             return false;
         }
-        if (!GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
-            String redisKey = "visit:number:admin:" + userId;
-            int number = 0;
-            Object numberObject = RedisUtil.get(redisKey);
-            if (null != numberObject) {
-                number = (int) numberObject;
-            }
-            number += 1;
-            //10秒内最多请求27次，不然会被封号
-            int maxNumber = 27;
-            if (number >= maxNumber) {
-                sysUserMapper.suspendSysUser(userId);
-                AdminTokenUtil.deleteToken(userId);
-                handleResponse(response, ResultUtil.errorSuspend());
-                return false;
-            }
-            if (null != numberObject) {
-                RedisUtil.setNotChangeTimeOut(redisKey, number);
-            } else {
-                RedisUtil.set(redisKey, number, 10L);
-            }
-        }
         //更新用户最后活跃时间
         sysUserMapper.updateLastActiveTimeById(userId);
         //更新token过期时间

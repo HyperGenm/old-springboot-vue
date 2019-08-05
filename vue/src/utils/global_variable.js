@@ -22,6 +22,7 @@ const URL = {
     loginValidateCode: '/getValidateCode',
     /*退出登录*/
     logout: '/logout',
+    /***********************************************************************系统管理*****************/
     /*********************功能管理*****************/
     /*获取所有功能菜单树*/
     sysFunctionGetAllFunctionTree: '/sysFunction/getAllFunctionTree',
@@ -71,7 +72,18 @@ const URL = {
     sysUserRelieveSuspend: '/sysUser/relieveSuspend',
     /*********************日志管理*****************/
     /*查看日志列表*/
-    sysLogGetLogList: '/sysLog/getLogList'
+    sysLogGetLogList: '/sysLog/getLogList',
+    /*********************异常ip管理*****************/
+    /*查看分页数据*/
+    sysAbnormalIpGetPageList: '/sysAbnormalIp/getPageList',
+    /***********************************************************************字典管理*****************/
+    /*********************ip名单*****************/
+    /*分页数据*/
+    ipFilterGetPageList: '/dataDictionary/ipFilter/getPageList',
+    /*新增ip*/
+    ipFilterAdd: '/dataDictionary/ipFilter/add',
+    /*删除ip*/
+    ipFilterDeleteIp: '/dataDictionary/ipFilter/delete',
 };
 
 export default {

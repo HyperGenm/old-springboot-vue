@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryIpFilterMapper">
+    <select id="getIpValueWhiteList" resultType="java.lang.String">
+        SELECT value
+        FROM data_dictionary_value
+        WHERE dictionary_code = 'ipFilterWhite'
+    </select>
+    <select id="getIpValueBlackList" resultType="java.lang.String">
+        SELECT value
+        FROM data_dictionary_value
+        WHERE dictionary_code = 'ipFilterBlack'
+    </select>
+    <select id="getOneInfoByIp" resultType="com.weiziplus.springboot.models.DataDictionaryValue">
+        SELECT *
+        FROM data_dictionary_value
+        WHERE dictionary_code IN ('ipFilterWhite','ipFilterBlack') AND value = #{ip}
+        LIMIT 1
+    </select>
+    <select id="getIpList" resultType="com.weiziplus.springboot.models.DataDictionaryValue">
+        SELECT *
+        FROM data_dictionary_value
+        WHERE dictionary_code = CONCAT('ipFilter',#{type})
+    </select>
+    <insert id="addIp">
+        INSERT INTO data_dictionary_value
+        (dictionary_code, name, value, create_time)
+        VALUES
+        (CONCAT('ipFilter',#{type}),#{ip},#{ip},now())
+    </insert>
+    <delete id="deleteIp">
+        DELETE FROM data_dictionary_value
+        WHERE dictionary_code = CONCAT('ipFilter',#{type}) AND  id = #{id}
+    </delete>
+</mapper>

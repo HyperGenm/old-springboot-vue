@@ -96,6 +96,9 @@ public class SysUserService extends BaseService {
         if (null != user && !sysUser.getId().equals(user.getId())) {
             return ResultUtil.error("用户名已存在");
         }
+        if (null != user && GlobalConfig.ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
+            return ResultUtil.error("用户封号中，不能修改状态");
+        }
         sysUser.setAllowLogin(null);
         sysUser.setPassword(null);
         sysUser.setRoleId(null);

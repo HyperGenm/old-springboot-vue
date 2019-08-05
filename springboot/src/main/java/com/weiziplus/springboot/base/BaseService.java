@@ -44,7 +44,7 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
-        Field[] fields = nowClass.getFields();
+        Field[] fields = nowClass.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(Id.class)) {
                 return field.getAnnotation(Id.class).value();

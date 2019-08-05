@@ -30,15 +30,6 @@ mybatis:
 swagger:
   enable: true
 
-
-logging:
-  #开启sql日志打印
-  level:
-    com.weiziplus.springboot.mapper: debug
-  #日志打印样式
-  pattern:
-    console: '%d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n'
-
 #自定义全局变量*******注意:  :后面要有空格
 global:
   #图片存放路径
