@@ -25,33 +25,33 @@
             }
         },
         watch: {
-            show() {
-                this.visible = this.show;
+            show(show) {
+                this.visible = show;
             },
-            visible() {
-                if (!this.visible) {
+            visible(visible) {
+                if (!visible) {
                     this.$emit('update:show', false);
                 }
             },
-            detailData() {
-                let {name, path, title, icon, sort, type, description} = this.detailData;
+            detailData(data) {
+                let {icon, type} = data;
                 this.rows = [
-                    {title: '功能名', content: name},
-                    {title: '路径', content: path},
-                    {title: '标题', content: title},
+                    {title: '功能名', content: data['name']},
+                    {title: '路径', content: data['path']},
+                    {title: '标题', content: data['title']},
                     {title: '上级', content: this.parentData.title},
                     {
                         title: '图标', formatter() {
                             return `<i class="${icon}"></i>`;
                         }
                     },
-                    {title: '排序', content: sort},
+                    {title: '排序', content: data['sort']},
                     {
                         title: '类型', formatter() {
                             return ('0' === type + '') ? '菜单' : '按钮';
                         }
                     },
-                    {title: '描述', content: description}
+                    {title: '描述', content: data['description']}
                 ];
             }
         },

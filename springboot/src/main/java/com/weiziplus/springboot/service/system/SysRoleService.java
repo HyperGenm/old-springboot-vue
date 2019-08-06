@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@CacheConfig(cacheNames = "pc:system:sysRoleService")
+@CacheConfig(cacheNames = "system:sysRoleService")
 public class SysRoleService extends BaseService {
 
     @Autowired

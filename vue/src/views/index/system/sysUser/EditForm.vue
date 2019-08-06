@@ -37,11 +37,11 @@
             }
         },
         watch: {
-            show() {
-                this.visible = this.show;
+            show(show) {
+                this.visible = show;
             },
-            visible() {
-                if (!this.visible) {
+            visible(visible) {
+                if (!visible) {
                     this.$emit('update:show', false);
                 }
             },
@@ -54,9 +54,9 @@
                     this.formOptions.splice(2);
                 }
             },
-            handleType() {
+            handleType(handleType) {
                 this.formOptions = JSON.parse(JSON.stringify(baseOptions));
-                if ('add' === this.handleType) {
+                if ('add' === handleType) {
                     this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
                 } else {
                     this.formOptions[0]['disabled'] = true;

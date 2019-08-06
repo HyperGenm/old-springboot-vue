@@ -29,7 +29,10 @@ public class SysUserController {
      * @param pageNum
      * @param pageSize
      * @param userName
+     * @param roleId
      * @param allowLogin
+     * @param lastActiveTime
+     * @param createTime
      * @return
      */
     @GetMapping("/getUserList")
@@ -38,9 +41,11 @@ public class SysUserController {
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "roleId", required = false) Long roleId,
             @RequestParam(value = "allowLogin", required = false) Integer allowLogin,
+            @RequestParam(value = "lastActiveTime", required = false) String lastActiveTime,
             @RequestParam(value = "createTime", required = false) String createTime) {
-        return service.getUserList(pageNum, pageSize, userName, allowLogin, createTime);
+        return service.getUserList(pageNum, pageSize, userName, roleId, allowLogin, lastActiveTime, createTime);
     }
 
     /**

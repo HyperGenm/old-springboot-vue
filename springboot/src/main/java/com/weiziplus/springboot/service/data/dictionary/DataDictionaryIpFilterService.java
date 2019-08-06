@@ -122,7 +122,8 @@ public class DataDictionaryIpFilterService {
      * @return
      */
     public ResultUtil delete(HttpServletRequest request, Long id, String type) {
-        if (null == id || 0 >= id) {
+        //127.0.0.1的id为1
+        if (null == id || 1 >= id) {
             return ResultUtil.error("id为空");
         }
         if (StringUtil.isBlank(type)) {

@@ -19,8 +19,14 @@
         <if test="null != userName and '' != userName">
             AND position(#{userName} IN su.username)
         </if>
+        <if test="null != roleId">
+            AND su.role_id = #{roleId}
+        </if>
         <if test="null != allowLogin">
             AND su.allow_login = #{allowLogin}
+        </if>
+        <if test="null != lastActiveTime and '' != lastActiveTime">
+            AND su.last_active_time LIKE concat(#{lastActiveTime},'%')
         </if>
         <if test="null != createTime and '' != createTime">
             AND su.create_time LIKE concat(#{createTime},'%')

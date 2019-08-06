@@ -99,6 +99,7 @@
                     },
                     {prop: 'suspendNum', label: '封号次数'},
                     {prop: 'laseIpAddress', label: '用户最后活跃ip地址'},
+                    {prop: 'lastActiveTime', label: '用户最后活跃时间'},
                     {prop: 'createTime', label: '用户创建时间'}
                 ],
                 tableOperates: {
@@ -162,6 +163,7 @@
                 },
                 tableSearch: [
                     {type: 'input', prop: 'userName', placeholder: '用户名'},
+                    {type: 'select', prop: 'roleId', placeholder: '角色', options: []},
                     {
                         type: 'select', prop: 'allowLogin', placeholder: '是否允许登录', options: [
                             {label: '允许', value: 0},
@@ -169,6 +171,7 @@
                             {label: '封号中', value: 2},
                         ]
                     },
+                    {type: 'datePicker', prop: 'lastActiveTime', placeholder: '最后活跃时间'},
                     {type: 'datePicker', prop: 'createTime', placeholder: '创建时间'}
                 ],
                 //操作弹出框
@@ -181,6 +184,22 @@
                 userData: {},
                 dialogDetail: false
             }
+        },
+        mounted() {
+            let that = this;
+            this.$axios({
+                url: that.$global.URL.sysRoleGetList,
+                success(data) {
+                    let options = [];
+                    data.forEach((value) => {
+                        options.push({
+                            label: value.name,
+                            value: value.id
+                        });
+                    });
+                    that.tableSearch[1].options = options;
+                }
+            });
         },
         methods: {
             deleteUsers(ids) {

@@ -21,7 +21,7 @@ import java.util.Map;
  * @data 2019/5/9 15:18
  */
 @Service
-@CacheConfig(cacheNames = "pc:system:sysFunctionService")
+@CacheConfig(cacheNames = "system:sysFunctionService")
 public class SysFunctionService extends BaseService {
 
     @Autowired

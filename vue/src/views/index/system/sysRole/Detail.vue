@@ -22,8 +22,8 @@
             }
         },
         watch: {
-            show() {
-                this.visible = this.show;
+            show(show) {
+                this.visible = show;
                 if (!this.show) {
                     return;
                 }
@@ -40,8 +40,8 @@
                     {title: '创建时间', content: createTime}
                 ];
             },
-            visible() {
-                if (!this.visible) {
+            visible(visible) {
+                if (!visible) {
                     this.$emit('update:show', false);
                 }
             }

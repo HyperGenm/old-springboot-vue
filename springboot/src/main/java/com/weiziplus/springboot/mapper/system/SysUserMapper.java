@@ -25,11 +25,15 @@ public interface SysUserMapper {
      * 获取系统用户列表
      *
      * @param userName
+     * @param roleId
      * @param allowLogin
+     * @param lastActiveTime
      * @param createTime
      * @return
      */
-    List<Map<String, Object>> getUserList(@Param("userName") String userName, @Param("allowLogin") Integer allowLogin, @Param("createTime") String createTime);
+    List<Map<String, Object>> getUserList(@Param("userName") String userName, @Param("roleId") Long roleId,
+                                          @Param("allowLogin") Integer allowLogin, @Param("lastActiveTime") String lastActiveTime,
+                                          @Param("createTime") String createTime);
 
     /**
      * 根据用户名获取用户信息

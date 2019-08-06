@@ -22,11 +22,11 @@
             }
         },
         watch: {
-            show() {
-                this.visible = this.show;
+            show(show) {
+                this.visible = show;
             },
-            visible() {
-                if (!this.visible) {
+            visible(visible) {
+                if (!visible) {
                     this.$emit('update:show', false);
                 }
             },

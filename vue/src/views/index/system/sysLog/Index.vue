@@ -51,8 +51,9 @@
                 tableSearch: [
                     {type: 'input', prop: 'username', placeholder: '用户名'},
                     {type: 'select', prop: 'roleId', placeholder: '角色', options: []},
-                    {type: 'datePicker', prop: 'createTime'},
-                    {type: 'input', prop: 'description', placeholder: '操作'}
+                    {type: 'input', prop: 'description', placeholder: '操作'},
+                    {type: 'input', prop: 'ipAddress', placeholder: 'ip地址'},
+                    {type: 'datePicker', prop: 'createTime', placeholder: '创建时间'}
                 ],
                 dialogDetail: false,
                 rowData: {}
