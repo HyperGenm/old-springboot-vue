@@ -48,7 +48,7 @@ public class SysRoleService extends BaseService {
     SysUserMapper sysUserMapper;
 
     /**
-     * 获取权限树形结构
+     * 获取角色树形结构
      *
      * @return
      */
@@ -64,7 +64,7 @@ public class SysRoleService extends BaseService {
     }
 
     /**
-     * 获取子级权限树形结构
+     * 获取子级角色树形结构
      *
      * @param sysRole
      * @return
@@ -80,7 +80,7 @@ public class SysRoleService extends BaseService {
     }
 
     /**
-     * 获取权限列表
+     * 获取角色列表
      *
      * @return
      */

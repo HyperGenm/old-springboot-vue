@@ -25,7 +25,7 @@ public class SysRoleController {
     SysRoleService service;
 
     /**
-     * 获取权限树形列表
+     * 获取角色树形列表
      *
      * @return
      */
@@ -36,7 +36,7 @@ public class SysRoleController {
     }
 
     /**
-     * 获取权限列表
+     * 获取角色列表
      *
      * @return
      */

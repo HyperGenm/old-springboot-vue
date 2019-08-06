@@ -33,7 +33,6 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    @Cacheable(condition = "#roleId > 1")
     public List<SysFunction> getMenuTreeByRoleId(Long roleId) {
         List<SysFunction> resultList = new ArrayList<>();
         if (null == roleId || 0 > roleId) {
