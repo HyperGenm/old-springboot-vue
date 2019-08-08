@@ -71,7 +71,7 @@ public class IpFilter implements Filter {
         if (null != numberObject) {
             RedisUtil.setNotChangeTimeOut(redisKey, number);
         } else {
-            RedisUtil.set(redisKey, number, 10L);
+            RedisUtil.set(redisKey, number, 5L);
         }
         chain.doFilter(req, res);
     }
