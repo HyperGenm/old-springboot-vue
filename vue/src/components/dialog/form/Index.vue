@@ -3,7 +3,7 @@
         <el-dialog :title="title" :visible.sync="visible" :modal-append-to-body="modelAppendToBody"
                    @close="$emit('update:show', false)">
             <el-form ref="form" size="mini" label-width="10rem"
-                     :model="formData" :rules="formRules">
+                     :model="formData" :rules="formRules || {}">
                 <slot name="itemHead"></slot>
                 <el-form-item v-for="(item,index) in formOptions" :key="index"
                               :label='item.label' :prop="item.prop" :required="item.required || false">
