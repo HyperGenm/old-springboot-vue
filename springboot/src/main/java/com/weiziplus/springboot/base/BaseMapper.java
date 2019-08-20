@@ -33,6 +33,28 @@ public interface BaseMapper {
     int insert(Map<String, Object> map);
 
     /**
+     * 新增多个
+     *
+     * @param map
+     * @return
+     */
+    @Insert("<script>" +
+            "INSERT INTO `${TABLE_NAME}` ( " +
+            "<foreach collection='COLUMNS' item='column' separator=','> " +
+            "`${column}` " +
+            "</foreach> " +
+            ") VALUES " +
+            "<foreach collection='VALUES_LIST' item='values' separator=','> " +
+            "(" +
+            " <foreach collection='values' item='value' separator=','> " +
+            " #{value} " +
+            " </foreach> " +
+            ")" +
+            "</foreach>" +
+            "</script>")
+    int insertList(Map<String, Object> map);
+
+    /**
      * 根据表名和id删除
      *
      * @param TABLE_NAME
@@ -41,7 +63,7 @@ public interface BaseMapper {
      */
     @Delete("DELETE FROM `${TABLE_NAME}` " +
             "WHERE id = #{id}")
-    int deleteById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
+    int deleteById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Object id);
 
     /**
      * 根据表名和ids删除
@@ -58,7 +80,7 @@ public interface BaseMapper {
             "</foreach>" +
             ")" +
             "</script>")
-    int deleteByIds(@Param("TABLE_NAME") String TABLE_NAME, @Param("ids") Long[] ids);
+    int deleteByIds(@Param("TABLE_NAME") String TABLE_NAME, @Param("ids") Object[] ids);
 
     /**
      * 修改数据
@@ -90,7 +112,7 @@ public interface BaseMapper {
             "FROM `${TABLE_NAME}` " +
             "WHERE `id` = #{id} " +
             "LIMIT 1")
-    Map<String, Object> findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Long id);
+    Map<String, Object> findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Object id);
 
     /**
      * 获取所有数据

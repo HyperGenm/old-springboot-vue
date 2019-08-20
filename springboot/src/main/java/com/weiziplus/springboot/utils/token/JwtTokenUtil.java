@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.utils.token;
 
+import com.weiziplus.springboot.utils.StringUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,7 +44,7 @@ public class JwtTokenUtil {
                 .setIssuer(ISSUER)
                 .setAudience(audience)
                 .signWith(HS512, SECRET)
-                .setSubject(String.valueOf(userId))
+                .setSubject(StringUtil.valueOf(userId))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();
@@ -55,7 +56,7 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static Boolean isExpiration(String token){
+    public static Boolean isExpiration(String token) {
         return getTokenBody(token).getExpiration().before(new Date());
     }
 

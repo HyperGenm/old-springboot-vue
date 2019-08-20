@@ -43,4 +43,17 @@ public class StringUtil {
     public static String createUUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }
+
+    /**
+     * 对象转为字符串
+     *
+     * @param object
+     * @return
+     */
+    public static String valueOf(Object object) {
+        if (null == object) {
+            return null;
+        }
+        return String.valueOf(object);
+    }
 }
