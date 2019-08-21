@@ -101,6 +101,10 @@ public class BaseService {
             } catch (Exception e) {
                 throw new RuntimeException("实体类get方法出错==========" + object.getClass() + "---" + e);
             }
+            //如果值为null，则不处理
+            if (null == value) {
+                continue;
+            }
             if (null != field.getAnnotation(Id.class)) {
                 //添加表的主键
                 columns.add(field.getAnnotation(Id.class).value());
