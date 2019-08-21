@@ -22,13 +22,12 @@ public interface SysFunctionMapper {
     SysFunction getMinParentIdMenuFunInfoByRoleId(@Param("roleId") Long roleId);
 
     /**
-     * 根据角色id和parent_id获取菜单列表
+     * 根据角色id获取菜单列表
      *
      * @param roleId
-     * @param parentId
      * @return
      */
-    List<SysFunction> getMenuListByRoleIdAndParentId(@Param("roleId") Long roleId, @Param("parentId") Long parentId);
+    List<SysFunction> getMenuListByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 根据roleId获取按钮列表

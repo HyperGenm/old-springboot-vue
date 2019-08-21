@@ -91,11 +91,8 @@ public interface BaseMapper {
     @Update("<script>" +
             "UPDATE `${TABLE_NAME}` " +
             "SET " +
-            "<foreach collection='COLUMNS_VALUES' item='item' index='index'> " +
+            "<foreach collection='COLUMNS_VALUES' item='item' separator=','> " +
             "`${item.column}` = #{item.value} " +
-            "      <if test='index != VALUES.size() - 1'> " +
-            "        , " +
-            "      </if> " +
             "</foreach> " +
             "WHERE `${KEY_ID}` = #{KEY_VALUE}" +
             "</script>")

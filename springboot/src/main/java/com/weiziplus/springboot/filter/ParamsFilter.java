@@ -1,11 +1,12 @@
 package com.weiziplus.springboot.filter;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * 参数过滤器
@@ -17,8 +18,6 @@ import java.util.Map;
 public class ParamsFilter implements Filter {
 
     /**
-     * 去掉字符串参数左右空格
-     *
      * @param servletRequest
      * @param servletResponse
      * @param filterChain
@@ -27,18 +26,52 @@ public class ParamsFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-            String[] values = entry.getValue();
+        filterChain.doFilter(new ParamsHttpServletRequestWrapper((HttpServletRequest) servletRequest), servletResponse);
+    }
+
+    static class ParamsHttpServletRequestWrapper extends HttpServletRequestWrapper {
+
+        ParamsHttpServletRequestWrapper(HttpServletRequest request) {
+            super(request);
+        }
+
+        @Override
+        public String getHeader(String name) {
+            String header = super.getHeader(name);
+            if (null == header) {
+                return null;
+            }
+            return HtmlUtils.htmlEscape(header);
+        }
+
+        @Override
+        public String getParameter(String name) {
+            String parameter = super.getParameter(name);
+            if (null == parameter) {
+                return null;
+            }
+            return HtmlUtils.htmlEscape(parameter);
+        }
+
+        /**
+         * 去掉字符串左右空格
+         *
+         * @param name
+         * @return
+         */
+        @Override
+        public String[] getParameterValues(String name) {
+            String[] values = super.getParameterValues(name);
+            if (null == values) {
+                return null;
+            }
             for (int i = 0; i < values.length; i++) {
-                String value = values[i];
-                if (null == value) {
+                if (null == values[i]) {
                     continue;
                 }
-                values[i] = value.trim();
+                values[i] = values[i].trim();
             }
+            return values;
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

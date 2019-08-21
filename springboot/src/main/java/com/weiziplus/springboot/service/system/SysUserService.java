@@ -118,13 +118,12 @@ public class SysUserService extends BaseService {
         for (Long id : ids) {
             if (GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
                 Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
-                if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                    mapper.suspendSysUser(nowUserId);
-                    AdminTokenUtil.deleteToken(nowUserId);
-                    return ResultUtil.errorSuspend();
-                } else {
+                if (GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                     return ResultUtil.error("不能删除超级管理员");
                 }
+                mapper.suspendSysUser(nowUserId);
+                AdminTokenUtil.deleteToken(nowUserId);
+                return ResultUtil.errorSuspend();
             }
         }
         return ResultUtil.success(baseDeleteByClassAndIds(SysUser.class, ids));

@@ -22,7 +22,7 @@
     <select id="getIpList" resultType="com.weiziplus.springboot.models.DataDictionaryValue">
         SELECT *
         FROM data_dictionary_value
-        WHERE dictionary_code = CONCAT('ipFilter',#{type}) AND name <![CDATA[<>]]> '127.0.0.1'
+        WHERE dictionary_code = CONCAT('ipFilter',#{type})
     </select>
     <insert id="addIp">
         INSERT INTO data_dictionary_value

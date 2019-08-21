@@ -10,10 +10,10 @@
         ORDER BY sf.parent_id ASC
         LIMIT 1
     </select>
-    <select id="getMenuListByRoleIdAndParentId" resultType="com.weiziplus.springboot.models.SysFunction">
+    <select id="getMenuListByRoleId" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT sf.*
         FROM sys_function sf,sys_role_function srf
-        WHERE srf.role_id = #{roleId} AND sf.parent_id = #{parentId} AND sf.type = 0 AND sf.id = srf.function_id
+        WHERE srf.role_id = #{roleId} AND sf.type = 0 AND sf.id = srf.function_id
         ORDER BY sf.sort ASC
     </select>
     <select id="getButtonListByRoleId" resultType="com.weiziplus.springboot.models.SysFunction">

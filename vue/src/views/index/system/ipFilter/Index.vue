@@ -61,6 +61,10 @@
                         [
                             {
                                 name: '删除', type: 'danger', show: showIpEditButton, handleClick(row) {
+                                    if ('127.0.0.1' === row['name'] || '127.0.0.1' === row['value']) {
+                                        that.$globalFun.errorMsg('127.0.0.1不需要删除');
+                                        return;
+                                    }
                                     that.deleteIp([row.id]);
                                 }
                             }

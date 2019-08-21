@@ -40,29 +40,34 @@ public class SysFunctionService extends BaseService {
         if (null == sysFunction) {
             return resultList;
         }
-        List<SysFunction> menuList = mapper.getMenuListByRoleIdAndParentId(roleId, sysFunction.getParentId());
+        List<SysFunction> menuList = mapper.getMenuListByRoleId(roleId);
         for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findMenuChildren(roleId, sysFun));
+            if (!sysFunction.getParentId().equals(sysFun.getParentId())) {
+                continue;
+            }
+            sysFun.setChildren(getChildrenByMenuListAndParentId(menuList, sysFun.getId()));
             resultList.add(sysFun);
         }
         return resultList;
     }
 
     /**
-     * 根据角色id递归子级菜单树形列表
+     * 根据功能菜单列表和parentId获取子级列表
      *
-     * @param roleId
-     * @param sysFunction
+     * @param menuList
+     * @param parentId
      * @return
      */
-    private List<SysFunction> findMenuChildren(Long roleId, SysFunction sysFunction) {
-        List<SysFunction> childrenList = new ArrayList<>();
-        List<SysFunction> menuList = mapper.getMenuListByRoleIdAndParentId(roleId, sysFunction.getId());
-        for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findMenuChildren(roleId, sysFun));
-            childrenList.add(sysFun);
+    private List<SysFunction> getChildrenByMenuListAndParentId(List<SysFunction> menuList, Long parentId) {
+        List<SysFunction> resultList = new ArrayList<>();
+        for (SysFunction sysFunction : menuList) {
+            if (!parentId.equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFunction.setChildren(getChildrenByMenuListAndParentId(menuList, sysFunction.getId()));
+            resultList.add(sysFunction);
         }
-        return childrenList;
+        return resultList;
     }
 
     /**
