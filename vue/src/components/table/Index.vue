@@ -217,7 +217,9 @@
             }
         },
         mounted() {
+            //获取数据
             this.getCourseList();
+            //初始化表格高度
             this.initTableMaxHeight();
         },
         methods: {
@@ -308,17 +310,21 @@
                     }
                 });
             },
+            //pageSize改变触发
             handleSizeChange(pageSize) {
                 this.pageSize = pageSize;
                 this.getCourseList();
             },
+            //pageNum改变触发
             handleCurrentChange(pageNum) {
                 this.pageNum = pageNum;
                 this.getCourseList();
             },
+            //刷新表格数据
             renderTable() {
                 this.getCourseList();
             },
+            //是否展示表格内部操作按钮
             isShowTableOperates(operates) {
                 let {buttons} = operates;
                 if (null == operates || null == buttons || 0 >= buttons.length) {
@@ -331,6 +337,7 @@
                 }
                 return false;
             },
+            //表格内部操作按钮是否折叠展示
             isShowTableOperatesPopover(buttons) {
                 let num = 0;
                 buttons.forEach(value => {
@@ -343,6 +350,7 @@
                 });
                 return 2 > num;
             },
+            //求和
             summaryMethod(param) {
                 let sums = [];
                 let that = this;
@@ -354,12 +362,15 @@
                 });
                 return sums;
             },
+            //表头点击事件
             headerClick(column, event) {
                 this.$emit('headerClick', column);
             },
+            //当选择项发生变化时会触发该事件
             selectionChange(selection) {
                 this.selection = selection;
             },
+            //表格行样式
             rowStyle({row, rowIndex}) {
                 if (this.selection.includes(row)) {
                     return {'background-color': 'rgba(185, 221, 249, 0.75) !important'};

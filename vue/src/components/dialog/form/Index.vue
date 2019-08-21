@@ -15,7 +15,8 @@
                     <template v-else-if="'select' === item.type">
                         <el-select v-model="formData[item.prop]" :size="item.size"
                                    clearable :disabled="item.disabled || false"
-                                   :placeholder="item.placeholder || '请选择'">
+                                   :placeholder="item.placeholder || '请选择'"
+                                   @change="selectChange(formData[item.prop],item.prop)">
                             <el-option v-for="(option,index) in item.options" :key="index"
                                        :label="option.label" :value="option.value"
                                        :disabled="option.disabled || false"></el-option>
@@ -123,6 +124,10 @@
             }
         },
         methods: {
+            //下拉框值改变触发事件
+            selectChange(value, prop) {
+                this.$emit('selectChange', value, prop);
+            },
             //监听表单提交
             submitForm() {
                 let that = this;
