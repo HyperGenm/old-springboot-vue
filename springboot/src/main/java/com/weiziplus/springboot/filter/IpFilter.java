@@ -88,7 +88,7 @@ public class IpFilter implements Filter {
             return;
         }
         sysAbnormalIpMapper.updateAbnormalIpAndRemark(ip, "访问频率过快");
-        //异常最大次数
+        //异常最大次数---超过将自动拉黑
         int maxNumber = 5;
         if (maxNumber <= oneInfoByIp.getNumber()) {
             dataDictionaryIpFilterService.autoAddBlack(ip);

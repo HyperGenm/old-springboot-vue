@@ -110,7 +110,7 @@
                 </el-table-column>
                 <!--表格中的操作按钮组-->
                 <el-table-column label="操作" fixed="right"
-                                 v-if="isShowTableOperates(tableOperates)"
+                                 v-if="tableOperates && tableOperates.buttons && 0 < tableOperates.buttons.length"
                                  :width="tableOperates.width || 100">
                     <template slot-scope="scope">
                         <div v-if="isShowTableOperatesPopover(tableOperates['buttons'])">
@@ -323,19 +323,6 @@
             //刷新表格数据
             renderTable() {
                 this.getCourseList();
-            },
-            //是否展示表格内部操作按钮
-            isShowTableOperates(operates) {
-                let {buttons} = operates;
-                if (null == operates || null == buttons || 0 >= buttons.length) {
-                    return false;
-                }
-                for (let i = 0; i < buttons.length; i++) {
-                    if (buttons[i]['show']) {
-                        return true;
-                    }
-                }
-                return false;
             },
             //表格内部操作按钮是否折叠展示
             isShowTableOperatesPopover(buttons) {
