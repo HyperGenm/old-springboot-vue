@@ -95,7 +95,6 @@
                     {prop: 'description', label: '路由描述'}
                 ],
                 tableOperates: {
-                    width: 250,
                     buttons: [
                         {
                             name: '查看', type: 'primary', show: true, handleClick(row) {

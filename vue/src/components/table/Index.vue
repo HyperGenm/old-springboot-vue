@@ -3,68 +3,66 @@
         <div class="search" v-show="tableSearch && 0 < tableSearch.length" ref="search">
             <!--表格查询-->
             <el-form inline size="mini">
-                <el-form-item>
-                    <el-form-item v-for="(item,index) in tableSearch" :key="index">
-                        <template v-if="'input' === item.type">
-                            <el-input v-model="tableDataRequest.data[item.prop]" :type="item.inputType || 'text'"
-                                      :placeholder="item.placeholder" clearable
-                                      :disabled="item.disabled || false"></el-input>
-                        </template>
-                        <template v-else-if="'select' === item.type">
-                            <el-select v-model="tableDataRequest.data[item.prop]"
-                                       clearable filterable :disabled="item.disabled || false"
-                                       :placeholder="item.placeholder || '请选择'">
-                                <el-option v-for="(option,index) in item.options" :key="index"
-                                           :label="option.label" :value="option.value"
-                                           :disabled="option.disabled || false"></el-option>
-                            </el-select>
-                        </template>
-                        <template v-else-if="'radio' === item.type">
-                            <el-radio-group v-model="tableDataRequest.data[item.prop]"
-                                            :disabled="item.disabled || false">
-                                <el-radio v-for="(option,index) in item.options" :key="index"
-                                          :label="option.value" :disabled="option.disabled || false">
-                                    {{option.label}}
-                                </el-radio>
-                            </el-radio-group>
-                        </template>
-                        <template v-else-if="'textarea' === item.type">
-                            <el-input type="textarea" v-model="tableDataRequest.data[item.prop]"
-                                      :disabled="item.disabled || false"></el-input>
-                        </template>
-                        <template v-else-if="'checkbox' === item.type">
-                            <el-checkbox-group v-model="tableDataRequest.data[item.prop]"
-                                               :disabled="item.disabled || false">
-                                <el-checkbox v-for="(option,index) in options" :key="index"
-                                             :label="option.value" :disabled="option.disabled || false">{{option.label}}
-                                </el-checkbox>
-                            </el-checkbox-group>
-                        </template>
-                        <template v-else-if="'switch' === item.type">
-                            <el-switch v-model="tableDataRequest.data[item.prop]"
-                                       :disabled="item.disabled || false"></el-switch>
-                        </template>
-                        <template v-else-if="'datePicker' === item.type">
-                            <el-date-picker :type="item['dateType'] || 'date'" :placeholder="item.placeholder || '选择日期'"
-                                            v-model="tableDataRequest.data[item.prop]"
-                                            :value-format="item.valueFormat || 'yyyy-MM-dd'"
-                                            :disabled="item.disabled || false"></el-date-picker>
-                        </template>
-                        <template v-else-if="'timePicker' === item.type">
-                            <el-date-picker :placeholder="item.placeholder || '选择日期'"
-                                            v-model="tableDataRequest.data[item.prop]"
-                                            :disabled="item.disabled || false"></el-date-picker>
-                        </template>
-                        <template v-else>
-                            {{item.label}}没有指定type
-                        </template>
-                    </el-form-item>
-                    <slot name="search"></slot>
-                    <el-button type="primary" size="mini" icon="el-icon-refresh"
-                               @click="renderTable">
-                        查询
-                    </el-button>
+                <el-form-item v-for="(item,index) in tableSearch" :key="index">
+                    <template v-if="'input' === item.type">
+                        <el-input v-model="tableDataRequest.data[item.prop]" :type="item.inputType || 'text'"
+                                  :placeholder="item.placeholder" clearable
+                                  :disabled="item.disabled || false"></el-input>
+                    </template>
+                    <template v-else-if="'select' === item.type">
+                        <el-select v-model="tableDataRequest.data[item.prop]"
+                                   clearable filterable :disabled="item.disabled || false"
+                                   :placeholder="item.placeholder || '请选择'">
+                            <el-option v-for="(option,index) in item.options" :key="index"
+                                       :label="option.label" :value="option.value"
+                                       :disabled="option.disabled || false"></el-option>
+                        </el-select>
+                    </template>
+                    <template v-else-if="'radio' === item.type">
+                        <el-radio-group v-model="tableDataRequest.data[item.prop]"
+                                        :disabled="item.disabled || false">
+                            <el-radio v-for="(option,index) in item.options" :key="index"
+                                      :label="option.value" :disabled="option.disabled || false">
+                                {{option.label}}
+                            </el-radio>
+                        </el-radio-group>
+                    </template>
+                    <template v-else-if="'textarea' === item.type">
+                        <el-input type="textarea" v-model="tableDataRequest.data[item.prop]"
+                                  :disabled="item.disabled || false"></el-input>
+                    </template>
+                    <template v-else-if="'checkbox' === item.type">
+                        <el-checkbox-group v-model="tableDataRequest.data[item.prop]"
+                                           :disabled="item.disabled || false">
+                            <el-checkbox v-for="(option,index) in options" :key="index"
+                                         :label="option.value" :disabled="option.disabled || false">{{option.label}}
+                            </el-checkbox>
+                        </el-checkbox-group>
+                    </template>
+                    <template v-else-if="'switch' === item.type">
+                        <el-switch v-model="tableDataRequest.data[item.prop]"
+                                   :disabled="item.disabled || false"></el-switch>
+                    </template>
+                    <template v-else-if="'datePicker' === item.type">
+                        <el-date-picker :type="item['dateType'] || 'date'" :placeholder="item.placeholder || '选择日期'"
+                                        v-model="tableDataRequest.data[item.prop]"
+                                        :value-format="item.valueFormat || 'yyyy-MM-dd'"
+                                        :disabled="item.disabled || false"></el-date-picker>
+                    </template>
+                    <template v-else-if="'timePicker' === item.type">
+                        <el-date-picker :placeholder="item.placeholder || '选择日期'"
+                                        v-model="tableDataRequest.data[item.prop]"
+                                        :disabled="item.disabled || false"></el-date-picker>
+                    </template>
+                    <template v-else>
+                        {{item.label}}没有指定type
+                    </template>
                 </el-form-item>
+                <slot name="search"></slot>
+                <el-button type="primary" size="mini" icon="el-icon-refresh" style="margin-bottom: 10px;"
+                           @click="renderTable">
+                    查询
+                </el-button>
             </el-form>
         </div>
         <div class="header" ref="header">
@@ -111,16 +109,33 @@
                     </template>
                 </el-table-column>
                 <!--表格中的操作按钮组-->
-                <el-table-column label="操作"
-                                 v-if="tableOperates && tableOperates.buttons && 0 < tableOperates.buttons.length"
-                                 :width="tableOperates.width || 170" fixed="right">
+                <el-table-column label="操作" fixed="right"
+                                 v-if="isShowTableOperates(tableOperates)"
+                                 :width="tableOperates.width || 100">
                     <template slot-scope="scope">
-                        <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
-                                   v-if="btn['show'] || false"
-                                   @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
-                                   size="mini"
-                                   :type="btn.type">{{btn.name}}
-                        </el-button>
+                        <div v-if="isShowTableOperatesPopover(tableOperates['buttons'])">
+                            <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
+                                       v-if="( btn['showFormatter'] && btn['showFormatter'](JSON.parse(JSON.stringify(scope.row))))
+                                       || btn['show'] || false"
+                                       @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
+                                       size="mini" :type="btn.type">{{btn.name}}
+                            </el-button>
+                        </div>
+                        <div v-else>
+                            <el-popover placement="bottom"
+                                        :width="tableOperates.width || 150"
+                                        trigger="click">
+                                <div style="margin: 10px auto;text-align: center;"
+                                     v-for="(btn, index) in tableOperates.buttons" :key="index"
+                                     v-if="( btn['showFormatter'] && btn['showFormatter'](JSON.parse(JSON.stringify(scope.row))))
+                                       || btn['show'] || false">
+                                    <el-button @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
+                                               size="mini" :type="btn.type">{{btn.name}}
+                                    </el-button>
+                                </div>
+                                <el-button slot="reference">操作</el-button>
+                            </el-popover>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -303,6 +318,30 @@
             },
             renderTable() {
                 this.getCourseList();
+            },
+            isShowTableOperates(operates) {
+                let {buttons} = operates;
+                if (null == operates || null == buttons || 0 >= buttons.length) {
+                    return false;
+                }
+                for (let i = 0; i < buttons.length; i++) {
+                    if (buttons[i]['show']) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            isShowTableOperatesPopover(buttons) {
+                let num = 0;
+                buttons.forEach(value => {
+                    let {show, showFormatter} = value;
+                    if (show) {
+                        num++;
+                    } else if (showFormatter && showFormatter()) {
+                        num++;
+                    }
+                });
+                return 2 > num;
             },
             summaryMethod(param) {
                 let sums = [];

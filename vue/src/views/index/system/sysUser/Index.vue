@@ -103,7 +103,6 @@
                     {prop: 'createTime', label: '用户创建时间'}
                 ],
                 tableOperates: {
-                    width: showRelieveSuspend ? 500 : 370,
                     buttons:
                         [
                             {

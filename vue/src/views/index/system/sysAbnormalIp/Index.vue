@@ -33,6 +33,7 @@
                     {prop: 'createTime', label: '创建时间'}
                 ],
                 tableOperates: {
+                    width: 150,
                     buttons:
                         [
                             {
