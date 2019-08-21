@@ -84,10 +84,10 @@ public class IpFilter implements Filter {
     private void handleAbnormalIp(String ip) {
         SysAbnormalIp oneInfoByIp = sysAbnormalIpMapper.getOneInfoByIp(ip);
         if (null == oneInfoByIp) {
-            sysAbnormalIpMapper.addAbnormalIp(ip);
+            sysAbnormalIpMapper.addAbnormalIpAndRemark(ip, "访问频率过快");
             return;
         }
-        sysAbnormalIpMapper.updateAbnormalIp(ip);
+        sysAbnormalIpMapper.updateAbnormalIpAndRemark(ip, "访问频率过快");
         //异常最大次数
         int maxNumber = 5;
         if (maxNumber <= oneInfoByIp.getNumber()) {

@@ -28,6 +28,7 @@
                 tableColumns: [
                     {prop: 'ip', label: 'ip'},
                     {prop: 'number', label: '异常次数'},
+                    {prop: 'remark', label: '备注'},
                     {prop: 'laseTime', label: '最后一次异常事件'},
                     {prop: 'createTime', label: '创建时间'}
                 ],

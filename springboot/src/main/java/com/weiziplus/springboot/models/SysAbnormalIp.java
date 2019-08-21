@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 异常ip记录
@@ -34,6 +35,12 @@ public class SysAbnormalIp implements Serializable {
      */
     @Column("number")
     private Integer number;
+
+    /**
+     * 备注
+     */
+    @Column("remark")
+    private String remark;
 
     /**
      * 最近违规时间

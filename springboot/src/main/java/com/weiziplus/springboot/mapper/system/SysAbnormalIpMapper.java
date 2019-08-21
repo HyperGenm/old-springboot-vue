@@ -15,9 +15,10 @@ public interface SysAbnormalIpMapper {
      * 新增异常ip
      *
      * @param ip
+     * @param remark
      * @return
      */
-    int addAbnormalIp(@Param("ip") String ip);
+    int addAbnormalIpAndRemark(@Param("ip") String ip, @Param("remark") String remark);
 
     /**
      * 根据ip获取一条数据
@@ -31,7 +32,8 @@ public interface SysAbnormalIpMapper {
      * 更新异常ip
      *
      * @param ip
+     * @param remark
      * @return
      */
-    int updateAbnormalIp(@Param("ip") String ip);
+    int updateAbnormalIpAndRemark(@Param("ip") String ip, @Param("remark") String remark);
 }

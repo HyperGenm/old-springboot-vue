@@ -67,6 +67,7 @@ CREATE TABLE `sys_abnormal_ip`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
   `ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
   `number` int(10) NOT NULL DEFAULT 0 COMMENT '次数',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
   `lase_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近违规时间',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
@@ -76,7 +77,7 @@ CREATE TABLE `sys_abnormal_ip`  (
 -- ----------------------------
 -- Records of sys_abnormal_ip
 -- ----------------------------
-INSERT INTO `sys_abnormal_ip` VALUES (1, '1.1.1.1', 0, '2019-08-05 14:55:59', '2019-08-05 14:55:59');
+INSERT INTO `sys_abnormal_ip` VALUES (1, '1.1.1.1', 0, '测试数据', '2019-08-05 14:55:59', '2019-08-05 14:55:59');
 
 -- ----------------------------
 -- Table structure for sys_function
