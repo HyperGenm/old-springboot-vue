@@ -45,5 +45,6 @@ pagehelper:
   reasonable: false
   support-methods-arguments: true
   params: count=countSql
+#日志打印
 logging:
   config: classpath:config/logback-spring.xml

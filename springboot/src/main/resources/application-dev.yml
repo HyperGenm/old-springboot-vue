@@ -35,7 +35,7 @@ swagger:
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
-  #图片存放路径
+  #图片存放路径--本地项目运行的target目录
   base-file-path: E:\idea\WeiziPlus\restaurant\springboot\target\classes\static\
-  #允许跨域地址
-  cors-filter-origins: http://localhost:8088,http://localhost:8088,,http://localhost:8888
+  #允许跨域地址---多个地址用,(逗号)分隔开
+  cors-filter-origins: http://localhost:8088,http://localhost:8088,http://localhost:8888
