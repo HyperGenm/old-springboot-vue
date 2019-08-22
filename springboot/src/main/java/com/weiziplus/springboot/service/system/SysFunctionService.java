@@ -52,7 +52,7 @@ public class SysFunctionService extends BaseService {
     }
 
     /**
-     * 根据功能菜单列表和parentId获取子级列表
+     * 根据功能菜单列表和parentId遍历子级列表
      *
      * @param menuList
      * @param parentId
@@ -79,32 +79,41 @@ public class SysFunctionService extends BaseService {
     public List<SysFunction> getFunTree() {
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
-        List<SysFunction> menuList = mapper.getFunListByParentId(sysFunction.getParentId());
+        if (null == sysFunction) {
+            return resultList;
+        }
+        List<SysFunction> menuList = mapper.getFunList();
         for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findChildren(sysFun));
+            if (!sysFunction.getParentId().equals(sysFun.getParentId())) {
+                continue;
+            }
+            sysFun.setChildren(getChildrenFun(menuList, sysFun.getId()));
             resultList.add(sysFun);
         }
         return resultList;
     }
 
     /**
-     * 获取子级功能列表
+     * 遍历子级功能列表
      *
-     * @param sysFunction
+     * @param menuList
+     * @param parentId
      * @return
      */
-    private List<SysFunction> findChildren(SysFunction sysFunction) {
-        List<SysFunction> childrenList = new ArrayList<>();
-        List<SysFunction> menuList = mapper.getFunListByParentId(sysFunction.getId());
-        for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findChildren(sysFun));
-            childrenList.add(sysFun);
+    private List<SysFunction> getChildrenFun(List<SysFunction> menuList, Long parentId) {
+        List<SysFunction> resultList = new ArrayList<>();
+        for (SysFunction sysFunction : menuList) {
+            if (!parentId.equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFunction.setChildren(getChildrenFun(menuList, sysFunction.getId()));
+            resultList.add(sysFunction);
         }
-        return childrenList;
+        return resultList;
     }
 
     /**
-     * 获取所有功能列表树形结构
+     * 获取所有功能列表树形结构---不包含按钮
      *
      * @return
      */
@@ -112,28 +121,37 @@ public class SysFunctionService extends BaseService {
     public List<SysFunction> getAllFunctionTreeNotButton() {
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
-        List<SysFunction> menuList = mapper.getFunNotButtonListByParentId(sysFunction.getParentId());
+        if (null == sysFunction) {
+            return resultList;
+        }
+        List<SysFunction> menuList = mapper.getFunNotButtonList();
         for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findChildrenNotButton(sysFun));
+            if (!sysFun.getParentId().equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFun.setChildren(getChildrenFunctionNotButton(menuList, sysFun.getId()));
             resultList.add(sysFun);
         }
         return resultList;
     }
 
     /**
-     * 获取子级功能列表
+     * 遍历子级功能列表---不包含按钮
      *
-     * @param sysFunction
+     * @param menuList
+     * @param parentId
      * @return
      */
-    private List<SysFunction> findChildrenNotButton(SysFunction sysFunction) {
-        List<SysFunction> childrenList = new ArrayList<>();
-        List<SysFunction> menuList = mapper.getFunNotButtonListByParentId(sysFunction.getId());
-        for (SysFunction sysFun : menuList) {
-            sysFun.setChildren(findChildrenNotButton(sysFun));
-            childrenList.add(sysFun);
+    private List<SysFunction> getChildrenFunctionNotButton(List<SysFunction> menuList, Long parentId) {
+        List<SysFunction> resultList = new ArrayList<>();
+        for (SysFunction sysFunction : menuList) {
+            if (!parentId.equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFunction.setChildren(getChildrenFunctionNotButton(menuList, sysFunction.getId()));
+            resultList.add(sysFunction);
         }
-        return childrenList;
+        return resultList;
     }
 
     /**

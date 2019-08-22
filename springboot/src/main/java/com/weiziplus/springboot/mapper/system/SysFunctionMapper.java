@@ -45,6 +45,13 @@ public interface SysFunctionMapper {
     SysFunction getMinParentIdFunInfo();
 
     /**
+     * 获取功能列表
+     *
+     * @return
+     */
+    List<SysFunction> getFunList();
+
+    /**
      * 根据父级id获取功能列表
      *
      * @param parentId
@@ -55,10 +62,9 @@ public interface SysFunctionMapper {
     /**
      * 根据父级id获取功能列表不包含按钮
      *
-     * @param parentId
      * @return
      */
-    List<SysFunction> getFunNotButtonListByParentId(@Param("parentId") Long parentId);
+    List<SysFunction> getFunNotButtonList();
 
     /**
      * 根据name获取功能信息
