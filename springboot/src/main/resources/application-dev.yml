@@ -26,6 +26,9 @@ mybatis:
   configuration-properties:
     #文件存放域名前缀
     filePathPrefix: http://192.168.3.233:8080/
+  configuration:
+    #IDEA的MyBatis Log插件以及控制台sql打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #是否启用swagger
 swagger:
   enable: true
