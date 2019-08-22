@@ -1,5 +1,5 @@
 <template>
-    <div id="sysLog">
+    <div id="index">
         <div class="wei-table">
             <wei-table ref="table" :tableDataRequest="tableDataRequest" :tableColumns="tableColumns"
                        :tableOperates="tableOperates" :tableSearch="tableSearch">

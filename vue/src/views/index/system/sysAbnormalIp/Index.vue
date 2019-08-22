@@ -1,5 +1,5 @@
 <template>
-    <div id="sysAbnormalIp">
+    <div id="index">
         <div class="wei-table">
             <wei-table ref="table" :tableDataRequest="tableDataRequest" :tableColumns="tableColumns"
                        :tableOperates="tableOperates">

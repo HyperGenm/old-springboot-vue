@@ -1,5 +1,5 @@
 <template>
-    <div id="sysFunc">
+    <div id="index">
         <div class="tree">
             <div class="title">功能菜单</div>
             <el-tree ref="tree" node-key="id"
@@ -18,7 +18,7 @@
                 <div class="edit">
                     <edit-form :show.sync="dialogEditForm" :parentData="parentData" :handleType="handleType"
                                :formData="formData"
-                               @renderTable="$refs.table.renderTable()" @renderTree="getAllFunctionTree"></edit-form>
+                               @renderTable="$refs.table.renderTable()" @renderTree="getAllFunctionTreeNotButton"></edit-form>
                 </div>
             </div>
         </div>
@@ -132,11 +132,11 @@
             };
         },
         mounted() {
-            this.getAllFunctionTree();
+            this.getAllFunctionTreeNotButton();
         },
         methods: {
             //获取所有功能列表树形结构
-            getAllFunctionTree() {
+            getAllFunctionTreeNotButton() {
                 let that = this;
                 this.$axios({
                     url: that.$global.URL.sysFunctionGetAllFunctionTreeNotButton,
@@ -172,7 +172,7 @@
                             success() {
                                 that.$globalFun.successMsg('删除成功');
                                 that.$refs.table.renderTable();
-                                that.getAllFunctionTree();
+                                that.getAllFunctionTreeNotButton();
                             }
                         })
                     }
@@ -183,7 +183,7 @@
 </script>
 
 <style lang="less" scoped>
-    #sysFunc {
+    #index {
         display: flex;
         .tree {
             flex: 1;

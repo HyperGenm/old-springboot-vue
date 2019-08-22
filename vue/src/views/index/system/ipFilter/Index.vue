@@ -1,5 +1,5 @@
 <template>
-    <div id="ipFilterBlack">
+    <div id="index">
         <div class="left">
             <div class="box">
                 <div class="item">
@@ -135,7 +135,7 @@
 </script>
 
 <style lang="less" scoped>
-    #ipFilterBlack {
+    #index {
         display: flex;
         box-sizing: border-box;
         .left {

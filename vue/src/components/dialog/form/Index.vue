@@ -9,7 +9,7 @@
                               :label='item.label' :prop="item.prop" :required="item.required || false">
                     <template v-if="'input' === item.type">
                         <el-input v-model="formData[item.prop]" :size="item.size" :type="item.inputType || 'text'"
-                                  :placeholder="item.placeholder" clearable
+                                  :placeholder="item.placeholder || item.label || '请输入'" clearable
                                   :disabled="item.disabled || false"></el-input>
                     </template>
                     <template v-else-if="'select' === item.type">

@@ -1,5 +1,5 @@
 <template>
-    <div id="sysUser">
+    <div id="index">
         <div class="wei-table">
             <wei-table ref="table"
                        :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"

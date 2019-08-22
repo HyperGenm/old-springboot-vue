@@ -1,5 +1,5 @@
 <template>
-    <div id="sysRole">
+    <div id="index">
         <div class="role">
             <div class="btn">
                 <el-button type="primary" size="mini"
@@ -305,7 +305,7 @@
 </script>
 
 <style lang="less" scoped>
-    #sysRole {
+    #index {
         display: flex;
         .role {
             flex: 1;
