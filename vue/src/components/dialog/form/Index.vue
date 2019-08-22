@@ -2,7 +2,7 @@
     <div id="dialogForm">
         <el-dialog :title="title" :visible.sync="visible" :modal-append-to-body="modelAppendToBody"
                    @close="$emit('update:show', false)">
-            <el-form ref="form" size="mini" label-width="10rem"
+            <el-form ref="form" size="mini" :label-width="labelWidth"
                      :model="formData" :rules="formRules || {}">
                 <slot name="itemHead"></slot>
                 <el-form-item v-for="(item,index) in formOptions" :key="index"
@@ -111,6 +111,11 @@
             formOptions: {
                 type: Array,
                 default: () => []
+            },
+            //表单左边的宽度
+            labelWidth: {
+                type: String,
+                default: '10rem'
             }
         },
         data() {
