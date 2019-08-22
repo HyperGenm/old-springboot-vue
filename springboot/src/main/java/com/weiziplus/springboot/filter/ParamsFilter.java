@@ -1,5 +1,8 @@
 package com.weiziplus.springboot.filter;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.HtmlUtils;
 
@@ -69,7 +72,8 @@ public class ParamsFilter implements Filter {
             parameter = parameter.trim();
             //替换sql关键字
             parameter = cleanSqlKeyWords(parameter);
-            return HtmlUtils.htmlEscape(parameter);
+            //过滤html标签
+            return JsoupUtil.clean(parameter);
         }
 
         /**
@@ -93,6 +97,8 @@ public class ParamsFilter implements Filter {
                 values[i] = values[i].trim();
                 //替换sql关键字
                 values[i] = cleanSqlKeyWords(values[i]);
+                //过滤html标签
+                values[i] = JsoupUtil.clean(values[i]);
             }
             return values;
         }
@@ -118,6 +124,41 @@ public class ParamsFilter implements Filter {
                 }
             }
             return value;
+        }
+    }
+
+    /**
+     * Jsoup工具类
+     */
+    static class JsoupUtil {
+
+        /**
+         * none():清除所有HTML标签，仅保留文本节点。
+         * simpleText():仅会保留b, em, i, strong, u 标签，除此之外的所有HTML标签都会被清除。
+         * basic():保留 a, b, blockquote, br, cite, code, dd, dl, dt, em, i, li, ol, p, pre, q, small, span, strike, strong, sub, sup, u, ul 和其适当的属性标签，除此之外的所有HTML标签都会被清除，且该API不允许出现图片(img tag)。另外该API中允许出现的超链接中可以允许其指定http, https, ftp, mailto 且在超链接中强制追加rel=nofollow属性。
+         * basicWithImages():保留basic()中允许出现的标签的同时也允许出现图片(img tag)和img的相关适当属性，且其src允许其指定 http 或 https。
+         * relaxed():仅会保留 a, b, blockquote, br, caption, cite, code, col, colgroup, dd, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, li, ol, p, pre, q, small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, u, ul 标签，除此之外的所有HTML标签都会被清除，且在超链接中不会强制追加rel=nofollow属性。
+         */
+        private static final Whitelist WHITELIST = Whitelist.basicWithImages();
+
+        /**
+         * 配置过滤化参数, 不对代码进行格式化
+         */
+        private static final Document.OutputSettings OUTPUT_SETTINGS = new Document.OutputSettings().prettyPrint(false);
+
+        static {
+            // 标签添加style属性
+            WHITELIST.addAttributes(":all", "style");
+        }
+
+        /**
+         * 过滤字符串
+         *
+         * @param content
+         * @return
+         */
+        public static String clean(String content) {
+            return Jsoup.clean(content, "", WHITELIST, OUTPUT_SETTINGS);
         }
     }
 }
