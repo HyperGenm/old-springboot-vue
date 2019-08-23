@@ -1,8 +1,7 @@
 <template>
     <div id="form">
-        <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
-                     :formData="form" :formOptions="formOptions" :formRules="rules"
-                     @submit="submit">
+        <dialog-form :formData="form" :formOptions="formOptions" :formRules="rules"
+                     @closeDialog="$emit('closeDialog')" @submit="submit">
         </dialog-form>
     </div>
 </template>
@@ -30,21 +29,9 @@
             },
             formData: {
                 type: Object
-            },
-            show: {
-                type: Boolean,
-                default: false
             }
         },
         watch: {
-            show(show) {
-                this.visible = show;
-            },
-            visible(visible) {
-                if (!visible) {
-                    this.$emit('update:show', false);
-                }
-            },
             formData(data) {
                 this.form = data;
                 this.formOptions = JSON.parse(JSON.stringify(baseOptions));
@@ -69,7 +56,6 @@
         },
         data() {
             return {
-                visible: false,
                 rules: {
                     username: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -94,7 +80,7 @@
                     data: that.form,
                     success() {
                         that.$globalFun.successMsg('成功');
-                        that.$emit('update:show', false);
+                        that.$emit('closeDialog');
                         that.$emit('renderTable');
                     }
                 });

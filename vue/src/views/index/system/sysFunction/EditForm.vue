@@ -1,8 +1,7 @@
 <template>
     <div id="form">
-        <dialog-form :show.sync="visible" :title="'add' === handleType ? '新增' : '编辑'"
-                     :formData="form" :formOptions="formOptions"
-                     @submit="submit">
+        <dialog-form :formData="form" :formOptions="formOptions"
+                     @closeDialog="$emit('closeDialog')" @submit="submit">
             <template v-slot:itemHead>
                 <el-form-item label="上级路由">
                     <el-input disabled v-model="parentData.title"></el-input>
@@ -53,21 +52,9 @@
             },
             formData: {
                 type: Object
-            },
-            show: {
-                type: Boolean,
-                default: false
             }
         },
         watch: {
-            show(show) {
-                this.visible = show;
-            },
-            visible(visible) {
-                if (!visible) {
-                    this.$emit('update:show', false);
-                }
-            },
             formData(formData) {
                 this.form = formData;
             },
@@ -80,7 +67,6 @@
         },
         data() {
             return {
-                visible: false,
                 formOptions: JSON.parse(JSON.stringify(baseOptions)),
                 form: this.formData,
                 dialogIcons: false
@@ -96,7 +82,7 @@
                     data: that.form,
                     success() {
                         that.$globalFun.successMsg('成功');
-                        that.$emit('update:show', false);
+                        that.$emit('closeDialog');
                         that.$emit('renderTable');
                         that.$emit('renderTree');
                     }

@@ -1,6 +1,6 @@
 <template>
     <div id="detail">
-        <dialog-detail :show.sync="visible" :rows="rows"></dialog-detail>
+        <dialog-detail :rows="rows"></dialog-detail>
     </div>
 </template>
 
@@ -11,26 +11,25 @@
             'dialog-detail': () => import('@/components/dialog/detail/Index.vue')
         },
         props: {
-            show: {
-                type: Boolean,
-                default: false
-            },
             detailData: {
-                type: Object,
-                default: () => {
-                }
+                type: Object
             }
         },
         watch: {
-            show(show) {
-                this.visible = show;
-            },
-            visible(visible) {
-                if (!visible) {
-                    this.$emit('update:show', false);
-                }
-            },
             detailData(data) {
+                this.initData(data);
+            }
+        },
+        data() {
+            return {
+                rows: []
+            }
+        },
+        mounted() {
+            this.initData(this.detailData);
+        },
+        methods: {
+            initData(data) {
                 this.rows = [
                     {title: '用户名', content: data['username']},
                     {title: '真实姓名', content: data['realName']},
@@ -39,12 +38,6 @@
                     {title: 'ip地址', content: data['ipAddress']},
                     {title: '操作时间', content: data['createTime']}
                 ];
-            }
-        },
-        data() {
-            return {
-                visible: false,
-                rows: []
             }
         }
     }

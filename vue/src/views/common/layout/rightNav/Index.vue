@@ -23,7 +23,9 @@
             </div>
         </div>
         <div class="edit">
-            <edit-form :show.sync="dialogEditForm"></edit-form>
+            <wei-dialog :show.sync="dialogEditForm"  title="修改密码">
+                <edit-form @closeDialog="dialogEditForm = false"></edit-form>
+            </wei-dialog>
         </div>
     </div>
 </template>
@@ -33,6 +35,7 @@
         name: "Index",
         components: {
             'wei-tabs': () => import('./Tabs.vue'),
+            'wei-dialog': () => import('@/components/dialog/index/Index.vue'),
             'edit-form': () => import('./EditForm.vue')
         },
         props: {

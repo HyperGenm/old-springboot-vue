@@ -1,8 +1,7 @@
 <template>
     <div id="form">
-        <dialog-form :show.sync="visible" title="修改密码"
-                     :formData="form" :formOptions="formOptions" :formRules="rules"
-                     @submit="submit">
+        <dialog-form :formData="form" :formOptions="formOptions" :formRules="rules"
+                     @closeDialog="$emit('closeDialog')" @submit="submit">
         </dialog-form>
     </div>
 </template>
@@ -13,26 +12,9 @@
         components: {
             'dialog-form': () => import('@/components/dialog/form/Index.vue')
         },
-        props: {
-            show: {
-                type: Boolean,
-                default: false
-            }
-        },
-        watch: {
-            show() {
-                this.visible = this.show;
-            },
-            visible() {
-                if (!this.visible) {
-                    this.$emit('update:show', false);
-                }
-            }
-        },
         data() {
             let that = this;
             return {
-                visible: false,
                 formOptions: [
                     {type: 'input', label: '旧密码', prop: 'oldPwd', inputType: 'password'},
                     {type: 'input', label: '新密码', prop: 'newPwd', inputType: 'password'},
@@ -75,7 +57,7 @@
                     data: that.form,
                     success() {
                         that.$globalFun.successMsg('成功');
-                        that.$emit('update:show', false);
+                        that.$emit('closeDialog');
                     }
                 });
             }

@@ -6,7 +6,9 @@
             </wei-table>
         </div>
         <div class="show">
-            <detail :show.sync="dialogDetail" :detailData="rowData"></detail>
+            <wei-dialog :show.sync="dialogDetail">
+                <detail :detailData="rowData"></detail>
+            </wei-dialog>
         </div>
     </div>
 </template>
@@ -16,6 +18,7 @@
         name: "Index",
         components: {
             'wei-table': () => import('@/components/table/Index.vue'),
+            'wei-dialog': () => import('@/components/dialog/index/Index.vue'),
             'detail': () => import('./Detail.vue')
         },
         data() {
