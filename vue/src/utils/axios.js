@@ -17,6 +17,7 @@ axios.defaults.withCredentials = true;
 /**
  * 封装axios请求
  *
+ * @param allUrl 请求的url为完整url
  * @param allSuccess 返回所有成功回调,不包含status不是200的出错请求
  * @param url 请求地址
  * @param method 请求方式
@@ -28,6 +29,7 @@ axios.defaults.withCredentials = true;
  * @private
  */
 export function weiAxios({
+                             allUrl = false,
                              allSuccess = false,
                              url = '',
                              method = 'get',
@@ -50,13 +52,18 @@ export function weiAxios({
         });
         /**axios请求所需参数*/
         let _axios = {
-            url: _Vue.$global.GLOBAL.base_url + url,
             method,
             headers: {
                 'Content-Type': header,
                 'token': that.$store.state.token || ''
             }
         };
+        /***请求的url是否为全部url***/
+        if (allUrl) {
+            _axios['url'] = url;
+        } else {
+            _axios['url'] = _Vue.$global.GLOBAL.base_url + url;
+        }
         /**axios请求参数添加随机字符串*/
         data['__t'] = (new Date()).getTime();
         /**axios请求处理不同请求方式时的参数*/
@@ -72,6 +79,11 @@ export function weiAxios({
             if (200 !== res.status) {
                 _Vue.$globalFun.errorMsg('请求出错:' + res.status);
                 console.warn(url, '-----status:', res.status, '------请求出错-----res:', res);
+                return;
+            }
+            /***请求的url如果是全部url的话,返回所有res['data']响应***/
+            if (allUrl) {
+                success(res['data']);
                 return;
             }
             /**token过期处理*/
