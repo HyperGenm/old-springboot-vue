@@ -16,7 +16,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>
-                %d{HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---) [%thread] %cyan(%-50logger{50}) - %highlight(%msg) %n
             </Pattern>
             <!-- 设置字符集 -->
             <charset>UTF-8</charset>
@@ -46,6 +46,7 @@
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGFILE"/>
     </root>
 
     <!-- 开发环境-->
@@ -58,7 +59,7 @@
 
     <!-- 生产环境-->
     <springProfile name="pro">
-        <logger name="com.weiziplus" level="INFO" additivity="false">
+        <logger name="com.weiziplus" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGFILE"/>
         </logger>
