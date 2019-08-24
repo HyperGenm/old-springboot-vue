@@ -1,20 +1,24 @@
 # springboot2-vue3
-##演示地址
+
+## 演示地址
 [在线演示地址](http://39.96.52.201/)    
 用户名:admin  
 密码:111111  
 *多个用户同时登陆可能会被顶掉*
-##结构简介
+
+## 结构简介
 *tip:前后端分离项目*
-###后端:
-####springboot、mybatis、redis
+
+### 后端:
+#### springboot、mybatis、redis
 1. 简介
     * 基于springboot模板创建的项目
     * 项目需要安装、启动redis环境
 2. 基本配置
     * .yml文件可以配置相关信息
-###前端:
-####vue:
+
+### 前端:
+#### vue:
 1. 简介
     * 基于vue cli3创建的项目
     * 界面UI:element-ui
