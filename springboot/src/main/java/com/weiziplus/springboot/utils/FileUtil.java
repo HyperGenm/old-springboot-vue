@@ -22,7 +22,7 @@ public class FileUtil {
      * @return 成功返回路径，失败返回null
      */
     public static String upFile(MultipartFile file, String mkdir) {
-        if (file.isEmpty()) {
+        if (null == file || file.isEmpty()) {
             return null;
         }
         String resultPath = "";
@@ -31,9 +31,6 @@ public class FileUtil {
         }
         // 获取原始名字
         String fileName = file.getOriginalFilename();
-        if ("01.jpg".equals(fileName)) {
-            return null;
-        }
         // 如果原始名字为null获取当前名字
         if (StringUtil.isBlank(fileName)) {
             fileName = file.getName();

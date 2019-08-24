@@ -1,7 +1,7 @@
 <template>
     <div id="index">
         <wei-upload :action="$global.URL.tools.upload" :limit="3"
-                    @success="success" @remove="remove"></wei-upload>
+                    @success="success"></wei-upload>
     </div>
 </template>
 
@@ -14,9 +14,6 @@
         methods: {
             success(data) {
                 console.log('上传成功列表---', data);
-            },
-            remove(data) {
-                console.log('文件删除后剩余列表---', data);
             }
         }
     }
