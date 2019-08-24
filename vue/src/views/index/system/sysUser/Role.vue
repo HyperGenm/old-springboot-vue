@@ -30,7 +30,7 @@
         mounted() {
             let that = this;
             this.$axios({
-                url: that.$global.URL.sysRoleGetRoleTree,
+                url: that.$global.URL.system.sysRole.getRoleTree,
                 success(data) {
                     that.roleData = data;
                 }
@@ -52,7 +52,7 @@
                 }
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.sysRoleUpdateUserRole,
+                    url: that.$global.URL.system.sysRole.updateUserRole,
                     method: 'post',
                     data: {
                         roleId: 'save' === status ? id : 0,

@@ -23,7 +23,7 @@ public class SysLogService {
      * @param pageSize
      * @return
      */
-    public ResultUtil getLogList(Integer pageNum, Integer pageSize, String username, Long roleId,
+    public ResultUtil getPageList(Integer pageNum, Integer pageSize, String username, Long roleId,
                                  String description, String ipAddress, String createTime) {
         PageHelper.startPage(pageNum, pageSize);
         PageUtil pageUtil = PageUtil.pageInfo(mapper.getLogList(username, roleId, description, ipAddress, createTime));

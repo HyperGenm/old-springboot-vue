@@ -61,10 +61,9 @@
         methods: {
             submit() {
                 let that = this;
-                let url = this.handleType === 'add' ? 'sysRoleAdd' : 'sysRoleUpdate';
                 delete that.form['children'];
                 that.$axios({
-                    url: that.$global.URL[url],
+                    url: that.$global.URL[url]['system']['sysRole'][that.handleType],
                     method: 'post',
                     data: that.form,
                     success() {

@@ -75,9 +75,8 @@
         methods: {
             submit() {
                 let that = this;
-                let url = this.handleType === 'add' ? 'sysFunctionAdd' : 'sysFunctionUpdate';
                 that.$axios({
-                    url: that.$global.URL[url],
+                    url: that.$global.URL['system']['sysFunction'][that.handleType],
                     method: 'post',
                     data: that.form,
                     success() {

@@ -34,7 +34,7 @@ public class SysUserService extends BaseService {
      * @param allowLogin
      * @return
      */
-    public ResultUtil getUserList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
+    public ResultUtil getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtil.error("pageNum,pageSize错误");
         }

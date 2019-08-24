@@ -25,7 +25,7 @@
             let that = this;
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.sysLogGetLogList,
+                    url: that.$global.URL.system.sysLog.getPageList,
                     data: {
                         username: '',
                         roleId: '',
@@ -65,7 +65,7 @@
         mounted() {
             let that = this;
             this.$axios({
-                url: that.$global.URL.sysRoleGetList,
+                url: that.$global.URL.system.sysRole.getList,
                 success(data) {
                     let options = [];
                     data.forEach((value) => {

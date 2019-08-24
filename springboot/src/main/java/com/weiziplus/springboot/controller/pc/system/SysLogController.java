@@ -25,7 +25,7 @@ public class SysLogController {
 
     @GetMapping("/getLogList")
     @SystemLog(description = "查看系统日志")
-    public ResultUtil getLogList(
+    public ResultUtil getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,
@@ -33,6 +33,6 @@ public class SysLogController {
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "ipAddress", required = false) String ipAddress,
             @RequestParam(value = "createTime", required = false) String createTime) {
-        return service.getLogList(pageNum, pageSize, username, roleId, description, ipAddress, createTime);
+        return service.getPageList(pageNum, pageSize, username, roleId, description, ipAddress, createTime);
     }
 }

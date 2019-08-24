@@ -53,7 +53,7 @@
                     label: 'title'
                 },
                 tableDataRequest: {
-                    url: that.$global.URL.sysFunctionGetList,
+                    url: that.$global.URL.system.sysFunction.getList,
                     data: {
                         parentId: 0
                     }
@@ -146,7 +146,7 @@
             getAllFunctionTreeNotButton() {
                 let that = this;
                 this.$axios({
-                    url: that.$global.URL.sysFunctionGetAllFunctionTreeNotButton,
+                    url: that.$global.URL.system.sysFunction.getAllFunctionTreeNotButton,
                     success(data) {
                         that.data = data;
                         that.$nextTick(() => {
@@ -171,7 +171,7 @@
                     message: '确定删除，该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.sysFunctionDelete,
+                            url: that.$global.URL.system.sysFunction.delete,
                             method: 'post',
                             data: {
                                 ids

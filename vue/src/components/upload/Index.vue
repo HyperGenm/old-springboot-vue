@@ -2,11 +2,10 @@
     <div class="upload">
         <el-upload
                 ref="upload"
-                :action="action"
+                :action="$global.GLOBAL.base_url + action"
                 :headers="headers"
                 :multiple="multiple"
                 :show-file-list="showFileList"
-                :drag="drag"
                 :on-preview="onPreview"
                 :on-remove="onRemove"
                 :on-success="onSuccess"
@@ -14,16 +13,14 @@
                 :before-upload="beforeUpload"
                 :list-type="listType"
                 :auto-upload="autoUpload"
-                :file-list="newFileList"
                 :limit="limit"
                 :on-exceed="onExceed"
                 :accept="accept">
             <el-button size="small" type="primary">点击上传</el-button>
+            <el-button v-if="!autoUpload" size="small" type="success"
+                       @click.stop="submitUpload">上传到服务器
+            </el-button>
         </el-upload>
-        <el-button v-if="!autoUpload" style="margin-top: 10px;" size="small"
-                   type="success" @click="submitUpload">
-            上传到服务器
-        </el-button>
         <div slot="tip" class="el-upload__tip">{{tip}}</div>
         <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl">
@@ -43,9 +40,9 @@
             headers: {
                 type: Object,
                 default() {
-                    let that = this;
+                    let token = this.$store.state.token;
                     return {
-                        'token': that.$store.state.token || ''
+                        'token': token || ''
                     }
                 }
             },
@@ -59,11 +56,6 @@
                 type: Boolean,
                 default: true
             },
-            //是否启用拖拽上传
-            drag: {
-                type: Boolean,
-                default: false
-            },
             //文件列表的类型
             listType: {
                 type: String,
@@ -72,7 +64,7 @@
             //是否在文件选择后立即上传
             autoUpload: {
                 type: Boolean,
-                default: true
+                default: false
             },
             //允许的最大上传个数
             limit: {
@@ -93,21 +85,10 @@
             maxSize: {
                 type: Number,
                 default: 2097152
-            },
-            //文件列表******************************必填
-            fileList: {
-                type: Array
-            }
-        },
-        watch: {
-            fileList(data) {
-                this.newFileList = data;
             }
         },
         data() {
             return {
-                //上传的文件列表
-                newFileList: this.fileList,
                 dialogImageUrl: '',
                 dialogVisible: false
             }
@@ -130,7 +111,14 @@
              * @param fileList
              */
             onRemove(file, fileList) {
-                this.$emit('update:fileList', fileList);
+                let successArr = [];
+                fileList.forEach(value => {
+                    let {response} = value;
+                    if (response) {
+                        successArr.push(response['data']);
+                    }
+                });
+                this.$emit('remove', successArr);
             },
             /**
              * 文件上传成功
@@ -153,16 +141,23 @@
                 }
                 if (200 !== res['code']) {
                     this.$globalFun.errorMsg(res['msg']);
-                    let uid = file['uid'];
-                    for (let i = 0; i < fileList.length; i++) {
-                        let _uid = fileList[i]['uid'];
-                        if (uid === _uid) {
-                            fileList.splice(i, 1);
-                            break;
-                        }
-                    }
+                    let that = this;
+                    this.$nextTick(() => {
+                        that.$refs['upload'].clearFiles();
+                    });
+                    //有一张失败，全部清空
+                    fileList = [];
+                    return;
                 }
-                this.$emit('update:fileList', fileList);
+                ////////////////////////////有bug
+                let successArr = [];
+                fileList.forEach(value => {
+                    let {response} = value;
+                    if (response) {
+                        successArr.push(response['data']);
+                    }
+                });
+                this.$emit('success', successArr);
             },
             /**
              * 文件上传失败
@@ -195,7 +190,7 @@
                 //无法识别文件类型
                 if (null == type || '' === type) {
                     this.$globalFun.errorMsg('图片文件格式不正确');
-                    console.log('图片上传文件格式不正确file:', file);
+                    console.warn('图片上传文件格式不正确file:', file);
                     return false;
                 }
                 //如果存在该类型
@@ -233,7 +228,7 @@
                 //如果文件格式不正确
                 if (!flag) {
                     this.$globalFun.errorMsg('图片文件格式不正确');
-                    console.log('图片上传文件格式不正确file:', file);
+                    console.warn('图片上传文件格式不正确file:', file);
                     return false;
                 }
                 //向父组件抛出beforeUpload---接受回调

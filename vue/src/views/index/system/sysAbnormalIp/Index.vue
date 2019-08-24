@@ -22,7 +22,7 @@
                 || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.sysAbnormalIpGetPageList,
+                    url: that.$global.URL.system.sysAbnormalIp.getPageList,
                     data: {}
                 },
                 tableColumns: [
@@ -53,7 +53,7 @@
                     message: '是否将改ip添加到黑名单',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.ipFilterAdd,
+                            url: that.$global.URL.dataDictionary.ipFilter.add,
                             method: 'post',
                             data: {
                                 ip,

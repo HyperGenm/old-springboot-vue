@@ -43,7 +43,6 @@ public class ParamsFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        System.out.println(requestUrl);
         filterChain.doFilter(new ParamsHttpServletRequestWrapper((HttpServletRequest) servletRequest), servletResponse);
     }
 

@@ -47,7 +47,7 @@
                 || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.sysUserGetUserList,
+                    url: that.$global.URL.system.sysUser.getPageList,
                     data: {
                         userName: '',
                         allowLogin: '',
@@ -192,7 +192,7 @@
         mounted() {
             let that = this;
             this.$axios({
-                url: that.$global.URL.sysRoleGetList,
+                url: that.$global.URL.system.sysRole.getList,
                 success(data) {
                     let options = [];
                     data.forEach((value) => {
@@ -212,7 +212,7 @@
                     message: '确定删除,该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.sysUserDelete,
+                            url: that.$global.URL.system.sysUser.delete,
                             method: 'post',
                             data: {
                                 ids
@@ -231,7 +231,7 @@
                     message: '确定解封该账号,该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.sysUserRelieveSuspend,
+                            url: that.$global.URL.system.sysUser.relieveSuspend,
                             method: 'post',
                             data: {
                                 userId: id
@@ -263,7 +263,7 @@
                                     return;
                                 }
                                 that.$axios({
-                                    url: that.$global.URL.sysUserResetUserPassword,
+                                    url: that.$global.URL.system.sysUser.resetUserPassword,
                                     method: 'post',
                                     data: {
                                         userId: row.id,

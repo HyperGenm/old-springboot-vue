@@ -22,68 +22,89 @@ const URL = {
     loginValidateCode: '/getValidateCode',
     /*退出登录*/
     logout: '/logout',
-    /***********************************************************************系统管理*****************/
-    /*********************功能管理*****************/
-    /*获取所有功能菜单树*/
-    sysFunctionGetAllFunctionTree: '/sysFunction/getAllFunctionTree',
-    /*获取所有功能菜单树*/
-    sysFunctionGetAllFunctionTreeNotButton: '/sysFunction/getAllFunctionTreeNotButton',
-    /*获取功能列表*/
-    sysFunctionGetList: '/sysFunction/getFunctionList',
-    /*新增功能*/
-    sysFunctionAdd: '/sysFunction/addFunction',
-    /*修改功能*/
-    sysFunctionUpdate: '/sysFunction/updateFunction',
-    /*删除功能*/
-    sysFunctionDelete: '/sysFunction/deleteFunction',
-    /*********************角色管理*****************/
-    /*获取角色树形列表*/
-    sysRoleGetRoleTree: '/sysRole/getRoleTree',
-    /*获取角色所有功能列表*/
-    sysRoleGetList: '/sysRole/getRoleList',
-    /*获取角色的功能列表*/
-    sysRoleGetRoleFunList: '/sysRole/getRoleFunList',
-    /*新增角色功能*/
-    sysRoleAddRoleFun: '/sysRole/addRoleFun',
-    /*新增角色*/
-    sysRoleAdd: '/sysRole/addRole',
-    /*修改角色*/
-    sysRoleUpdate: '/sysRole/updateRole',
-    /*删除角色*/
-    sysRoleDelete: '/sysRole/deleteRole',
-    /*改变角色状态*/
-    sysRoleChangeRoleIsStop: '/sysRole/changeRoleIsStop',
-    /*更新角色功能*/
-    sysRoleUpdateUserRole: '/sysUser/updateUserRole',
-    /*********************用户管理*****************/
-    /*获取用户列表*/
-    sysUserGetUserList: '/sysUser/getUserList',
-    /*新增用户*/
-    sysUserAdd: '/sysUser/addUser',
-    /*更新用户*/
-    sysUserUpdate: '/sysUser/updateUser',
-    /*删除用户*/
-    sysUserDelete: '/sysUser/deleteUser',
-    /*修改密码密码*/
-    sysUserUpdateUserPassword: '/sysUser/updatePassword',
-    /*重置用户密码*/
-    sysUserResetUserPassword: '/sysUser/resetUserPassword',
-    /*解除封号*/
-    sysUserRelieveSuspend: '/sysUser/relieveSuspend',
-    /*********************日志管理*****************/
-    /*查看日志列表*/
-    sysLogGetLogList: '/sysLog/getLogList',
-    /*********************异常ip管理*****************/
-    /*查看分页数据*/
-    sysAbnormalIpGetPageList: '/sysAbnormalIp/getPageList',
-    /***********************************************************************字典管理*****************/
-    /*********************ip名单*****************/
-    /*分页数据*/
-    ipFilterGetPageList: '/dataDictionary/ipFilter/getPageList',
-    /*新增ip*/
-    ipFilterAdd: '/dataDictionary/ipFilter/add',
-    /*删除ip*/
-    ipFilterDeleteIp: '/dataDictionary/ipFilter/delete',
+    /*************系统管理*****************/
+    system: {
+        /*********************功能管理*****************/
+        sysFunction: {
+            /*获取所有功能菜单树*/
+            getAllFunctionTree: '/sysFunction/getAllFunctionTree',
+            /*获取所有功能菜单树*/
+            getAllFunctionTreeNotButton: '/sysFunction/getAllFunctionTreeNotButton',
+            /*获取功能列表*/
+            getList: '/sysFunction/getFunctionList',
+            /*新增功能*/
+            add: '/sysFunction/addFunction',
+            /*修改功能*/
+            update: '/sysFunction/updateFunction',
+            /*删除功能*/
+            delete: '/sysFunction/deleteFunction',
+        },
+        /*********************角色管理*****************/
+        sysRole: {
+            /*获取角色树形列表*/
+            getRoleTree: '/sysRole/getRoleTree',
+            /*获取角色所有功能列表*/
+            getList: '/sysRole/getRoleList',
+            /*获取角色的功能列表*/
+            getRoleFunList: '/sysRole/getRoleFunList',
+            /*新增角色功能*/
+            addRoleFun: '/sysRole/addRoleFun',
+            /*新增角色*/
+            add: '/sysRole/addRole',
+            /*修改角色*/
+            update: '/sysRole/updateRole',
+            /*删除角色*/
+            delete: '/sysRole/deleteRole',
+            /*改变角色状态*/
+            changeRoleIsStop: '/sysRole/changeRoleIsStop',
+            /*更新角色功能*/
+            updateUserRole: '/sysUser/updateUserRole',
+        },
+        /*********************用户管理*****************/
+        sysUser: {
+            /*获取用户列表*/
+            getPageList: '/sysUser/getPageList',
+            /*新增用户*/
+            add: '/sysUser/addUser',
+            /*更新用户*/
+            update: '/sysUser/updateUser',
+            /*删除用户*/
+            delete: '/sysUser/deleteUser',
+            /*修改密码密码*/
+            updateUserPassword: '/sysUser/updatePassword',
+            /*重置用户密码*/
+            resetUserPassword: '/sysUser/resetUserPassword',
+            /*解除封号*/
+            relieveSuspend: '/sysUser/relieveSuspend',
+        },
+        /*********************日志管理*****************/
+        sysLog: {
+            /*查看日志列表*/
+            getPageList: '/sysLog/getPageList',
+        },
+        /*********************异常ip管理*****************/
+        sysAbnormalIp: {
+            /*查看分页数据*/
+            getPageList: '/sysAbnormalIp/getPageList',
+        }
+    },
+    /********字典管理*****************/
+    dataDictionary: {
+        /*********************ip名单*****************/
+        ipFilter: {
+            /*分页数据*/
+            getPageList: '/dataDictionary/ipFilter/getPageList',
+            /*新增ip*/
+            add: '/dataDictionary/ipFilter/add',
+            /*删除ip*/
+            delete: '/dataDictionary/ipFilter/delete'
+        }
+    },
+    /********常用工具*****************/
+    tools: {
+        /*文件上传*/
+        upload: '/tools/upload'
+    }
 };
 
 export default {

@@ -39,7 +39,7 @@
             return {
                 type: 'white',
                 tableDataRequest: {
-                    url: that.$global.URL.ipFilterGetPageList,
+                    url: that.$global.URL.dataDictionary.ipFilter.getPageList,
                     data: {
                         type: that.type
                     }
@@ -96,7 +96,7 @@
                         }
                         that.$axios({
                             method: 'post',
-                            url: that.$global.URL.ipFilterAdd,
+                            url: that.$global.URL.dataDictionary.ipFilter.add,
                             data: {
                                 ip: value,
                                 type: that.type
@@ -116,7 +116,7 @@
                     message: '确定删除,该操作无法撤销',
                     confirm() {
                         that.$axios({
-                            url: that.$global.URL.ipFilterDeleteIp,
+                            url: that.$global.URL.dataDictionary.ipFilter.delete,
                             method: 'post',
                             data: {
                                 id,

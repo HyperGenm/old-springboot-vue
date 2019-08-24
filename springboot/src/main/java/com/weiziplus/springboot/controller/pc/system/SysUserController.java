@@ -35,9 +35,9 @@ public class SysUserController {
      * @param createTime
      * @return
      */
-    @GetMapping("/getUserList")
+    @GetMapping("/getPageList")
     @SystemLog(description = "查看用户列表")
-    public ResultUtil getUserList(
+    public ResultUtil getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,
@@ -45,7 +45,7 @@ public class SysUserController {
             @RequestParam(value = "allowLogin", required = false) Integer allowLogin,
             @RequestParam(value = "lastActiveTime", required = false) String lastActiveTime,
             @RequestParam(value = "createTime", required = false) String createTime) {
-        return service.getUserList(pageNum, pageSize, userName, roleId, allowLogin, lastActiveTime, createTime);
+        return service.getPageList(pageNum, pageSize, userName, roleId, allowLogin, lastActiveTime, createTime);
     }
 
     /**
