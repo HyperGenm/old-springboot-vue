@@ -108,7 +108,11 @@
             handleRouter(data) {
                 let that = this;
                 let routers = [];
+                let haveHomePage = false;
                 data.forEach((value) => {
+                    if ('home' === value['name']) {
+                        haveHomePage = true;
+                    }
                     let router = {};
                     router['path'] = "/" + value.name;
                     router['name'] = value.name;
@@ -137,7 +141,7 @@
                     routersTree: data
                 });
                 this.$router.addRoutes(parentRouters);
-                this.$router.push('/');
+                this.$router.push(haveHomePage ? '/home' : '/');
             },
             childrenRouter(parentName, data) {
                 let routers = [];

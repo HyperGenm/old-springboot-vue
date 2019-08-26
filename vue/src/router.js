@@ -26,7 +26,11 @@ router.beforeEach((to, from, next) => {
     if ((null == from.name || '' === from.name) && (null == to.name || '' === to.name)) {
         let routers = store.state.routers.routers;
         let children = [];
+        let haveHomePage = false;
         routers.forEach((value) => {
+            if ('home' === value['name']) {
+                haveHomePage = true;
+            }
             let router = {};
             router['path'] = value.path;
             router['name'] = value.name;
@@ -45,7 +49,7 @@ router.beforeEach((to, from, next) => {
             children
         }];
         router.addRoutes(parentRouters);
-        next('/');
+        next(haveHomePage ? '/home' : '/');
         return;
     }
     next();

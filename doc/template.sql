@@ -117,10 +117,11 @@ INSERT INTO `sys_function` VALUES (13, 4, 'sysUser_update', 'update', '修改', 
 INSERT INTO `sys_function` VALUES (14, 4, 'sysUser_delete', 'delete', '删除', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
 INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_role', 'role', '角色', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
 INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_resetPwd', 'resetPwd', '重置密码', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
-INSERT INTO `sys_function` VALUES (21, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', 1, '', 4, '', '2019-05-10 15:58:15');
-INSERT INTO `sys_function` VALUES (22, 1, 'sysLog', 'sysLog', '日志管理', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
-INSERT INTO `sys_function` VALUES (25, 1, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', 0, '', 0, '', '2019-08-05 10:13:42');
-INSERT INTO `sys_function` VALUES (27, 1, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', 0, '', 0, '', '2019-08-05 14:39:33');
+INSERT INTO `sys_function` VALUES (17, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', 1, '', 4, '', '2019-05-10 15:58:15');
+INSERT INTO `sys_function` VALUES (18, 1, 'sysLog', 'sysLog', '日志管理', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (19, 1, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', 0, '', 0, '', '2019-08-05 10:13:42');
+INSERT INTO `sys_function` VALUES (20, 1, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', 0, '', 0, '', '2019-08-05 14:39:33');
+INSERT INTO `sys_function` VALUES (21, 0, 'home', 'home', '首页', 0, 'el-icon-s-home', 0, '后台首页', '2019-08-26 14:13:35' );
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -192,24 +193,25 @@ INSERT INTO `sys_role_function` VALUES (105, 666, 1);
 INSERT INTO `sys_role_function` VALUES (106, 666, 4);
 INSERT INTO `sys_role_function` VALUES (206, 1, 1);
 INSERT INTO `sys_role_function` VALUES (207, 1, 2);
+INSERT INTO `sys_role_function` VALUES (212, 1, 3);
+INSERT INTO `sys_role_function` VALUES (218, 1, 4);
 INSERT INTO `sys_role_function` VALUES (208, 1, 5);
 INSERT INTO `sys_role_function` VALUES (209, 1, 6);
 INSERT INTO `sys_role_function` VALUES (210, 1, 7);
-INSERT INTO `sys_role_function` VALUES (211, 1, 27);
-INSERT INTO `sys_role_function` VALUES (212, 1, 3);
 INSERT INTO `sys_role_function` VALUES (213, 1, 8);
 INSERT INTO `sys_role_function` VALUES (214, 1, 9);
 INSERT INTO `sys_role_function` VALUES (215, 1, 10);
 INSERT INTO `sys_role_function` VALUES (216, 1, 11);
-INSERT INTO `sys_role_function` VALUES (217, 1, 21);
-INSERT INTO `sys_role_function` VALUES (218, 1, 4);
 INSERT INTO `sys_role_function` VALUES (219, 1, 12);
 INSERT INTO `sys_role_function` VALUES (220, 1, 13);
 INSERT INTO `sys_role_function` VALUES (221, 1, 14);
 INSERT INTO `sys_role_function` VALUES (222, 1, 15);
 INSERT INTO `sys_role_function` VALUES (223, 1, 16);
-INSERT INTO `sys_role_function` VALUES (224, 1, 22);
-INSERT INTO `sys_role_function` VALUES (226, 1, 25);
+INSERT INTO `sys_role_function` VALUES (211, 1, 17);
+INSERT INTO `sys_role_function` VALUES (217, 1, 18);
+INSERT INTO `sys_role_function` VALUES (224, 1, 19);
+INSERT INTO `sys_role_function` VALUES (226, 1, 20);
+INSERT INTO `sys_role_function` VALUES (226, 1, 21);
 
 -- ----------------------------
 -- Table structure for sys_user
