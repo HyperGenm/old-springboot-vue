@@ -10,8 +10,6 @@ import Qs from 'qs';
 import {Loading} from 'element-ui';
 
 /**axios默认配置*/
-//设置超时时间，规定时间内没有响应则执行失败回调
-axios.defaults.timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT);
 axios.defaults.withCredentials = true;
 
 /**
@@ -23,6 +21,7 @@ axios.defaults.withCredentials = true;
  * @param method 请求方式
  * @param headers 请求头
  * @param data 请求参数
+ * @param timeout 请求超时时间---某些请求需要单独设置超时时间
  * @param success 成功回调
  * @param fail 失败回调
  * @returns {Promise<any>}
@@ -35,6 +34,7 @@ export function weiAxios({
                              method = 'get',
                              header = 'application/x-www-form-urlencoded; charset=UTF-8',
                              data = {},
+                             timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT),
                              success = function () {
                              },
                              fail = function () {
@@ -56,7 +56,8 @@ export function weiAxios({
             headers: {
                 'Content-Type': header,
                 'token': that.$store.state.token || ''
-            }
+            },
+            timeout
         };
         /***请求的url是否为全部url***/
         if (allUrl) {

@@ -157,10 +157,6 @@
     /**引入参数处理*/
     import Qs from 'qs';
 
-    /**axios默认配置*/
-    //设置超时时间，规定时间内没有响应则执行失败回调
-    axios.defaults.timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT);
-
     export default {
         name: "Index",
         props: {
@@ -243,13 +239,15 @@
                 let _url = that.tableDataRequest.url;
                 let _method = that.tableDataRequest.method || 'get';
                 let _header = that.tableDataRequest.header || 'application/x-www-form-urlencoded; charset=UTF-8';
+                let _timeout = that.tableDataRequest.timeout || parseInt(process.env.VUE_APP_AXIOS_TIMEOUT);
                 let _axios = {
                     url: that.$global.GLOBAL.base_url + _url,
                     method: _method,
                     headers: {
                         'Content-Type': _header,
                         'token': that.$store.state.token || ''
-                    }
+                    },
+                    timeout: _timeout
                 };
                 let _data = that.tableDataRequest.data || {};
                 _data['pageNum'] = that.pageNum;
