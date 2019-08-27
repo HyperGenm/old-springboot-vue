@@ -4,9 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.models.SysUser;
-import com.weiziplus.springboot.utils.*;
-import com.weiziplus.springboot.utils.token.AdminTokenUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
+import com.weiziplus.springboot.util.*;
+import com.weiziplus.springboot.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +34,13 @@ public class SysUserService extends BaseService {
      * @param allowLogin
      * @return
      */
-    public ResultUtil getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
+    public ResultUtils getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
-            return ResultUtil.error("pageNum,pageSize错误");
+            return ResultUtils.error("pageNum,pageSize错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtil pageUtil = PageUtil.pageInfo(mapper.getUserList(userName, roleId, allowLogin, lastActiveTime, createTime));
-        return ResultUtil.success(pageUtil);
+        PageUtils pageUtil = PageUtils.pageInfo(mapper.getUserList(userName, roleId, allowLogin, lastActiveTime, createTime));
+        return ResultUtils.success(pageUtil);
     }
 
     /**
@@ -49,25 +49,25 @@ public class SysUserService extends BaseService {
      * @param sysUser
      * @return
      */
-    public ResultUtil addUser(SysUser sysUser) {
-        if (ValidateUtil.notUsername(sysUser.getUsername())) {
-            return ResultUtil.error("用户名不能包含特殊字符");
+    public ResultUtils addUser(SysUser sysUser) {
+        if (ValidateUtils.notUsername(sysUser.getUsername())) {
+            return ResultUtils.error("用户名不能包含特殊字符");
         }
-        if (ValidateUtil.notPassword(sysUser.getPassword())) {
-            return ResultUtil.error("密码为6-20位大小写和数字");
+        if (ValidateUtils.notPassword(sysUser.getPassword())) {
+            return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        if (ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResultUtil.error("真实姓名格式错误");
+        if (ValidateUtils.notRealName(sysUser.getRealName())) {
+            return ResultUtils.error("真实姓名格式错误");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user) {
-            return ResultUtil.error("用户名已存在");
+            return ResultUtils.error("用户名已存在");
         }
-        sysUser.setPassword(Md5Util.encode(sysUser.getPassword()));
-        sysUser.setCreateTime(DateUtil.getNowDateTime());
+        sysUser.setPassword(Md5Utils.encode(sysUser.getPassword()));
+        sysUser.setCreateTime(DateUtils.getNowDateTime());
         sysUser.setSuspendNum(null);
         sysUser.setRoleId(null);
-        return ResultUtil.success(baseInsert(sysUser));
+        return ResultUtils.success(baseInsert(sysUser));
     }
 
     /**
@@ -76,33 +76,33 @@ public class SysUserService extends BaseService {
      * @param sysUser
      * @return
      */
-    public ResultUtil updateUser(HttpServletRequest request, SysUser sysUser) {
-        if (ValidateUtil.notUsername(sysUser.getUsername())) {
-            return ResultUtil.error("用户名不能包含特殊字符");
+    public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
+        if (ValidateUtils.notUsername(sysUser.getUsername())) {
+            return ResultUtils.error("用户名不能包含特殊字符");
         }
-        if (ValidateUtil.notRealName(sysUser.getRealName())) {
-            return ResultUtil.error("真实姓名格式错误");
+        if (ValidateUtils.notRealName(sysUser.getRealName())) {
+            return ResultUtils.error("真实姓名格式错误");
         }
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             if (null != sysUser.getSuspendNum() || GlobalConfig.ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
                 mapper.suspendSysUser(nowUserId);
-                AdminTokenUtil.deleteToken(nowUserId);
-                return ResultUtil.errorSuspend();
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
             }
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
         if (null != user && !sysUser.getId().equals(user.getId())) {
-            return ResultUtil.error("用户名已存在");
+            return ResultUtils.error("用户名已存在");
         }
         if (null != user && GlobalConfig.ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
-            return ResultUtil.error("用户封号中，不能修改状态");
+            return ResultUtils.error("用户封号中，不能修改状态");
         }
         sysUser.setAllowLogin(null);
         sysUser.setPassword(null);
         sysUser.setRoleId(null);
         sysUser.setSuspendNum(null);
-        return ResultUtil.success(baseUpdate(sysUser));
+        return ResultUtils.success(baseUpdate(sysUser));
     }
 
     /**
@@ -111,22 +111,22 @@ public class SysUserService extends BaseService {
      * @param ids
      * @return
      */
-    public ResultUtil deleteUser(HttpServletRequest request, Long[] ids) {
+    public ResultUtils deleteUser(HttpServletRequest request, Long[] ids) {
         if (null == ids || 0 >= ids.length) {
-            return ResultUtil.error("ids为空");
+            return ResultUtils.error("ids为空");
         }
         for (Long id : ids) {
             if (GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
-                Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+                Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
                 if (GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                    return ResultUtil.error("不能删除超级管理员");
+                    return ResultUtils.error("不能删除超级管理员");
                 }
                 mapper.suspendSysUser(nowUserId);
-                AdminTokenUtil.deleteToken(nowUserId);
-                return ResultUtil.errorSuspend();
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
             }
         }
-        return ResultUtil.success(baseDeleteByClassAndIds(SysUser.class, ids));
+        return ResultUtils.success(baseDeleteByClassAndIds(SysUser.class, ids));
     }
 
     /**
@@ -136,29 +136,29 @@ public class SysUserService extends BaseService {
      * @param roleId
      * @return
      */
-    public ResultUtil updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
+    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
         if (null == userId || 0 >= userId) {
-            return ResultUtil.error("userId不能为空");
+            return ResultUtils.error("userId不能为空");
         }
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                 mapper.suspendSysUser(nowUserId);
-                AdminTokenUtil.deleteToken(nowUserId);
-                return ResultUtil.errorSuspend();
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
             } else {
-                return ResultUtil.error("不能修改超级管理员的角色");
+                return ResultUtils.error("不能修改超级管理员的角色");
             }
         }
         if (null == roleId || 0 > roleId) {
-            return ResultUtil.error("roleId错误");
+            return ResultUtils.error("roleId错误");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             mapper.suspendSysUser(nowUserId);
-            AdminTokenUtil.deleteToken(nowUserId);
-            return ResultUtil.errorSuspend();
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
-        return ResultUtil.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
+        return ResultUtils.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
     }
 
     /**
@@ -169,19 +169,19 @@ public class SysUserService extends BaseService {
      * @param newPwd
      * @return
      */
-    public ResultUtil updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
-        if (ValidateUtil.notPassword(oldPwd) || ValidateUtil.notPassword(newPwd)) {
-            return ResultUtil.error("密码为6-20位大小写和数字");
+    public ResultUtils updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
+        if (ValidateUtils.notPassword(oldPwd) || ValidateUtils.notPassword(newPwd)) {
+            return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         Map<String, Object> map = baseFindByClassAndId(SysUser.class, userId);
         String passwordFiled = "password";
-        if (null == map || null == map.get(passwordFiled) || !Md5Util.encode(oldPwd).equals(map.get(passwordFiled).toString())) {
-            return ResultUtil.error("原密码错误");
+        if (null == map || null == map.get(passwordFiled) || !Md5Utils.encode(oldPwd).equals(map.get(passwordFiled).toString())) {
+            return ResultUtils.error("原密码错误");
         }
-        mapper.resetUserPassword(userId, Md5Util.encode(newPwd));
-        AdminTokenUtil.deleteToken(userId);
-        return ResultUtil.success();
+        mapper.resetUserPassword(userId, Md5Utils.encode(newPwd));
+        AdminTokenUtils.deleteToken(userId);
+        return ResultUtils.success();
     }
 
     /**
@@ -192,21 +192,21 @@ public class SysUserService extends BaseService {
      * @param password
      * @return
      */
-    public ResultUtil resetUserPassword(HttpServletRequest request, Long userId, String password) {
+    public ResultUtils resetUserPassword(HttpServletRequest request, Long userId, String password) {
         if (null == userId || 0 > userId) {
-            return ResultUtil.error("id不能为空");
+            return ResultUtils.error("id不能为空");
         }
-        if (ValidateUtil.notPassword(password)) {
-            return ResultUtil.error("密码为6-20位大小写和数字");
+        if (ValidateUtils.notPassword(password)) {
+            return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             mapper.suspendSysUser(nowUserId);
-            AdminTokenUtil.deleteToken(nowUserId);
-            return ResultUtil.errorSuspend();
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
-        String newPwd = Md5Util.encode(password);
-        return ResultUtil.success(mapper.resetUserPassword(userId, newPwd));
+        String newPwd = Md5Utils.encode(password);
+        return ResultUtils.success(mapper.resetUserPassword(userId, newPwd));
     }
 
     /**
@@ -216,16 +216,16 @@ public class SysUserService extends BaseService {
      * @param userId
      * @return
      */
-    public ResultUtil relieveSuspend(HttpServletRequest request, Long userId) {
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+    public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             mapper.suspendSysUser(nowUserId);
-            AdminTokenUtil.deleteToken(nowUserId);
-            return ResultUtil.errorSuspend();
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
         if (null == userId || 0 >= userId) {
-            return ResultUtil.error("userId错误");
+            return ResultUtils.error("userId错误");
         }
-        return ResultUtil.success(mapper.relieveSuspend(userId));
+        return ResultUtils.success(mapper.relieveSuspend(userId));
     }
 }

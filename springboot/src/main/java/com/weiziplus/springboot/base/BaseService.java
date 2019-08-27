@@ -1,6 +1,6 @@
 package com.weiziplus.springboot.base;
 
-import com.weiziplus.springboot.utils.StringUtil;
+import com.weiziplus.springboot.util.ToolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
@@ -271,7 +271,7 @@ public class BaseService {
      * @return
      */
     protected int baseDeleteByClassAndId(Class nowClass, String id) {
-        if (null == nowClass || null == id || StringUtil.isBlank(id)) {
+        if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
             return 0;
         }
         return mapper.deleteById(getTableName(nowClass), id);
@@ -337,7 +337,7 @@ public class BaseService {
      * @return
      */
     protected Map<String, Object> baseFindByClassAndId(Class nowClass, String id) {
-        if (null == nowClass || null == id || StringUtil.isBlank(id)) {
+        if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
             return null;
         }
         return mapper.findById(getTableName(nowClass), id);

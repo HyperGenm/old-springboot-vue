@@ -1,27 +1,24 @@
-package com.weiziplus.springboot.utils.redis;
+package com.weiziplus.springboot.util.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * StringRedisTemplate常用工具类
- *
  * @author wanglongwei
- * @data 2019/4/22 16:10
+ * @data 2019/7/19 10:52
  */
 @Component
-public class StringRedisUtil {
+public class RedisUtils {
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    private static StringRedisUtil that;
+    private static RedisUtils that;
 
     @PostConstruct
     protected void init() {
@@ -29,16 +26,16 @@ public class StringRedisUtil {
     }
 
     /**
-     * 根据key和value存入redis---默认3分钟过期
+     * 根据key和value存入redis---默认一小时过期
      *
      * @param key
      * @param value
      */
-    public static void set(String key, String value) {
+    public static void set(String key, Object value) {
         if (null == key) {
             return;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, 3 * 60L, TimeUnit.SECONDS);
+        that.redisTemplate.opsForValue().set(key, value, 60 * 60L, TimeUnit.SECONDS);
     }
 
     /**
@@ -48,14 +45,14 @@ public class StringRedisUtil {
      * @param value
      * @param timeout 过期时间：单位秒
      */
-    public static void set(String key, String value, Long timeout) {
+    public static void set(String key, Object value, Long timeout) {
         if (null == key) {
             return;
         }
         if (null == timeout) {
-            timeout = 3 * 60L;
+            timeout = 60 * 60L;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+        that.redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -64,11 +61,11 @@ public class StringRedisUtil {
      * @param key
      * @param value
      */
-    public static void setNotChangeTimeOut(String key, String value) {
+    public static void setNotChangeTimeOut(String key, Object value) {
         if (null == key) {
             return;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, 0L);
+        that.redisTemplate.opsForValue().set(key, value, 0L);
     }
 
     /**
@@ -77,11 +74,11 @@ public class StringRedisUtil {
      * @param key
      * @return
      */
-    public static String get(String key) {
+    public static Object get(String key) {
         if (null == key) {
             return null;
         }
-        return that.stringRedisTemplate.opsForValue().get(key);
+        return that.redisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -91,11 +88,24 @@ public class StringRedisUtil {
      * @param timeout 过期时间：单位秒
      * @return
      */
-    public static boolean expire(String key, Long timeout) {
-        if (null == key) {
+    public static boolean setExpire(String key, Long timeout) {
+        if (null == key || null == timeout) {
             return false;
         }
-        return that.stringRedisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+        return that.redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 根据key获取内容
+     *
+     * @param key
+     * @return
+     */
+    public static Long getExpire(String key) {
+        if (null == key) {
+            return null;
+        }
+        return that.redisTemplate.getExpire(key);
     }
 
     /**
@@ -108,7 +118,7 @@ public class StringRedisUtil {
         if (null == key) {
             return false;
         }
-        return that.stringRedisTemplate.hasKey(key);
+        return that.redisTemplate.hasKey(key);
     }
 
     /**
@@ -121,7 +131,7 @@ public class StringRedisUtil {
         if (null == key) {
             return false;
         }
-        return that.stringRedisTemplate.delete(key);
+        return that.redisTemplate.delete(key);
     }
 
     /**
@@ -130,11 +140,11 @@ public class StringRedisUtil {
      * @param keys
      * @return
      */
-    public static Long delete(Collection<String> keys) {
+    public static Long delete(Set<String> keys) {
         if (null == keys) {
             return null;
         }
-        return that.stringRedisTemplate.delete(keys);
+        return that.redisTemplate.delete(keys);
     }
 
     /**
@@ -147,13 +157,13 @@ public class StringRedisUtil {
         if (null == key) {
             return null;
         }
-        Set<String> keys = that.stringRedisTemplate.keys(key + "*");
+        Set<String> keys = that.redisTemplate.keys(key + "*");
         if (null == keys || 0 >= keys.size()) {
             return 0L;
         }
-        Long delete = that.stringRedisTemplate.delete(keys);
+        Long delete = that.redisTemplate.delete(keys);
         for (String k : keys) {
-            that.stringRedisTemplate.expire(k, 3L, TimeUnit.SECONDS);
+            that.redisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
         return delete;
     }

@@ -1,6 +1,6 @@
-package com.weiziplus.springboot.utils.token;
+package com.weiziplus.springboot.util.token;
 
-import com.weiziplus.springboot.utils.redis.StringRedisUtil;
+import com.weiziplus.springboot.util.redis.StringRedisUtils;
 
 /**
  * web用户token配置
@@ -8,7 +8,7 @@ import com.weiziplus.springboot.utils.redis.StringRedisUtil;
  * @author wanglongwei
  * @data 2019/5/8 9:01
  */
-public class WebTokenUtil {
+public class WebTokenUtils {
     /**
      * web用户
      */
@@ -26,7 +26,7 @@ public class WebTokenUtil {
      * @return
      */
     public static String getAudienceRedisKey(Long userId) {
-        return TokenUtil.getAudienceRedisKey(AUDIENCE, userId);
+        return TokenUtils.getAudienceRedisKey(AUDIENCE, userId);
     }
 
     /**
@@ -36,7 +36,7 @@ public class WebTokenUtil {
      * @return
      */
     public static String createToken(Long userId) {
-        return TokenUtil.createToken(AUDIENCE, userId, EXPIRE_TIME);
+        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME);
     }
 
     /**
@@ -46,7 +46,7 @@ public class WebTokenUtil {
      * @return
      */
     public static Boolean updateExpireTime(Long userId) {
-        return StringRedisUtil.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
+        return StringRedisUtils.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
     }
 
     /**
@@ -56,6 +56,6 @@ public class WebTokenUtil {
      * @return
      */
     public static Boolean deleteToken(Long userId) {
-        return StringRedisUtil.delete(getAudienceRedisKey(userId));
+        return StringRedisUtils.delete(getAudienceRedisKey(userId));
     }
 }

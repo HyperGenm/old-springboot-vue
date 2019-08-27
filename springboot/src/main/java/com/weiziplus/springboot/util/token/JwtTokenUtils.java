@@ -1,6 +1,6 @@
-package com.weiziplus.springboot.utils.token;
+package com.weiziplus.springboot.util.token;
 
-import com.weiziplus.springboot.utils.StringUtil;
+import com.weiziplus.springboot.util.ToolUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,7 +14,7 @@ import java.util.Date;
  * @author wanglongwei
  * @data 2019/5/7 9:50
  */
-public class JwtTokenUtil {
+public class JwtTokenUtils {
 
     /**
      * 发行人
@@ -44,7 +44,7 @@ public class JwtTokenUtil {
                 .setIssuer(ISSUER)
                 .setAudience(audience)
                 .signWith(HS512, SECRET)
-                .setSubject(StringUtil.valueOf(userId))
+                .setSubject(ToolUtils.valueOfString(userId))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();

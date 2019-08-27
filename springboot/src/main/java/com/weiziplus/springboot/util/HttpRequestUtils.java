@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @data 2019/8/5 8:56
  */
 @Slf4j
-public class HttpRequestUtil {
+public class HttpRequestUtils {
 
     /**
      * 获取用户ip地址

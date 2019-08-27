@@ -2,7 +2,7 @@ package com.weiziplus.springboot.controller.pc.data.dictionary;
 
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.service.data.dictionary.DataDictionaryIpFilterService;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -31,7 +31,7 @@ public class DataDictionaryIpFilterController {
      * @return
      */
     @GetMapping("/getPageList")
-    public ResultUtil getPageList(
+    public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "type", defaultValue = "white") String type) {
@@ -47,7 +47,7 @@ public class DataDictionaryIpFilterController {
      * @return
      */
     @PostMapping("/add")
-    public ResultUtil add(HttpServletRequest request, String ip, String type) {
+    public ResultUtils add(HttpServletRequest request, String ip, String type) {
         return service.add(request, ip, type);
     }
 
@@ -60,7 +60,7 @@ public class DataDictionaryIpFilterController {
      * @return
      */
     @PostMapping("/delete")
-    public ResultUtil delete(HttpServletRequest request, Long id, String type) {
+    public ResultUtils delete(HttpServletRequest request, Long id, String type) {
         return service.delete(request, id, type);
     }
 }

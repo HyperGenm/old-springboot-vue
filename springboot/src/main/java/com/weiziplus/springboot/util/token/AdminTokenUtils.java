@@ -1,6 +1,6 @@
-package com.weiziplus.springboot.utils.token;
+package com.weiziplus.springboot.util.token;
 
-import com.weiziplus.springboot.utils.redis.StringRedisUtil;
+import com.weiziplus.springboot.util.redis.StringRedisUtils;
 
 /**
  * 系统用户token配置
@@ -8,7 +8,7 @@ import com.weiziplus.springboot.utils.redis.StringRedisUtil;
  * @author wanglongwei
  * @data 2019/5/7 9:53
  */
-public class AdminTokenUtil {
+public class AdminTokenUtils {
 
     /**
      * 系统用户
@@ -27,7 +27,7 @@ public class AdminTokenUtil {
      * @return
      */
     public static String getAudienceRedisKey(Long userId) {
-        return TokenUtil.getAudienceRedisKey(AUDIENCE, userId);
+        return TokenUtils.getAudienceRedisKey(AUDIENCE, userId);
     }
 
     /**
@@ -37,7 +37,7 @@ public class AdminTokenUtil {
      * @return
      */
     public static String createToken(Long userId) {
-        return TokenUtil.createToken(AUDIENCE, userId, EXPIRE_TIME);
+        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME);
     }
 
     /**
@@ -47,7 +47,7 @@ public class AdminTokenUtil {
      * @return
      */
     public static Boolean updateExpireTime(Long userId) {
-        return StringRedisUtil.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
+        return StringRedisUtils.expire(getAudienceRedisKey(userId), EXPIRE_TIME);
     }
 
     /**
@@ -57,6 +57,6 @@ public class AdminTokenUtil {
      * @return
      */
     public static Boolean deleteToken(Long userId) {
-        return StringRedisUtil.delete(getAudienceRedisKey(userId));
+        return StringRedisUtils.delete(getAudienceRedisKey(userId));
     }
 }

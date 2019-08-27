@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import com.github.pagehelper.PageInfo;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class PageUtil implements Serializable {
+public class PageUtils implements Serializable {
 
     private Integer pageNum;
 
@@ -25,9 +25,9 @@ public class PageUtil implements Serializable {
 
     private List list;
 
-    public static PageUtil pageInfo(List list) {
+    public static PageUtils pageInfo(List list) {
         PageInfo pageInfo = new PageInfo(list);
-        PageUtil pageUtil = new PageUtil();
+        PageUtils pageUtil = new PageUtils();
         pageUtil.setPageNum(pageInfo.getPageNum());
         pageUtil.setPageSize(pageInfo.getSize());
         pageUtil.setTotal(pageInfo.getTotal());

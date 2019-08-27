@@ -3,7 +3,7 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysUser;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ public class SysUserController {
      */
     @GetMapping("/getPageList")
     @SystemLog(description = "查看用户列表")
-    public ResultUtil getPageList(
+    public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,
@@ -56,7 +56,7 @@ public class SysUserController {
      */
     @PostMapping("/addUser")
     @SystemLog(description = "新增用户")
-    public ResultUtil addUser(SysUser sysUser) {
+    public ResultUtils addUser(SysUser sysUser) {
         return service.addUser(sysUser);
     }
 
@@ -68,7 +68,7 @@ public class SysUserController {
      */
     @PostMapping("/updateUser")
     @SystemLog(description = "更新用户")
-    public ResultUtil updateUser(HttpServletRequest request, SysUser sysUser) {
+    public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
         return service.updateUser(request, sysUser);
     }
 
@@ -80,7 +80,7 @@ public class SysUserController {
      */
     @PostMapping("/deleteUser")
     @SystemLog(description = "删除用户")
-    public ResultUtil deleteUser(
+    public ResultUtils deleteUser(
             HttpServletRequest request,
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
         return service.deleteUser(request, ids);
@@ -95,7 +95,7 @@ public class SysUserController {
      */
     @PostMapping("/updateUserRole")
     @SystemLog(description = "更新用户角色")
-    public ResultUtil updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
+    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
         return service.updateUserRole(request, userId, roleId);
     }
 
@@ -109,7 +109,7 @@ public class SysUserController {
      */
     @PostMapping("/updatePassword")
     @SystemLog(description = "修改密码")
-    public ResultUtil updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
+    public ResultUtils updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
         return service.updatePassword(request, oldPwd, newPwd);
     }
 
@@ -118,7 +118,7 @@ public class SysUserController {
      */
     @PostMapping("/resetUserPassword")
     @SystemLog(description = "重置用户密码")
-    public ResultUtil resetUserPassword(HttpServletRequest request, Long userId, String password) {
+    public ResultUtils resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
     }
 
@@ -127,7 +127,7 @@ public class SysUserController {
      */
     @PostMapping("/relieveSuspend")
     @SystemLog(description = "解除封号")
-    public ResultUtil relieveSuspend(HttpServletRequest request, Long userId) {
+    public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
         return service.relieveSuspend(request, userId);
     }
 }

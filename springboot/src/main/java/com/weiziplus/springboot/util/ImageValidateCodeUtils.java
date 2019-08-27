@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import java.util.Random;
  * @data 2019/5/24 8:24
  */
 @Slf4j
-public class ImageValidateCodeUtil {
+public class ImageValidateCodeUtils {
 
     /**
      * 随机的字符串

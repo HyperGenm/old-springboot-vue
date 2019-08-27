@@ -2,7 +2,7 @@ package com.weiziplus.springboot.controller.pc.tools;
 
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.service.tools.ToolsService;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +29,7 @@ public class ToolsController {
      * @return
      */
     @PostMapping("/upload")
-    public ResultUtil upload(MultipartFile file) {
+    public ResultUtils upload(MultipartFile file) {
         return service.upload(file);
     }
 }

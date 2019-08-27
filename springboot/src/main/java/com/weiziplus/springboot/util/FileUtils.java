@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import com.weiziplus.springboot.config.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import java.io.IOException;
  * @data 2019/6/20 15:45
  */
 @Slf4j
-public class FileUtil {
+public class FileUtils {
 
     /**
      * 文件上传
@@ -26,19 +26,19 @@ public class FileUtil {
             return null;
         }
         String resultPath = "";
-        if (StringUtil.notBlank(mkdir)) {
+        if (ToolUtils.notBlank(mkdir)) {
             resultPath = mkdir + File.separatorChar;
         }
         // 获取原始名字
         String fileName = file.getOriginalFilename();
         // 如果原始名字为null获取当前名字
-        if (StringUtil.isBlank(fileName)) {
+        if (ToolUtils.isBlank(fileName)) {
             fileName = file.getName();
         }
         //  获取文件后缀类型
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         // 生成新文件名
-        fileName = StringUtil.createUUID() + suffixName;
+        fileName = ToolUtils.createUUID() + suffixName;
         resultPath = resultPath + fileName;
         File dest = new File(GlobalConfig.BASE_FILE_PATH + resultPath);
         if (!dest.getParentFile().exists()) {

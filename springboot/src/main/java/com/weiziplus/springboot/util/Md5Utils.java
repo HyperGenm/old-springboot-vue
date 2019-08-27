@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import org.springframework.util.DigestUtils;
 
@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  * @author wanglongwei
  * @data 2019/5/7 10:15
  */
-public class Md5Util {
+public class Md5Utils {
     /**
      * MD5加密盐
      */

@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import java.util.regex.Pattern;
 
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * @author wanglongwei
  * @data 2019/5/9 10:08
  */
-public class ValidateUtil {
+public class ValidateUtils {
 
     /**
      * 设置基础验证
@@ -18,7 +18,7 @@ public class ValidateUtil {
      * @return
      */
     public static boolean baseValidate(String regex, String string) {
-        if (StringUtil.isBlank(string)) {
+        if (ToolUtils.isBlank(string)) {
             return false;
         }
         return Pattern.matches(regex, string);

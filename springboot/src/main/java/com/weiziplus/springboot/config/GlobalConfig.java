@@ -22,6 +22,11 @@ public class GlobalConfig {
     public static final String UNDEFINED = "undefined";
 
     /**
+     * 空字符串
+     */
+    public static final String NULL = "null";
+
+    /**
      * 用户允许禁止登录
      */
     public static final Integer ALLOW_LOGIN_ONE = 1;

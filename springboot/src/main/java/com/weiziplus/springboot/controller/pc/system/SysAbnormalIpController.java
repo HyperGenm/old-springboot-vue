@@ -3,7 +3,7 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.service.system.SysAbnormalIpService;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class SysAbnormalIpController {
 
     @GetMapping("/getPageList")
     @SystemLog(description = "查看异常ip列表")
-    public ResultUtil getPageList(
+    public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         return service.getPageList(pageNum, pageSize);

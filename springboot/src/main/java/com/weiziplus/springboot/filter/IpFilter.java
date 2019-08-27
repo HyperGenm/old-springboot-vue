@@ -3,8 +3,8 @@ package com.weiziplus.springboot.filter;
 import com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper;
 import com.weiziplus.springboot.models.SysAbnormalIp;
 import com.weiziplus.springboot.service.data.dictionary.DataDictionaryIpFilterService;
-import com.weiziplus.springboot.utils.HttpRequestUtil;
-import com.weiziplus.springboot.utils.redis.RedisUtil;
+import com.weiziplus.springboot.util.HttpRequestUtils;
+import com.weiziplus.springboot.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class IpFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        String ipAddress = HttpRequestUtil.getIpAddress(request);
+        String ipAddress = HttpRequestUtils.getIpAddress(request);
         //如果是白名单，放过
         List<String> ipWhiteList = dataDictionaryIpFilterService.getIpValueWhiteList();
         if (ipWhiteList.contains(ipAddress)) {
@@ -48,14 +48,14 @@ public class IpFilter implements Filter {
         }
         //查看ip是否被临时封号
         String warnRedisKey = "ip:filter:warn:" + ipAddress;
-        Object warnObject = RedisUtil.get(warnRedisKey);
+        Object warnObject = RedisUtils.get(warnRedisKey);
         if (null != warnObject) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
         String redisKey = "ip:filter:info:" + ipAddress;
         int number = 0;
-        Object numberObject = RedisUtil.get(redisKey);
+        Object numberObject = RedisUtils.get(redisKey);
         if (null != numberObject) {
             number = (int) numberObject;
         }
@@ -63,15 +63,15 @@ public class IpFilter implements Filter {
         int maxNumber = 27;
         //如果访问频率过快超出限制
         if (number >= maxNumber) {
-            RedisUtil.set(warnRedisKey, true, 60 * 60L);
+            RedisUtils.set(warnRedisKey, true, 60 * 60L);
             handleAbnormalIp(ipAddress);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
         if (null != numberObject) {
-            RedisUtil.setNotChangeTimeOut(redisKey, number);
+            RedisUtils.setNotChangeTimeOut(redisKey, number);
         } else {
-            RedisUtil.set(redisKey, number, 5L);
+            RedisUtils.set(redisKey, number, 5L);
         }
         chain.doFilter(req, res);
     }

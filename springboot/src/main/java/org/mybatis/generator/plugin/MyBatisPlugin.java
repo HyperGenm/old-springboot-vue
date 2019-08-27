@@ -1,6 +1,6 @@
 package org.mybatis.generator.plugin;
 
-import com.weiziplus.springboot.utils.DateUtil;
+import com.weiziplus.springboot.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -73,7 +73,7 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addJavaDocLine(sb.toString());
         sb.setLength(0);
         sb.append(" * @date ");
-        sb.append(DateUtil.getNowDateTime());
+        sb.append(DateUtils.getNowDateTime());
         topLevelClass.addJavaDocLine(sb.toString());
         topLevelClass.addJavaDocLine(" */");
         return true;

@@ -1,6 +1,6 @@
 package com.weiziplus.springboot.config;
 
-import com.weiziplus.springboot.utils.StringUtil;
+import com.weiziplus.springboot.util.ToolUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.wrapper.MapWrapper;
 import org.apache.ibatis.reflection.wrapper.ObjectWrapper;
@@ -59,7 +59,7 @@ public class MybatisConfig {
          * @return
          */
         private String underlineToCamelHump(String name) {
-            if (StringUtil.isBlank(name)) {
+            if (ToolUtils.isBlank(name)) {
                 return "";
             }
             String underline = "_";

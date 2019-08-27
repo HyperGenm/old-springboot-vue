@@ -5,12 +5,12 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryIpFilterMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.DataDictionaryValue;
-import com.weiziplus.springboot.utils.PageUtil;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.StringUtil;
-import com.weiziplus.springboot.utils.redis.RedisUtil;
-import com.weiziplus.springboot.utils.token.AdminTokenUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
+import com.weiziplus.springboot.util.PageUtils;
+import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.ToolUtils;
+import com.weiziplus.springboot.util.redis.RedisUtils;
+import com.weiziplus.springboot.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +42,12 @@ public class DataDictionaryIpFilterService {
      */
     public List<String> getIpValueWhiteList() {
         String redisKey = BASE_REDIS_KEY + "getIpValueWhiteList";
-        Object object = RedisUtil.get(redisKey);
+        Object object = RedisUtils.get(redisKey);
         if (null != object) {
             return (List<String>) object;
         }
         List<String> ipWhiteList = mapper.getIpValueWhiteList();
-        RedisUtil.set(redisKey, ipWhiteList, 60 * 60 * 24L);
+        RedisUtils.set(redisKey, ipWhiteList, 60 * 60 * 24L);
         return ipWhiteList;
     }
 
@@ -58,12 +58,12 @@ public class DataDictionaryIpFilterService {
      */
     public List<String> getIpValueBlackList() {
         String redisKey = BASE_REDIS_KEY + "getIpValueBlackList";
-        Object object = RedisUtil.get(redisKey);
+        Object object = RedisUtils.get(redisKey);
         if (null != object) {
             return (List<String>) object;
         }
         List<String> ipBlackList = mapper.getIpValueBlackList();
-        RedisUtil.set(redisKey, ipBlackList, 60 * 60 * 24L);
+        RedisUtils.set(redisKey, ipBlackList, 60 * 60 * 24L);
         return ipBlackList;
     }
 
@@ -72,16 +72,16 @@ public class DataDictionaryIpFilterService {
      *
      * @return
      */
-    public ResultUtil getPageList(Integer pageNum, Integer pageSize, String type) {
+    public ResultUtils getPageList(Integer pageNum, Integer pageSize, String type) {
         String redisKey = BASE_REDIS_KEY + "getPageListBlack:type_" + type + "pageSize_" + pageSize + "pageNum_" + pageNum;
-        Object object = RedisUtil.get(redisKey);
+        Object object = RedisUtils.get(redisKey);
         if (null != object) {
-            return ResultUtil.success(object);
+            return ResultUtils.success(object);
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtil pageUtil = PageUtil.pageInfo(mapper.getIpList(type));
-        RedisUtil.set(redisKey, pageUtil);
-        return ResultUtil.success(pageUtil);
+        PageUtils pageUtil = PageUtils.pageInfo(mapper.getIpList(type));
+        RedisUtils.set(redisKey, pageUtil);
+        return ResultUtils.success(pageUtil);
     }
 
     /**
@@ -91,26 +91,26 @@ public class DataDictionaryIpFilterService {
      * @param ip
      * @return
      */
-    public ResultUtil add(HttpServletRequest request, String ip, String type) {
-        if (StringUtil.isBlank(ip)) {
-            return ResultUtil.error("ip不能为空");
+    public ResultUtils add(HttpServletRequest request, String ip, String type) {
+        if (ToolUtils.isBlank(ip)) {
+            return ResultUtils.error("ip不能为空");
         }
-        if (StringUtil.isBlank(type)) {
-            return ResultUtil.error("type不能为空");
+        if (ToolUtils.isBlank(type)) {
+            return ResultUtils.error("type不能为空");
         }
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
-            AdminTokenUtil.deleteToken(nowUserId);
-            return ResultUtil.errorSuspend();
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
         DataDictionaryValue oneInfoByIp = mapper.getOneInfoByIp(ip);
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
-            return ResultUtil.error("ip已存在");
+            return ResultUtils.error("ip已存在");
         }
         mapper.addIp(ip, type);
-        RedisUtil.deleteLikeKey(BASE_REDIS_KEY);
-        return ResultUtil.success();
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -120,23 +120,23 @@ public class DataDictionaryIpFilterService {
      * @param id
      * @return
      */
-    public ResultUtil delete(HttpServletRequest request, Long id, String type) {
+    public ResultUtils delete(HttpServletRequest request, Long id, String type) {
         //127.0.0.1的id为1
         if (null == id || 1 >= id) {
-            return ResultUtil.error("id为空");
+            return ResultUtils.error("id为空");
         }
-        if (StringUtil.isBlank(type)) {
-            return ResultUtil.error("type不能为空");
+        if (ToolUtils.isBlank(type)) {
+            return ResultUtils.error("type不能为空");
         }
-        Long nowUserId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
-            AdminTokenUtil.deleteToken(nowUserId);
-            return ResultUtil.errorSuspend();
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
         mapper.deleteIp(id, type);
-        RedisUtil.deleteLikeKey(BASE_REDIS_KEY);
-        return ResultUtil.success();
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -150,6 +150,6 @@ public class DataDictionaryIpFilterService {
             return;
         }
         mapper.addIp(ip, "black");
-        RedisUtil.deleteLikeKey(BASE_REDIS_KEY);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
     }
 }

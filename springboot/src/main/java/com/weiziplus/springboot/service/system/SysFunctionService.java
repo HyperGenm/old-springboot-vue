@@ -3,7 +3,7 @@ package com.weiziplus.springboot.service.system;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.models.SysFunction;
-import com.weiziplus.springboot.utils.*;
+import com.weiziplus.springboot.util.*;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -163,16 +163,16 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @Cacheable
-    public ResultUtil getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
+    public ResultUtils getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
         if (null == parentId || 0 > parentId) {
-            return ResultUtil.error("parentId错误");
+            return ResultUtils.error("parentId错误");
         }
         if (0 >= pageNum || 0 >= pageSize) {
-            return ResultUtil.error("pageNum,pageSize格式错误");
+            return ResultUtils.error("pageNum,pageSize格式错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtil pageUtil = PageUtil.pageInfo(mapper.getFunListByParentId(parentId));
-        return ResultUtil.success(pageUtil);
+        PageUtils pageUtil = PageUtils.pageInfo(mapper.getFunListByParentId(parentId));
+        return ResultUtils.success(pageUtil);
     }
 
     /**
@@ -182,22 +182,22 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil addFunction(SysFunction sysFunction) {
-        if (ValidateUtil.notEnglishNumberUnderLine(sysFunction.getName())) {
-            return ResultUtil.error("name为英文开头，英文、数字和下划线且最少两位");
+    public ResultUtils addFunction(SysFunction sysFunction) {
+        if (ValidateUtils.notEnglishNumberUnderLine(sysFunction.getName())) {
+            return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
-            return ResultUtil.error("parentId不能为空");
+            return ResultUtils.error("parentId不能为空");
         }
-        if (StringUtil.isBlank(sysFunction.getTitle())) {
-            return ResultUtil.error("标题不能为空");
+        if (ToolUtils.isBlank(sysFunction.getTitle())) {
+            return ResultUtils.error("标题不能为空");
         }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun) {
-            return ResultUtil.error("name已存在");
+            return ResultUtils.error("name已存在");
         }
-        sysFunction.setCreateTime(DateUtil.getNowDateTime());
-        return ResultUtil.success(baseInsert(sysFunction));
+        sysFunction.setCreateTime(DateUtils.getNowDateTime());
+        return ResultUtils.success(baseInsert(sysFunction));
     }
 
     /**
@@ -207,15 +207,15 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil updateFunction(SysFunction sysFunction) {
-        if (StringUtil.isBlank(sysFunction.getTitle())) {
-            return ResultUtil.error("标题不能为空");
+    public ResultUtils updateFunction(SysFunction sysFunction) {
+        if (ToolUtils.isBlank(sysFunction.getTitle())) {
+            return ResultUtils.error("标题不能为空");
         }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
-            return ResultUtil.error("name已存在");
+            return ResultUtils.error("name已存在");
         }
-        return ResultUtil.success(baseUpdate(sysFunction));
+        return ResultUtils.success(baseUpdate(sysFunction));
     }
 
     /**
@@ -225,19 +225,19 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    public ResultUtil deleteFunction(Long[] ids) {
+    public ResultUtils deleteFunction(Long[] ids) {
         if (null == ids) {
-            return ResultUtil.error("ids不能为空");
+            return ResultUtils.error("ids不能为空");
         }
         for (Long id : ids) {
             if (null == id || 0 > id) {
-                return ResultUtil.error("ids错误");
+                return ResultUtils.error("ids错误");
             }
             List<SysFunction> list = mapper.getFunListByParentId(id);
             if (null != list && 0 < list.size()) {
-                return ResultUtil.error("目录下面含有子级目录");
+                return ResultUtils.error("目录下面含有子级目录");
             }
         }
-        return ResultUtil.success(baseDeleteByClassAndIds(SysFunction.class, ids));
+        return ResultUtils.success(baseDeleteByClassAndIds(SysFunction.class, ids));
     }
 }

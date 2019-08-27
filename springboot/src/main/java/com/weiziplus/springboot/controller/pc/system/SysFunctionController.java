@@ -3,7 +3,7 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysFunction;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.SysFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +28,8 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTree")
     @SystemLog(description = "查看功能列表")
-    public ResultUtil getAllFunctionTree() {
-        return ResultUtil.success(service.getFunTree());
+    public ResultUtils getAllFunctionTree() {
+        return ResultUtils.success(service.getFunTree());
     }
 
     /**
@@ -39,8 +39,8 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTreeNotButton")
     @SystemLog(description = "查看功能列表")
-    public ResultUtil getAllFunctionTreeNotButton() {
-        return ResultUtil.success(service.getAllFunctionTreeNotButton());
+    public ResultUtils getAllFunctionTreeNotButton() {
+        return ResultUtils.success(service.getAllFunctionTreeNotButton());
     }
 
     /**
@@ -52,7 +52,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getFunctionList")
-    public ResultUtil getFunctionList(
+    public ResultUtils getFunctionList(
             @RequestParam(value = "parentId", defaultValue = "0") Long parentId,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
@@ -67,7 +67,7 @@ public class SysFunctionController {
      */
     @PostMapping("/addFunction")
     @SystemLog(description = "新增功能")
-    public ResultUtil addFunction(SysFunction sysFunction) {
+    public ResultUtils addFunction(SysFunction sysFunction) {
         return service.addFunction(sysFunction);
     }
 
@@ -79,7 +79,7 @@ public class SysFunctionController {
      */
     @PostMapping("/updateFunction")
     @SystemLog(description = "修改功能")
-    public ResultUtil updateFunction(SysFunction sysFunction) {
+    public ResultUtils updateFunction(SysFunction sysFunction) {
         return service.updateFunction(sysFunction);
     }
 
@@ -91,7 +91,7 @@ public class SysFunctionController {
      */
     @PostMapping("/deleteFunction")
     @SystemLog(description = "删除功能")
-    public ResultUtil deleteFunction(Long[] ids) {
+    public ResultUtils deleteFunction(Long[] ids) {
         return service.deleteFunction(ids);
     }
 }

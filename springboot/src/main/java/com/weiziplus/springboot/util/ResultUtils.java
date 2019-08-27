@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import lombok.Getter;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @data 2019/5/24 15:58
  */
 @Getter
-public class ResultUtil implements Serializable {
+public class ResultUtils implements Serializable {
 
     /**
      * 返回状态码code
@@ -31,7 +31,7 @@ public class ResultUtil implements Serializable {
     /**
      * 创建无参数ResultUtil对象---fastjson反序列化需要无参数
      */
-    public ResultUtil() {
+    public ResultUtils() {
     }
 
     /**
@@ -41,7 +41,7 @@ public class ResultUtil implements Serializable {
      * @param msg
      * @param data
      */
-    private ResultUtil(Integer code, String msg, Object data) {
+    private ResultUtils(Integer code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -55,8 +55,8 @@ public class ResultUtil implements Serializable {
      * @param data
      * @return
      */
-    private static ResultUtil content(Integer code, String msg, Object data) {
-        return new ResultUtil(code, msg, data);
+    private static ResultUtils content(Integer code, String msg, Object data) {
+        return new ResultUtils(code, msg, data);
     }
 
     /**
@@ -79,47 +79,47 @@ public class ResultUtil implements Serializable {
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
 
-    public static ResultUtil success(String msg, Object data) {
+    public static ResultUtils success(String msg, Object data) {
         return content(SUCCESS_CODE, msg, data);
     }
 
-    public static ResultUtil success(Object data) {
+    public static ResultUtils success(Object data) {
         return content(SUCCESS_CODE, "success", data);
     }
 
-    public static ResultUtil success(String msg) {
+    public static ResultUtils success(String msg) {
         return content(SUCCESS_CODE, msg, null);
     }
 
-    public static ResultUtil success() {
+    public static ResultUtils success() {
         return content(SUCCESS_CODE, "success", null);
     }
 
-    public static ResultUtil error(String msg, Object data) {
+    public static ResultUtils error(String msg, Object data) {
         return content(ERROR_CODE, msg, data);
     }
 
-    public static ResultUtil error(String msg) {
+    public static ResultUtils error(String msg) {
         return content(ERROR_CODE, msg, null);
     }
 
-    public static ResultUtil error() {
+    public static ResultUtils error() {
         return content(ERROR_CODE, "error", null);
     }
 
-    public static ResultUtil errorSuspend() {
+    public static ResultUtils errorSuspend() {
         return content(ERROR_SUSPEND_CODE, "Rider Kick", null);
     }
 
-    public static ResultUtil errorToken(String msg, Object data) {
+    public static ResultUtils errorToken(String msg, Object data) {
         return content(ERROR_TOKEN_CODE, msg, data);
     }
 
-    public static ResultUtil errorToken(String msg) {
+    public static ResultUtils errorToken(String msg) {
         return content(ERROR_TOKEN_CODE, msg, null);
     }
 
-    public static ResultUtil errorToken() {
+    public static ResultUtils errorToken() {
         return content(ERROR_TOKEN_CODE, "token失效", null);
     }
 }

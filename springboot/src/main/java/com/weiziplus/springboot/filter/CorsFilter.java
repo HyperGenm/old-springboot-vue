@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.filter;
 
 import com.weiziplus.springboot.config.GlobalConfig;
-import com.weiziplus.springboot.utils.StringUtil;
+import com.weiziplus.springboot.util.ToolUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -36,14 +36,14 @@ public class CorsFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String originHeader = request.getHeader(HttpHeaders.ORIGIN);
         //如果不需要跨域直接放行
-        if (StringUtil.isBlank(originHeader)) {
+        if (ToolUtils.isBlank(originHeader)) {
             chain.doFilter(req, res);
             return;
         }
         //如果是swagger-ui.html直接放行
         String referer = request.getHeader(HttpHeaders.REFERER);
         String pattern = "^(http://|https://)([a-zA-Z0-9\\.\\:]+)(\\/swagger-ui.html)";
-        if (StringUtil.notBlank(referer) && Pattern.compile(pattern).matcher(referer).matches()) {
+        if (ToolUtils.notBlank(referer) && Pattern.compile(pattern).matcher(referer).matches()) {
             chain.doFilter(req, res);
             return;
         }

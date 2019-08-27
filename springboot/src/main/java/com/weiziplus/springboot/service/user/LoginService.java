@@ -3,11 +3,11 @@ package com.weiziplus.springboot.service.user;
 import com.github.pagehelper.util.StringUtil;
 import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.models.User;
-import com.weiziplus.springboot.utils.Md5Util;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.ValidateUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
-import com.weiziplus.springboot.utils.token.WebTokenUtil;
+import com.weiziplus.springboot.util.Md5Utils;
+import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.ValidateUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
+import com.weiziplus.springboot.util.token.WebTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,21 +34,21 @@ public class LoginService {
      * @param password
      * @return
      */
-    public ResultUtil login(String username, String password) {
+    public ResultUtils login(String username, String password) {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
-            return ResultUtil.error("用户名或密码为空");
+            return ResultUtils.error("用户名或密码为空");
         }
         User user = userMapper.getUserInfoByUsername(username);
         if (null == user) {
-            return ResultUtil.error("用户名或密码错误");
+            return ResultUtils.error("用户名或密码错误");
         }
-        if (!user.getPassword().equals(Md5Util.encode(password))) {
-            return ResultUtil.error("用户名或密码错误");
+        if (!user.getPassword().equals(Md5Utils.encode(password))) {
+            return ResultUtils.error("用户名或密码错误");
         }
         Map<String, Object> resMap = new HashMap<>(1);
-        String token = WebTokenUtil.createToken(user.getId());
+        String token = WebTokenUtils.createToken(user.getId());
         resMap.put("token", token);
-        return ResultUtil.success(resMap);
+        return ResultUtils.success(resMap);
     }
 
     /**
@@ -58,22 +58,22 @@ public class LoginService {
      * @param password
      * @return
      */
-    public ResultUtil register(String username, String password) {
+    public ResultUtils register(String username, String password) {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
-            return ResultUtil.error("用户名或密码为空");
+            return ResultUtils.error("用户名或密码为空");
         }
-        if (ValidateUtil.notUsername(username)) {
-            return ResultUtil.error("用户名不能包含特殊字符");
+        if (ValidateUtils.notUsername(username)) {
+            return ResultUtils.error("用户名不能包含特殊字符");
         }
-        if (ValidateUtil.notPassword(password)) {
-            return ResultUtil.error("密码为6-20位大小写和数字");
+        if (ValidateUtils.notPassword(password)) {
+            return ResultUtils.error("密码为6-20位大小写和数字");
         }
         User user = userMapper.getUserInfoByUsername(username);
         if (null != user) {
-            return ResultUtil.error("用户名已存在");
+            return ResultUtils.error("用户名已存在");
         }
-        String md5Pwd = Md5Util.encode(password);
-        return ResultUtil.success(userMapper.addUser(username, md5Pwd));
+        String md5Pwd = Md5Utils.encode(password);
+        return ResultUtils.success(userMapper.addUser(username, md5Pwd));
     }
 
     /**
@@ -81,9 +81,9 @@ public class LoginService {
      *
      * @return
      */
-    public ResultUtil logout(HttpServletRequest request) {
-        Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
-        WebTokenUtil.deleteToken(userId);
-        return ResultUtil.success();
+    public ResultUtils logout(HttpServletRequest request) {
+        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        WebTokenUtils.deleteToken(userId);
+        return ResultUtils.success();
     }
 }

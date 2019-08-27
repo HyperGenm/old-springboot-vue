@@ -1,8 +1,8 @@
 package com.weiziplus.springboot.service.tools;
 
 import com.weiziplus.springboot.base.BaseService;
-import com.weiziplus.springboot.utils.FileUtil;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.FileUtils;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,12 +18,12 @@ public class ToolsService extends BaseService {
      *
      * @return
      */
-    public ResultUtil upload(MultipartFile file) {
-        String path = FileUtil.upFile(file, "文件上传");
+    public ResultUtils upload(MultipartFile file) {
+        String path = FileUtils.upFile(file, "文件上传");
         if (null == path) {
-            return ResultUtil.error("文件上传失败，请重试");
+            return ResultUtils.error("文件上传失败，请重试");
         }
-        return ResultUtil.success("success", path);
+        return ResultUtils.success("success", path);
     }
 
 }

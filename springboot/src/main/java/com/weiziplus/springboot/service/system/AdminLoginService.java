@@ -3,12 +3,9 @@ package com.weiziplus.springboot.service.system;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.models.SysUser;
-import com.weiziplus.springboot.utils.ImageValidateCodeUtil;
-import com.weiziplus.springboot.utils.Md5Util;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.StringUtil;
-import com.weiziplus.springboot.utils.token.AdminTokenUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
+import com.weiziplus.springboot.util.*;
+import com.weiziplus.springboot.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
@@ -58,7 +55,7 @@ public class AdminLoginService {
      * @return
      */
     public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> validateCode = ImageValidateCodeUtil.getValidateCode();
+        Map<String, Object> validateCode = ImageValidateCodeUtils.getValidateCode();
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_RANDOM_CODE, validateCode.get("random"));
         //设置相应类型,告诉浏览器输出的内容为图片
@@ -81,39 +78,39 @@ public class AdminLoginService {
      * @param password
      * @return
      */
-    public ResultUtil login(HttpSession session, String username, String password, String code) {
-        if (StringUtil.isBlank(username) || StringUtil.isBlank(password)) {
-            return ResultUtil.error("用户名或密码为空");
+    public ResultUtils login(HttpSession session, String username, String password, String code) {
+        if (ToolUtils.isBlank(username) || ToolUtils.isBlank(password)) {
+            return ResultUtils.error("用户名或密码为空");
         }
-        if (StringUtil.isBlank(code) || ImageValidateCodeUtil.RANDOM_NUM != code.length()) {
+        if (ToolUtils.isBlank(code) || ImageValidateCodeUtils.RANDOM_NUM != code.length()) {
             session.removeAttribute(LOGIN_RANDOM_CODE);
-            return ResultUtil.error("验证码错误");
+            return ResultUtils.error("验证码错误");
         }
         Object randomCode = session.getAttribute(LOGIN_RANDOM_CODE);
         session.removeAttribute(LOGIN_RANDOM_CODE);
         if (null == randomCode || !code.equalsIgnoreCase(randomCode.toString())) {
-            return ResultUtil.error("验证码错误");
+            return ResultUtils.error("验证码错误");
         }
         SysUser sysUser = sysUserMapper.getInfoByUsername(username);
-        if (null == sysUser || !sysUser.getPassword().equals(Md5Util.encode(password))) {
-            return ResultUtil.error("用户名或密码错误");
+        if (null == sysUser || !sysUser.getPassword().equals(Md5Utils.encode(password))) {
+            return ResultUtils.error("用户名或密码错误");
         }
         if (GlobalConfig.ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
-            return ResultUtil.error("账号被禁用，请联系管理员");
+            return ResultUtils.error("账号被禁用，请联系管理员");
         }
         if (GlobalConfig.ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
-            return ResultUtil.error("账号封号中，请联系管理员");
+            return ResultUtils.error("账号封号中，请联系管理员");
         }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
-            return ResultUtil.error("您还没有角色，请联系管理员添加");
+            return ResultUtils.error("您还没有角色，请联系管理员添加");
         }
         if (!GlobalConfig.IS_STOP.equals(sysRole.getIsStop())) {
-            return ResultUtil.error("角色被禁用，请联系管理员");
+            return ResultUtils.error("角色被禁用，请联系管理员");
         }
-        String token = AdminTokenUtil.createToken(sysUser.getId());
+        String token = AdminTokenUtils.createToken(sysUser.getId());
         if (null == token) {
-            return ResultUtil.error("登录失败，请重试");
+            return ResultUtils.error("登录失败，请重试");
         }
         sysUser.setPassword(null);
         Map<String, Object> map = new HashMap<>(5);
@@ -122,7 +119,7 @@ public class AdminLoginService {
         map.put("role", sysRole.getName());
         map.put("routerTree", sysFunctionService.getMenuTreeByRoleId(sysRole.getId()));
         map.put("roleButtons", sysFunctionMapper.getButtonListByRoleId(sysRole.getId()));
-        return ResultUtil.success(map);
+        return ResultUtils.success(map);
     }
 
     /**
@@ -131,9 +128,9 @@ public class AdminLoginService {
      * @param request
      * @return
      */
-    public ResultUtil logout(HttpServletRequest request) {
-        Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
-        AdminTokenUtil.deleteToken(userId);
-        return ResultUtil.success();
+    public ResultUtils logout(HttpServletRequest request) {
+        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        AdminTokenUtils.deleteToken(userId);
+        return ResultUtils.success();
     }
 }

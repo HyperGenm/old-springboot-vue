@@ -1,8 +1,8 @@
 package com.weiziplus.springboot.service.user;
 
 import com.weiziplus.springboot.mapper.user.UserMapper;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
+import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,8 @@ public class UserService {
      * @param request
      * @return
      */
-    public ResultUtil getInfo(HttpServletRequest request) {
-        Long userId = JwtTokenUtil.getUserIdByHttpServletRequest(request);
-        return ResultUtil.success(mapper.getUserInfoByUserId(userId));
+    public ResultUtils getInfo(HttpServletRequest request) {
+        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        return ResultUtils.success(mapper.getUserInfoByUserId(userId));
     }
 }

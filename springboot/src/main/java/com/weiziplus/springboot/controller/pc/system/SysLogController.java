@@ -2,7 +2,7 @@ package com.weiziplus.springboot.controller.pc.system;
 
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
-import com.weiziplus.springboot.utils.ResultUtil;
+import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ public class SysLogController {
 
     @GetMapping("/getLogList")
     @SystemLog(description = "查看系统日志")
-    public ResultUtil getPageList(
+    public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,

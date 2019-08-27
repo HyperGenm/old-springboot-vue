@@ -1,4 +1,4 @@
-package com.weiziplus.springboot.utils;
+package com.weiziplus.springboot.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import java.util.TimeZone;
  * @author wanglongwei
  * @data 2019/5/7 17:44
  */
-public class DateUtil {
+public class DateUtils {
 
     /**
      * 时间字符串转时间
@@ -22,10 +22,10 @@ public class DateUtil {
      * @throws ParseException
      */
     public static Date stringToDate(String date, String pattern) throws ParseException {
-        if (StringUtil.isBlank(date)) {
+        if (ToolUtils.isBlank(date)) {
             return null;
         }
-        if (StringUtil.isBlank(pattern)) {
+        if (ToolUtils.isBlank(pattern)) {
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -41,7 +41,7 @@ public class DateUtil {
      * @throws ParseException
      */
     public static Date stringToDate(String date) throws ParseException {
-        if (StringUtil.isBlank(date)) {
+        if (ToolUtils.isBlank(date)) {
             return null;
         }
         String basePattern = "yyyy-MM-dd HH:mm:ss";
@@ -61,7 +61,7 @@ public class DateUtil {
         if (null == date) {
             return null;
         }
-        if (StringUtil.isBlank(pattern)) {
+        if (ToolUtils.isBlank(pattern)) {
             return null;
         }
         //设置时间格式

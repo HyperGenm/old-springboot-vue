@@ -1,18 +1,18 @@
 package com.weiziplus.springboot.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.config.GlobalConfig;
-import com.weiziplus.springboot.models.User;
-import com.weiziplus.springboot.utils.HttpRequestUtil;
-import com.weiziplus.springboot.utils.ResultUtil;
-import com.weiziplus.springboot.utils.StringUtil;
-import com.weiziplus.springboot.utils.redis.StringRedisUtil;
-import com.weiziplus.springboot.utils.token.AdminTokenUtil;
-import com.weiziplus.springboot.utils.token.JwtTokenUtil;
-import com.weiziplus.springboot.utils.token.WebTokenUtil;
 import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
+import com.weiziplus.springboot.mapper.user.UserMapper;
+import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.util.HttpRequestUtils;
+import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.ToolUtils;
+import com.weiziplus.springboot.util.redis.StringRedisUtils;
+import com.weiziplus.springboot.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
+import com.weiziplus.springboot.util.token.WebTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,33 +73,33 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //获取头部的token
         String token = request.getHeader(GlobalConfig.TOKEN);
-        if (StringUtil.isBlank(token)) {
-            handleResponse(response, ResultUtil.errorToken("token不存在"));
+        if (ToolUtils.isBlank(token)) {
+            handleResponse(response, ResultUtils.errorToken("token不存在"));
             return false;
         }
         try {
             //判断jwtToken是否过期
-            if (JwtTokenUtil.isExpiration(token)) {
-                handleResponse(response, ResultUtil.errorToken("token失效"));
+            if (JwtTokenUtils.isExpiration(token)) {
+                handleResponse(response, ResultUtils.errorToken("token失效"));
                 return false;
             }
         } catch (Exception e) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //获取角色
-        switch (JwtTokenUtil.getUserAudienceByToken(token)) {
+        switch (JwtTokenUtils.getUserAudienceByToken(token)) {
             //角色为admin
-            case AdminTokenUtil.AUDIENCE: {
+            case AdminTokenUtils.AUDIENCE: {
                 //查看是否有日志注解，有的话将日志信息放入数据库
                 SystemLog systemLog = method.getAnnotation(SystemLog.class);
                 if (null != systemLog) {
-                    sysLogMapper.addSysLog(JwtTokenUtil.getUserIdByToken(token), systemLog.description(), HttpRequestUtil.getIpAddress(request));
+                    sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
                 }
                 return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
             }
             //角色为web
-            case WebTokenUtil.AUDIENCE: {
+            case WebTokenUtils.AUDIENCE: {
                 return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
             }
             default: {
@@ -119,31 +119,31 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     private boolean handleAdminToken(HttpServletRequest request, HttpServletResponse response, String token, AdminAuthToken authTokenClass, AdminAuthToken authTokenMethod) {
         //获取用户id
-        Long userId = JwtTokenUtil.getUserIdByToken(token);
+        Long userId = JwtTokenUtils.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //查看redis是否过期
-        if (!StringRedisUtil.hasKye(AdminTokenUtil.getAudienceRedisKey(userId))) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+        if (!StringRedisUtils.hasKye(AdminTokenUtils.getAudienceRedisKey(userId))) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
-        if (!StringRedisUtil.get(AdminTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+        if (!StringRedisUtils.get(AdminTokenUtils.getAudienceRedisKey(userId)).equals(token)) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //更新用户最后活跃时间
-        int i = sysUserMapper.updateLastActiveTimeByIdAndIp(userId, HttpRequestUtil.getIpAddress(request));
+        int i = sysUserMapper.updateLastActiveTimeByIdAndIp(userId, HttpRequestUtils.getIpAddress(request));
         //如果更新成功，证明有该用户，反之没有该用户
         if (0 >= i) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //更新token过期时间
-        AdminTokenUtil.updateExpireTime(userId);
+        AdminTokenUtils.updateExpireTime(userId);
         return true;
     }
 
@@ -158,30 +158,30 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     private boolean handleWebToken(HttpServletResponse response, String token, WebAuthToken authTokenClass, WebAuthToken authTokenMethod) {
         //获取用户id
-        Long userId = JwtTokenUtil.getUserIdByToken(token);
+        Long userId = JwtTokenUtils.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //查看redis是否过期
-        if (!StringRedisUtil.hasKye(WebTokenUtil.getAudienceRedisKey(userId))) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+        if (!StringRedisUtils.hasKye(WebTokenUtils.getAudienceRedisKey(userId))) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //查看redis中token是否是当前token
-        if (!StringRedisUtil.get(WebTokenUtil.getAudienceRedisKey(userId)).equals(token)) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+        if (!StringRedisUtils.get(WebTokenUtils.getAudienceRedisKey(userId)).equals(token)) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //查看是否存在该用户
         User user = userMapper.getUserInfoByUserId(userId);
         if (null == user) {
-            handleResponse(response, ResultUtil.errorToken("token失效"));
+            handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         //更新token过期时间
-        WebTokenUtil.updateExpireTime(userId);
+        WebTokenUtils.updateExpireTime(userId);
         return true;
     }
 
@@ -191,7 +191,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * @param response
      * @param errResult
      */
-    private void handleResponse(HttpServletResponse response, ResultUtil errResult) {
+    private void handleResponse(HttpServletResponse response, ResultUtils errResult) {
         PrintWriter out = null;
         try {
             response.setCharacterEncoding("UTF-8");

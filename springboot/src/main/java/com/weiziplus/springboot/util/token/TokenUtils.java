@@ -1,7 +1,7 @@
-package com.weiziplus.springboot.utils.token;
+package com.weiziplus.springboot.util.token;
 
 import com.weiziplus.springboot.config.GlobalConfig;
-import com.weiziplus.springboot.utils.redis.StringRedisUtil;
+import com.weiziplus.springboot.util.redis.StringRedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * @data 2019/5/8 9:06
  */
 @Slf4j
-public class TokenUtil {
+public class TokenUtils {
 
     /**
      * 根据用户id获取用户Redis的key值
@@ -34,8 +34,8 @@ public class TokenUtil {
      * @return
      */
     protected static String createToken(String audience, Long userId, Long expireTime) {
-        String token = JwtTokenUtil.createToken(userId, audience);
-        StringRedisUtil.set(getAudienceRedisKey(audience, userId), token, expireTime);
+        String token = JwtTokenUtils.createToken(userId, audience);
+        StringRedisUtils.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;
     }
 }
