@@ -30,6 +30,7 @@ public interface BaseMapper {
             "</foreach>" +
             ")" +
             "</script>")
+    @Options(useGeneratedKeys = true, keyProperty = "KEY_ID")
     int insert(Map<String, Object> map);
 
     /**

@@ -310,6 +310,7 @@
             },
             //pageSize改变触发
             handleSizeChange(pageSize) {
+                this.pageNum = 1;
                 this.pageSize = pageSize;
                 this.getCourseList();
             },

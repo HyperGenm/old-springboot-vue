@@ -1,10 +1,10 @@
 package com.weiziplus.springboot.base;
 
 import com.weiziplus.springboot.util.ToolUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.Map;
  * @author wanglongwei
  * @data 2019/5/20 10:44
  */
+@Slf4j
 public class BaseService {
 
     @Autowired
@@ -92,15 +93,8 @@ public class BaseService {
             if (null == field.getAnnotation(Column.class) && null == field.getAnnotation(Id.class)) {
                 continue;
             }
-            //通过反射get方法获取变量值
-            String getMethod = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
-            Object value;
-            try {
-                Method method = object.getClass().getMethod(getMethod);
-                value = method.invoke(object);
-            } catch (Exception e) {
-                throw new RuntimeException("实体类get方法出错==========" + object.getClass() + "---" + e);
-            }
+            //获取属性值
+            Object value = getValueByObjectAndField(object, field);
             //如果值为null，则不处理
             if (null == value) {
                 continue;
@@ -147,15 +141,8 @@ public class BaseService {
                 if (null == field.getAnnotation(Column.class) && null == field.getAnnotation(Id.class)) {
                     continue;
                 }
-                //通过反射get方法获取变量值
-                String getMethod = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
-                Object value;
-                try {
-                    Method method = object.getClass().getMethod(getMethod);
-                    value = method.invoke(object);
-                } catch (Exception e) {
-                    throw new RuntimeException("实体类get方法出错==========" + object.getClass() + "---" + e);
-                }
+                //获取属性值
+                Object value = getValueByObjectAndField(object, field);
                 values.add(value);
                 //第一次循环将字段添加到数组里面
                 if (i > 0) {
@@ -195,15 +182,8 @@ public class BaseService {
             if (null == field.getAnnotation(Column.class) && null == field.getAnnotation(Id.class)) {
                 continue;
             }
-            //通过反射get方法获取变量值
-            String getMethod = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
-            Object value;
-            try {
-                Method method = object.getClass().getMethod(getMethod);
-                value = method.invoke(object);
-            } catch (Exception e) {
-                throw new RuntimeException("实体类get方法出错==========" + object.getClass() + "---" + e);
-            }
+            //获取属性值
+            Object value = getValueByObjectAndField(object, field);
             //获取表的主键
             if (null != field.getAnnotation(Id.class)) {
                 result.put("KEY_ID", field.getAnnotation(Id.class).value());
@@ -224,16 +204,81 @@ public class BaseService {
     }
 
     /**
+     * 根据对象和属性获取属性值
+     *
+     * @param object
+     * @param field
+     * @return
+     */
+    private Object getValueByObjectAndField(Object object, Field field) {
+        if (null == object || null == field) {
+            return null;
+        }
+        Object value = null;
+        try {
+            field.setAccessible(true);
+            value = field.get(object);
+            field.setAccessible(false);
+        } catch (Exception e) {
+            throw new RuntimeException("实体类get方法出错==========" + object.getClass() + "---" + e);
+        }
+        return value;
+    }
+
+    /**
      * 新增
      *
      * @param object
      * @return
      */
     protected int baseInsert(Object object) {
+        return baseInsert(object, false);
+    }
+
+    /**
+     * 新增
+     *
+     * @param object
+     * @param getAutoIncrementPrimaryKey 自增主键赋值给实体变量
+     * @return
+     */
+    protected int baseInsert(Object object, boolean getAutoIncrementPrimaryKey) {
         if (null == object) {
             return 0;
         }
-        return mapper.insert(handleTableInsert(object));
+        Map<String, Object> map = handleTableInsert(object);
+        int insert = mapper.insert(map);
+        if (!getAutoIncrementPrimaryKey) {
+            return insert;
+        }
+        //获取实体类所有变量
+        Field[] fields = object.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            //获取表的主键
+            if (null == field || null == field.getAnnotation(Id.class)) {
+                continue;
+            }
+            try {
+                String longTypeName = Long.class.getTypeName();
+                String stringTypeName = String.class.getTypeName();
+                String integerTypeName = Integer.class.getTypeName();
+                String typeName = field.getGenericType().getTypeName();
+                String keyId = ToolUtils.valueOfString(map.get("KEY_ID"));
+                field.setAccessible(true);
+                if (longTypeName.equals(typeName)) {
+                    field.set(object, ToolUtils.valueOfLong(keyId));
+                } else if (stringTypeName.equals(typeName)) {
+                    field.set(object, keyId);
+                } else if (integerTypeName.equals(typeName)) {
+                    field.set(object, ToolUtils.valueOfInteger(keyId));
+                }
+                field.setAccessible(false);
+                break;
+            } catch (IllegalAccessException e) {
+                log.debug("baseInsert插入数据错误，如果不使用返回的自增主键，该消息可以忽略，详情:" + e);
+            }
+        }
+        return insert;
     }
 
     /**
