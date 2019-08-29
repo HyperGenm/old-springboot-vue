@@ -102,6 +102,7 @@ public class BaseService {
             if (null != field.getAnnotation(Id.class)) {
                 //添加表的主键
                 columns.add(field.getAnnotation(Id.class).value());
+                result.put("KEY_ID", field.getAnnotation(Id.class).value());
             } else {
                 //添加表的普通字段
                 columns.add(field.getAnnotation(Column.class).value());
@@ -259,17 +260,14 @@ public class BaseService {
                 continue;
             }
             try {
-                String longTypeName = Long.class.getTypeName();
-                String stringTypeName = String.class.getTypeName();
-                String integerTypeName = Integer.class.getTypeName();
                 String typeName = field.getGenericType().getTypeName();
                 String keyId = ToolUtils.valueOfString(map.get("KEY_ID"));
                 field.setAccessible(true);
-                if (longTypeName.equals(typeName)) {
+                if (Long.class.getTypeName().equals(typeName)) {
                     field.set(object, ToolUtils.valueOfLong(keyId));
-                } else if (stringTypeName.equals(typeName)) {
+                } else if (String.class.getTypeName().equals(typeName)) {
                     field.set(object, keyId);
-                } else if (integerTypeName.equals(typeName)) {
+                } else if (Integer.class.getTypeName().equals(typeName)) {
                     field.set(object, ToolUtils.valueOfInteger(keyId));
                 }
                 field.setAccessible(false);
