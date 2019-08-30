@@ -2,14 +2,14 @@
     <div id="wei-dialog-detail">
         <slot name="rowHead"></slot>
         <el-row v-for="(row,index) in rows" :key="index">
-            <el-col :span="5">
+            <el-col :span="colNum">
                 <el-tooltip class="item" effect="dark" :content="row.title || '标题'" placement="top">
                     <div class="title">
                         {{row.title || '标题'}}
                     </div>
                 </el-tooltip>
             </el-col>
-            <el-col :span="19">
+            <el-col :span="24 - colNum">
                 <div class="content">
                     <template v-if="row.formatter">
                         <div v-html="row.formatter()"></div>
@@ -32,6 +32,11 @@
             rows: {
                 type: Array,
                 default: () => []
+            },
+            //左边站的格数
+            colNum: {
+                type: Number,
+                default: 5
             }
         }
     }
