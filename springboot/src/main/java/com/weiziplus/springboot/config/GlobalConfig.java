@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
  * @data 2019/5/6 15:50
  */
 @Component
-public class GlobalConfig {
+public final class GlobalConfig {
+
     /**
      * 身份验证，请求头，token
      */
-    public final static String TOKEN = "token";
+    public static final String TOKEN = "token";
 
     /**
      * 空字符串
@@ -59,20 +60,38 @@ public class GlobalConfig {
     /**
      * 设置可以跨域访问的地址
      */
-    public static String CORS_FILTER_ORIGINS;
+    private static String CORS_FILTER_ORIGINS;
 
     @Value("${global.cors-filter-origins}")
-    public void setCorsFilterOrigins(String corsFilterOrigins) {
+    private void setCorsFilterOrigins(String corsFilterOrigins) {
         GlobalConfig.CORS_FILTER_ORIGINS = corsFilterOrigins;
+    }
+
+    /**
+     * 获取跨域访问的地址
+     *
+     * @return
+     */
+    public static String getCorsFilterOrigins() {
+        return GlobalConfig.CORS_FILTER_ORIGINS;
     }
 
     /**
      * 设置图片上传基础路径
      */
-    public static String BASE_FILE_PATH;
+    private static String BASE_FILE_PATH;
 
     @Value("${global.base-file-path}")
-    public void setBaseFilePath(String baseFilePath) {
+    private void setBaseFilePath(String baseFilePath) {
         GlobalConfig.BASE_FILE_PATH = baseFilePath;
+    }
+
+    /**
+     * 获取图片上传基础路径
+     *
+     * @return
+     */
+    public static String getBaseFilePath() {
+        return GlobalConfig.BASE_FILE_PATH;
     }
 }

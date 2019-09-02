@@ -48,7 +48,7 @@ public class CorsFilter implements Filter {
             return;
         }
         //当前域名是否存在允许跨域域名内
-        if (!GlobalConfig.CORS_FILTER_ORIGINS.contains(originHeader)) {
+        if (!GlobalConfig.getCorsFilterOrigins().contains(originHeader)) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;

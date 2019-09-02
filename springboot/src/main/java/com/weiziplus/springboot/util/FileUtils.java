@@ -40,7 +40,7 @@ public class FileUtils {
         // 生成新文件名
         fileName = ToolUtils.createUUID() + suffixName;
         resultPath = resultPath + fileName;
-        File dest = new File(GlobalConfig.BASE_FILE_PATH + resultPath);
+        File dest = new File(GlobalConfig.getBaseFilePath() + resultPath);
         if (!dest.getParentFile().exists()) {
             boolean flag = dest.getParentFile().mkdirs();
             if (!flag) {
