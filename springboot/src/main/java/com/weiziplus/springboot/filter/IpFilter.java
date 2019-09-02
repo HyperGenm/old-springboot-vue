@@ -4,9 +4,11 @@ import com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper;
 import com.weiziplus.springboot.models.SysAbnormalIp;
 import com.weiziplus.springboot.service.data.dictionary.DataDictionaryIpFilterService;
 import com.weiziplus.springboot.util.HttpRequestUtils;
+import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -28,6 +30,16 @@ public class IpFilter implements Filter {
 
     @Autowired
     SysAbnormalIpMapper sysAbnormalIpMapper;
+
+    /**
+     * 5秒内多少次请求，暂时封ip
+     */
+    private static Integer MAX_NUM = 27;
+
+    @Value("${global.ip-filter-max-num:259200}")
+    private void setMaxNum(String maxNum) {
+        IpFilter.MAX_NUM = ToolUtils.valueOfInteger(maxNum);
+    }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -60,10 +72,10 @@ public class IpFilter implements Filter {
             number = (int) numberObject;
         }
         number += 1;
-        int maxNumber = 27;
         //如果访问频率过快超出限制
-        if (number >= maxNumber) {
-            RedisUtils.set(warnRedisKey, true, 60 * 60L);
+        if (number >= MAX_NUM) {
+            //暂时封号---3分钟后恢复
+            RedisUtils.set(warnRedisKey, true, 3 * 60L);
             handleAbnormalIp(ipAddress);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
