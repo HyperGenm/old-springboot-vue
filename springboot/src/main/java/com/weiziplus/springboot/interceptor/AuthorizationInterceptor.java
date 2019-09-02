@@ -7,6 +7,7 @@ import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.models.User;
 import com.weiziplus.springboot.util.HttpRequestUtils;
+import com.weiziplus.springboot.util.Md5Utils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.StringRedisUtils;
@@ -87,25 +88,30 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
-        //获取角色
-        switch (JwtTokenUtils.getUserAudienceByToken(token)) {
-            //角色为admin
-            case AdminTokenUtils.AUDIENCE: {
-                //查看是否有日志注解，有的话将日志信息放入数据库
-                SystemLog systemLog = method.getAnnotation(SystemLog.class);
-                if (null != systemLog) {
-                    sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
-                }
-                return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
-            }
-            //角色为web
-            case WebTokenUtils.AUDIENCE: {
-                return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
-            }
-            default: {
-                return false;
-            }
+        //获取token中存放的issuer
+        String issuer = JwtTokenUtils.getIssuer(token);
+        //获取当前访问的ip地址
+        String ipAddress = HttpRequestUtils.getIpAddress(request);
+        if (!Md5Utils.encode(ipAddress).equals(issuer)) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
+            return false;
         }
+        String tokenAudience = JwtTokenUtils.getUserAudienceByToken(token);
+        if (Md5Utils.encode(AdminTokenUtils.AUDIENCE).equals(tokenAudience)) {
+            //角色为admin
+            //查看是否有日志注解，有的话将日志信息放入数据库
+            SystemLog systemLog = method.getAnnotation(SystemLog.class);
+            if (null != systemLog) {
+                sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
+            }
+            return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
+        } else if (Md5Utils.encode(WebTokenUtils.AUDIENCE).equals(tokenAudience)) {
+            //角色为web
+            return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
+        }
+        //没有角色
+        handleResponse(response, ResultUtils.errorToken("token不存在"));
+        return false;
     }
 
     /**

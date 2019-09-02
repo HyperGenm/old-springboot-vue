@@ -36,7 +36,7 @@ public class IpFilter implements Filter {
      */
     private static Integer MAX_NUM = 27;
 
-    @Value("${global.ip-filter-max-num:259200}")
+    @Value("${global.ip-filter-max-num:27}")
     private void setMaxNum(String maxNum) {
         IpFilter.MAX_NUM = ToolUtils.valueOfInteger(maxNum);
     }

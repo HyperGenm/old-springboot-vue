@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.util.token;
 
+import com.weiziplus.springboot.util.Md5Utils;
 import com.weiziplus.springboot.util.ToolUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -39,15 +40,25 @@ public class JwtTokenUtils {
      * @param userId
      * @return
      */
-    public static String createToken(Long userId, String audience) {
+    protected static String createToken(Long userId, String audience, String ipAddress) {
         return Jwts.builder()
-                .setIssuer(ISSUER)
-                .setAudience(audience)
+                .setIssuer(Md5Utils.encode(ipAddress))
+                .setAudience(Md5Utils.encode(audience))
                 .signWith(HS512, SECRET)
                 .setSubject(ToolUtils.valueOfString(userId))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();
+    }
+
+    /**
+     * 获取token中的issuer---目前存放的是ip地址
+     *
+     * @param token
+     * @return
+     */
+    public static String getIssuer(String token) {
+        return getTokenBody(token).getIssuer();
     }
 
     /**

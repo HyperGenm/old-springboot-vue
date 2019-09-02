@@ -47,8 +47,8 @@ public class AdminLoginController {
      */
     @PostMapping("/login")
     @SystemLog(description = "系统用户登录")
-    public ResultUtils login(HttpSession session, String username, String password, String code) {
-        return service.login(session, username, password, code);
+    public ResultUtils login(HttpServletRequest request, HttpSession session, String username, String password, String code) {
+        return service.login(request, session, username, password, code);
     }
 
     /**

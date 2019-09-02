@@ -31,8 +31,8 @@ public class LoginController {
             @ApiImplicitParam(name = "password", value = "密码", dataType = "String", required = true, paramType = "form")
     })
     @PostMapping("/login")
-    public ResultUtils login(String username, String password) {
-        return service.login(username, password);
+    public ResultUtils login(HttpServletRequest request, String username, String password) {
+        return service.login(request, username, password);
     }
 
     @ApiOperation(value = "注册")

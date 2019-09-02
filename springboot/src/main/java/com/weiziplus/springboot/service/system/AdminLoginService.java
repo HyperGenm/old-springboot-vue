@@ -83,7 +83,7 @@ public class AdminLoginService {
      * @param password
      * @return
      */
-    public ResultUtils login(HttpSession session, String username, String password, String code) {
+    public ResultUtils login(HttpServletRequest request, HttpSession session, String username, String password, String code) {
         if (ToolUtils.isBlank(username) || ToolUtils.isBlank(password)) {
             return ResultUtils.error("用户名或密码为空");
         }
@@ -113,7 +113,7 @@ public class AdminLoginService {
         if (!SysRoleService.IS_STOP.equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
-        String token = AdminTokenUtils.createToken(sysUser.getId());
+        String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request));
         if (null == token) {
             return ResultUtils.error("登录失败，请重试");
         }

@@ -3,6 +3,7 @@ package com.weiziplus.springboot.service.user;
 import com.github.pagehelper.util.StringUtil;
 import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.util.HttpRequestUtils;
 import com.weiziplus.springboot.util.Md5Utils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ValidateUtils;
@@ -34,7 +35,7 @@ public class LoginService {
      * @param password
      * @return
      */
-    public ResultUtils login(String username, String password) {
+    public ResultUtils login(HttpServletRequest request, String username, String password) {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
             return ResultUtils.error("用户名或密码为空");
         }
@@ -46,7 +47,7 @@ public class LoginService {
             return ResultUtils.error("用户名或密码错误");
         }
         Map<String, Object> resMap = new HashMap<>(1);
-        String token = WebTokenUtils.createToken(user.getId());
+        String token = WebTokenUtils.createToken(user.getId(), HttpRequestUtils.getIpAddress(request));
         resMap.put("token", token);
         return ResultUtils.success(resMap);
     }
