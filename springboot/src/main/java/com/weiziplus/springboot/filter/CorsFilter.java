@@ -2,6 +2,7 @@ package com.weiziplus.springboot.filter;
 
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.util.ToolUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,16 @@ import java.util.regex.Pattern;
  */
 @Component
 public class CorsFilter implements Filter {
+
+    /**
+     * 设置可以跨域访问的地址
+     */
+    private static String CORS_FILTER_ORIGINS;
+
+    @Value("${global.cors-filter-origins}")
+    private void setCorsFilterOrigins(String corsFilterOrigins) {
+        CorsFilter.CORS_FILTER_ORIGINS = corsFilterOrigins;
+    }
 
     /**
      * 配置跨域
@@ -48,7 +59,7 @@ public class CorsFilter implements Filter {
             return;
         }
         //当前域名是否存在允许跨域域名内
-        if (!GlobalConfig.getCorsFilterOrigins().contains(originHeader)) {
+        if (!CORS_FILTER_ORIGINS.contains(originHeader)) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;

@@ -1,6 +1,5 @@
 package com.weiziplus.springboot.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,19 +27,9 @@ public final class GlobalConfig {
     public static final String NULL = "null";
 
     /**
-     * 用户允许禁止登录
+     * 系统用户封号中
      */
-    public static final Integer ALLOW_LOGIN_ONE = 1;
-
-    /**
-     * 用户允许封号中
-     */
-    public static final Integer ALLOW_LOGIN_TWO = 2;
-
-    /**
-     * 允许使用为0，禁止为1
-     */
-    public static final Integer IS_STOP = 0;
+    public static final Integer ADMIN_USER_ALLOW_LOGIN_TWO = 2;
 
     /**
      * 超级管理员id为1
@@ -51,47 +40,4 @@ public final class GlobalConfig {
      * 超级管理员角色id为1
      */
     public static final Long SUPER_ADMIN_ROLE_ID = 1L;
-
-    /**
-     * 系统功能表中角色管理id为3
-     */
-    public static final Long SYS_FUNCTION_ROLE_ID = 3L;
-
-    /**
-     * 设置可以跨域访问的地址
-     */
-    private static String CORS_FILTER_ORIGINS;
-
-    @Value("${global.cors-filter-origins}")
-    private void setCorsFilterOrigins(String corsFilterOrigins) {
-        GlobalConfig.CORS_FILTER_ORIGINS = corsFilterOrigins;
-    }
-
-    /**
-     * 获取跨域访问的地址
-     *
-     * @return
-     */
-    public static String getCorsFilterOrigins() {
-        return GlobalConfig.CORS_FILTER_ORIGINS;
-    }
-
-    /**
-     * 设置图片上传基础路径
-     */
-    private static String BASE_FILE_PATH;
-
-    @Value("${global.base-file-path}")
-    private void setBaseFilePath(String baseFilePath) {
-        GlobalConfig.BASE_FILE_PATH = baseFilePath;
-    }
-
-    /**
-     * 获取图片上传基础路径
-     *
-     * @return
-     */
-    public static String getBaseFilePath() {
-        return GlobalConfig.BASE_FILE_PATH;
-    }
 }

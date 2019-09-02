@@ -48,6 +48,16 @@ public class SysRoleService extends BaseService {
     SysUserMapper sysUserMapper;
 
     /**
+     * 角色允许使用为0，禁止为1
+     */
+    public static final Integer IS_STOP = 0;
+
+    /**
+     * 系统功能表中角色管理id为3
+     */
+    private static final Long SYS_FUNCTION_ROLE_ID = 3L;
+
+    /**
      * 获取角色树形结构
      *
      * @return
@@ -125,7 +135,7 @@ public class SysRoleService extends BaseService {
                 if (null == id || 0 > id) {
                     return ResultUtils.error("ids错误");
                 }
-                if (GlobalConfig.SYS_FUNCTION_ROLE_ID.equals(id)) {
+                if (SYS_FUNCTION_ROLE_ID.equals(id)) {
                     haveRoleId = true;
                     break;
                 }
@@ -169,7 +179,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("角色名已存在");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
-        if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
+        if (!IS_STOP.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtils.getNowDateTime());
@@ -201,11 +211,11 @@ public class SysRoleService extends BaseService {
         if (null != role && null != role.getId() && !role.getId().equals(sysRole.getId())) {
             return ResultUtils.error("角色名已存在");
         }
-        if (!GlobalConfig.IS_STOP.equals(sysRole.getIsStop())) {
+        if (!IS_STOP.equals(sysRole.getIsStop())) {
             return ResultUtils.error("操作失败，角色处于禁用状态");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
-        if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
+        if (!IS_STOP.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         return ResultUtils.success(baseUpdate(sysRole));
@@ -264,10 +274,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("状态不能为空");
         }
         //判断是否启用
-        if (GlobalConfig.IS_STOP.equals(isStop)) {
+        if (IS_STOP.equals(isStop)) {
             SysRole role = mapper.getInfoByRoleId(roleId);
             SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
-            if (!GlobalConfig.IS_STOP.equals(superRole.getIsStop())) {
+            if (!IS_STOP.equals(superRole.getIsStop())) {
                 return ResultUtils.error("父级当前处于禁用状态");
             }
         }
