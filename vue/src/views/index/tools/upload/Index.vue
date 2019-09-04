@@ -1,7 +1,8 @@
 <template>
     <div id="index">
         <wei-upload :action="$global.URL.tools.upload" :limit="3"
-                    @success="success"></wei-upload>
+                    :fileList.sync="fileList"></wei-upload>
+        <el-button type="primary" @click="showFileList">当前的文件列表</el-button>
     </div>
 </template>
 
@@ -11,9 +12,20 @@
         components: {
             'wei-upload': () => import('@/components/upload/Index.vue')
         },
+        data() {
+            return {
+                fileList: [
+                    {
+                        path: '原始回显图片',
+                        name: '回显图片.jpeg',
+                        url: 'http://localhost:8080/666.jpg'
+                    }
+                ]
+            }
+        },
         methods: {
-            success(data) {
-                console.log('上传成功列表---', data);
+            showFileList() {
+                console.log(this.fileList);
             }
         }
     }

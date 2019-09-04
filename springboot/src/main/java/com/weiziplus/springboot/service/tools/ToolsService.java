@@ -6,6 +6,8 @@ import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+
 /**
  * @author wanglongwei
  * @data 2019/8/24 16:27
@@ -23,7 +25,9 @@ public class ToolsService extends BaseService {
         if (null == path) {
             return ResultUtils.error("文件上传失败，请重试");
         }
-        return ResultUtils.success("success", path);
+        return ResultUtils.success(new HashMap<String, String>(1) {{
+            put("path", path);
+        }});
     }
 
 }

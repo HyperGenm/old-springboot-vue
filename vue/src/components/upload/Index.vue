@@ -8,9 +8,11 @@
                 :show-file-list="showFileList"
                 :on-preview="onPreview"
                 :on-remove="onRemove"
+                :on-change="onChange"
                 :before-upload="beforeUpload"
                 :list-type="listType"
                 :auto-upload="autoUpload"
+                :file-list="nowFileList"
                 :limit="limit"
                 :on-exceed="onExceed"
                 :accept="accept"
@@ -87,14 +89,24 @@
             maxSize: {
                 type: Number,
                 default: 2097152
+            },
+            //展示的文件列表
+            fileList: {
+                type: Array
             }
         },
         data() {
+            let that = this;
             return {
-                //当前成功上传的文件数组
-                successFile: [],
+                //文件展示列表
+                nowFileList: that.fileList,
                 dialogImageUrl: '',
                 dialogVisible: false
+            }
+        },
+        watch: {
+            nowFileList(list) {
+                this.$emit('update:fileList', list);
             }
         },
         methods: {
@@ -115,26 +127,47 @@
              * @param fileList
              */
             onRemove(file, fileList) {
-                for (let i = 0; i < this.successFile.length; i++) {
-                    if (file['uid'] === this.successFile[i]['uid']) {
-                        this.successFile.splice(i, 1);
-                        break;
-                    }
-                }
-                this.$emit('success', this.successFile);
+                this.nowFileList = fileList;
             },
             /**
-             * 文件上传之前
+             * 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+             * @param file
+             * @param fileList
+             */
+            onChange(file, fileList) {
+                let {raw} = file;
+                if (!this.beforeValidateFileSize(raw)) {
+                    this.nowFileList = fileList.filter(value => value['uid'] !== file['uid']);
+                    this.$globalFun.errorMsg('文件超出最大尺寸');
+                    console.warn('上传文件超出最大尺寸file:', file);
+                    return;
+                }
+                if (!this.beforeValidateFileType(raw)) {
+                    this.$globalFun.errorMsg('文件格式不正确');
+                    this.nowFileList = fileList.filter(value => value['uid'] !== file['uid']);
+                    console.warn('上传文件格式不正确file:', file);
+                    return;
+                }
+                this.nowFileList = fileList;
+            },
+            /**
+             * 文件尺寸是否正确
+             * @param file
+             * @param fileList
+             */
+            beforeValidateFileSize(file) {
+                let {maxSize} = this;
+                let {size} = file;
+                //判断文件是否超出尺寸
+                return size <= maxSize;
+            },
+            /**
+             * 检验文件格式
              * @param file
              */
-            beforeUpload(file) {
-                let {maxSize, accept} = this;
-                let {type, size} = file;
-                //判断文件是否超出尺寸
-                if (size > maxSize) {
-                    this.$globalFun.errorMsg('图片超出最大尺寸');
-                    return false;
-                }
+            beforeValidateFileType(file) {
+                let {accept} = this;
+                let {type} = file;
                 //默认文件格式不正确
                 let flag = false;
                 //如果为全部类型，不做处理
@@ -143,48 +176,61 @@
                 }
                 //无法识别文件类型
                 if (null == type || '' === type) {
-                    this.$globalFun.errorMsg('图片文件格式不正确');
-                    console.warn('图片上传文件格式不正确file:', file);
                     return false;
                 }
                 //如果存在该类型
-                if (!flag && -1 !== accept.indexOf(type)) {
+                if (!flag && accept.includes(type)) {
                     flag = true;
                 }
                 //如果有图片类型，并且是所有图片类型
-                if (!flag && -1 !== accept.indexOf("image/*")) {
+                if (!flag && accept.includes("image/*")) {
                     if (0 === type.indexOf("image/")) {
                         flag = true;
                     }
                 }
                 //如果有音频类型，并且是所有音频类型
-                if (!flag && -1 !== accept.indexOf("audio/*")) {
+                if (!flag && accept.includes("audio/*")) {
                     if (0 === type.indexOf("audio/")) {
                         flag = true;
                     }
                 }
                 //如果有视频类型，并且是所有视频类型
-                if (!flag && -1 !== accept.indexOf("video/*")) {
+                if (!flag && accept.includes("video/*")) {
                     if (0 === type.indexOf("video/")) {
                         flag = true;
                     }
                 }
-                if (!flag && -1 !== accept.indexOf("application/*")) {
+                //以下为自定义类型
+                if (!flag && accept.includes("application/*")) {
                     if (0 === type.indexOf("application/")) {
                         flag = true;
                     }
                 }
-                if (!flag && -1 !== accept.indexOf("text/*")) {
+                if (!flag && accept.includes("text/*")) {
                     if (0 === type.indexOf("text/")) {
                         flag = true;
                     }
                 }
-                //如果文件格式不正确
-                if (!flag) {
-                    this.$globalFun.errorMsg('图片文件格式不正确');
-                    console.warn('图片上传文件格式不正确file:', file);
+                return flag;
+            },
+            /**
+             * 文件上传之前
+             * @param file
+             */
+            beforeUpload(file) {
+                //尺寸是否正确
+                if (!this.beforeValidateFileSize(file)) {
+                    this.$globalFun.errorMsg('文件超出最大尺寸');
+                    console.warn('上传文件超出最大尺寸file:', file);
                     return false;
                 }
+                //如果文件格式不正确
+                if (!this.beforeValidateFileType(file)) {
+                    this.$globalFun.errorMsg('文件格式不正确');
+                    console.warn('上传文件格式不正确file:', file);
+                    return false;
+                }
+                let flag = true;
                 //向父组件抛出beforeUpload---接受回调
                 this.$emit('beforeUpload', file, function (res) {
                     //根据回调判断是否继续上传
@@ -252,11 +298,14 @@
                         return;
                     }
                     item.onSuccess();
-                    that.successFile.push({
-                        uid: item['file']['uid'],
-                        data: data['data']
-                    });
-                    that.$emit('success', that.successFile);
+                    let {nowFileList} = that;
+                    for (let i = 0; i < nowFileList.length; i++) {
+                        if (item['file']['uid'] === nowFileList[i]['uid']) {
+                            nowFileList[i]['response'] = data;
+                            break;
+                        }
+                    }
+                    that.nowFileList = nowFileList;
                 }).catch(error => {
                     item.onError();
                     that.$globalFun.errorMsg('文件上传失败');
