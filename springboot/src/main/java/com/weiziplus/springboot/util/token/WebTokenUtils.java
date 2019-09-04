@@ -3,6 +3,7 @@ package com.weiziplus.springboot.util.token;
 import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.StringRedisUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * web用户token配置
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author wanglongwei
  * @data 2019/5/8 9:01
  */
+@Component
 public class WebTokenUtils {
     /**
      * web用户
