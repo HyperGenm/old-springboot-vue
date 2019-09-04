@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.base;
 
+import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.util.ToolUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,7 +274,7 @@ public class BaseService {
                 field.setAccessible(false);
                 break;
             } catch (IllegalAccessException e) {
-                log.debug("baseInsert插入数据错误，如果不使用返回的自增主键，该消息可以忽略，详情:" + e);
+                log.warn("baseInsert插入数据错误，详情:" + e);
             }
         }
         return insert;
@@ -303,7 +304,10 @@ public class BaseService {
         if (null == nowClass || null == id) {
             return 0;
         }
-        return mapper.deleteById(getTableName(nowClass), id);
+        return mapper.deleteById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("id", id);
+        }});
     }
 
     /**
@@ -317,7 +321,10 @@ public class BaseService {
         if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
             return 0;
         }
-        return mapper.deleteById(getTableName(nowClass), id);
+        return mapper.deleteById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("id", id);
+        }});
     }
 
     /**
@@ -331,7 +338,10 @@ public class BaseService {
         if (null == nowClass || null == ids || 0 >= ids.length) {
             return 0;
         }
-        return mapper.deleteByIds(getTableName(nowClass), ids);
+        return mapper.deleteByIds(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("ids", ids);
+        }});
     }
 
     /**
@@ -345,7 +355,10 @@ public class BaseService {
         if (null == nowClass || null == ids || 0 >= ids.length) {
             return 0;
         }
-        return mapper.deleteByIds(getTableName(nowClass), ids);
+        return mapper.deleteByIds(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("ids", ids);
+        }});
     }
 
     /**
@@ -369,7 +382,10 @@ public class BaseService {
         if (null == nowClass || null == id) {
             return null;
         }
-        return mapper.findById(getTableName(nowClass), id);
+        return mapper.findById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("id", id);
+        }});
     }
 
     /**
@@ -383,7 +399,34 @@ public class BaseService {
         if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
             return null;
         }
-        return mapper.findById(getTableName(nowClass), id);
+        return mapper.findById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("id", id);
+        }});
+    }
+
+    /**
+     * 降序
+     */
+    private final static String DESC = "DESC";
+
+    /**
+     * 升序
+     */
+    private final static String ASC = "ASC";
+
+    /**
+     * 获取所有数据---不指定排序字段，默认主键降序
+     *
+     * @param nowClass
+     * @return
+     */
+    protected List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
+        return mapper.findAll(new HashMap<String, String>(3) {{
+            put("TABLE_NAME", getTableName(nowClass));
+            put("orderColumn", getPrimaryKey(nowClass));
+            put("desc", DESC);
+        }});
     }
 
     /**
@@ -392,7 +435,23 @@ public class BaseService {
      * @param nowClass
      * @return
      */
-    protected List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
-        return mapper.findAll(getTableName(nowClass), getPrimaryKey(nowClass));
+    protected List<Map<String, Object>> baseFindAllByClass(Class nowClass, String orderColumn, String desc) {
+        if (ToolUtils.isBlank(orderColumn)) {
+            throw new RuntimeException("获取所有数据baseFindAllByClass，排序字段错误，class:" + nowClass);
+        }
+        orderColumn = orderColumn.trim();
+        //空格
+        String blankSpace = " ";
+        if (orderColumn.contains(blankSpace)) {
+            throw new RuntimeException("获取所有数据baseFindAllByClass，排序字段错误,内部不能包含空格,class:" + nowClass);
+        }
+        if (!DESC.equalsIgnoreCase(desc) && !ASC.equalsIgnoreCase(desc)) {
+            throw new RuntimeException("获取所有数据baseFindAllByClass，升序、降序字段错误,class:" + nowClass);
+        }
+        Map<String, String> param = new HashMap<>(3);
+        param.put("TABLE_NAME", getTableName(nowClass));
+        param.put("orderColumn", orderColumn);
+        param.put("desc", desc.toUpperCase());
+        return mapper.findAll(param);
     }
 }

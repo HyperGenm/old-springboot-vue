@@ -69,8 +69,8 @@ public class ParamsFilter implements Filter {
             }
             //去除左右的空格
             parameter = parameter.trim();
-            //替换sql关键字
-            parameter = cleanSqlKeyWords(parameter);
+            //替换sql关键字--mybatis框架已经过滤大部分---如果需要请放开限制
+//            parameter = cleanSqlKeyWords(parameter);
             //过滤html标签
             return JsoupUtil.clean(parameter);
         }
@@ -94,8 +94,8 @@ public class ParamsFilter implements Filter {
                 }
                 //去除左右的空格
                 values[i] = values[i].trim();
-                //替换sql关键字
-                values[i] = cleanSqlKeyWords(values[i]);
+                //替换sql关键字--mybatis框架已经过滤大部分---如果需要请放开限制
+//                values[i] = cleanSqlKeyWords(values[i]);
                 //过滤html标签
                 values[i] = JsoupUtil.clean(values[i]);
             }
@@ -117,8 +117,7 @@ public class ParamsFilter implements Filter {
         private String cleanSqlKeyWords(String value) {
             String space = " ";
             for (String keyword : NOT_ALLOW_KEY_WORDS) {
-                if (value.contains(space + keyword) || value.contains(keyword + space)
-                        || value.contains(space + keyword.toUpperCase()) || value.contains(keyword.toUpperCase() + space)) {
+                if (value.toLowerCase().contains(space + keyword) || value.toLowerCase().contains(keyword + space)) {
                     value = value.replace(keyword, "INVALID");
                 }
             }

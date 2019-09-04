@@ -20,15 +20,15 @@ public interface BaseMapper {
      * @return
      */
     @Insert("<script>" +
-            "INSERT INTO `${TABLE_NAME}` ( " +
+            "INSERT INTO `${TABLE_NAME}` \r\n ( " +
             "<foreach collection='COLUMNS' item='column' separator=','> " +
             "`${column}` " +
             "</foreach> " +
-            ") VALUES ( " +
+            ") \r\n VALUES \r\n ( \r\n " +
             "<foreach collection='VALUES' item='value' separator=','> " +
             "#{value} " +
             "</foreach>" +
-            ")" +
+            " \r\n )" +
             "</script>")
     @Options(useGeneratedKeys = true, keyProperty = "KEY_ID")
     int insert(Map<String, Object> map);
@@ -40,17 +40,17 @@ public interface BaseMapper {
      * @return
      */
     @Insert("<script>" +
-            "INSERT INTO `${TABLE_NAME}` ( " +
+            "INSERT INTO `${TABLE_NAME}` \r\n( " +
             "<foreach collection='COLUMNS' item='column' separator=','> " +
             "`${column}` " +
             "</foreach> " +
-            ") VALUES " +
+            ") \r\n VALUES \r\n " +
             "<foreach collection='VALUES_LIST' item='values' separator=','> " +
-            "(" +
+            "( \r\n " +
             " <foreach collection='values' item='value' separator=','> " +
             " #{value} " +
             " </foreach> " +
-            ")" +
+            " \r\n )" +
             "</foreach>" +
             "</script>")
     int insertList(Map<String, Object> map);
@@ -58,30 +58,28 @@ public interface BaseMapper {
     /**
      * 根据表名和id删除
      *
-     * @param TABLE_NAME
-     * @param id
+     * @param map
      * @return
      */
-    @Delete("DELETE FROM `${TABLE_NAME}` " +
+    @Delete("DELETE FROM `${TABLE_NAME}` \r\n " +
             "WHERE id = #{id}")
-    int deleteById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Object id);
+    int deleteById(Map<String, Object> map);
 
     /**
      * 根据表名和ids删除
      *
-     * @param TABLE_NAME
-     * @param ids
+     * @param map
      * @return
      */
     @Delete("<script>" +
-            "DELETE FROM `${TABLE_NAME}` " +
-            "WHERE `id` IN (" +
+            "DELETE FROM `${TABLE_NAME}` \r\n" +
+            "WHERE `id` IN ( \r\n " +
             "<foreach collection='ids' item='id' separator=','> " +
             "#{id} " +
             "</foreach>" +
-            ")" +
+            " \r\n )" +
             "</script>")
-    int deleteByIds(@Param("TABLE_NAME") String TABLE_NAME, @Param("ids") Object[] ids);
+    int deleteByIds(Map<String, Object> map);
 
     /**
      * 修改数据
@@ -90,11 +88,11 @@ public interface BaseMapper {
      * @return
      */
     @Update("<script>" +
-            "UPDATE `${TABLE_NAME}` " +
-            "SET " +
+            "UPDATE `${TABLE_NAME}` \r\n " +
+            "SET \r\n " +
             "<foreach collection='COLUMNS_VALUES' item='item' separator=','> " +
             "`${item.column}` = #{item.value} " +
-            "</foreach> " +
+            "</foreach> \r\n " +
             "WHERE `${KEY_ID}` = #{KEY_VALUE}" +
             "</script>")
     int update(Map<String, Object> map);
@@ -102,25 +100,22 @@ public interface BaseMapper {
     /**
      * 根据id查询数据
      *
-     * @param TABLE_NAME
-     * @param id
+     * @param map
      * @return
      */
-    @Select("SELECT * " +
-            "FROM `${TABLE_NAME}` " +
-            "WHERE `id` = #{id} " +
-            "LIMIT 1")
-    Map<String, Object> findById(@Param("TABLE_NAME") String TABLE_NAME, @Param("id") Object id);
+    @Select("SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "WHERE `id` = #{id}")
+    Map<String, Object> findById(Map<String, Object> map);
 
     /**
      * 获取所有数据
      *
-     * @param TABLE_NAME
-     * @param PRIMARY_KEY
+     * @param map
      * @return
      */
-    @Select("SELECT * " +
-            "FROM `${TABLE_NAME}` " +
-            "ORDER BY `${PRIMARY_KEY}` DESC")
-    List<Map<String, Object>> findAll(@Param("TABLE_NAME") String TABLE_NAME, @Param("PRIMARY_KEY") String PRIMARY_KEY);
+    @Select("SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "ORDER BY #{orderColumn} #{desc}")
+    List<Map<String, Object>> findAll(Map<String, String> map);
 }

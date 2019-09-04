@@ -18,7 +18,7 @@
     <select id="getRoleInfoByName" resultType="com.weiziplus.springboot.models.SysRole">
         SELECT *
         FROM sys_role
-        WHERE name = #{name}
+        WHERE `name` = #{name}
         LIMIT 1
     </select>
     <update id="changeRoleIsStopByIdAndIsStop">

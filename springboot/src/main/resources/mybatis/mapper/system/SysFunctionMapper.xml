@@ -42,13 +42,13 @@
     <select id="getFunNotButtonList" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
         FROM sys_function
-        WHERE type = 0
+        WHERE `type` = 0
         ORDER BY sort ASC
     </select>
     <select id="getFunInfoByName" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
         FROM sys_function
-        WHERE name = #{name}
+        WHERE `name` = #{name}
         LIMIT 1
     </select>
     <select id="getFunListByRoleId" resultType="com.weiziplus.springboot.models.SysFunction">

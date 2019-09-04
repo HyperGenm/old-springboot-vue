@@ -5,7 +5,7 @@
 <mapper namespace="com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper">
     <insert id="addAbnormalIpAndRemark">
         INSERT INTO sys_abnormal_ip
-        (ip,number,remark,lase_time,create_time)
+        (ip,`number`,remark,lase_time,create_time)
         VALUES
         (#{ip},1,#{remark},now(),now())
     </insert>
@@ -18,7 +18,7 @@
     <update id="updateAbnormalIpAndRemark">
         UPDATE sys_abnormal_ip
         SET
-        number = number + 1,
+        `number` = `number` + 1,
         remark = #{remark},
         lase_time = now()
         WHERE ip = #{ip}

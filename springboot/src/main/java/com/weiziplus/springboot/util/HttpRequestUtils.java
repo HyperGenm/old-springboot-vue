@@ -53,7 +53,11 @@ public class HttpRequestUtils {
                     ip = "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
                 }
             }
-        } else if (15 < ip.length()) {
+            return ip;
+        }
+        //ip地址最大长度为15
+        int ipMaxNum = 15;
+        if (ipMaxNum < ip.length()) {
             String[] ips = ip.split(",");
             for (String strIp : ips) {
                 if (!(unknown.equalsIgnoreCase(strIp))) {
