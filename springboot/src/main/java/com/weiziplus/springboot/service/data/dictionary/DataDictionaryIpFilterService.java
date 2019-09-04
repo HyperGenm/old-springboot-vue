@@ -1,5 +1,7 @@
 package com.weiziplus.springboot.service.data.dictionary;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryIpFilterMapper;
@@ -44,7 +46,7 @@ public class DataDictionaryIpFilterService {
         String redisKey = BASE_REDIS_KEY + "getIpValueWhiteList";
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
-            return (List<String>) object;
+            return JSONArray.parseArray(JSON.toJSONString(object), String.class);
         }
         List<String> ipWhiteList = mapper.getIpValueWhiteList();
         RedisUtils.set(redisKey, ipWhiteList, 60 * 60 * 24L);
@@ -60,7 +62,7 @@ public class DataDictionaryIpFilterService {
         String redisKey = BASE_REDIS_KEY + "getIpValueBlackList";
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
-            return (List<String>) object;
+            return JSONArray.parseArray(JSON.toJSONString(object), String.class);
         }
         List<String> ipBlackList = mapper.getIpValueBlackList();
         RedisUtils.set(redisKey, ipBlackList, 60 * 60 * 24L);

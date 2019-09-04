@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 自定义的拦截器interceptor
@@ -200,7 +201,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     private void handleResponse(HttpServletResponse response, ResultUtils errResult) {
         PrintWriter out = null;
         try {
-            response.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType("application/json;charset=utf-8");
             out = response.getWriter();
             out.print(JSON.toJSONString(errResult));
