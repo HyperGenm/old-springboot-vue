@@ -23,7 +23,7 @@ public class SysLogController {
     @Autowired
     SysLogService service;
 
-    @GetMapping("/getLogList")
+    @GetMapping("/getPageList")
     @SystemLog(description = "查看系统日志")
     public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
