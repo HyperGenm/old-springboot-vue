@@ -214,10 +214,10 @@ INSERT INTO `sys_role_function` VALUES (211, 1, 17);
 INSERT INTO `sys_role_function` VALUES (217, 1, 18);
 INSERT INTO `sys_role_function` VALUES (224, 1, 19);
 INSERT INTO `sys_role_function` VALUES (226, 1, 20);
-INSERT INTO `sys_role_function` VALUES (226, 1, 21);
-INSERT INTO `sys_role_function` VALUES (226, 1, 22);
-INSERT INTO `sys_role_function` VALUES (226, 1, 23);
-INSERT INTO `sys_role_function` VALUES (226, 1, 24);
+INSERT INTO `sys_role_function` VALUES (227, 1, 21);
+INSERT INTO `sys_role_function` VALUES (228, 1, 22);
+INSERT INTO `sys_role_function` VALUES (229, 1, 23);
+INSERT INTO `sys_role_function` VALUES (230, 1, 24);
 
 -- ----------------------------
 -- Table structure for sys_user
