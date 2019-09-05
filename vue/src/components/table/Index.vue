@@ -122,7 +122,7 @@
                             </el-button>
                         </div>
                         <div v-else>
-                            <el-popover placement="bottom"
+                            <el-popover placement="left"
                                         :width="tableOperates.width || 150"
                                         trigger="click">
                                 <div style="margin: 10px auto;text-align: center;"
