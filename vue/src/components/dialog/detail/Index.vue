@@ -12,7 +12,7 @@
             <el-col :span="24 - colNum">
                 <div class="content">
                     <template v-if="row.formatter">
-                        <div v-html="row.formatter()"></div>
+                        <div v-html="row.formatter(row)"></div>
                     </template>
                     <!--表格普通元素-->
                     <template v-else>

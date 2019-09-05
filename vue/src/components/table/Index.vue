@@ -85,9 +85,11 @@
                       v-loading="loading" :empty-text="emptyText" @header-click="headerClick"
                       :stripe="null == selection || 0 >= selection.length"
                       @selection-change="selectionChange" :row-style="rowStyle"
+                      @sort-change="sortChange"
                       border highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
                 <el-table-column type="index" width="50"></el-table-column>
+                <slot name="startColumn"></slot>
                 <el-table-column
                         v-for="(column, index) in tableColumns"
                         :key="index"
@@ -95,19 +97,51 @@
                         :label="column.label"
                         :width="column.width"
                         min-width="80"
-                        :sortable="column.sortable"
+                        :sortable="column.sortable || false"
                         :show-overflow-tooltip="column.showOverflowTooltip || true">
                     <template slot-scope="scope">
-                        <!--需要处理元素———:formatter=""-->
-                        <template v-if="column.formatter">
-                            <div v-html="column.formatter(scope.row)"></div>
+                        <!--自定义显示element-ui组件，属性详情请看element-ui官网-->
+                        <template v-if="column.element">
+                            <template v-if="'tag' === column.type">
+                                <el-tag :type="column.element(scope.row)['type'] || ''"
+                                        :size="column.element(scope.row)['size'] || ''"
+                                        :effect="column.element(scope.row)['effect'] || 'dark'">
+                                    {{column.element(scope.row)['content'] || scope.row[column.prop]}}
+                                </el-tag>
+                            </template>
+                            <template v-else-if="'link' === column.type">
+                                <el-link :target="column.element(scope.row)['target'] || '_blank'"
+                                         :href="column.element(scope.row)['href'] || ''"
+                                         :type="column.element(scope.row)['type'] || ''"
+                                         :icon="column.element(scope.row)['icon'] || ''"
+                                         :underline="column.element(scope.row)['underline'] || false">
+                                    {{column.element(scope.row)['content'] || scope.row[column.prop]}}
+                                </el-link>
+                            </template>
+                            <template v-else-if="'switch' === column.type">
+                                <el-switch @change="columnSwitchChange(event,scope)"
+                                           :value="column.element(scope.row)['value'] || ''"
+                                           :disabled="column.element(scope.row)['disabled'] || false"
+                                           :activeColor="column.element(scope.row)['activeColor'] || '#13ce66'"
+                                           :inactiveColor="column.element(scope.row)['inactiveColor'] || '#ff4949'"
+                                           :activeText="column.element(scope.row)['activeText'] || ''"
+                                           :inactiveText="column.element(scope.row)['inactiveText'] || ''"></el-switch>
+                            </template>
+                            <template v-else>{{column.label}}没有指定type</template>
                         </template>
-                        <!--表格普通元素-->
                         <template v-else>
-                            <div>{{scope.row[column.prop]}}</div>
+                            <!--需要处理元素———:formatter=""-->
+                            <template v-if="column.formatter">
+                                <div v-html="column.formatter(scope.row)"></div>
+                            </template>
+                            <!--表格普通元素-->
+                            <template v-else>
+                                <div>{{scope.row[column.prop]}}</div>
+                            </template>
                         </template>
                     </template>
                 </el-table-column>
+                <slot name="endColumn"></slot>
                 <!--表格中的操作按钮组-->
                 <el-table-column label="操作" fixed="right"
                                  v-if="tableOperates && tableOperates.buttons && 0 < tableOperates.buttons.length"
@@ -117,7 +151,7 @@
                             <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
                                        v-if="( btn['showFormatter'] && btn['showFormatter'](JSON.parse(JSON.stringify(scope.row))))
                                        || btn['show'] || false"
-                                       @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
+                                       @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)),scope['$index'])"
                                        size="mini" :type="btn.type">{{btn.name}}
                             </el-button>
                         </div>
@@ -129,8 +163,9 @@
                                      v-for="(btn, index) in tableOperates.buttons" :key="index"
                                      v-if="( btn['showFormatter'] && btn['showFormatter'](JSON.parse(JSON.stringify(scope.row))))
                                        || btn['show'] || false">
-                                    <el-button @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)))"
-                                               size="mini" :type="btn.type">{{btn.name}}
+                                    <el-button size="mini" :type="btn.type"
+                                               @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)),scope['$index'])">
+                                        {{btn.name}}
                                     </el-button>
                                 </div>
                                 <el-button slot="reference" style="padding: 7px 15px;">
@@ -217,7 +252,7 @@
         },
         mounted() {
             //获取数据
-            this.getCourseList();
+            this.getTableList();
             //初始化表格高度
             this.initTableMaxHeight();
         },
@@ -233,7 +268,7 @@
                 });
             },
             // 获取数据
-            getCourseList() {
+            getTableList() {
                 /**开启加载中动画*/
                 this.loading = true;
                 /**重置表格数据*/
@@ -315,16 +350,16 @@
             handleSizeChange(pageSize) {
                 this.pageNum = 1;
                 this.pageSize = pageSize;
-                this.getCourseList();
+                this.getTableList();
             },
             //pageNum改变触发
             handleCurrentChange(pageNum) {
                 this.pageNum = pageNum;
-                this.getCourseList();
+                this.getTableList();
             },
             //刷新表格数据
             renderTable() {
-                this.getCourseList();
+                this.getTableList();
             },
             //表格内部操作按钮是否折叠展示
             isShowTableOperatesPopover(buttons) {
@@ -364,6 +399,25 @@
                 if (this.selection.includes(row)) {
                     return {'background-color': 'rgba(185, 221, 249, 0.75) !important'};
                 }
+            },
+            //当表格的排序条件发生变化的时候会触发该事件
+            sortChange({column, prop, order}) {
+                if ('descending' === order) {
+                    order = 'desc';
+                } else if ('ascending' === order) {
+                    order = 'acs';
+                }
+                this.tableDataRequest.data[`${prop}Sort`] = order;
+                this.getTableList();
+            },
+            //switch状态改变时触发
+            columnSwitchChange(value, {$index, column, row}) {
+                this.$emit('columnSwitchChange', {
+                    index: $index,
+                    prop: column['property'],
+                    row,
+                    value
+                });
             }
         }
     }

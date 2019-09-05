@@ -59,7 +59,7 @@
                         userId: that.userData.id
                     },
                     success() {
-                        that.$globalFun.successMsg('角色成功');
+                        that.$globalFun.successMsg('成功');
                         that.$emit('closeDialogRole');
                         that.$emit('renderTable');
                     }

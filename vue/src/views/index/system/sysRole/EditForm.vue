@@ -63,7 +63,7 @@
                 let that = this;
                 delete that.form['children'];
                 that.$axios({
-                    url: that.$global.URL[url]['system']['sysRole'][that.handleType],
+                    url: that.$global.URL['system']['sysRole'][that.handleType],
                     method: 'post',
                     data: that.form,
                     success() {

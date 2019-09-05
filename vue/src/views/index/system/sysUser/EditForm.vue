@@ -34,24 +34,10 @@
         watch: {
             formData(data) {
                 this.form = data;
-                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
-                this.formOptions[0]['disabled'] = true;
-                //如果当前用户被封号
-                if ('update' === this.handleType && 2 === data['allowLogin']) {
-                    this.formOptions.splice(2);
-                }
+                this.changeFormOptions();
             },
-            handleType(handleType) {
-                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
-                if ('add' === handleType) {
-                    this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
-                } else {
-                    this.formOptions[0]['disabled'] = true;
-                    //如果当前用户被封号
-                    if (2 === this.formData['allowLogin']) {
-                        this.formOptions.splice(2);
-                    }
-                }
+            handleType() {
+                this.changeFormOptions();
             }
         },
         data() {
@@ -67,14 +53,29 @@
                     ]
                 },
                 form: this.formData,
-                formOptions: JSON.parse(JSON.stringify(baseOptions))
+                formOptions: []
             }
         },
+        mounted() {
+            this.changeFormOptions();
+        },
         methods: {
+            changeFormOptions() {
+                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
+                if ('add' === this.handleType) {
+                    this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
+                } else {
+                    this.formOptions[0]['disabled'] = true;
+                    //如果当前用户被封号
+                    if (2 === this.formData['allowLogin']) {
+                        this.formOptions.splice(2);
+                    }
+                }
+            },
             submit() {
                 let that = this;
                 that.$axios({
-                    url: that.$global.URL[url]['system']['sysUser'][that.handleType],
+                    url: that.$global.URL['system']['sysUser'][that.handleType],
                     method: 'post',
                     data: that.form,
                     success() {

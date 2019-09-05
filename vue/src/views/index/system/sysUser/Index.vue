@@ -91,15 +91,34 @@
                     {prop: 'roleName', label: '角色'},
                     {prop: 'realName', label: '真实姓名'},
                     {
-                        prop: 'title', label: '是否允许登录', formatter(row) {
+                        prop: 'title', label: '是否允许登录', type: 'tag',
+                        element(row) {
                             let {allowLogin} = row;
-                            if ('0' === '' + allowLogin) {
-                                return '允许';
-                            } else if ('1' === '' + allowLogin) {
-                                return '禁止';
-                            } else {
-                                return '封号中';
+                            let result = {};
+                            switch (allowLogin) {
+                                case 0:
+                                case '0': {
+                                    result = {
+                                        content: '允许'
+                                    };
+                                }
+                                    break;
+                                case 1:
+                                case '1': {
+                                    result = {
+                                        type: 'warning',
+                                        content: '禁止'
+                                    };
+                                }
+                                    break;
+                                default: {
+                                    result = {
+                                        type: 'danger',
+                                        content: '封号中'
+                                    };
+                                }
                             }
+                            return result;
                         }
                     },
                     {prop: 'suspendNum', label: '封号次数'},
@@ -219,7 +238,13 @@
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
-                                that.$refs['table'].renderTable();
+                                let {tableData, total} = that.$refs['table'];
+                                for (let i = 0; i < ids.length; i++) {
+                                    tableData = tableData.filter(value => value['id'] !== ids[i]);
+                                }
+                                total -= ids.length;
+                                that.$refs['table']['tableData'] = tableData;
+                                that.$refs['table']['total'] = total;
                             }
                         });
                     }

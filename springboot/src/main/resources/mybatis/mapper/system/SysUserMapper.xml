@@ -15,7 +15,7 @@
         su.last_ip_address AS laseIpAddress
         FROM sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
-        WHERE su.id <![CDATA[<>]]> 1
+        WHERE su.id <![CDATA[>]]> 1
         <if test="null != userName and '' != userName">
             AND position(#{userName} IN su.username)
         </if>

@@ -178,7 +178,13 @@
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
-                                that.$refs.table.renderTable();
+                                let {tableData, total} = that.$refs['table'];
+                                for (let i = 0; i < ids.length; i++) {
+                                    tableData = tableData.filter(value => value['id'] !== ids[i]);
+                                }
+                                total -= ids.length;
+                                that.$refs['table']['tableData'] = tableData;
+                                that.$refs['table']['total'] = total;
                                 that.getAllFunctionTreeNotButton();
                             }
                         })

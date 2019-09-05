@@ -2,8 +2,7 @@
     <div id="index">
         <div class="wei-table">
             <wei-table ref="table" :tableDataRequest="tableDataRequest" :tableColumns="tableColumns"
-                       :tableOperates="tableOperates">
-            </wei-table>
+                       :tableOperates="tableOperates"></wei-table>
         </div>
     </div>
 </template>
@@ -27,7 +26,19 @@
                 },
                 tableColumns: [
                     {prop: 'ip', label: 'ip'},
-                    {prop: 'number', label: '异常次数'},
+                    {
+                        prop: 'number', label: '异常次数', type: 'tag',
+                        element(row) {
+                            let {number} = row;
+                            let type = '';
+                            if (5 >= number && 0 < number) {
+                                type = 'warning';
+                            } else if (5 < number) {
+                                type = 'danger';
+                            }
+                            return {type};
+                        }
+                    },
                     {prop: 'remark', label: '备注'},
                     {prop: 'laseTime', label: '最后一次异常事件'},
                     {prop: 'createTime', label: '创建时间'}

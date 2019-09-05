@@ -9,11 +9,14 @@
         VALUES
         (#{userId},#{description},#{ip})
     </insert>
-    <select id="getLogList" resultType="java.util.Map">
+    <select id="getList" resultType="java.util.Map">
         SELECT sl.*,su.username,su.real_name AS realName,sr.name AS roleName
         FROM sys_log sl ,sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
         WHERE sl.user_id = su.id
+        <if test="null == isSuperAdmin or 0 != isSuperAdmin">
+            AND su.id <![CDATA[>]]> 1
+        </if>
         <if test="null != username and '' != username">
             AND position(#{username} IN su.username)
         </if>

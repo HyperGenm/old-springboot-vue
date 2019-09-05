@@ -70,8 +70,8 @@
                                     }
                                     return '127.0.0.1' !== row['name'];
                                 },
-                                handleClick(row) {
-                                    that.deleteIp([row.id]);
+                                handleClick(row, index) {
+                                    that.deleteIp([row.id], index);
                                 }
                             }
                         ]
@@ -110,7 +110,7 @@
                     }
                 });
             },
-            deleteIp(id) {
+            deleteIp(id, index) {
                 let that = this;
                 this.$globalFun.messageBox({
                     message: '确定删除,该操作无法撤销',
@@ -124,7 +124,11 @@
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
-                                that.$refs['table'].renderTable();
+                                let {tableData, total} = that.$refs['table'];
+                                tableData.splice(index, 1);
+                                total -= 1;
+                                that.$refs['table'].tableData = tableData;
+                                that.$refs['table'].total = total;
                             }
                         });
                     }

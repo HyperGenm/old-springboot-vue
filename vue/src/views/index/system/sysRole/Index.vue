@@ -10,22 +10,22 @@
                            @click="detailRole">
                     查看角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_add']" type="primary" size="mini"
+                <el-button v-if="storeStateRoleButtons['sysRole_add']" type="primary" size="mini"
                            @click="addRole">
                     新增角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_update']" type="success" size="mini"
+                <el-button v-if="storeStateRoleButtons['sysRole_update']" type="success" size="mini"
                            @click="updateRole">修改角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_delete']" type="danger" size="mini"
+                <el-button v-if="storeStateRoleButtons['sysRole_delete']" type="danger" size="mini"
                            @click="deleteRole">
                     删除角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_status']" type="success" size="mini"
+                <el-button v-if="storeStateRoleButtons['sysRole_status']" type="success" size="mini"
                            @click="changeRoleIsStop(0)">
                     启用角色
                 </el-button>
-                <el-button v-if="$store.state.role['buttons']['sysRole_status']" type="danger" size="mini"
+                <el-button v-if="storeStateRoleButtons['sysRole_status']" type="danger" size="mini"
                            @click="changeRoleIsStop(1)">
                     禁用角色
                 </el-button>
@@ -75,7 +75,10 @@
             'detail': () => import('./Detail.vue')
         },
         data() {
+            let that = this;
             return {
+                //用户角色拥有的按钮
+                storeStateRoleButtons: that.$store.state.role.buttons,
                 //角色树的数据
                 roleData: [],
                 roleProps: {

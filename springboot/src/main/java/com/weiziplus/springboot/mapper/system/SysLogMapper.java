@@ -25,6 +25,7 @@ public interface SysLogMapper {
     /**
      * 获取日志列表
      *
+     * @param isSuperAdmin 当前是否是超级管理员,0：是
      * @param username
      * @param roleId
      * @param description
@@ -32,7 +33,8 @@ public interface SysLogMapper {
      * @param createTime
      * @return
      */
-    List<Map<String, Object>> getLogList(@Param("username") String username, @Param("roleId") Long roleId,
-                                         @Param("description") String description, @Param("ipAddress") String ipAddress,
-                                         @Param("createTime") String createTime);
+    List<Map<String, Object>> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
+                                      @Param("username") String username, @Param("roleId") Long roleId,
+                                      @Param("description") String description, @Param("ipAddress") String ipAddress,
+                                      @Param("createTime") String createTime);
 }
