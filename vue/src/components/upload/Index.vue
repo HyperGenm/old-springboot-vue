@@ -117,6 +117,10 @@
              * @param file
              */
             onPreview(file) {
+                //回显图片
+                if (null == file['raw']) {
+                    return;
+                }
                 let type = file['raw']['type'];
                 if (0 === type.indexOf('image/')) {
                     this.dialogImageUrl = file['url'];
