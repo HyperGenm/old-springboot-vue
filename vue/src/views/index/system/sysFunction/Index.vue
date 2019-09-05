@@ -199,14 +199,14 @@
     #index {
         display: flex;
         .tree {
-            flex: 1;
+            flex: 2.1;
             .title {
                 font-weight: bold;
                 margin-bottom: 30px;
             }
         }
-        .table {
-            flex: 2.7;
+        .wei-table {
+            flex: 5.7;
             border-left: 1px solid #eee;
             padding-left: 2%;
         }
