@@ -77,6 +77,8 @@
                             name,
                             icon
                         }];
+                        that.tabValue = name;
+                        that.$router.push(name);
                     }
                 });
             }
