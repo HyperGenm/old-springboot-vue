@@ -69,7 +69,7 @@ module.exports = {
                     reportFilename: 'report.html',
                     defaultSizes: 'parsed',
                     //是否自动打开浏览器
-                    openAnalyzer: true,
+                    openAnalyzer: false,
                     generateStatsFile: false,
                     statsFilename: 'stats.json',
                     statsOptions: null,
