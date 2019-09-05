@@ -1,11 +1,15 @@
 <template>
     <div id="tabs">
-        <el-tabs v-if="null != tabs || 0 < tabs.length" type="card" closable stretch
+        <el-tabs v-if="null != tabs || 0 < tabs.length"
+                 type="card" closable stretch
                  v-model="tabValue"
                  @tab-remove="removeTab"
                  @tab-click="clickTab">
             <el-tab-pane v-for="item in tabs" :key="item.name" :name="item.name">
-                <span slot="label"><i class="el-icon-s-help"></i> {{item.title}}</span>
+                <span slot="label" @contextmenu.prevent="closeAll(item)">
+                    <i :class="item.icon || 'el-icon-s-help'"></i>
+                    <span>{{item.title}}</span>
+                </span>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -38,7 +42,7 @@
                 this.tabs = tabs.concat({
                     title: to.meta.title,
                     name: to.name,
-                    icon: to.meta.icon || 'el-icon-info'
+                    icon: to.meta.icon || 'el-icon-s-help'
                 });
             }
         },
@@ -61,6 +65,20 @@
             },
             clickTab(tab) {
                 this.$router.push(tab.name);
+            },
+            closeAll(item) {
+                let {name, title, icon} = item;
+                let that = this;
+                this.$globalFun.messageBox({
+                    message: `保留'${title}'页面,关闭其他页面`,
+                    confirm() {
+                        that.tabs = [{
+                            title,
+                            name,
+                            icon
+                        }];
+                    }
+                });
             }
         }
     }

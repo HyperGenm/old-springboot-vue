@@ -53,6 +53,7 @@ function successMsg(msg = '成功', time = 3000) {
  * @param title  标题
  * @param message  内容
  * @param type  类型
+ * @param center  居中布局
  * @param showCancelButton  是否显示取消按钮
  * @param cancelButtonText  取消按钮文字
  * @param confirmButtonText  确定按钮文字
@@ -64,6 +65,7 @@ function messageBox({
                         title = '警告',
                         message = '',
                         type = 'warning',
+                        center = false,
                         showCancelButton = true,
                         cancelButtonText = '取消',
                         confirmButtonText = '确定',
@@ -78,6 +80,7 @@ function messageBox({
         title,
         message,
         type,
+        center,
         showCancelButton,
         cancelButtonText,
         confirmButtonText,
@@ -96,6 +99,7 @@ function messageBox({
  * @param title  标题
  * @param message  内容
  * @param type  类型
+ * @param center  居中布局
  * @param showCancelButton  是否显示取消按钮
  * @param cancelButtonText  取消按钮文字
  * @param confirmButtonText  确定按钮文字
@@ -107,6 +111,7 @@ function messageBoxInput({
                              title = '警告',
                              message = '',
                              type = 'warning',
+                             center = false,
                              showCancelButton = true,
                              cancelButtonText = '取消',
                              confirmButtonText = '确定',
@@ -119,6 +124,7 @@ function messageBoxInput({
         title,
         message,
         type,
+        center,
         showCancelButton,
         cancelButtonText,
         confirmButtonText,

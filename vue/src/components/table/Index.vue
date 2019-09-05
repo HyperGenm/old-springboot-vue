@@ -133,7 +133,10 @@
                                                size="mini" :type="btn.type">{{btn.name}}
                                     </el-button>
                                 </div>
-                                <el-button slot="reference">操作</el-button>
+                                <el-button slot="reference" style="padding: 7px 15px;">
+                                    <span style="margin-right: 5px;">操作</span>
+                                    <i class="el-icon-arrow-down"></i>
+                                </el-button>
                             </el-popover>
                         </div>
                     </template>

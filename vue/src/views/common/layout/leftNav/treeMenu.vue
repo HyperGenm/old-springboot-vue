@@ -4,7 +4,7 @@
             <el-menu-item v-if="null == item.children || 0 >= item.children.length" :index="item.name">
                 <el-tooltip :content="item.title" placement="right">
                     <div>
-                        <i :class="item['icon'] || 'el-icon-info'"></i>
+                        <i :class="item['icon'] || 'el-icon-s-help'"></i>
                         <span>{{item.title}}</span>
                     </div>
                 </el-tooltip>
@@ -13,7 +13,7 @@
                 <template slot="title">
                     <el-tooltip :content="item.title" placement="right">
                         <div>
-                            <i :class="item['icon'] || 'el-icon-info'"></i>
+                            <i :class="item['icon'] || 'el-icon-s-help'"></i>
                             <span>{{item.title}}</span>
                         </div>
                     </el-tooltip>

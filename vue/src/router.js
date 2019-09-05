@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
             router['name'] = value.name;
             router['meta'] = {
                 title: value.meta.title,
-                icon: value.icon
+                icon: value.meta.icon
             };
             router['components'] = require('@/views/index/' + value.components_bak + '/Index');
             router['components_bak'] = value.components_bak;

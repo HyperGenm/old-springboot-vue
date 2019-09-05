@@ -16,7 +16,7 @@
                         </el-menu-item>
                         <el-submenu v-else :index="item.name">
                             <template slot="title">
-                                <i :class="item['icon'] || 'el-icon-info'"></i>
+                                <i :class="item['icon'] || 'el-icon-s-help'"></i>
                                 <span>{{item.title}}</span>
                             </template>
                             <tree-menu :data="item.children"></tree-menu>
