@@ -122,6 +122,9 @@ INSERT INTO `sys_function` VALUES (18, 1, 'sysLog', 'sysLog', '日志管理', 0,
 INSERT INTO `sys_function` VALUES (19, 1, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', 0, '', 0, '', '2019-08-05 10:13:42');
 INSERT INTO `sys_function` VALUES (20, 1, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', 0, '', 0, '', '2019-08-05 14:39:33');
 INSERT INTO `sys_function` VALUES (21, 0, 'home', 'home', '首页', 0, 'el-icon-s-home', 0, '后台首页', '2019-08-26 14:13:35' );
+INSERT INTO `sys_function` VALUES (22, 0, 'tools', 'tools', '常用工具', 0, 'el-icon-s-promotion', 2, '', '2019-08-24 16:41:28');
+INSERT INTO `sys_function` VALUES (23, 22, 'toolsUpload', 'upload', '图片上传', 0, '', 0, '', '2019-08-24 16:41:49');
+INSERT INTO `sys_function` VALUES (24, 22, 'richText', 'richText', '富文本', 0, 'el-icon-s-release', 1, '', '2019-09-04 16:21:09');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -212,6 +215,9 @@ INSERT INTO `sys_role_function` VALUES (217, 1, 18);
 INSERT INTO `sys_role_function` VALUES (224, 1, 19);
 INSERT INTO `sys_role_function` VALUES (226, 1, 20);
 INSERT INTO `sys_role_function` VALUES (226, 1, 21);
+INSERT INTO `sys_role_function` VALUES (226, 1, 22);
+INSERT INTO `sys_role_function` VALUES (226, 1, 23);
+INSERT INTO `sys_role_function` VALUES (226, 1, 24);
 
 -- ----------------------------
 -- Table structure for sys_user
