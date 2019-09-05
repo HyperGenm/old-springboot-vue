@@ -90,16 +90,16 @@
                     }
                 ],
                 tableColumns: [
-                    {prop: 'name', label: '功能名'},
-                    {prop: 'path', label: '路径'},
-                    {prop: 'title', label: '路由标题'},
+                    {label: '功能名', prop: 'name'},
+                    {label: '路径', prop: 'path'},
+                    {label: '路由标题', prop: 'title'},
                     {
-                        prop: 'icon', label: '路由图标', formatter(row) {
+                        label: '路由图标', prop: 'icon', formatter(row) {
                             return `<i class="${row.icon}"></i>`;
                         }
                     },
-                    {prop: 'sort', label: '排序', sortable: true},
-                    {prop: 'description', label: '路由描述'}
+                    {label: '排序', prop: 'sort'},
+                    {label: '路由描述', prop: 'description'}
                 ],
                 tableOperates: {
                     buttons: [

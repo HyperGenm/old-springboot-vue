@@ -33,12 +33,12 @@
                     }
                 },
                 tableColumns: [
-                    {prop: 'username', label: '用户名'},
-                    {prop: 'realName', label: '真实姓名'},
-                    {prop: 'roleName', label: '角色'},
-                    {prop: 'description', label: '操作'},
-                    {prop: 'ipAddress', label: 'ip地址'},
-                    {prop: 'createTime', label: '创建时间'}
+                    {label: '用户名', prop: 'username'},
+                    {label: '真实姓名', prop: 'realName'},
+                    {label: '角色', prop: 'roleName'},
+                    {label: '操作', prop: 'description'},
+                    {label: 'ip地址', prop: 'ipAddress'},
+                    {label: '创建时间', prop: 'createTime'}
                 ],
                 tableOperates: {
                     buttons:

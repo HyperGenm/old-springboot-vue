@@ -25,9 +25,9 @@
                     data: {}
                 },
                 tableColumns: [
-                    {prop: 'ip', label: 'ip'},
+                    {label: 'ip', prop: 'ip'},
                     {
-                        prop: 'number', label: '异常次数', type: 'tag',
+                        label: '异常次数', prop: 'number', type: 'tag',
                         element(row) {
                             let {number} = row;
                             let type = '';
@@ -39,9 +39,9 @@
                             return {type};
                         }
                     },
-                    {prop: 'remark', label: '备注'},
-                    {prop: 'laseTime', label: '最后一次异常事件'},
-                    {prop: 'createTime', label: '创建时间'}
+                    {label: '备注', prop: 'remark'},
+                    {label: '最后一次异常时间', prop: 'laseTime'},
+                    {label: '创建时间', prop: 'createTime'}
                 ],
                 tableOperates: {
                     width: 150,

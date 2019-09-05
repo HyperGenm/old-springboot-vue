@@ -35,22 +35,22 @@
             initData(data) {
                 let {icon, type} = data;
                 this.rows = [
-                    {title: '功能名', content: data['name']},
-                    {title: '路径', content: data['path']},
-                    {title: '标题', content: data['title']},
-                    {title: '上级', content: this.parentData.title},
+                    {label: '功能名', prop: data['name']},
+                    {label: '路径', prop: data['path']},
+                    {label: '标题', prop: data['title']},
+                    {label: '上级', prop: this.parentData.title},
                     {
-                        title: '图标', formatter() {
+                        label: '图标', formatter() {
                             return `<i class="${icon}"></i>`;
                         }
                     },
-                    {title: '排序', content: data['sort']},
+                    {label: '排序', prop: data['sort']},
                     {
-                        title: '类型', formatter() {
+                        label: '类型', formatter() {
                             return ('0' === type + '') ? '菜单' : '按钮';
                         }
                     },
-                    {title: '描述', content: data['description']}
+                    {label: '描述', prop: data['description']}
                 ];
             }
         }

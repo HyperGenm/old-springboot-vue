@@ -87,11 +87,11 @@
                     }
                 ],
                 tableColumns: [
-                    {prop: 'username', label: '用户名'},
-                    {prop: 'roleName', label: '角色'},
-                    {prop: 'realName', label: '真实姓名'},
+                    {label: '用户名', prop: 'username'},
+                    {label: '角色', prop: 'roleName'},
+                    {label: '真实姓名', prop: 'realName'},
                     {
-                        prop: 'title', label: '是否允许登录', type: 'tag',
+                        label: '是否允许登录', prop: 'title', type: 'tag',
                         element(row) {
                             let {allowLogin} = row;
                             let result = {};
@@ -121,10 +121,10 @@
                             return result;
                         }
                     },
-                    {prop: 'suspendNum', label: '封号次数'},
-                    {prop: 'laseIpAddress', label: '用户最后活跃ip地址'},
-                    {prop: 'lastActiveTime', label: '用户最后活跃时间'},
-                    {prop: 'createTime', label: '用户创建时间'}
+                    {label: '封号次数', prop: 'suspendNum'},
+                    {label: '用户最后活跃ip地址', prop: 'laseIpAddress'},
+                    {label: '用户最后活跃时间', prop: 'lastActiveTime'},
+                    {label: '用户创建时间', prop: 'createTime'}
                 ],
                 tableOperates: {
                     buttons:

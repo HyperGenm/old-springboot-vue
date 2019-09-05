@@ -31,12 +31,12 @@
         methods: {
             initData(data) {
                 this.rows = [
-                    {title: '用户名', content: data['username']},
-                    {title: '真实姓名', content: data['realName']},
-                    {title: '角色名', content: data['roleName']},
-                    {title: '日志记录', content: data['description']},
-                    {title: 'ip地址', content: data['ipAddress']},
-                    {title: '操作时间', content: data['createTime']}
+                    {label: '用户名', prop: data['username']},
+                    {label: '真实姓名', prop: data['realName']},
+                    {label: '角色名', prop: data['roleName']},
+                    {label: '日志记录', prop: data['description']},
+                    {label: 'ip地址', prop: data['ipAddress']},
+                    {label: '操作时间', prop: data['createTime']}
                 ];
             }
         }

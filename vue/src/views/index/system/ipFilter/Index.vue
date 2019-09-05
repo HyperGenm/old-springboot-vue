@@ -45,9 +45,9 @@
                     }
                 },
                 tableColumns: [
-                    {prop: 'name', label: 'ip'},
-                    {prop: 'remark', label: '备注'},
-                    {prop: 'createTime', label: '创建时间'}
+                    {label: 'ip', prop: 'name'},
+                    {label: '备注', prop: 'remark'},
+                    {label: '创建时间', prop: 'createTime'}
                 ],
                 tableHeaderButtons: [
                     {

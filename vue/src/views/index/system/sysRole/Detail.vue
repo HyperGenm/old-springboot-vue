@@ -39,15 +39,15 @@
             initData(data) {
                 let {name, sort, isStop, description, createTime} = data;
                 this.rows = [
-                    {title: '角色', content: name},
-                    {title: '排序', content: sort},
+                    {label: '角色', prop: name},
+                    {label: '排序', prop: sort},
                     {
-                        title: '是否启用', formatter() {
+                        label: '是否启用', formatter() {
                             return ('0' === isStop + '') ? '启用' : '禁用';
                         }
                     },
-                    {title: '描述', content: description},
-                    {title: '创建时间', content: createTime}
+                    {label: '描述', prop: description},
+                    {label: '创建时间', prop: createTime}
                 ];
             }
         }
