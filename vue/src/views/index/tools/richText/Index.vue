@@ -1,7 +1,7 @@
 <template>
     <div id="index">
         <wang-editor :html.sync="html"></wang-editor>
-        <button @click="ceshi">测试</button>
+        <el-button type="primary" @click="showContent">展示输入框内容</el-button>
     </div>
 </template>
 
@@ -13,11 +13,11 @@
         },
         data() {
             return {
-                html: `<h1>hello wangEditor</h1>`
+                html: `<h1 style="color: #666;">hello wangEditor</h1>`
             }
         },
         methods: {
-            ceshi() {
+            showContent() {
                 console.log(this.html);
             }
         }

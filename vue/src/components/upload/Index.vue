@@ -32,6 +32,8 @@
 <script>
     //引入axios
     import axios from "axios";
+    /**引入element-ui组件*/
+    import {Loading} from 'element-ui';
 
     export default {
         name: "Index",
@@ -258,6 +260,13 @@
              * @param item
              */
             httpRequest(item) {
+                /**开启加载中动画*/
+                let loading = Loading.service({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
                 let that = this;
                 let formData = new FormData();
                 formData.append('file', item['file']);
@@ -270,6 +279,8 @@
                     url: that.$global.GLOBAL.base_url + that.action,
                     data: formData,
                 }).then(res => {
+                    /**关闭加载中动画*/
+                    loading.close();
                     let {status, data} = res;
                     /**status不是200*/
                     if (200 !== status) {
@@ -307,6 +318,8 @@
                     }
                     that.nowFileList = nowFileList;
                 }).catch(error => {
+                    /**关闭加载中动画*/
+                    loading.close();
                     item.onError();
                     that.$globalFun.errorMsg('文件上传失败');
                     console.warn('文件上传失败，详情:', (error.response || error));

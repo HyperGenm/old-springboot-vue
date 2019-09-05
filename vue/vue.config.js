@@ -46,7 +46,8 @@ module.exports = {
                 'vue-router': 'VueRouter',
                 'vuex': 'Vuex',
                 'axios': 'axios',
-                'element-ui': 'ELEMENT'
+                'element-ui': 'ELEMENT',
+                'wangeditor': 'E'
             };
             //开启Gzip
             config.plugins.push(new CompressionWebpackPlugin({
@@ -68,7 +69,7 @@ module.exports = {
                     reportFilename: 'report.html',
                     defaultSizes: 'parsed',
                     //是否自动打开浏览器
-                    openAnalyzer: false,
+                    openAnalyzer: true,
                     generateStatsFile: false,
                     statsFilename: 'stats.json',
                     statsOptions: null,
