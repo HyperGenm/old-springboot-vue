@@ -33,6 +33,6 @@ swagger:
 #自定义全局变量*******注意:  :后面要有空格
 global:
   #图片存放路径--项目打包后的jar包同级目录static
-  base-file-path: E:\idea\WeiziPlus\restaurant\springboot\target\build\static\
+  base-file-path: /home/template/build/static/
   #允许跨域地址---多个地址用,(逗号)分隔开
   cors-filter-origins: http://localhost:8088,http://localhost:8088

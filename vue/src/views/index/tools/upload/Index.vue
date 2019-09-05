@@ -25,6 +25,7 @@
         },
         methods: {
             showFileList() {
+                this.$globalFun.successMsg(JSON.stringify(this.fileList));
                 console.log(this.fileList);
             }
         }

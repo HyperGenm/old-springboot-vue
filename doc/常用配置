@@ -1,0 +1,26 @@
+
+* nginx
+
+    * 开启gzip
+        #开启gzip
+        gzip on;
+        #配置禁用gzip条件，支持正则。此处表示ie6及以下不启用gzip（因为ie低版本不支持）
+        gzip_disable "MSIE [1-6]\.";
+        #让代理服务器上的浏览器和服务器能正确辨认gzip压缩功能.
+        gzip_vary on;
+        gzip_proxied any;
+        #需要压缩的MIME类型文件
+        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript image/jpeg image/gif image/png;
+
+    * 监听/pc/请求重定向到本地8080端口
+        server {
+                listen       80;
+                server_name  ***;
+
+        		#######/pc/请求重定向到 8080 端口
+                location /pc/ {
+                    proxy_pass   http://127.0.0.1:8080;
+                    proxy_set_header x-forwarded-for  $remote_addr;
+                }
+
+        }

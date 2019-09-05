@@ -18,6 +18,7 @@
         },
         methods: {
             showContent() {
+                this.$globalFun.successMsg(this.html);
                 console.log(this.html);
             }
         }

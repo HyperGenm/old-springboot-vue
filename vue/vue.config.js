@@ -47,7 +47,7 @@ module.exports = {
                 'vuex': 'Vuex',
                 'axios': 'axios',
                 'element-ui': 'ELEMENT',
-                'wangeditor': 'E'
+                'wangeditor': 'wangEditor'
             };
             //开启Gzip
             config.plugins.push(new CompressionWebpackPlugin({
