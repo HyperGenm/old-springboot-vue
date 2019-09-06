@@ -23,13 +23,13 @@ import java.util.regex.Pattern;
 public class CorsFilter implements Filter {
 
     /**
-     * 设置可以跨域访问的地址
+     * 可以跨域访问的地址
      */
-    private static String CORS_FILTER_ORIGINS;
+    private static String[] CORS_FILTER_ORIGINS;
 
-    @Value("${global.cors-filter-origins}")
+    @Value("${global.cors-filter-origins:http://localhost}")
     private void setCorsFilterOrigins(String corsFilterOrigins) {
-        CorsFilter.CORS_FILTER_ORIGINS = corsFilterOrigins;
+        CorsFilter.CORS_FILTER_ORIGINS = corsFilterOrigins.split(",");
     }
 
     /**
@@ -58,8 +58,16 @@ public class CorsFilter implements Filter {
             chain.doFilter(req, res);
             return;
         }
-        //当前域名是否存在允许跨域域名内
-        if (!CORS_FILTER_ORIGINS.contains(originHeader)) {
+        boolean isAllow = false;
+        //当前地址是否在允许的地址中
+        for (String origin : CORS_FILTER_ORIGINS) {
+            if (0 == originHeader.indexOf(origin)) {
+                isAllow = true;
+                break;
+            }
+        }
+        //是否允许
+        if (!isAllow) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
