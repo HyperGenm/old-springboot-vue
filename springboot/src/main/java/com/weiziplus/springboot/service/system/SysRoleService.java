@@ -167,7 +167,8 @@ public class SysRoleService extends BaseService {
      */
     @CacheEvict(allEntries = true)
     public ResultUtils addRole(SysRole sysRole) {
-        if (ValidateUtils.notUsername(sysRole.getName())) {
+        //中英文开头、数字、下划线
+        if (!ValidateUtils.notChinaEnglishNumberUnderline(sysRole.getName())) {
             return ResultUtils.error("角色名不能包含特殊字符");
         }
         //因为超级管理员只有一个所以角色父级id从1开始
@@ -194,7 +195,8 @@ public class SysRoleService extends BaseService {
      */
     @CacheEvict(allEntries = true)
     public ResultUtils updateRole(HttpServletRequest request, SysRole sysRole) {
-        if (ValidateUtils.notUsername(sysRole.getName())) {
+        //中英文开头、数字、下划线
+        if (!ValidateUtils.notChinaEnglishNumberUnderline(sysRole.getName())) {
             return ResultUtils.error("角色名不能包含特殊字符");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(sysRole.getId())) {
