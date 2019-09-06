@@ -95,7 +95,7 @@ function messageBox({
 }
 
 /**
- * 对话框input输入框
+ * 对话框input输入框-----确定后需要调用done()关闭对话框
  * @param title  标题
  * @param message  内容
  * @param type  类型
@@ -135,7 +135,7 @@ function messageBoxInput({
                 done();
                 return;
             }
-            confirm(instance, done);
+            confirm(instance.inputValue, done);
         },
         callback(action, instance) {
         }

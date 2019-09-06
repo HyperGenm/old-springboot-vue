@@ -88,8 +88,7 @@
                 let that = this;
                 this.$globalFun.messageBoxInput({
                     message: '请输入ip',
-                    confirm(instance, done) {
-                        let value = instance.inputValue;
+                    confirm(value, done) {
                         if (that.$globalFun.isBlank(value)) {
                             that.$globalFun.errorMsg('ip不能为空');
                             return;

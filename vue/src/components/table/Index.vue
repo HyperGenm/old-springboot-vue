@@ -100,8 +100,26 @@
                         :sortable="column.sortable || false"
                         :show-overflow-tooltip="column.showOverflowTooltip || true">
                     <template slot-scope="scope">
+                        <!--自定义，单元格直接编辑-->
+                        <template v-if="column.edit">
+                            <template v-if="'input' === column.type">
+                                <!--需要处理元素———:formatter=""-->
+                                <template v-if="column.formatter">
+                                    <div style="cursor:pointer;"
+                                         v-html="column.formatter(scope.row)"
+                                         @click="columnEditInputClick(column.prop,scope)"></div>
+                                </template>
+                                <!--表格普通元素-->
+                                <template v-else>
+                                    <div style="cursor:pointer;"
+                                         @click="columnEditInputClick(column.prop,scope)">
+                                        {{scope.row[column.prop]}}
+                                    </div>
+                                </template>
+                            </template>
+                        </template>
                         <!--自定义显示element-ui组件，属性详情请看element-ui官网-->
-                        <template v-if="column.element">
+                        <template v-else-if="column.element">
                             <template v-if="'tag' === column.type">
                                 <el-tag :type="column.element(scope.row)['type'] || ''"
                                         :size="column.element(scope.row)['size'] || 'medium'"
@@ -119,7 +137,8 @@
                                 </el-link>
                             </template>
                             <template v-else-if="'switch' === column.type">
-                                <el-switch @change="columnSwitchChange($event,scope)"
+                                <el-switch style="cursor:pointer;"
+                                           @change="columnSwitchChange($event,scope)"
                                            :value="column.element(scope.row)['value'] || false"
                                            :disabled="column.element(scope.row)['disabled'] || false"
                                            :activeColor="column.element(scope.row)['activeColor'] || '#13ce66'"
@@ -413,10 +432,25 @@
             //switch状态改变时触发
             columnSwitchChange(value, {$index, column, row}) {
                 this.$emit('columnSwitchChange', {
-                    index: $index,
-                    prop: column['property'],
-                    row,
-                    value
+                    index: $index,//在表格中的行数-1
+                    prop: column['property'],//当前prop
+                    row,//当前行的值
+                    value//改变后得值
+                });
+            },
+            columnEditInputClick(prop, {$index, row}) {
+                let that = this;
+                this.$globalFun.messageBoxInput({
+                    message: '请输入要更改的值',
+                    confirm(value, done) {
+                        that.$emit('columnEditInputClick', {
+                            value,//输入框中的值
+                            done,//调用done()关闭对话框
+                            index: $index,//在表格中的行数-1
+                            prop,//当前prop
+                            row//当前行的值
+                        });
+                    }
                 });
             }
         }

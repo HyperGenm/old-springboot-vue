@@ -277,8 +277,7 @@
                         that.$globalFun.messageBoxInput({
                             message: '请输入密码',
                             inputType: 'password',
-                            confirm(instance, done) {
-                                let value = instance.inputValue;
+                            confirm(value, done) {
                                 if (that.$globalFun.isBlank(value)) {
                                     that.$globalFun.errorMsg('密码不能为空');
                                     return;
