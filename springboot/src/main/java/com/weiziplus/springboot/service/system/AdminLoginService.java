@@ -1,6 +1,5 @@
 package com.weiziplus.springboot.service.system;
 
-import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.models.SysUser;
 import com.weiziplus.springboot.util.*;
@@ -46,11 +45,6 @@ public class AdminLoginService {
      * 图片验证码放入session中的key
      */
     private final String LOGIN_RANDOM_CODE = "loginRandomCoe";
-
-    /**
-     * 用户允许禁止登录
-     */
-    public static final Integer ALLOW_LOGIN_ONE = 1;
 
     /**
      * 生成图片验证码
@@ -100,17 +94,17 @@ public class AdminLoginService {
         if (null == sysUser || !sysUser.getPassword().equals(Md5Utils.encode(password))) {
             return ResultUtils.error("用户名或密码错误");
         }
-        if (ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
+        if (SysUserService.ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号被禁用，请联系管理员");
         }
-        if (GlobalConfig.ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
+        if (SysUserService.ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号封号中，请联系管理员");
         }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
             return ResultUtils.error("您还没有角色，请联系管理员添加");
         }
-        if (!SysRoleService.IS_STOP.equals(sysRole.getIsStop())) {
+        if (!SysRoleService.ADMIN_ROLE_IS_STOP.equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
         String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request));

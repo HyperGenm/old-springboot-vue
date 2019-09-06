@@ -27,11 +27,6 @@ public final class GlobalConfig {
     public static final String NULL = "null";
 
     /**
-     * 系统用户封号中
-     */
-    public static final Integer ADMIN_USER_ALLOW_LOGIN_TWO = 2;
-
-    /**
      * 超级管理员id为1
      */
     public static final Long SUPER_ADMIN_ID = 1L;
@@ -40,4 +35,5 @@ public final class GlobalConfig {
      * 超级管理员角色id为1
      */
     public static final Long SUPER_ADMIN_ROLE_ID = 1L;
+
 }

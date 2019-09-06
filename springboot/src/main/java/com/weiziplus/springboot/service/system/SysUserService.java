@@ -26,6 +26,16 @@ public class SysUserService extends BaseService {
     SysUserMapper mapper;
 
     /**
+     * 用户允许禁止登录
+     */
+    public static final Integer ADMIN_USER_ALLOW_LOGIN_ONE = 1;
+
+    /**
+     * 系统用户封号中
+     */
+    public static final Integer ADMIN_USER_ALLOW_LOGIN_TWO = 2;
+
+    /**
      * 获取用户列表
      *
      * @param pageNum
@@ -85,7 +95,7 @@ public class SysUserService extends BaseService {
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            if (null != sysUser.getSuspendNum() || GlobalConfig.ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
+            if (null != sysUser.getSuspendNum() || ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
                 mapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
@@ -95,7 +105,7 @@ public class SysUserService extends BaseService {
         if (null != user && !sysUser.getId().equals(user.getId())) {
             return ResultUtils.error("用户名已存在");
         }
-        if (null != user && GlobalConfig.ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
+        if (null != user && ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
             return ResultUtils.error("用户封号中，不能修改状态");
         }
         sysUser.setAllowLogin(null);
