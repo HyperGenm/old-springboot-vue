@@ -107,16 +107,17 @@
                                 <template v-if="column.formatter">
                                     <div style="cursor:pointer;"
                                          v-html="column.formatter(scope.row)"
-                                         @click="columnEditInputClick(column.prop,scope)"></div>
+                                         @click="columnEditInputClick(column,scope)"></div>
                                 </template>
                                 <!--表格普通元素-->
                                 <template v-else>
                                     <div style="cursor:pointer;"
-                                         @click="columnEditInputClick(column.prop,scope)">
+                                         @click="columnEditInputClick(column,scope)">
                                         {{scope.row[column.prop]}}
                                     </div>
                                 </template>
                             </template>
+                            <template v-else><h1 style="color: #ff4949;">{{column.label}}没有指定type</h1></template>
                         </template>
                         <!--自定义显示element-ui组件，属性详情请看element-ui官网-->
                         <template v-else-if="column.element">
@@ -438,10 +439,10 @@
                     value//改变后得值
                 });
             },
-            columnEditInputClick(prop, {$index, row}) {
+            columnEditInputClick({prop, label}, {$index, row}) {
                 let that = this;
                 this.$globalFun.messageBoxInput({
-                    message: '请输入要更改的值',
+                    message: `请输入'${label}'列要更改的值`,
                     confirm(value, done) {
                         that.$emit('columnEditInputClick', {
                             value,//输入框中的值
