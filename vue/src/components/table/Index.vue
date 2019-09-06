@@ -111,7 +111,7 @@
                             </template>
                             <template v-else-if="'link' === column.type">
                                 <el-link :target="column.element(scope.row)['target'] || '_blank'"
-                                         :href="column.element(scope.row)['href'] || ''"
+                                         :href="column.element(scope.row)['href'] || null"
                                          :type="column.element(scope.row)['type'] || ''"
                                          :icon="column.element(scope.row)['icon'] || ''"
                                          :underline="column.element(scope.row)['underline'] || false">
@@ -119,15 +119,15 @@
                                 </el-link>
                             </template>
                             <template v-else-if="'switch' === column.type">
-                                <el-switch @change="columnSwitchChange(event,scope)"
-                                           :value="column.element(scope.row)['value'] || ''"
+                                <el-switch @change="columnSwitchChange($event,scope)"
+                                           :value="column.element(scope.row)['value'] || false"
                                            :disabled="column.element(scope.row)['disabled'] || false"
                                            :activeColor="column.element(scope.row)['activeColor'] || '#13ce66'"
                                            :inactiveColor="column.element(scope.row)['inactiveColor'] || '#ff4949'"
                                            :activeText="column.element(scope.row)['activeText'] || ''"
                                            :inactiveText="column.element(scope.row)['inactiveText'] || ''"></el-switch>
                             </template>
-                            <template v-else>{{column.label}}没有指定type</template>
+                            <template v-else><h1 style="color: #ff4949;">{{column.label}}没有指定type</h1></template>
                         </template>
                         <template v-else>
                             <!--需要处理元素———:formatter=""-->

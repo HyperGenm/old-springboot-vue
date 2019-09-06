@@ -37,7 +37,7 @@
                                        :activeText="row.element(row)['activeText'] || ''"
                                        :inactiveText="row.element(row)['inactiveText'] || ''"></el-switch>
                         </template>
-                        <template v-else>{{row.label}}没有指定type</template>
+                        <template v-else><h1 style="color: #ff4949;">{{row.label}}没有指定type</h1></template>
                     </template>
                     <template v-else>
                         <!--需要处理元素———:formatter=""-->
