@@ -13,12 +13,13 @@
             'wei-upload': () => import('@/components/upload/Index.vue')
         },
         data() {
+            let that = this;
             return {
                 fileList: [
                     {
                         path: '原始回显图片',
                         name: '回显图片.jpeg',
-                        url: 'http://localhost:8080/666.jpg'
+                        url: that.$global.GLOBAL.base_url.replace('/pc', '') + '/666.jpg'
                     }
                 ]
             }

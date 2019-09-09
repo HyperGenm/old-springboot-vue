@@ -10,7 +10,11 @@
                 <router-view/>
             </div>
             <div class="footer">
-                <span>Copyright ©{{nowYear}} WeiziPlus</span>
+                <span>Copyright ©{{nowYear}}</span>
+                <el-link class="link" type="primary" target="_blank"
+                         href="https://github.com/WeiziPlus/springboot2-vue3">
+                    WeiziPlus
+                </el-link>
             </div>
         </div>
     </div>
@@ -82,8 +86,13 @@
                 text-align: center;
                 font-size: 12px;
                 height: 37px;
-                line-height: 37px;
                 background-color: #e2e2e2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .link {
+                    margin-left: 10px;
+                }
             }
         }
     }
