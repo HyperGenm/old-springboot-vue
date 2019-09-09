@@ -151,10 +151,24 @@ public class StringRedisUtils {
         if (null == keys || 0 >= keys.size()) {
             return 0L;
         }
-        Long delete = that.stringRedisTemplate.delete(keys);
+        return that.stringRedisTemplate.delete(keys);
+    }
+
+    /**
+     * 设置过期时间删除,模糊查询key
+     *
+     * @param key
+     */
+    public static void setExpireDeleteLikeKey(String key) {
+        if (null == key) {
+            return;
+        }
+        Set<String> keys = that.stringRedisTemplate.keys(key + "*");
+        if (null == keys || 0 >= keys.size()) {
+            return;
+        }
         for (String k : keys) {
             that.stringRedisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
-        return delete;
     }
 }

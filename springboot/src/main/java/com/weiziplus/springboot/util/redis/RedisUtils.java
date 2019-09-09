@@ -35,7 +35,8 @@ public class RedisUtils {
         if (null == key) {
             return;
         }
-        that.redisTemplate.opsForValue().set(key, value, 60 * 60L, TimeUnit.SECONDS);
+        long timeOut = 60 * 60L + Math.round(Math.random() * 7);
+        that.redisTemplate.opsForValue().set(key, value, timeOut, TimeUnit.SECONDS);
     }
 
     /**
@@ -50,7 +51,7 @@ public class RedisUtils {
             return;
         }
         if (null == timeout) {
-            timeout = 60 * 60L;
+            timeout = 60 * 60L + Math.round(Math.random() * 7);
         }
         that.redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
@@ -161,10 +162,24 @@ public class RedisUtils {
         if (null == keys || 0 >= keys.size()) {
             return 0L;
         }
-        Long delete = that.redisTemplate.delete(keys);
+        return that.redisTemplate.delete(keys);
+    }
+
+    /**
+     * 设置过期时间删除,模糊查询key
+     *
+     * @param key
+     */
+    public static void setExpireDeleteLikeKey(String key) {
+        if (null == key) {
+            return;
+        }
+        Set<String> keys = that.redisTemplate.keys(key + "*");
+        if (null == keys || 0 >= keys.size()) {
+            return;
+        }
         for (String k : keys) {
             that.redisTemplate.expire(k, 3L, TimeUnit.SECONDS);
         }
-        return delete;
     }
 }

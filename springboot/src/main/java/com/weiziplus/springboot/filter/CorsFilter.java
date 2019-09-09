@@ -25,10 +25,13 @@ public class CorsFilter implements Filter {
     /**
      * 可以跨域访问的地址
      */
-    private static String[] CORS_FILTER_ORIGINS;
+    private static String[] CORS_FILTER_ORIGINS = {};
 
     @Value("${global.cors-filter-origins:http://localhost}")
     private void setCorsFilterOrigins(String corsFilterOrigins) {
+        if (ToolUtils.isBlank(corsFilterOrigins)) {
+            return;
+        }
         CorsFilter.CORS_FILTER_ORIGINS = corsFilterOrigins.split(",");
     }
 
@@ -61,6 +64,11 @@ public class CorsFilter implements Filter {
         boolean isAllow = false;
         //当前地址是否在允许的地址中
         for (String origin : CORS_FILTER_ORIGINS) {
+            //如果*,所有请求都允许
+            if ("*".equals(origin)) {
+                isAllow = true;
+                break;
+            }
             if (0 == originHeader.indexOf(origin)) {
                 isAllow = true;
                 break;
@@ -72,7 +80,7 @@ public class CorsFilter implements Filter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Accept,Content-Type,Origin," + GlobalConfig.TOKEN);

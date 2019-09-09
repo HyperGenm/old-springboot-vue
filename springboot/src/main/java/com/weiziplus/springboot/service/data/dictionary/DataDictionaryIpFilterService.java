@@ -110,6 +110,7 @@ public class DataDictionaryIpFilterService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return ResultUtils.error("ip已存在");
         }
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         mapper.addIp(ip, type);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
@@ -136,6 +137,7 @@ public class DataDictionaryIpFilterService {
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         mapper.deleteIp(id, type);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
@@ -151,6 +153,7 @@ public class DataDictionaryIpFilterService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return;
         }
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         mapper.addIp(ip, "black");
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
     }
