@@ -19,7 +19,7 @@
                     {
                         path: '原始回显图片',
                         name: '回显图片.jpeg',
-                        url: that.$global.GLOBAL.base_url.replace('/pc', '') + '/666.jpg'
+                        url: that.$global.GLOBAL.base_url + '/666.jpg'
                     }
                 ]
             }

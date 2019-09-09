@@ -37,7 +37,7 @@ public class FileUtils {
         if (null == file || file.isEmpty()) {
             return null;
         }
-        String resultPath = "";
+        String resultPath = "pc/";
         if (ToolUtils.notBlank(mkdir)) {
             resultPath = mkdir + File.separatorChar;
         }
