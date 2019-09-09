@@ -117,19 +117,11 @@
              * @param file
              */
             onPreview(file) {
-                if (null == file['raw']) {
-                    try {
-                        this.dialogImageUrl = file['url'];
-                        this.dialogVisible = true;
-                    } catch (e) {
-                        console.debug('当前显示不是图片，此消息可以忽略');
-                    }
-                } else {
-                    let type = file['raw']['type'];
-                    if (0 === type.indexOf('image/')) {
-                        this.dialogImageUrl = file['url'];
-                        this.dialogVisible = true;
-                    }
+                try {
+                    this.dialogImageUrl = file['url'];
+                    this.dialogVisible = true;
+                } catch (e) {
+                    console.debug('当前显示不是图片，此消息可以忽略,详情:', e);
                 }
             },
             /**
