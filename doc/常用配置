@@ -24,3 +24,10 @@
                 }
 
         }
+
+    * 由于vue是单页面应用，刷新的时候重定向到index.html页面
+        location / {
+                    root   /home/template/view;
+        			index  index.html index.htm;
+        			try_files $uri $uri/ /index.html;
+        }
