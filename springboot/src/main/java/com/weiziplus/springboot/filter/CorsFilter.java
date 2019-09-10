@@ -80,11 +80,11 @@ public class CorsFilter implements Filter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-        response.setHeader("Access-Control-Allow-Origin", originHeader);
-        response.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Accept,Content-Type,Origin," + GlobalConfig.TOKEN);
-        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, originHeader);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST,GET,PUT,OPTIONS,DELETE");
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Accept,Content-Type,Origin," + GlobalConfig.TOKEN);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
         chain.doFilter(req, res);
     }
 }
