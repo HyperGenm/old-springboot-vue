@@ -7,7 +7,7 @@
 *tip:多个用户同时登陆可能会被顶掉*
 
 ## 结构简介
-*tip:前后端分离项目*
+*tip:前后端分离项目，代码通过阿里巴巴编码规约扫描、95%findbugs*
 
 ### 后端:
 #### springboot、mybatis、redis
