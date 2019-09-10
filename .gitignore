@@ -25,6 +25,7 @@ hs_err_pid*
 #设置忽略文件
 *.iml
 *.idea
+package-lock.json
 
 #设置忽略文件夹
 target/
