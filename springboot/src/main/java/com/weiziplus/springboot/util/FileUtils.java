@@ -27,19 +27,62 @@ public class FileUtils {
     }
 
     /**
+     * /pc/   后台文件上传
+     *
+     * @param file
+     * @param mkdir
+     * @return
+     */
+    public static String upFilePc(MultipartFile file, String mkdir) {
+        return upFile("pc", file, mkdir);
+    }
+
+    /**
+     * /pc/   后台文件上传
+     *
+     * @param file
+     * @return
+     */
+    public static String upFilePc(MultipartFile file) {
+        return upFile("pc", file, null);
+    }
+
+    /**
+     * /api/   web文件上传
+     *
+     * @param file
+     * @param mkdir
+     * @return
+     */
+    public static String upFileApi(MultipartFile file, String mkdir) {
+        return upFile("api", file, mkdir);
+    }
+
+    /**
+     * /api/   web文件上传
+     *
+     * @param file
+     * @return
+     */
+    public static String upFileApi(MultipartFile file) {
+        return upFile("api", file, null);
+    }
+
+    /**
      * 文件上传
      *
      * @param file
      * @param mkdir 如果分文件夹存放，传入文件夹
      * @return 成功返回路径，失败返回null
      */
-    public static String upFile(MultipartFile file, String mkdir) {
+    private static String upFile(String type, MultipartFile file, String mkdir) {
         if (null == file || file.isEmpty()) {
             return null;
         }
-        String resultPath = "pc/";
+        //此处配合nginx访问/pc/反向代理java后台
+        String resultPath = type + "/";
         if (ToolUtils.notBlank(mkdir)) {
-            resultPath = mkdir + File.separatorChar;
+            resultPath += mkdir + "/";
         }
         // 获取原始名字
         String fileName = file.getOriginalFilename();
@@ -68,13 +111,4 @@ public class FileUtils {
         return resultPath;
     }
 
-    /**
-     * 文件上传
-     *
-     * @param file
-     * @return
-     */
-    public static String upFile(MultipartFile file) {
-        return upFile(file, null);
-    }
 }

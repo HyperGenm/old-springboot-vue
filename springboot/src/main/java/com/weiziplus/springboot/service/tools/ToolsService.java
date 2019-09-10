@@ -21,7 +21,7 @@ public class ToolsService extends BaseService {
      * @return
      */
     public ResultUtils upload(MultipartFile file) {
-        String path = FileUtils.upFile(file, "文件上传");
+        String path = FileUtils.upFilePc(file, "文件上传");
         if (null == path) {
             return ResultUtils.error("文件上传失败，请重试");
         }
