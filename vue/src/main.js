@@ -14,9 +14,10 @@ if (process.env.NODE_ENV !== 'production') {
 import "./assets/font/iconfont/iconfont.css";
 
 /**引入封装的axios*/
-import {weiAxios} from './utils/axios';
+import {weiAxios, weiAxiosDown} from './utils/axios';
 
 Vue.prototype.$axios = weiAxios;
+Vue.prototype.$axiosDown = weiAxiosDown;
 
 /**引入全局变量和方法*/
 import globalVariable from './utils/global_variable'

@@ -124,3 +124,120 @@ export function weiAxios({
         });
     });
 }
+
+/**封装axios下载请求
+ *
+ * @param url
+ * @param method
+ * @param data
+ * @param filename
+ * @param success
+ * @param fail
+ * @returns {Promise<any>}
+ */
+export function weiAxiosDown({
+                                 url = '',
+                                 method = 'post',
+                                 data = {},
+                                 filename = '新建文件',
+                                 success = function () {
+                                 },
+                                 fail = function () {
+                                 }
+                             } = {}) {
+    return new Promise(() => {
+        /**保留this指针*/
+        let that = this;
+        /**开启加载中动画*/
+        let loading = Loading.service({
+            lock: true,
+            text: '下载中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+        });
+        /**axios请求所需参数*/
+        let _axios = {
+            url: _Vue.$global.GLOBAL.base_url + url,
+            method,
+            headers: {
+                'token': that.$store.state.token || ''
+            },
+            responseType: 'blob'
+        };
+        /**axios请求参数添加随机字符串*/
+        data['__t'] = (new Date()).getTime();
+        /**axios请求处理不同请求方式时的参数*/
+        if (method === 'get' || method === 'GET') {
+            _axios['params'] = data;
+        } else {
+            _axios['data'] = Qs.stringify(data, {indices: false});
+        }
+        axios(_axios).then((res) => {
+            /**关闭加载中动画*/
+            loading.close();
+            let {data} = res;
+            let fileReader = new FileReader();
+            fileReader.readAsText(data);
+            fileReader.onload = function () {
+                // 如果JSON.parse(this.result)不报错，说明this.result是json字符串，是下载报错情况的返回值，弹框提示
+                // 如果JSON.parse(this.result)报错，说明下载成功，进入catch
+                try {
+                    let resData = JSON.parse(this.result);
+                    if (resData && resData['code']) {
+                        let {code, msg} = resData;
+                        /**token过期处理*/
+                        if ('401' === (code + '')) {
+                            _Vue.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
+                            that.$store.dispatch('resetState');
+                            sessionStorage.setItem('loginStatus', 'logout');
+                            let timer = setTimeout(() => {
+                                that.$router.replace('login');
+                                clearTimeout(timer);
+                            }, 3000);
+                            return;
+                        }
+                        /**处理code不为200的出错请求*/
+                        if ('200' !== (code + '')) {
+                            _Vue.$globalFun.errorMsg(msg);
+                            console.warn(url, '-----code:', code, '------请求出错-----res:', res);
+                            return;
+                        }
+                        console.log('文件下载成功回调，不是文件流', resData);
+                    }
+                } catch (error) {
+                    let blob = new Blob([data]);
+                    // 兼容ie11
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveOrOpenBlob(blob, filename);
+                    } else {
+                        let downloadElement = document.createElement('a');
+                        //创建下载的链接
+                        let href = window.URL.createObjectURL(blob);
+                        downloadElement.href = href;
+                        //下载后文件名
+                        downloadElement.download = filename;
+                        document.body.appendChild(downloadElement);
+                        //点击下载
+                        downloadElement.click();
+                        //下载完成移除元素
+                        document.body.removeChild(downloadElement);
+                        //释放掉blob对象
+                        window.URL.revokeObjectURL(href);
+                    }
+                }
+            };
+            success(res);
+        }).catch((error) => {
+            /**关闭加载中动画*/
+            loading.close();
+            _Vue.$globalFun.errorMsg('文件下载失败，请重试');
+            if (error.response) {
+                console.warn(url, '------请求失败-----error:', error, '---失败详情:', error.response);
+            } else {
+                console.warn(url, '------请求失败-----error:', error);
+            }
+            fail(error);
+        });
+    });
+}
+
