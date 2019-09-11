@@ -3,6 +3,7 @@ package com.weiziplus.springboot.service.data.dictionary;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
+import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryIpFilterMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
@@ -24,7 +25,7 @@ import java.util.List;
  * @data 2019/8/5 9:53
  */
 @Service
-public class DataDictionaryIpFilterService {
+public class DataDictionaryIpFilterService extends BaseService {
 
     @Autowired
     DataDictionaryIpFilterMapper mapper;
@@ -43,7 +44,7 @@ public class DataDictionaryIpFilterService {
      * @return
      */
     public List<String> getIpValueWhiteList() {
-        String redisKey = BASE_REDIS_KEY + "getIpValueWhiteList";
+        String redisKey = createRedisKey(BASE_REDIS_KEY + "getIpValueWhiteList");
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
             return JSONArray.parseArray(JSON.toJSONString(object), String.class);
@@ -59,7 +60,7 @@ public class DataDictionaryIpFilterService {
      * @return
      */
     public List<String> getIpValueBlackList() {
-        String redisKey = BASE_REDIS_KEY + "getIpValueBlackList";
+        String redisKey = createRedisKey(BASE_REDIS_KEY + "getIpValueBlackList");
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
             return JSONArray.parseArray(JSON.toJSONString(object), String.class);
@@ -75,7 +76,7 @@ public class DataDictionaryIpFilterService {
      * @return
      */
     public ResultUtils getPageList(Integer pageNum, Integer pageSize, String type) {
-        String redisKey = BASE_REDIS_KEY + "getPageListBlack:type_" + type + "pageSize_" + pageSize + "pageNum_" + pageNum;
+        String redisKey = createRedisKey(BASE_REDIS_KEY + "getPageListBlack", type, pageSize, pageNum);
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
             return ResultUtils.success(object);

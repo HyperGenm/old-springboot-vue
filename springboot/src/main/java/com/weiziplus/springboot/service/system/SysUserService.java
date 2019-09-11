@@ -112,11 +112,12 @@ public class SysUserService extends BaseService {
         if (null != user && ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
             return ResultUtils.error("用户封号中，不能修改状态");
         }
-        sysUser.setAllowLogin(null);
-        sysUser.setPassword(null);
-        sysUser.setRoleId(null);
-        sysUser.setSuspendNum(null);
-        return ResultUtils.success(baseUpdate(sysUser));
+        SysUser newUser = new SysUser();
+        newUser.setId(sysUser.getId());
+        newUser.setAllowLogin(sysUser.getAllowLogin());
+        newUser.setRealName(sysUser.getRealName());
+        newUser.setUsername(sysUser.getUsername());
+        return ResultUtils.success(baseUpdate(newUser));
     }
 
     /**

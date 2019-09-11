@@ -45,8 +45,8 @@ public class AdminTokenUtils {
      * @param userId
      * @return
      */
-    public static String createToken(Long userId, String ipAddress) {
-        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress);
+    public static String createToken(Long userId, String ipAddress, Long roleId) {
+        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress, roleId);
     }
 
     /**

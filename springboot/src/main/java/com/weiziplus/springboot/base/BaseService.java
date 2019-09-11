@@ -454,4 +454,19 @@ public class BaseService {
         param.put("desc", desc.toUpperCase());
         return mapper.findAll(param);
     }
+
+    /**
+     * 根据唯一前缀和方法参数创建唯一redis的key
+     *
+     * @param onlyPrefix
+     * @param objects
+     * @return
+     */
+    protected String createRedisKey(String onlyPrefix, Object... objects) {
+        StringBuffer stringBuffer = new StringBuffer(onlyPrefix);
+        for (Object object : objects) {
+            stringBuffer.append("_666_").append(object);
+        }
+        return ToolUtils.valueOfString(stringBuffer);
+    }
 }

@@ -45,7 +45,7 @@ public class WebTokenUtils {
      * @return
      */
     public static String createToken(Long userId, String ipAddress) {
-        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress);
+        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress, null);
     }
 
     /**

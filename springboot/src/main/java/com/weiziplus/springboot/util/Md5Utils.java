@@ -23,7 +23,7 @@ public class Md5Utils {
      * @return
      */
     public static String encode(String str) {
-        if (null == str) {
+        if (ToolUtils.isBlank(str)) {
             return null;
         }
         //在字符串基础上添加加密盐
@@ -38,6 +38,6 @@ public class Md5Utils {
      * @return
      */
     public static String encode(Object object) {
-        return encode(object.toString());
+        return encode(ToolUtils.valueOfString(object));
     }
 }

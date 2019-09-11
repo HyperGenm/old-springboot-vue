@@ -2,16 +2,15 @@ package com.weiziplus.springboot.service.system;
 
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
+import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import com.weiziplus.springboot.models.SysFunction;
 import com.weiziplus.springboot.util.*;
-import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
+import com.weiziplus.springboot.util.redis.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,11 +18,20 @@ import java.util.List;
  * @data 2019/5/9 15:18
  */
 @Service
-@CacheConfig(cacheNames = "system:sysFunctionService")
 public class SysFunctionService extends BaseService {
 
     @Autowired
     SysFunctionMapper mapper;
+
+    /**
+     * SysFunction基础redis的key
+     */
+    private static final String BASE_REDIS_KEY = "service:system:SysFunctionService:";
+
+    /**
+     * 根据role获取方法列表的redis的key
+     */
+    public static final String ROLE_FUNCTION_LIST_REDIS_KEY = BASE_REDIS_KEY + "getFunctionListByRoleId:";
 
     /**
      * 根据角色id获取功能树形列表
@@ -75,8 +83,12 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    @Cacheable
     public List<SysFunction> getFunTree() {
+        String key = createRedisKey(BASE_REDIS_KEY + "getFunTree");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return (List<SysFunction>) object;
+        }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
         if (null == sysFunction) {
@@ -90,6 +102,7 @@ public class SysFunctionService extends BaseService {
             sysFun.setChildren(getChildrenFun(menuList, sysFun.getId()));
             resultList.add(sysFun);
         }
+        RedisUtils.set(key, resultList);
         return resultList;
     }
 
@@ -117,8 +130,12 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    @Cacheable
     public List<SysFunction> getAllFunctionTreeNotButton() {
+        String key = createRedisKey(BASE_REDIS_KEY + "getAllFunctionTreeNotButton");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return (List<SysFunction>) object;
+        }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
         if (null == sysFunction) {
@@ -132,6 +149,7 @@ public class SysFunctionService extends BaseService {
             sysFun.setChildren(getChildrenFunctionNotButton(menuList, sysFun.getId()));
             resultList.add(sysFun);
         }
+        RedisUtils.set(key, resultList);
         return resultList;
     }
 
@@ -162,7 +180,6 @@ public class SysFunctionService extends BaseService {
      * @param pageSize
      * @return
      */
-    @Cacheable
     public ResultUtils getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
         if (null == parentId || 0 > parentId) {
             return ResultUtils.error("parentId错误");
@@ -170,9 +187,74 @@ public class SysFunctionService extends BaseService {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtils.error("pageNum,pageSize格式错误");
         }
+        String key = createRedisKey(BASE_REDIS_KEY + "getFunctionListByParentId", parentId, pageNum, pageSize);
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return ResultUtils.success(object);
+        }
         PageHelper.startPage(pageNum, pageSize);
         PageUtils pageUtil = PageUtils.pageInfo(mapper.getFunListByParentId(parentId));
+        RedisUtils.set(key, pageUtil);
         return ResultUtils.success(pageUtil);
+    }
+
+    /**
+     * 根据roleId获取所有方法列表
+     *
+     * @param roleId
+     * @return
+     */
+    public List<SysFunction> getFunctionListByRoleId(Long roleId) {
+        if (null == roleId || 0 > roleId) {
+            return null;
+        }
+        String key = createRedisKey(ROLE_FUNCTION_LIST_REDIS_KEY, roleId);
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return (List<SysFunction>) object;
+        }
+        List<SysFunction> list = mapper.getFunListByRoleId(roleId);
+        RedisUtils.set(key, list);
+        return list;
+    }
+
+    /**
+     * 根据角色id获取功能id列表
+     *
+     * @param roleId
+     * @return
+     */
+    public List<Long> getRoleFunList(Long roleId) {
+        List<Long> resultList = new ArrayList<>();
+        if (null == roleId || 0 > roleId) {
+            return resultList;
+        }
+        for (SysFunction sysFunction : getFunctionListByRoleId(roleId)) {
+            resultList.add(sysFunction.getId());
+        }
+        return resultList;
+    }
+
+    /**
+     * 根据roleId获取拥有的api
+     *
+     * @param roleId
+     * @return
+     */
+    public List<String> getFunContainApiByRoleId(Long roleId) {
+        List<String> resultList = new ArrayList<>();
+        if (null == roleId || 0 > roleId) {
+            return resultList;
+        }
+        for (SysFunction sysFunction : getFunctionListByRoleId(roleId)) {
+            String containApi = sysFunction.getContainApi();
+            if (ToolUtils.isBlank(containApi)) {
+                continue;
+            }
+            String[] split = containApi.split(",");
+            resultList.addAll(Arrays.asList(split));
+        }
+        return resultList;
     }
 
     /**
@@ -181,7 +263,6 @@ public class SysFunctionService extends BaseService {
      * @param sysFunction
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils addFunction(SysFunction sysFunction) {
         if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
@@ -197,7 +278,10 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("name已存在");
         }
         sysFunction.setCreateTime(DateUtils.getNowDateTime());
-        return ResultUtils.success(baseInsert(sysFunction));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseInsert(sysFunction);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -206,7 +290,6 @@ public class SysFunctionService extends BaseService {
      * @param sysFunction
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils updateFunction(SysFunction sysFunction) {
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
@@ -218,7 +301,10 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
         }
-        return ResultUtils.success(baseUpdate(sysFunction));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseUpdate(sysFunction);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -227,7 +313,6 @@ public class SysFunctionService extends BaseService {
      * @param ids
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils deleteFunction(Long[] ids) {
         if (null == ids) {
             return ResultUtils.error("ids不能为空");
@@ -241,6 +326,9 @@ public class SysFunctionService extends BaseService {
                 return ResultUtils.error("目录下面含有子级目录");
             }
         }
-        return ResultUtils.success(baseDeleteByClassAndIds(SysFunction.class, ids));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseDeleteByClassAndIds(SysFunction.class, ids);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 }

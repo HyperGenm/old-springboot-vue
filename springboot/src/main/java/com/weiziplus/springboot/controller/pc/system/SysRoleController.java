@@ -47,17 +47,6 @@ public class SysRoleController {
     }
 
     /**
-     * 根据角色id获取功能列表
-     *
-     * @param roleId
-     * @return
-     */
-    @GetMapping("/getRoleFunList")
-    public ResultUtils getRoleFunList(Long roleId) {
-        return ResultUtils.success(service.getRoleFunList(roleId));
-    }
-
-    /**
      * 新增角色功能
      *
      * @param roleId

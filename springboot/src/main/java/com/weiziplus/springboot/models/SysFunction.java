@@ -51,6 +51,12 @@ public class SysFunction implements Serializable {
     private String title;
 
     /**
+     * 当前功能对应的api列表
+     */
+    @Column("contain_api")
+    private String containApi;
+
+    /**
      * 功能类型;0:菜单,1:按钮
      */
     @Column("type")

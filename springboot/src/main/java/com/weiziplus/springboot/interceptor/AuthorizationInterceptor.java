@@ -5,7 +5,10 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.mapper.user.UserMapper;
+import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.service.system.SysFunctionService;
+import com.weiziplus.springboot.service.system.SysRoleService;
 import com.weiziplus.springboot.util.HttpRequestUtils;
 import com.weiziplus.springboot.util.Md5Utils;
 import com.weiziplus.springboot.util.ResultUtils;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * 自定义的拦截器interceptor
@@ -43,6 +47,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     SysLogMapper sysLogMapper;
+
+    @Autowired
+    SysRoleService sysRoleService;
+
+    @Autowired
+    SysFunctionService sysFunctionService;
 
     /**
      * 请求之前拦截
@@ -93,12 +103,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         String issuer = JwtTokenUtils.getIssuer(token);
         //获取当前访问的ip地址
         String ipAddress = HttpRequestUtils.getIpAddress(request);
-        if (!Md5Utils.encode(ipAddress).equals(issuer)) {
+        if (!issuer.equals(Md5Utils.encode(ipAddress))) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
         String tokenAudience = JwtTokenUtils.getUserAudienceByToken(token);
-        if (Md5Utils.encode(AdminTokenUtils.AUDIENCE).equals(tokenAudience)) {
+        if (tokenAudience.equals(Md5Utils.encode(AdminTokenUtils.AUDIENCE))) {
             //角色为admin
             //查看是否有日志注解，有的话将日志信息放入数据库
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
@@ -106,7 +116,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
             }
             return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
-        } else if (Md5Utils.encode(WebTokenUtils.AUDIENCE).equals(tokenAudience)) {
+        } else if (tokenAudience.equals(Md5Utils.encode(WebTokenUtils.AUDIENCE))) {
             //角色为web
             return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
         }
@@ -149,9 +159,35 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
-        //更新token过期时间
-        AdminTokenUtils.updateExpireTime(userId);
-        return true;
+        //如果当前是超级管理员
+        if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
+            //更新token过期时间
+            AdminTokenUtils.updateExpireTime(userId);
+            return true;
+        }
+        String md5RoleIdByToken = JwtTokenUtils.getMd5RoleIdByToken(token);
+        Long roleId = null;
+        for (SysRole sysRole : sysRoleService.getRoleList()) {
+            if (md5RoleIdByToken.equals(Md5Utils.encode(sysRole.getId()))) {
+                roleId = sysRole.getId();
+                break;
+            }
+        }
+        if (null == roleId) {
+            handleResponse(response, ResultUtils.errorRole("您没有权限"));
+            return false;
+        }
+        //获取当前访问的url
+        String requestURI = request.getRequestURI();
+        //获取当前角色拥有的方法url
+        List<String> funContainApiByRoleId = sysFunctionService.getFunContainApiByRoleId(roleId);
+        if (funContainApiByRoleId.contains(requestURI)) {
+            //更新token过期时间
+            AdminTokenUtils.updateExpireTime(userId);
+            return true;
+        }
+        handleResponse(response, ResultUtils.errorRole("您没有权限"));
+        return false;
     }
 
     /**

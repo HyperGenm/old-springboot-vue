@@ -46,7 +46,7 @@ const URL = {
             /*获取角色所有功能列表*/
             getList: '/sysRole/getRoleList',
             /*获取角色的功能列表*/
-            getRoleFunList: '/sysRole/getRoleFunList',
+            getRoleFunList: '/sysFunction/getRoleFunList',
             /*新增角色功能*/
             addRoleFun: '/sysRole/addRoleFun',
             /*新增角色*/

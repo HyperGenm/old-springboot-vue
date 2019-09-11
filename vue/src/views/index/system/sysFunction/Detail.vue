@@ -38,6 +38,7 @@
                     {label: '功能名', prop: data['name']},
                     {label: '路径', prop: data['path']},
                     {label: '标题', prop: data['title']},
+                    {label: '对应api', prop: data['containApi']},
                     {label: '上级', prop: this.parentData.title},
                     {
                         label: '图标', formatter() {

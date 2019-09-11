@@ -93,6 +93,7 @@
                     {label: '功能名', prop: 'name'},
                     {label: '路径', prop: 'path'},
                     {label: '路由标题', prop: 'title'},
+                    {label: '对应api', prop: 'containApi'},
                     {
                         label: '路由图标', prop: 'icon', formatter(row) {
                             return `<i class="${row.icon}"></i>`;

@@ -6,18 +6,15 @@ import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
-import com.weiziplus.springboot.models.SysFunction;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ValidateUtils;
+import com.weiziplus.springboot.util.redis.RedisUtils;
 import com.weiziplus.springboot.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -32,7 +29,6 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@CacheConfig(cacheNames = "system:sysRoleService")
 public class SysRoleService extends BaseService {
 
     @Autowired
@@ -58,18 +54,29 @@ public class SysRoleService extends BaseService {
     private static final Long SYS_FUNCTION_ROLE_ID = 4L;
 
     /**
+     * SysRole基础redis的key
+     */
+    private static final String BASE_REDIS_KEY = "service:system:SysRoleService:";
+
+    /**
      * 获取角色树形结构
      *
      * @return
      */
-    @Cacheable
     public List<SysRole> getRoleTree() {
+        String key = createRedisKey(BASE_REDIS_KEY + "getRoleTree");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return (List<SysRole>) object;
+        }
         List<SysRole> resultList = new ArrayList<>();
+        //默认根节点为0
         List<SysRole> menuList = mapper.getRoleListByParentId(0L);
         for (SysRole sysRole : menuList) {
             sysRole.setChildren(findChildren(sysRole));
             resultList.add(sysRole);
         }
+        RedisUtils.set(key, resultList);
         return resultList;
     }
 
@@ -94,27 +101,15 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
-    @Cacheable
     public List<SysRole> getRoleList() {
-        return mapper.getRoleList();
-    }
-
-    /**
-     * 根据角色id获取功能id列表
-     *
-     * @param roleId
-     * @return
-     */
-    public List<Long> getRoleFunList(Long roleId) {
-        List<Long> resultList = new ArrayList<>();
-        if (null == roleId || 0 > roleId) {
-            return resultList;
+        String key = createRedisKey(BASE_REDIS_KEY + "getRoleList");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return (List<SysRole>) object;
         }
-        List<SysFunction> list = sysFunctionMapper.getFunListByRoleId(roleId);
-        for (SysFunction sysFunction : list) {
-            resultList.add(sysFunction.getId());
-        }
-        return resultList;
+        List<SysRole> roleList = mapper.getRoleList();
+        RedisUtils.set(key, roleList);
+        return roleList;
     }
 
     /**
@@ -144,6 +139,7 @@ public class SysRoleService extends BaseService {
                 return ResultUtils.error("超级管理员:角色管理权限一定要添加啊(*/ω＼*)");
             }
         }
+        RedisUtils.setExpireDeleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         try {
             sysRoleFunctionMapper.deleteByRoleId(roleId);
@@ -156,6 +152,7 @@ public class SysRoleService extends BaseService {
             TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
             return ResultUtils.error("系统错误，请重试");
         }
+        RedisUtils.deleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         return ResultUtils.success();
     }
 
@@ -165,7 +162,6 @@ public class SysRoleService extends BaseService {
      * @param sysRole
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils addRole(SysRole sysRole) {
         //中英文开头、数字、下划线
         if (ValidateUtils.notChinaEnglishNumberUnderline(sysRole.getName())) {
@@ -184,7 +180,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtils.getNowDateTime());
-        return ResultUtils.success(baseInsert(sysRole));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseInsert(sysRole);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -193,7 +192,6 @@ public class SysRoleService extends BaseService {
      * @param sysRole
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils updateRole(HttpServletRequest request, SysRole sysRole) {
         //中英文开头、数字、下划线
         if (ValidateUtils.notChinaEnglishNumberUnderline(sysRole.getName())) {
@@ -220,7 +218,10 @@ public class SysRoleService extends BaseService {
         if (!ADMIN_ROLE_IS_STOP.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
-        return ResultUtils.success(baseUpdate(sysRole));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseUpdate(sysRole);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -229,7 +230,6 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @return
      */
-    @CacheEvict(allEntries = true)
     public ResultUtils deleteRole(HttpServletRequest request, Long roleId) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("roleId错误");
@@ -248,7 +248,10 @@ public class SysRoleService extends BaseService {
         if (null != list && 0 < list.size()) {
             return ResultUtils.error("当前角色存在下级");
         }
-        return ResultUtils.success(baseDeleteByClassAndId(SysRole.class, roleId));
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        baseDeleteByClassAndId(SysRole.class, roleId);
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        return ResultUtils.success();
     }
 
     /**
@@ -257,7 +260,7 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @return
      */
-    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResultUtils changeRoleIsStop(HttpServletRequest request, Long roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("id不能为空");
@@ -283,10 +286,19 @@ public class SysRoleService extends BaseService {
                 return ResultUtils.error("父级当前处于禁用状态");
             }
         }
-        mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
-        for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
-            findChildrenChangeIsStop(sysRole.getId(), isStop);
+        RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
+        try {
+            mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
+            for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
+                findChildrenChangeIsStop(sysRole.getId(), isStop);
+            }
+        } catch (Exception e) {
+            log.warn("改变角色状态失败，详情:" + e);
+            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
+            return ResultUtils.error("系统错误，请重试");
         }
+        RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
     }
 
@@ -296,7 +308,7 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @param isStop
      */
-    private void findChildrenChangeIsStop(Long roleId, Integer isStop) {
+    private void findChildrenChangeIsStop(Long roleId, Integer isStop) throws Exception {
         mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
         for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
             findChildrenChangeIsStop(sysRole.getId(), isStop);

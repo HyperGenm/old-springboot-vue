@@ -27,6 +27,7 @@
         {type: 'input', label: '标题', prop: 'title', required: true},
         {type: 'input', label: '功能名name', prop: 'name', required: true},
         {type: 'input', label: '功能路径', prop: 'path', required: true},
+        {type: 'input', label: '功能对应的api', prop: 'containApi'},
         {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
         {
             type: 'radio', label: '类型', prop: 'type', required: true, options: [

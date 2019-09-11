@@ -40,12 +40,16 @@ public class JwtTokenUtils {
      * @param userId
      * @return
      */
-    protected static String createToken(Long userId, String audience, String ipAddress) {
+    protected static String createToken(Long userId, String audience, String ipAddress, Long roleId) {
         return Jwts.builder()
+                //用户id
+                .setId(ToolUtils.valueOfString(userId))
                 .setIssuer(Md5Utils.encode(ipAddress))
+                //用户类型，admin还是web
                 .setAudience(Md5Utils.encode(audience))
                 .signWith(HS512, SECRET)
-                .setSubject(ToolUtils.valueOfString(userId))
+                //admin的用户角色，
+                .setSubject(Md5Utils.encode(ToolUtils.valueOfString(roleId)))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();
@@ -101,7 +105,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static Long getUserIdByToken(String token) {
-        return Long.valueOf(getTokenBody(token).getSubject());
+        return Long.valueOf(getTokenBody(token).getId());
     }
 
     /**
@@ -112,5 +116,15 @@ public class JwtTokenUtils {
      */
     public static Long getUserIdByHttpServletRequest(HttpServletRequest request) {
         return getUserIdByToken(request.getHeader("token"));
+    }
+
+    /**
+     * 根据token获取md5加密后的admin用户角色
+     *
+     * @param token
+     * @return
+     */
+    public static String getMd5RoleIdByToken(String token) {
+        return getTokenBody(token).getSubject();
     }
 }

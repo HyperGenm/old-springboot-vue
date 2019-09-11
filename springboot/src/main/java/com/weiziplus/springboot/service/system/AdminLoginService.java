@@ -107,7 +107,7 @@ public class AdminLoginService {
         if (!SysRoleService.ADMIN_ROLE_IS_STOP.equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
-        String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request));
+        String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request), sysRole.getId());
         if (null == token) {
             return ResultUtils.error("登录失败，请重试");
         }

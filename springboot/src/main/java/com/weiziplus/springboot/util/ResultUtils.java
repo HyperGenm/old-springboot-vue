@@ -79,6 +79,11 @@ public class ResultUtils implements Serializable {
      */
     private static final Integer ERROR_TOKEN_CODE = 401;
 
+    /**
+     * admin用户没有权限的code
+     */
+    private static final Integer ERROR_ROLE_CODE = 402;
+
     public static ResultUtils success(String msg, Object data) {
         return content(SUCCESS_CODE, msg, data);
     }
@@ -111,15 +116,11 @@ public class ResultUtils implements Serializable {
         return content(ERROR_SUSPEND_CODE, "Rider Kick", null);
     }
 
-    public static ResultUtils errorToken(String msg, Object data) {
-        return content(ERROR_TOKEN_CODE, msg, data);
-    }
-
     public static ResultUtils errorToken(String msg) {
         return content(ERROR_TOKEN_CODE, msg, null);
     }
 
-    public static ResultUtils errorToken() {
-        return content(ERROR_TOKEN_CODE, "token失效", null);
+    public static ResultUtils errorRole(String msg) {
+        return content(ERROR_ROLE_CODE, msg, null);
     }
 }
