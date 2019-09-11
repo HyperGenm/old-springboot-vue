@@ -37,32 +37,12 @@
                     {
                         label: '是否允许登录', type: 'tag',
                         element() {
-                            let {allowLogin} = data;
-                            let result = {};
-                            switch (allowLogin) {
-                                case 0:
-                                case '0': {
-                                    result = {
-                                        content: '允许'
-                                    };
-                                }
-                                    break;
-                                case 1:
-                                case '1': {
-                                    result = {
-                                        type: 'warning',
-                                        content: '禁止'
-                                    };
-                                }
-                                    break;
-                                default: {
-                                    result = {
-                                        type: 'danger',
-                                        content: '封号中'
-                                    };
-                                }
-                            }
-                            return result;
+                            let result = [
+                                {content: '允许'},
+                                {content: '禁止', type: 'warning'},
+                                {content: '封号中', type: 'danger'}
+                            ];
+                            return result[data['allowLogin']];
                         }
                     },
                     {label: '最后活跃ip', prop: data['laseIpAddress']},

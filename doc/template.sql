@@ -103,13 +103,13 @@ CREATE TABLE `sys_function`  (
 -- Records of sys_function
 -- ----------------------------
 INSERT INTO `sys_function` VALUES (1, 0, 'home', 'home', '首页', '', 0, 'el-icon-s-home', 0, '后台首页', '2019-08-26 14:13:35');
-INSERT INTO `sys_function` VALUES (2, 0, 'system', 'system', '系统管理', '', 0, 'el-icon-info', 1, '描述', '2019-05-09 16:55:47');
-INSERT INTO `sys_function` VALUES (3, 2, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreeNotButton,/pc/sysFunction/getFunctionList', 0, 'el-icon-info', 0, '', '2019-05-09 16:56:10');
-INSERT INTO `sys_function` VALUES (4, 2, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getRoleTree,/pc/sysFunction/getAllFunctionTree,/pc/sysFunction/getRoleFunList', 0, 'el-icon-info', 1, '', '2019-05-09 16:56:26');
-INSERT INTO `sys_function` VALUES (5, 2, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-info', 2, '', '2019-05-09 16:56:52');
-INSERT INTO `sys_function` VALUES (6, 2, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, '', 3, '系统日志', '2019-05-13 15:30:57');
-INSERT INTO `sys_function` VALUES (7, 2, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', '/pc/dataDictionary/ipFilter/getPageList', 0, '', 0, '', '2019-08-05 10:13:42');
-INSERT INTO `sys_function` VALUES (8, 2, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', '/pc/sysAbnormalIp/getPageList', 0, '', 0, '', '2019-08-05 14:39:33');
+INSERT INTO `sys_function` VALUES (2, 0, 'system', 'system', '系统管理', '', 0, 'el-icon-s-tools', 1, '后台的管理', '2019-05-09 16:55:47');
+INSERT INTO `sys_function` VALUES (3, 2, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreeNotButton,/pc/sysFunction/getFunctionList', 0, 'el-icon-s-tools', 0, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
+INSERT INTO `sys_function` VALUES (4, 2, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getRoleTree,/pc/sysFunction/getAllFunctionTree,/pc/sysFunction/getRoleFunList', 0, 'el-icon-s-check', 1, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
+INSERT INTO `sys_function` VALUES (5, 2, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 2, '管理后台的用户', '2019-05-09 16:56:52');
+INSERT INTO `sys_function` VALUES (6, 2, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 3, '记录系统用户的操作', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (7, 2, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', '/pc/dataDictionary/ipFilter/getPageList', 0, 'el-icon-platform-eleme', 4, '对ip进行限制，白名单将不进行任何限制，黑名单将拒绝访问', '2019-08-05 10:13:42');
+INSERT INTO `sys_function` VALUES (8, 2, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', '/pc/sysAbnormalIp/getPageList', 0, 'el-icon-s-help', 5, '展示异常访问的ip，如：请求过快等，以便于进行安全排查', '2019-08-05 14:39:33');
 INSERT INTO `sys_function` VALUES (9, 3, 'sysFunc_add', 'add', '新增', '/pc/sysFunction/addFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:20:41');
 INSERT INTO `sys_function` VALUES (10, 3, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
 INSERT INTO `sys_function` VALUES (11, 3, 'sysFunc_delete', 'delete', '删除', '/pc/sysFunction/deleteFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:34');
@@ -123,9 +123,9 @@ INSERT INTO `sys_function` VALUES (18, 5, 'sysUser_update', 'update', '修改', 
 INSERT INTO `sys_function` VALUES (19, 5, 'sysUser_delete', 'delete', '删除', '/pc/sysUser/deleteUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
 INSERT INTO `sys_function` VALUES (20, 5, 'sysUser_role', 'role', '角色', '/pc/sysUser/updateUserRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
 INSERT INTO `sys_function` VALUES (21, 5, 'sysUser_resetPwd', 'resetPwd', '重置密码', '/pc/sysUser/resetUserPassword', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
-INSERT INTO `sys_function` VALUES (22, 0, 'tools', 'tools', '常用工具', '', 0, 'el-icon-s-promotion', 2, '', '2019-08-24 16:41:28');
-INSERT INTO `sys_function` VALUES (23, 22, 'toolsUpload', 'upload', '图片上传', '', 0, '', 0, '', '2019-08-24 16:41:49');
-INSERT INTO `sys_function` VALUES (24, 22, 'richText', 'richText', '富文本', '', 0, 'el-icon-s-release', 1, '', '2019-09-04 16:21:09');
+INSERT INTO `sys_function` VALUES (22, 0, 'tools', 'tools', '常用工具', '', 0, 'el-icon-s-promotion', 2, '进一步封装element-ui的常用组件，约定大于配置思想', '2019-08-24 16:41:28');
+INSERT INTO `sys_function` VALUES (23, 22, 'toolsUpload', 'upload', '图片上传', '', 0, 'el-icon-picture', 0, '进一步封装了图片上传，方便调用', '2019-08-24 16:41:49');
+INSERT INTO `sys_function` VALUES (24, 22, 'richText', 'richText', '富文本', '', 0, 'el-icon-s-release', 1, '进一步封装了富文本，方便调用', '2019-09-04 16:21:09');
 
 -- ----------------------------
 -- Table structure for sys_log

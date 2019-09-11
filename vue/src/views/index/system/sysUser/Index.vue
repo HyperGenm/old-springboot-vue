@@ -92,33 +92,13 @@
                     {label: '真实姓名', prop: 'realName'},
                     {
                         label: '是否允许登录', prop: 'title', type: 'tag',
-                        element(row) {
-                            let {allowLogin} = row;
-                            let result = {};
-                            switch (allowLogin) {
-                                case 0:
-                                case '0': {
-                                    result = {
-                                        content: '允许'
-                                    };
-                                }
-                                    break;
-                                case 1:
-                                case '1': {
-                                    result = {
-                                        type: 'warning',
-                                        content: '禁止'
-                                    };
-                                }
-                                    break;
-                                default: {
-                                    result = {
-                                        type: 'danger',
-                                        content: '封号中'
-                                    };
-                                }
-                            }
-                            return result;
+                        element({allowLogin}) {
+                            let result = [
+                                {content: '允许'},
+                                {content: '禁止', type: 'warning'},
+                                {content: '封号中', type: 'danger'}
+                            ];
+                            return result[allowLogin];
                         }
                     },
                     {label: '封号次数', prop: 'suspendNum'},

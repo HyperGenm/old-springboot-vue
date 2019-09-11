@@ -2,32 +2,11 @@
     <div id="index">
         <div class="role">
             <div class="btn">
-                <el-button type="primary" size="mini"
-                           @click="initGetRoleTree">
-                    刷新
-                </el-button>
-                <el-button type="success" size="mini"
-                           @click="detailRole">
-                    查看角色
-                </el-button>
-                <el-button v-if="storeStateRoleButtons['sysRole_add']" type="primary" size="mini"
-                           @click="addRole">
-                    新增角色
-                </el-button>
-                <el-button v-if="storeStateRoleButtons['sysRole_update']" type="success" size="mini"
-                           @click="updateRole">修改角色
-                </el-button>
-                <el-button v-if="storeStateRoleButtons['sysRole_delete']" type="danger" size="mini"
-                           @click="deleteRole">
-                    删除角色
-                </el-button>
-                <el-button v-if="storeStateRoleButtons['sysRole_status']" type="success" size="mini"
-                           @click="changeRoleIsStop(0)">
-                    启用角色
-                </el-button>
-                <el-button v-if="storeStateRoleButtons['sysRole_status']" type="danger" size="mini"
-                           @click="changeRoleIsStop(1)">
-                    禁用角色
+                <el-button v-for="(btn,index) in roleHeaderButtons" :key="index"
+                           v-if="btn['show']"
+                           :type="btn['type']" size="mini"
+                           @click="btn['handleClick']">
+                    {{btn['title']}}
                 </el-button>
             </div>
             <el-tree ref="roleTree" node-key="id"
@@ -76,9 +55,54 @@
         },
         data() {
             let that = this;
+            //用户角色拥有的按钮
+            let storeStateRoleButtons = this.$store.state.role.buttons;
             return {
-                //用户角色拥有的按钮
-                storeStateRoleButtons: that.$store.state.role.buttons,
+                //角色上面的按钮列表
+                roleHeaderButtons: [
+                    {
+                        title: '刷新', type: 'primary', show: true,
+                        handleClick() {
+                            that.initGetRoleTree();
+                        }
+                    },
+                    {
+                        title: '查看角色', type: 'success', show: true,
+                        handleClick() {
+                            that.detailRole();
+                        }
+                    },
+                    {
+                        title: '新增角色', type: 'primary', show: storeStateRoleButtons['sysRole_add'],
+                        handleClick() {
+                            that.addRole();
+                        }
+                    },
+                    {
+                        title: '修改角色', type: 'success', show: storeStateRoleButtons['sysRole_update'],
+                        handleClick() {
+                            that.updateRole();
+                        }
+                    },
+                    {
+                        title: '删除角色', type: 'danger', show: storeStateRoleButtons['sysRole_delete'],
+                        handleClick() {
+                            that.deleteRole();
+                        }
+                    },
+                    {
+                        title: '启用角色', type: 'success', show: storeStateRoleButtons['sysRole_status'],
+                        handleClick() {
+                            that.changeRoleIsStop(0);
+                        }
+                    },
+                    {
+                        title: '禁用角色', type: 'danger', show: storeStateRoleButtons['sysRole_status'],
+                        handleClick() {
+                            that.changeRoleIsStop(1);
+                        }
+                    }
+                ],
                 //角色树的数据
                 roleData: [],
                 roleProps: {

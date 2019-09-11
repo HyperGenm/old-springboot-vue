@@ -95,6 +95,16 @@
                     {label: '路由标题', prop: 'title'},
                     {label: '对应api', prop: 'containApi'},
                     {
+                        label: '类型', prop: 'type', type: 'tag',
+                        element({type}) {
+                            let result = [
+                                {content: '菜单'},
+                                {content: '按钮'}
+                            ];
+                            return result[type];
+                        }
+                    },
+                    {
                         label: '路由图标', prop: 'icon', formatter(row) {
                             return `<i class="${row.icon}"></i>`;
                         }
