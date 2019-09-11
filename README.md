@@ -12,14 +12,14 @@ tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*f
 ### 后端:
 #### springboot、mybatis、redis
 1. 简介
-    * 基于*springboot*模板创建的项目
-    * 项目需要安装、启动*redis*环境
+    * 基于 *springboot* 模板创建的项目
+    * 项目需要安装、启动 *redis* 环境
 2. 基本配置
     * *.yml*文件可以配置相关信息
 3. 权限管理
-    * 带有`@AdminAuthToken`注解的接口，请求头必须有*token*才能访问
+    * 带有`@AdminAuthToken`注解的接口，请求头必须有 *token* 才能访问
     * 配合vue前端页面动态渲染路由，以及隐藏显示按钮:按钮保存在`$store.state.role['buttons']`中
-    * 精确到接口级别权限，必须完善*功能管理*中菜单或者按钮对应的*对应api*,否则默认放行
+    * 精确到接口级别权限，必须完善 *功能管理* 中菜单或者按钮对应的 *对应api* ,否则默认放行
 
 ### 前端:
 #### vue:
@@ -33,10 +33,10 @@ tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*f
                           success(data) {}
                      });`
             * url:只需要域名之后的地址
-            * success:回调只需要处理*code为200*的情况
+            * success:回调只需要处理 *code为200* 的情况
 
 2. 基本配置
-    * 初次运行需要进入vue文件运行*npm install*命令安装依赖
+    * 初次运行需要进入vue文件运行 *npm install* 命令安装依赖
     * 配合后端实现动态路由:功能管理表单填写path路径，默认根路径为*/src/views/index/*
     * .env.production/development文件为配置文件
                      
