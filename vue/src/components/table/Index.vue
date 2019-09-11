@@ -322,7 +322,7 @@
                     /**处理status不为200的出错请求*/
                     if (200 !== res.status) {
                         that.$globalFun.errorMsg('请求出错:' + res.status);
-                        that.emptyText = res;
+                        that.emptyText = JSON.stringify(res);
                         console.warn(_url, '-----status:', res.status, '------请求出错-----res:', res);
                         return;
                     }
@@ -340,7 +340,7 @@
                     /**处理code不为200的出错请求*/
                     if (200 !== res.data.code) {
                         that.$globalFun.errorMsg(res.data.msg);
-                        that.emptyText = res;
+                        that.emptyText = JSON.stringify(res['data']);
                         console.warn(_url, '-----code:', res.data.code, '------请求出错-----res:', res);
                         return;
                     }
@@ -362,7 +362,7 @@
                         that.emptyText = error.response.data.message;
                     } else {
                         console.warn(_url, '------请求失败-----error:', error);
-                        that.emptyText = 'error:' + error;
+                        that.emptyText = 'error:' + JSON.stringify(error);
                     }
                 });
             },
