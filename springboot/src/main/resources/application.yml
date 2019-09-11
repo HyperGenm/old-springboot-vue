@@ -55,5 +55,5 @@ global:
   token-admin-expire-time: 43200
   #web用户token过期时间,单位秒
   token-web-expire-time: 259200
-  #5秒内超过多少次请求，暂时封ip
-  ip-filter-max-num: 27
+  #10秒内超过多少次请求，暂时封ip
+  ip-filter-max-num: 57
