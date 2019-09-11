@@ -20,6 +20,10 @@ tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*f
     * 带有`@AdminAuthToken`注解的接口，请求头必须有 *token* 才能访问
     * 配合vue前端页面动态渲染路由，以及隐藏显示按钮:按钮保存在`$store.state.role['buttons']`中
     * 精确到接口级别权限，必须完善 *功能管理* 中菜单或者按钮对应的 *对应api* ,否则默认放行
+4. 封装厂用CURD,继承 *BaseService* 即可
+5. 根据数据库自动生成实体类 
+    * 运行 *org.mybatis.generator.plugin.MyBatisTest.main()* 方法
+    * 具体配置 *resources/config/generator-config.xml* 
 
 ### 前端:
 #### vue:
@@ -46,7 +50,7 @@ tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*f
         * form: 表单提交,`@submit`只需要处理表单验证之后的情况
         * index: 普通弹出框
     * table:表格
-        * 表格接受的返回示例: ```{"list":[],"pageNum":1,"pageSize":10}```
+        * 表格接受的返回示例: `{"list":[],"pageNum":1,"pageSize":10}`
         * 表格数据请求 `tableDataRequest: {
                                       url: '',
                                       data: {}
