@@ -183,7 +183,7 @@ public class SysFunctionService extends BaseService {
      */
     @CacheEvict(allEntries = true)
     public ResultUtils addFunction(SysFunction sysFunction) {
-        if (!ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
+        if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
         if (null == sysFunction.getParentId() || 0 > sysFunction.getParentId()) {
@@ -211,7 +211,7 @@ public class SysFunctionService extends BaseService {
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
         }
-        if (!ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
+        if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());

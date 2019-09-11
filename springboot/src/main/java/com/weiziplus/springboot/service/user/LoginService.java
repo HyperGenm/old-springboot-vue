@@ -64,7 +64,7 @@ public class LoginService {
             return ResultUtils.error("用户名或密码为空");
         }
         //中英文开头、数字下划线
-        if (!ValidateUtils.notChinaEnglishNumberUnderline(username)) {
+        if (ValidateUtils.notChinaEnglishNumberUnderline(username)) {
             return ResultUtils.error("用户名不能包含特殊字符");
         }
         if (ValidateUtils.notPassword(password)) {

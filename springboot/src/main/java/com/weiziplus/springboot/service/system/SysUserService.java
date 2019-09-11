@@ -68,7 +68,7 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("密码为6-20位大小写和数字");
         }
         //正常格式真实姓名:中文或英文包括空格和点
-        if (!ValidateUtils.notRealName(sysUser.getRealName())) {
+        if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
@@ -94,7 +94,7 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("用户名不能包含特殊字符");
         }
         //正常格式真实姓名:中文或英文包括空格和点
-        if (!ValidateUtils.notRealName(sysUser.getRealName())) {
+        if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
