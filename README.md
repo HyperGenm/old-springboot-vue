@@ -46,7 +46,7 @@ tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*f
         * form: 表单提交,`@submit`只需要处理表单验证之后的情况
         * index: 普通弹出框
     * table:表格
-        * 表格接受的返回示例: `{"list":[],"pageNum":1,"pageSize":10}`
+        * 表格接受的返回示例: ```{"list":[],"pageNum":1,"pageSize":10}```
         * 表格数据请求 `tableDataRequest: {
                                       url: '',
                                       data: {}
