@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.util.token;
 
-import com.weiziplus.springboot.util.Md5Utils;
+import com.weiziplus.springboot.config.GlobalConfig;
+import com.weiziplus.springboot.util.Base64Utils;
 import com.weiziplus.springboot.util.ToolUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -43,13 +44,13 @@ public class JwtTokenUtils {
     protected static String createToken(Long userId, String audience, String ipAddress, Long roleId) {
         return Jwts.builder()
                 //用户id
-                .setId(ToolUtils.valueOfString(userId))
-                .setIssuer(Md5Utils.encode(ipAddress))
+                .setId(Base64Utils.encode(ToolUtils.valueOfString(userId)))
+                .setIssuer(Base64Utils.encode(ipAddress))
                 //用户类型，admin还是web
-                .setAudience(Md5Utils.encode(audience))
+                .setAudience(Base64Utils.encode(audience))
                 .signWith(HS512, SECRET)
                 //admin的用户角色，
-                .setSubject(Md5Utils.encode(ToolUtils.valueOfString(roleId)))
+                .setSubject(Base64Utils.encode(ToolUtils.valueOfString(roleId)))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();
@@ -62,7 +63,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static String getIssuer(String token) {
-        return getTokenBody(token).getIssuer();
+        return Base64Utils.decode(getTokenBody(token).getIssuer());
     }
 
     /**
@@ -95,7 +96,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static String getUserAudienceByToken(String token) {
-        return getTokenBody(token).getAudience();
+        return Base64Utils.decode(getTokenBody(token).getAudience());
     }
 
     /**
@@ -105,7 +106,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static Long getUserIdByToken(String token) {
-        return Long.valueOf(getTokenBody(token).getId());
+        return Long.valueOf(Base64Utils.decode(getTokenBody(token).getId()));
     }
 
     /**
@@ -115,7 +116,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static Long getUserIdByHttpServletRequest(HttpServletRequest request) {
-        return getUserIdByToken(request.getHeader("token"));
+        return Long.valueOf(Base64Utils.decode(getTokenBody(request.getHeader(GlobalConfig.TOKEN)).getId()));
     }
 
     /**
@@ -124,7 +125,8 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    public static String getMd5RoleIdByToken(String token) {
-        return getTokenBody(token).getSubject();
+    public static Long getRoleIdByToken(String token) {
+        return ToolUtils.valueOfLong(Base64Utils.decode(getTokenBody(token).getSubject()));
     }
+
 }

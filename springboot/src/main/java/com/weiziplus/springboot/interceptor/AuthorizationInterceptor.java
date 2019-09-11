@@ -5,12 +5,10 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.mapper.user.UserMapper;
-import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.models.User;
 import com.weiziplus.springboot.service.system.SysFunctionService;
 import com.weiziplus.springboot.service.system.SysRoleService;
 import com.weiziplus.springboot.util.HttpRequestUtils;
-import com.weiziplus.springboot.util.Md5Utils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.StringRedisUtils;
@@ -103,12 +101,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         String issuer = JwtTokenUtils.getIssuer(token);
         //获取当前访问的ip地址
         String ipAddress = HttpRequestUtils.getIpAddress(request);
-        if (!issuer.equals(Md5Utils.encode(ipAddress))) {
+        if (!issuer.equals(ipAddress)) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
+        //获取当前角色
         String tokenAudience = JwtTokenUtils.getUserAudienceByToken(token);
-        if (tokenAudience.equals(Md5Utils.encode(AdminTokenUtils.AUDIENCE))) {
+        if (AdminTokenUtils.AUDIENCE.equals(tokenAudience)) {
             //角色为admin
             //查看是否有日志注解，有的话将日志信息放入数据库
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
@@ -116,7 +115,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
             }
             return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
-        } else if (tokenAudience.equals(Md5Utils.encode(WebTokenUtils.AUDIENCE))) {
+        } else if (WebTokenUtils.AUDIENCE.equals(tokenAudience)) {
             //角色为web
             return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
         }
@@ -174,15 +173,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             AdminTokenUtils.updateExpireTime(userId);
             return true;
         }
-        //获取被md5加密后的roleId
-        String md5RoleIdByToken = JwtTokenUtils.getMd5RoleIdByToken(token);
-        Long roleId = null;
-        for (SysRole sysRole : sysRoleService.getRoleList()) {
-            if (md5RoleIdByToken.equals(Md5Utils.encode(sysRole.getId()))) {
-                roleId = sysRole.getId();
-                break;
-            }
-        }
+        //获取roleId
+        Long roleId = JwtTokenUtils.getRoleIdByToken(token);
         if (null == roleId) {
             handleResponse(response, ResultUtils.errorRole("您没有权限"));
             return false;
