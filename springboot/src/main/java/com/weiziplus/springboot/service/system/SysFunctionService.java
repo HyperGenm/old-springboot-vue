@@ -87,7 +87,7 @@ public class SysFunctionService extends BaseService {
         String key = createRedisKey(BASE_REDIS_KEY + "getFunTree");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return (List<SysFunction>) object;
+            return ToolUtils.objectOfList(object, SysFunction.class);
         }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
@@ -134,7 +134,7 @@ public class SysFunctionService extends BaseService {
         String key = createRedisKey(BASE_REDIS_KEY + "getAllFunctionTreeNotButton");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return (List<SysFunction>) object;
+            return ToolUtils.objectOfList(object, SysFunction.class);
         }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
@@ -211,7 +211,7 @@ public class SysFunctionService extends BaseService {
         String key = createRedisKey(ROLE_FUNCTION_LIST_REDIS_KEY, roleId);
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return (List<SysFunction>) object;
+            return ToolUtils.objectOfList(object, SysFunction.class);
         }
         List<SysFunction> list = mapper.getFunListByRoleId(roleId);
         RedisUtils.set(key, list);

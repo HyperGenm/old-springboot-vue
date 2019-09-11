@@ -9,6 +9,7 @@ import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.ValidateUtils;
 import com.weiziplus.springboot.util.redis.RedisUtils;
 import com.weiziplus.springboot.util.token.AdminTokenUtils;
@@ -67,7 +68,7 @@ public class SysRoleService extends BaseService {
         String key = createRedisKey(BASE_REDIS_KEY + "getRoleTree");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return (List<SysRole>) object;
+            return ToolUtils.objectOfList(object, SysRole.class);
         }
         List<SysRole> resultList = new ArrayList<>();
         //默认根节点为0
@@ -105,7 +106,7 @@ public class SysRoleService extends BaseService {
         String key = createRedisKey(BASE_REDIS_KEY + "getRoleList");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return (List<SysRole>) object;
+            return ToolUtils.objectOfList(object, SysRole.class);
         }
         List<SysRole> roleList = mapper.getRoleList();
         RedisUtils.set(key, roleList);

@@ -2,6 +2,8 @@ package com.weiziplus.springboot.util;
 
 import com.weiziplus.springboot.config.GlobalConfig;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -107,5 +109,27 @@ public class ToolUtils {
             return null;
         }
         return Long.valueOf(string);
+    }
+
+    /**
+     * 将object对象转为list
+     *
+     * @param obj
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> objectOfList(Object obj, Class<T> clazz) {
+        if (null == obj || null == clazz) {
+            return null;
+        }
+        List<T> result = new ArrayList<>();
+        if (obj instanceof List<?>) {
+            for (Object o : (List<?>) obj) {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
     }
 }
