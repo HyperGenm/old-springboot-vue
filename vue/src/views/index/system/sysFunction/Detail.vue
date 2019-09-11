@@ -44,8 +44,8 @@
                                 return;
                             }
                             let dom = '';
-                            data['containApi'].split(',').forEach(value => {
-                                dom += `<div>${value}</div>`;
+                            data['containApi'].split(',').forEach((value, index) => {
+                                dom += `<div style="border-top: ${0 === index ? 0 : 1}px dashed #777;">${value}</div>`;
                             });
                             return dom;
                         }

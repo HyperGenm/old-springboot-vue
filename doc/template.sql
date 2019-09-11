@@ -29,7 +29,7 @@ CREATE TABLE `data_dictionary`  (
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '字典创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `code`(`code`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_dictionary
@@ -72,7 +72,7 @@ CREATE TABLE `sys_abnormal_ip`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ip`(`ip`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '异常ip记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '异常ip记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_abnormal_ip
@@ -85,7 +85,7 @@ INSERT INTO `sys_abnormal_ip` VALUES (1, '1.1.1.1', 0, '测试数据', '2019-08-
 DROP TABLE IF EXISTS `sys_function`;
 CREATE TABLE `sys_function`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '系统功能表主键，自增',
-  `parent_id` bigint(11) NOT NULL DEFAULT 0 COMMENT '上级id',
+  `parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '上级id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能唯一标识',
   `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能路径',
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能标题',
@@ -132,15 +132,15 @@ INSERT INTO `sys_function` VALUES (24, 22, 'richText', 'richText', '富文本', 
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`  (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '系统日志表主键，自增',
-  `user_id` bigint(11) NOT NULL DEFAULT 0 COMMENT '用户表id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '系统日志表主键，自增',
+  `user_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '用户表id',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '操作描述',
   `ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `sys_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 751 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
@@ -185,51 +185,66 @@ CREATE TABLE `sys_role_function`  (
   INDEX `function_id`(`function_id`) USING BTREE,
   CONSTRAINT `sys_role_function_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_role_function_ibfk_2` FOREIGN KEY (`function_id`) REFERENCES `sys_function` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 185 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 274 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_function
 -- ----------------------------
-INSERT INTO `sys_role_function` VALUES (102, 666, 14);
-INSERT INTO `sys_role_function` VALUES (103, 666, 15);
-INSERT INTO `sys_role_function` VALUES (104, 666, 16);
-INSERT INTO `sys_role_function` VALUES (105, 666, 1);
-INSERT INTO `sys_role_function` VALUES (106, 666, 4);
-INSERT INTO `sys_role_function` VALUES (206, 1, 1);
-INSERT INTO `sys_role_function` VALUES (207, 1, 2);
-INSERT INTO `sys_role_function` VALUES (212, 1, 3);
-INSERT INTO `sys_role_function` VALUES (218, 1, 4);
-INSERT INTO `sys_role_function` VALUES (208, 1, 5);
-INSERT INTO `sys_role_function` VALUES (209, 1, 6);
-INSERT INTO `sys_role_function` VALUES (210, 1, 7);
-INSERT INTO `sys_role_function` VALUES (213, 1, 8);
-INSERT INTO `sys_role_function` VALUES (214, 1, 9);
-INSERT INTO `sys_role_function` VALUES (215, 1, 10);
-INSERT INTO `sys_role_function` VALUES (216, 1, 11);
-INSERT INTO `sys_role_function` VALUES (219, 1, 12);
-INSERT INTO `sys_role_function` VALUES (220, 1, 13);
-INSERT INTO `sys_role_function` VALUES (221, 1, 14);
-INSERT INTO `sys_role_function` VALUES (222, 1, 15);
-INSERT INTO `sys_role_function` VALUES (223, 1, 16);
-INSERT INTO `sys_role_function` VALUES (211, 1, 17);
-INSERT INTO `sys_role_function` VALUES (217, 1, 18);
-INSERT INTO `sys_role_function` VALUES (224, 1, 19);
-INSERT INTO `sys_role_function` VALUES (226, 1, 20);
-INSERT INTO `sys_role_function` VALUES (227, 1, 21);
-INSERT INTO `sys_role_function` VALUES (228, 1, 22);
-INSERT INTO `sys_role_function` VALUES (229, 1, 23);
-INSERT INTO `sys_role_function` VALUES (230, 1, 24);
+INSERT INTO `sys_role_function` VALUES (231, 1, 1);
+INSERT INTO `sys_role_function` VALUES (232, 1, 2);
+INSERT INTO `sys_role_function` VALUES (233, 1, 3);
+INSERT INTO `sys_role_function` VALUES (234, 1, 9);
+INSERT INTO `sys_role_function` VALUES (235, 1, 10);
+INSERT INTO `sys_role_function` VALUES (236, 1, 11);
+INSERT INTO `sys_role_function` VALUES (237, 1, 7);
+INSERT INTO `sys_role_function` VALUES (238, 1, 8);
+INSERT INTO `sys_role_function` VALUES (239, 1, 4);
+INSERT INTO `sys_role_function` VALUES (240, 1, 12);
+INSERT INTO `sys_role_function` VALUES (241, 1, 13);
+INSERT INTO `sys_role_function` VALUES (242, 1, 14);
+INSERT INTO `sys_role_function` VALUES (243, 1, 15);
+INSERT INTO `sys_role_function` VALUES (244, 1, 16);
+INSERT INTO `sys_role_function` VALUES (245, 1, 5);
+INSERT INTO `sys_role_function` VALUES (246, 1, 17);
+INSERT INTO `sys_role_function` VALUES (247, 1, 18);
+INSERT INTO `sys_role_function` VALUES (248, 1, 19);
+INSERT INTO `sys_role_function` VALUES (249, 1, 20);
+INSERT INTO `sys_role_function` VALUES (250, 1, 21);
+INSERT INTO `sys_role_function` VALUES (251, 1, 6);
+INSERT INTO `sys_role_function` VALUES (252, 1, 22);
+INSERT INTO `sys_role_function` VALUES (253, 1, 23);
+INSERT INTO `sys_role_function` VALUES (254, 1, 24);
+INSERT INTO `sys_role_function` VALUES (255, 666, 1);
+INSERT INTO `sys_role_function` VALUES (256, 666, 7);
+INSERT INTO `sys_role_function` VALUES (257, 666, 8);
+INSERT INTO `sys_role_function` VALUES (258, 666, 4);
+INSERT INTO `sys_role_function` VALUES (259, 666, 12);
+INSERT INTO `sys_role_function` VALUES (260, 666, 13);
+INSERT INTO `sys_role_function` VALUES (261, 666, 14);
+INSERT INTO `sys_role_function` VALUES (262, 666, 15);
+INSERT INTO `sys_role_function` VALUES (263, 666, 16);
+INSERT INTO `sys_role_function` VALUES (264, 666, 5);
+INSERT INTO `sys_role_function` VALUES (265, 666, 17);
+INSERT INTO `sys_role_function` VALUES (266, 666, 18);
+INSERT INTO `sys_role_function` VALUES (267, 666, 19);
+INSERT INTO `sys_role_function` VALUES (268, 666, 20);
+INSERT INTO `sys_role_function` VALUES (269, 666, 21);
+INSERT INTO `sys_role_function` VALUES (270, 666, 6);
+INSERT INTO `sys_role_function` VALUES (271, 666, 22);
+INSERT INTO `sys_role_function` VALUES (272, 666, 23);
+INSERT INTO `sys_role_function` VALUES (273, 666, 24);
+INSERT INTO `sys_role_function` VALUES (274, 666, 2);
 
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '系统用户表主键id，自增',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '系统用户表主键id，自增',
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录用户名',
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录密码',
   `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户真实姓名',
-  `role_id` bigint(11) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
+  `role_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
   `allow_login` int(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止，2:封号中',
   `suspend_num` int(5) NOT NULL DEFAULT 0 COMMENT '账户封号次数',
   `last_ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户最后活跃ip地址',
@@ -237,7 +252,7 @@ CREATE TABLE `sys_user`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE COMMENT '登录名唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 1000004 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000003 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -252,12 +267,12 @@ INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2'
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '用户表主键，自增',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户表主键，自增',
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '密码',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1000002 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000001 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
