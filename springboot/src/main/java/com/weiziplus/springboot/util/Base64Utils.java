@@ -26,7 +26,7 @@ public class Base64Utils {
             return null;
         }
         Base64.Encoder encoder = Base64.getEncoder();
-        byte[] bytes = (SALT + text).getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
         return encoder.encodeToString(bytes);
     }
 
@@ -41,8 +41,8 @@ public class Base64Utils {
             return null;
         }
         Base64.Decoder decoder = Base64.getDecoder();
-        String string = new String(decoder.decode(text), StandardCharsets.UTF_8);
-        return string.substring(SALT.length());
+        byte[] decode = decoder.decode(text);
+        return new String(decode, StandardCharsets.UTF_8);
     }
 
 }
