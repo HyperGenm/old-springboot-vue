@@ -1,8 +1,11 @@
 //当前是生产环境还是开发环境
-const IS_Production = process.env.NODE_ENV === 'production';
+//生产环境---静态常量
+const PRODUCTION = 'production';
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//获取配置
+let {NODE_ENV, outputDir, productionSourceMap, removeConsole} = process.env;
 
 module.exports = {
     /** 区分生产环境与开发环境
@@ -11,15 +14,15 @@ module.exports = {
      * publicPath: process.env.NODE_ENV==='production'?"https://www.weiziplus.com/test/":'test/',
      */
     //打包时注意路径问题
-    publicPath: IS_Production ? './' : '/',
+    publicPath: PRODUCTION === NODE_ENV ? './' : '/',
     // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
-    outputDir: process.env.outputDir,
+    outputDir,
     //放置生成的静态资源(s、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
     assetsDir: 'assets',
     //指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径
     indexPath: 'index.html',
     // 是否在构建生产包时生成 sourceMap 文件，false将提高构建速度// 。
-    productionSourceMap: false,
+    productionSourceMap: '0' === productionSourceMap,
     css: {
         // 是否使用css分离插件 ExtractTextPlugin
         extract: false,
@@ -30,7 +33,7 @@ module.exports = {
     },
     chainWebpack: config => {
         //如果是生产环境
-        if (IS_Production) {
+        if (PRODUCTION === NODE_ENV) {
             // 移除 prefetch 插件
             config.plugins.delete('prefetch');
             // 移除 preload 插件
@@ -38,8 +41,25 @@ module.exports = {
         }
     },
     configureWebpack: config => {
+        //查看打包后的文件信息
+        config.plugins.push(new BundleAnalyzerPlugin(
+            {
+                analyzerMode: 'server',
+                analyzerHost: 'localhost',
+                // 运行后的端口号
+                analyzerPort: 8000,
+                reportFilename: 'report.html',
+                defaultSizes: 'parsed',
+                //是否自动打开浏览器
+                openAnalyzer: false,
+                generateStatsFile: false,
+                statsFilename: 'stats.json',
+                statsOptions: null,
+                logLevel: 'info'
+            }
+        ));
         //如果是生产环境
-        if (IS_Production) {
+        if (PRODUCTION === NODE_ENV) {
             //打包去除的资源
             config.externals = {
                 'vue': 'Vue',
@@ -59,23 +79,9 @@ module.exports = {
                 //是否删除原文件
                 deleteOriginalAssets: false
             }));
-            //查看打包后的文件信息
-            config.plugins.push(new BundleAnalyzerPlugin(
-                {
-                    analyzerMode: 'server',
-                    analyzerHost: 'localhost',
-                    // 运行后的端口号
-                    analyzerPort: 8000,
-                    reportFilename: 'report.html',
-                    defaultSizes: 'parsed',
-                    //是否自动打开浏览器
-                    openAnalyzer: false,
-                    generateStatsFile: false,
-                    statsFilename: 'stats.json',
-                    statsOptions: null,
-                    logLevel: 'info'
-                }
-            ));
+        }
+        //是否删除console打印 0:删除,1:不删除
+        if ('0' === removeConsole) {
             //去掉注释
             config.plugins.push(new UglifyJsPlugin({
                 uglifyOptions: {
