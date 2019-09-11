@@ -49,7 +49,7 @@ public interface SysFunctionMapper {
      *
      * @return
      */
-    List<SysFunction> getFunList();
+    List<SysFunction> getALLFunList();
 
     /**
      * 根据父级id获取功能列表

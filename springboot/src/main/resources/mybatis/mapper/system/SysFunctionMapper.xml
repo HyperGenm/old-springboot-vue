@@ -28,7 +28,7 @@
         ORDER BY parent_id ASC
         LIMIT 1
     </select>
-    <select id="getFunList" resultType="com.weiziplus.springboot.models.SysFunction">
+    <select id="getALLFunList" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
         FROM sys_function
         ORDER BY sort ASC

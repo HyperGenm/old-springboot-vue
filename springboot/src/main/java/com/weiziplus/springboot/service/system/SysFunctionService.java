@@ -94,7 +94,7 @@ public class SysFunctionService extends BaseService {
         if (null == sysFunction) {
             return resultList;
         }
-        List<SysFunction> menuList = mapper.getFunList();
+        List<SysFunction> menuList = mapper.getALLFunList();
         for (SysFunction sysFun : menuList) {
             if (!sysFunction.getParentId().equals(sysFun.getParentId())) {
                 continue;
@@ -199,12 +199,46 @@ public class SysFunctionService extends BaseService {
     }
 
     /**
+     * 得到所有的功能列表
+     *
+     * @return
+     */
+    private List<SysFunction> getAllFunList() {
+        String key = BASE_REDIS_KEY + "getAllFunList:";
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return ToolUtils.objectOfList(object, SysFunction.class);
+        }
+        List<SysFunction> funList = mapper.getALLFunList();
+        RedisUtils.set(key, funList);
+        return funList;
+    }
+
+    /**
+     * 获取所有功能包含的api
+     *
+     * @return
+     */
+    public List<String> getAllFunContainApi() {
+        List<String> result = new ArrayList<>();
+        for (SysFunction sysFunction : getAllFunList()) {
+            String containApi = sysFunction.getContainApi();
+            if (ToolUtils.isBlank(containApi)) {
+                continue;
+            }
+            String[] split = containApi.split(",");
+            result.addAll(Arrays.asList(split));
+        }
+        return result;
+    }
+
+    /**
      * 根据roleId获取所有方法列表
      *
      * @param roleId
      * @return
      */
-    public List<SysFunction> getFunctionListByRoleId(Long roleId) {
+    private List<SysFunction> getFunctionListByRoleId(Long roleId) {
         if (null == roleId || 0 > roleId) {
             return null;
         }

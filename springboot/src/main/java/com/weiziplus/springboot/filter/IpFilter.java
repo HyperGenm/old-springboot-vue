@@ -32,11 +32,11 @@ public class IpFilter implements Filter {
     SysAbnormalIpMapper sysAbnormalIpMapper;
 
     /**
-     * 5秒内多少次请求，暂时封ip
+     * 10秒内多少次请求，暂时封ip
      */
-    private static Integer MAX_NUM = 27;
+    private static Integer MAX_NUM = 57;
 
-    @Value("${global.ip-filter-max-num:27}")
+    @Value("${global.ip-filter-max-num:57}")
     private void setMaxNum(String maxNum) {
         IpFilter.MAX_NUM = ToolUtils.valueOfInteger(maxNum);
     }
@@ -83,7 +83,7 @@ public class IpFilter implements Filter {
         if (null != numberObject) {
             RedisUtils.setNotChangeTimeOut(redisKey, number);
         } else {
-            RedisUtils.set(redisKey, number, 5L);
+            RedisUtils.set(redisKey, number, 10L);
         }
         chain.doFilter(req, res);
     }

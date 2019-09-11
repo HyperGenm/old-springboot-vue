@@ -159,12 +159,22 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
-        //如果当前是超级管理员
+        //如果当前是超级管理员---直接放过
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
             //更新token过期时间
             AdminTokenUtils.updateExpireTime(userId);
             return true;
         }
+        //获取当前访问的url
+        String requestURI = request.getRequestURI();
+        List<String> allFunContainApi = sysFunctionService.getAllFunContainApi();
+        //如果限制的功能api不包含当前url---直接放过
+        if (!allFunContainApi.contains(requestURI)) {
+            //更新token过期时间
+            AdminTokenUtils.updateExpireTime(userId);
+            return true;
+        }
+        //获取被md5加密后的roleId
         String md5RoleIdByToken = JwtTokenUtils.getMd5RoleIdByToken(token);
         Long roleId = null;
         for (SysRole sysRole : sysRoleService.getRoleList()) {
@@ -177,8 +187,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.errorRole("您没有权限"));
             return false;
         }
-        //获取当前访问的url
-        String requestURI = request.getRequestURI();
         //获取当前角色拥有的方法url
         List<String> funContainApiByRoleId = sysFunctionService.getFunContainApiByRoleId(roleId);
         if (funContainApiByRoleId.contains(requestURI)) {
