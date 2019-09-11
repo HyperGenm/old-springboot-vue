@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Set;
 
 /**
  * 自定义的拦截器interceptor
@@ -166,7 +166,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //获取当前访问的url
         String requestURI = request.getRequestURI();
-        List<String> allFunContainApi = sysFunctionService.getAllFunContainApi();
+        Set<String> allFunContainApi = sysFunctionService.getAllFunContainApi();
         //如果限制的功能api不包含当前url---直接放过
         if (!allFunContainApi.contains(requestURI)) {
             //更新token过期时间
@@ -180,7 +180,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         //获取当前角色拥有的方法url
-        List<String> funContainApiByRoleId = sysFunctionService.getFunContainApiByRoleId(roleId);
+        Set<String> funContainApiByRoleId = sysFunctionService.getFunContainApiByRoleId(roleId);
         if (funContainApiByRoleId.contains(requestURI)) {
             //更新token过期时间
             AdminTokenUtils.updateExpireTime(userId);

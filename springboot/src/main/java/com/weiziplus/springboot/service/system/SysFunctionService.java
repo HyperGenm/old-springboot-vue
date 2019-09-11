@@ -9,9 +9,7 @@ import com.weiziplus.springboot.util.redis.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author wanglongwei
@@ -219,8 +217,8 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    public List<String> getAllFunContainApi() {
-        List<String> result = new ArrayList<>();
+    public Set<String> getAllFunContainApi() {
+        Set<String> result = new HashSet<>();
         for (SysFunction sysFunction : getAllFunList()) {
             String containApi = sysFunction.getContainApi();
             if (ToolUtils.isBlank(containApi)) {
@@ -275,8 +273,8 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    public List<String> getFunContainApiByRoleId(Long roleId) {
-        List<String> resultList = new ArrayList<>();
+    public Set<String> getFunContainApiByRoleId(Long roleId) {
+        Set<String> resultList = new HashSet<>();
         if (null == roleId || 0 > roleId) {
             return resultList;
         }

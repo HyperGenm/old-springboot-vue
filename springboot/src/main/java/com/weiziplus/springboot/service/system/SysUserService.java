@@ -191,7 +191,10 @@ public class SysUserService extends BaseService {
         Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         Map<String, Object> map = baseFindByClassAndId(SysUser.class, userId);
         String passwordFiled = "password";
-        if (null == map || null == map.get(passwordFiled) || !Md5Utils.encode(oldPwd).equals(map.get(passwordFiled).toString())) {
+        if (null == map || null == map.get(passwordFiled)) {
+            return ResultUtils.error("原密码错误");
+        }
+        if (!Md5Utils.encode(oldPwd).equals(ToolUtils.valueOfString(map.get(passwordFiled)))) {
             return ResultUtils.error("原密码错误");
         }
         mapper.resetUserPassword(userId, Md5Utils.encode(newPwd));

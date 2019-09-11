@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 参数过滤器
@@ -25,7 +26,7 @@ public class ParamsFilter implements Filter {
     /**
      * 允许的url---该请求将不会过滤参数
      */
-    private final List<String> ALLOW_URL = Arrays.asList("", "");
+    private final Set<String> ALLOW_URL = new HashSet<>(Arrays.asList("", ""));
 
     /**
      * @param servletRequest

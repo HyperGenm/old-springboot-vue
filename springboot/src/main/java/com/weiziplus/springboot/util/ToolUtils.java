@@ -2,9 +2,7 @@ package com.weiziplus.springboot.util;
 
 import com.weiziplus.springboot.config.GlobalConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 常用工具类
@@ -126,6 +124,28 @@ public class ToolUtils {
         List<T> result = new ArrayList<>();
         if (obj instanceof List<?>) {
             for (Object o : (List<?>) obj) {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
+    }
+
+    /**
+     * 将object对象转为set
+     *
+     * @param obj
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<T> objectOfSet(Object obj, Class<T> clazz) {
+        if (null == obj || null == clazz) {
+            return null;
+        }
+        Set<T> result = new HashSet<>();
+        if (obj instanceof Set<?>) {
+            for (Object o : (Set<?>) obj) {
                 result.add(clazz.cast(o));
             }
             return result;

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wanglongwei
@@ -18,14 +19,14 @@ public interface DataDictionaryIpFilterMapper {
      *
      * @return
      */
-    List<String> getIpValueWhiteList();
+    Set<String> getIpValueWhiteList();
 
     /**
      * 获取ip黑名单列表
      *
      * @return
      */
-    List<String> getIpValueBlackList();
+    Set<String> getIpValueBlackList();
 
     /**
      * 根据ip获取一条数据

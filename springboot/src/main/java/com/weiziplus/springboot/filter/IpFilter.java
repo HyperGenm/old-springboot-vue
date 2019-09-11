@@ -15,7 +15,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author wanglongwei
@@ -47,13 +47,13 @@ public class IpFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String ipAddress = HttpRequestUtils.getIpAddress(request);
         //如果是白名单，放过
-        List<String> ipWhiteList = dataDictionaryIpFilterService.getIpValueWhiteList();
+        Set<String> ipWhiteList = dataDictionaryIpFilterService.getIpValueWhiteList();
         if (ipWhiteList.contains(ipAddress)) {
             chain.doFilter(req, res);
             return;
         }
         //如果在黑名单里面---直接403
-        List<String> ipBlackList = dataDictionaryIpFilterService.getIpValueBlackList();
+        Set<String> ipBlackList = dataDictionaryIpFilterService.getIpValueBlackList();
         if (ipBlackList.contains(ipAddress)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;

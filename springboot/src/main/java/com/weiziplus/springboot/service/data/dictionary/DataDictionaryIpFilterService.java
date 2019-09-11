@@ -1,7 +1,5 @@
 package com.weiziplus.springboot.service.data.dictionary;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
@@ -18,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author wanglongwei
@@ -43,13 +41,13 @@ public class DataDictionaryIpFilterService extends BaseService {
      *
      * @return
      */
-    public List<String> getIpValueWhiteList() {
+    public Set<String> getIpValueWhiteList() {
         String redisKey = createRedisKey(BASE_REDIS_KEY + "getIpValueWhiteList");
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
-            return JSONArray.parseArray(JSON.toJSONString(object), String.class);
+            return ToolUtils.objectOfSet(object, String.class);
         }
-        List<String> ipWhiteList = mapper.getIpValueWhiteList();
+        Set<String> ipWhiteList = mapper.getIpValueWhiteList();
         RedisUtils.set(redisKey, ipWhiteList, 60 * 60 * 24L);
         return ipWhiteList;
     }
@@ -59,13 +57,13 @@ public class DataDictionaryIpFilterService extends BaseService {
      *
      * @return
      */
-    public List<String> getIpValueBlackList() {
+    public Set<String> getIpValueBlackList() {
         String redisKey = createRedisKey(BASE_REDIS_KEY + "getIpValueBlackList");
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
-            return JSONArray.parseArray(JSON.toJSONString(object), String.class);
+            return ToolUtils.objectOfSet(object, String.class);
         }
-        List<String> ipBlackList = mapper.getIpValueBlackList();
+        Set<String> ipBlackList = mapper.getIpValueBlackList();
         RedisUtils.set(redisKey, ipBlackList, 60 * 60 * 24L);
         return ipBlackList;
     }
