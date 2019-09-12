@@ -250,8 +250,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("当前角色存在下级");
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        RedisUtils.setExpireDeleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         baseDeleteByClassAndId(SysRole.class, roleId);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        RedisUtils.deleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         return ResultUtils.success();
     }
 
@@ -288,6 +290,7 @@ public class SysRoleService extends BaseService {
             }
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
+        RedisUtils.setExpireDeleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         try {
             mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
@@ -300,6 +303,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("系统错误，请重试");
         }
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
+        RedisUtils.deleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         return ResultUtils.success();
     }
 

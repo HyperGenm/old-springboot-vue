@@ -120,7 +120,7 @@ public class JwtTokenUtils {
     }
 
     /**
-     * 根据token获取md5加密后的admin用户角色
+     * 根据token获取用户角色
      *
      * @param token
      * @return

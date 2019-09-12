@@ -465,7 +465,7 @@ public class BaseService {
     protected String createRedisKey(String onlyPrefix, Object... objects) {
         StringBuffer stringBuffer = new StringBuffer(onlyPrefix);
         for (Object object : objects) {
-            stringBuffer.append("_666_").append(object);
+            stringBuffer.append("_&&&_").append(object);
         }
         return ToolUtils.valueOfString(stringBuffer);
     }

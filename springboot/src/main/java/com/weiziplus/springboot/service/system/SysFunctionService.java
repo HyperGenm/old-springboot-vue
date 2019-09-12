@@ -4,8 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
 import com.weiziplus.springboot.models.SysFunction;
+import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.util.*;
 import com.weiziplus.springboot.util.redis.RedisUtils;
+import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -197,36 +199,26 @@ public class SysFunctionService extends BaseService {
     }
 
     /**
-     * 得到所有的功能列表
-     *
-     * @return
-     */
-    private List<SysFunction> getAllFunList() {
-        String key = BASE_REDIS_KEY + "getAllFunList:";
-        Object object = RedisUtils.get(key);
-        if (null != object) {
-            return ToolUtils.objectOfList(object, SysFunction.class);
-        }
-        List<SysFunction> funList = mapper.getALLFunList();
-        RedisUtils.set(key, funList);
-        return funList;
-    }
-
-    /**
      * 获取所有功能包含的api
      *
      * @return
      */
     public Set<String> getAllFunContainApi() {
+        String key = createRedisKey(BASE_REDIS_KEY + "getAllFunContainApi:");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return ToolUtils.objectOfSet(object, String.class);
+        }
         Set<String> result = new HashSet<>();
-        for (SysFunction sysFunction : getAllFunList()) {
+        for (SysFunction sysFunction : mapper.getALLFunList()) {
             String containApi = sysFunction.getContainApi();
-            if (ToolUtils.isBlank(containApi)) {
+            if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.split(",");
+            String[] split = containApi.replace(" ", "").split(",");
             result.addAll(Arrays.asList(split));
         }
+        RedisUtils.set(key, result);
         return result;
     }
 
@@ -240,7 +232,7 @@ public class SysFunctionService extends BaseService {
         if (null == roleId || 0 > roleId) {
             return null;
         }
-        String key = createRedisKey(ROLE_FUNCTION_LIST_REDIS_KEY, roleId);
+        String key = createRedisKey(ROLE_FUNCTION_LIST_REDIS_KEY + "getFunctionListByRoleId:", roleId);
         Object object = RedisUtils.get(key);
         if (null != object) {
             return ToolUtils.objectOfList(object, SysFunction.class);
@@ -274,18 +266,34 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     public Set<String> getFunContainApiByRoleId(Long roleId) {
-        Set<String> resultList = new HashSet<>();
         if (null == roleId || 0 > roleId) {
-            return resultList;
+            return null;
         }
-        for (SysFunction sysFunction : getFunctionListByRoleId(roleId)) {
+        String key = createRedisKey(ROLE_FUNCTION_LIST_REDIS_KEY + "getFunContainApiByRoleId:", roleId);
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return ToolUtils.objectOfSet(object, String.class);
+        }
+        Map<String, Object> map = baseFindByClassAndId(SysRole.class, roleId);
+        if (null == map) {
+            return null;
+        }
+        //是否启用;0:启用,1:禁用'
+        Object isStopObject = map.get("isStop");
+        String stopStatus = "1";
+        if (null == isStopObject || stopStatus.equals(ToolUtils.valueOfString(isStopObject))) {
+            return null;
+        }
+        Set<String> resultList = new HashSet<>();
+        for (SysFunction sysFunction : mapper.getFunListByRoleId(roleId)) {
             String containApi = sysFunction.getContainApi();
-            if (ToolUtils.isBlank(containApi)) {
+            if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.split(",");
+            String[] split = containApi.replace(" ", "").split(",");
             resultList.addAll(Arrays.asList(split));
         }
+        RedisUtils.set(key, resultList);
         return resultList;
     }
 
