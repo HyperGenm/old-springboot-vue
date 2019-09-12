@@ -168,7 +168,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         Set<String> allFunContainApi = sysFunctionService.getAllFunContainApi();
         //如果限制的功能api不包含当前url---直接放过
-        if (!allFunContainApi.contains(requestURI)) {
+        if (null == allFunContainApi || !allFunContainApi.contains(requestURI)) {
             //更新token过期时间
             AdminTokenUtils.updateExpireTime(userId);
             return true;
@@ -181,7 +181,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //获取当前角色拥有的方法url
         Set<String> funContainApiByRoleId = sysFunctionService.getFunContainApiByRoleId(roleId);
-        if (funContainApiByRoleId.contains(requestURI)) {
+        if (null != funContainApiByRoleId && funContainApiByRoleId.contains(requestURI)) {
             //更新token过期时间
             AdminTokenUtils.updateExpireTime(userId);
             return true;
