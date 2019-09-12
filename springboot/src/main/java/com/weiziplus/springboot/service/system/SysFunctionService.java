@@ -215,7 +215,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("\\s*", "").split(",");
+            String[] split = containApi.replaceAll("[a-zA-Z|/|,]*", "").split(",");
             result.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, result);
@@ -290,7 +290,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("\\s*", "").split(",");
+            String[] split = containApi.replaceAll("[a-zA-Z|/|,]*", "").split(",");
             resultList.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, resultList);
@@ -317,6 +317,9 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun) {
             return ResultUtils.error("name已存在");
         }
+        if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
+            sysFunction.setContainApi(sysFunction.getContainApi().replaceAll("[a-zA-Z|/|,]*", ""));
+        }
         sysFunction.setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseInsert(sysFunction);
@@ -340,6 +343,9 @@ public class SysFunctionService extends BaseService {
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
+        }
+        if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
+            sysFunction.setContainApi(sysFunction.getContainApi().replaceAll("[a-zA-Z|/|,]*", ""));
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysFunction);
