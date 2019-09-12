@@ -31,7 +31,7 @@
                 </template>
                 <template v-else-if="'textarea' === item.type">
                     <el-input type="textarea" :size="item.size" v-model="formData[item.prop]"
-                              :disabled="item.disabled || false"></el-input>
+                              :disabled="item.disabled || false" autosize></el-input>
                 </template>
                 <template v-else-if="'checkbox' === item.type">
                     <el-checkbox-group v-model="formData[item.prop]" :size="item.size"

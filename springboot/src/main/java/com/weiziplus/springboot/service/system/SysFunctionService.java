@@ -215,7 +215,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replace(" ", "").split(",");
+            String[] split = containApi.replaceAll("\\s*", "").split(",");
             result.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, result);
@@ -290,7 +290,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replace(" ", "").split(",");
+            String[] split = containApi.replaceAll("\\s*", "").split(",");
             resultList.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, resultList);
