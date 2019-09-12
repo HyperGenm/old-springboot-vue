@@ -215,7 +215,8 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("[a-zA-Z|/|,]*", "").split(",");
+            String[] split = containApi.replaceAll("[^(a-zA-Z/)]*", "")
+                    .replace("，", ",").split(",");
             result.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, result);
@@ -290,7 +291,8 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("[a-zA-Z|/|,]*", "").split(",");
+            String[] split = containApi.replaceAll("[^(a-zA-Z/)]*", "")
+                    .replace("，", ",").split(",");
             resultList.addAll(Arrays.asList(split));
         }
         RedisUtils.set(key, resultList);
@@ -318,7 +320,8 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("name已存在");
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
-            sysFunction.setContainApi(sysFunction.getContainApi().replaceAll("[a-zA-Z|/|,]*", ""));
+            sysFunction.setContainApi(sysFunction.getContainApi()
+                    .replaceAll("[^(a-zA-Z/)]*", "").replace("，", ","));
         }
         sysFunction.setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
@@ -345,7 +348,8 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("name已存在");
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
-            sysFunction.setContainApi(sysFunction.getContainApi().replaceAll("[a-zA-Z|/|,]*", ""));
+            sysFunction.setContainApi(sysFunction.getContainApi()
+                    .replaceAll("[^(a-zA-Z/)]*", "").replace("，", ","));
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysFunction);
