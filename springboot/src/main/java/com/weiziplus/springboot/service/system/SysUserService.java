@@ -112,6 +112,10 @@ public class SysUserService extends BaseService {
         if (null != user && ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
             return ResultUtils.error("用户封号中，不能修改状态");
         }
+        //如果用户禁用---强制用户下线
+        if (ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
+            AdminTokenUtils.deleteToken(sysUser.getId());
+        }
         SysUser newUser = new SysUser();
         newUser.setId(sysUser.getId());
         newUser.setAllowLogin(sysUser.getAllowLogin());
@@ -173,7 +177,10 @@ public class SysUserService extends BaseService {
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
-        return ResultUtils.success(mapper.updateRoleIdByUserIdAndRoleId(userId, roleId));
+        //用户权限更改，强制下线
+        AdminTokenUtils.deleteToken(userId);
+        mapper.updateRoleIdByUserIdAndRoleId(userId, roleId);
+        return ResultUtils.success();
     }
 
     /**
