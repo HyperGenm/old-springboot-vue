@@ -259,7 +259,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0, 0, '127.0.0.1', '2019-08-06 08:56:40', '2019-05-09 16:26:15');
 INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 2, 7, '', '2019-08-01 17:16:24', '2019-05-10 14:30:04');
-INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 0, 0, 0, '', '2019-05-13 09:14:32', '2019-08-07 09:38:16');
+INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 666, 0, 0, '', '2019-05-13 09:14:32', '2019-08-07 09:38:16');
 INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0, 0, '', '2019-06-28 17:21:07', '2019-06-28 17:18:24');
 
 -- ----------------------------
