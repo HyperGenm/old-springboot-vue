@@ -4,13 +4,12 @@ import store from './store'
 
 if (process.env.NODE_ENV !== 'production') {
     Vue.use(Router);
+    //解决点击当前路由报错问题
+    const originalPush = Router.prototype.push;
+    Router.prototype.push = function push(location) {
+        return originalPush.call(this, location).catch(err => err)
+    };
 }
-
-//解决点击当前路由报错问题
-const originalPush = Router.prototype.push;
-Router.prototype.push = function push(location) {
-    return originalPush.call(this, location).catch(err => err)
-};
 
 const baseRouters = [
     {path: '/login', name: 'login', component: () => import('@/views/login/Index')}
