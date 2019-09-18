@@ -81,11 +81,6 @@ const URL = {
         sysLog: {
             /*查看日志列表*/
             getPageList: '/sysLog/getPageList',
-        },
-        /*********************异常ip管理*****************/
-        sysAbnormalIp: {
-            /*查看分页数据*/
-            getPageList: '/sysAbnormalIp/getPageList',
         }
     },
     /********字典管理*****************/
@@ -98,6 +93,11 @@ const URL = {
             add: '/dataDictionary/ipFilter/add',
             /*删除ip*/
             delete: '/dataDictionary/ipFilter/delete'
+        },
+        /*********************异常ip管理*****************/
+        abnormalIp: {
+            /*查看分页数据*/
+            getPageList: '/dataDictionary/abnormalIp/getPageList',
         }
     },
     /********常用工具*****************/

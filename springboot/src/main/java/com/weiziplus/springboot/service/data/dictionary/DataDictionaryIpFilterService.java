@@ -6,6 +6,7 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryIpFilterMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.DataDictionaryValue;
+import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.PageUtils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ToolUtils;
@@ -32,6 +33,21 @@ public class DataDictionaryIpFilterService extends BaseService {
     SysUserMapper sysUserMapper;
 
     /**
+     * ip名单数据库中code为ipFilter
+     */
+    private static final String DICTIONARY_CODE = "ipFilter";
+
+    /**
+     * 白名单
+     */
+    private static final int TYPE_WHITE = 0;
+
+    /**
+     * 黑名单
+     */
+    private static final int TYPE_BLACK = 1;
+
+    /**
      * ipFilter基础redis的key
      */
     private static final String BASE_REDIS_KEY = "service:data:dictionary:DataDictionaryIpFilterService:";
@@ -47,7 +63,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipWhiteList = mapper.getIpValueWhiteList();
+        Set<String> ipWhiteList = mapper.getIpValueList(TYPE_WHITE);
         RedisUtils.set(redisKey, ipWhiteList, 60 * 60 * 24L);
         return ipWhiteList;
     }
@@ -63,7 +79,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipBlackList = mapper.getIpValueBlackList();
+        Set<String> ipBlackList = mapper.getIpValueList(TYPE_BLACK);
         RedisUtils.set(redisKey, ipBlackList, 60 * 60 * 24L);
         return ipBlackList;
     }
@@ -73,7 +89,7 @@ public class DataDictionaryIpFilterService extends BaseService {
      *
      * @return
      */
-    public ResultUtils getPageList(Integer pageNum, Integer pageSize, String type) {
+    public ResultUtils getPageList(Integer pageNum, Integer pageSize, Integer type) {
         String redisKey = createRedisKey(BASE_REDIS_KEY + "getPageListBlack", type, pageSize, pageNum);
         Object object = RedisUtils.get(redisKey);
         if (null != object) {
@@ -92,12 +108,15 @@ public class DataDictionaryIpFilterService extends BaseService {
      * @param ip
      * @return
      */
-    public ResultUtils add(HttpServletRequest request, String ip, String type) {
+    public ResultUtils add(HttpServletRequest request, String ip, Integer type) {
         if (ToolUtils.isBlank(ip)) {
             return ResultUtils.error("ip不能为空");
         }
-        if (ToolUtils.isBlank(type)) {
+        if (null == type) {
             return ResultUtils.error("type不能为空");
+        }
+        if (TYPE_WHITE != type && TYPE_BLACK != type) {
+            return ResultUtils.error("type错误");
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
@@ -109,8 +128,14 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return ResultUtils.error("ip已存在");
         }
+        DataDictionaryValue value = new DataDictionaryValue();
+        value.setDictionaryCode(DICTIONARY_CODE);
+        value.setType(type);
+        value.setName(ip);
+        value.setValue(ip);
+        value.setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
-        mapper.addIp(ip, type);
+        baseInsert(value);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
     }
@@ -122,13 +147,10 @@ public class DataDictionaryIpFilterService extends BaseService {
      * @param id
      * @return
      */
-    public ResultUtils delete(HttpServletRequest request, Long id, String type) {
+    public ResultUtils delete(HttpServletRequest request, Long id) {
         //127.0.0.1的id为1
         if (null == id || 1 >= id) {
             return ResultUtils.error("id为空");
-        }
-        if (ToolUtils.isBlank(type)) {
-            return ResultUtils.error("type不能为空");
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
@@ -137,7 +159,7 @@ public class DataDictionaryIpFilterService extends BaseService {
             return ResultUtils.errorSuspend();
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
-        mapper.deleteIp(id, type);
+        mapper.deleteIp(id);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
     }
@@ -152,8 +174,15 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return;
         }
+        DataDictionaryValue value = new DataDictionaryValue();
+        value.setDictionaryCode(DICTIONARY_CODE);
+        //1为黑名单
+        value.setType(TYPE_BLACK);
+        value.setName(ip);
+        value.setValue(ip);
+        value.setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
-        mapper.addIp(ip, "black");
+        baseInsert(value);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
     }
 }

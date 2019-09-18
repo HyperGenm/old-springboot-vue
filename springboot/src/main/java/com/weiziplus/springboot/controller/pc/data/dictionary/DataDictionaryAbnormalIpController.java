@@ -1,8 +1,8 @@
-package com.weiziplus.springboot.controller.pc.system;
+package com.weiziplus.springboot.controller.pc.data.dictionary;
 
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
-import com.weiziplus.springboot.service.system.SysAbnormalIpService;
+import com.weiziplus.springboot.service.data.dictionary.DataDictionaryAbnormalIpService;
 import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,16 +13,16 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author wanglongwei
- * @data 2019/8/5 14:35
+ * @data 2019/8/5 10:17
  */
 @RestController
 @ApiIgnore
 @AdminAuthToken
-@RequestMapping("/pc/sysAbnormalIp")
-public class SysAbnormalIpController {
+@RequestMapping("/pc/dataDictionary/abnormalIp")
+public class DataDictionaryAbnormalIpController {
 
     @Autowired
-    SysAbnormalIpService service;
+    DataDictionaryAbnormalIpService service;
 
     @GetMapping("/getPageList")
     @SystemLog(description = "查看异常ip列表")

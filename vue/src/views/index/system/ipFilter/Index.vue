@@ -3,13 +3,13 @@
         <div class="left">
             <div class="box">
                 <div class="item">
-                    <el-button size="mini" :type="type === 'white' ? 'primary' : 'info'"
-                               @click="typeChange('white')">白名单
+                    <el-button size="mini" :type="type === 0 ? 'primary' : 'info'"
+                               @click="typeChange(0)">白名单
                     </el-button>
                 </div>
                 <div class="item">
-                    <el-button size="mini" :type="type === 'black' ? 'primary' : 'info'"
-                               @click="typeChange('black')">黑名单
+                    <el-button size="mini" :type="type === 1 ? 'primary' : 'info'"
+                               @click="typeChange(1)">黑名单
                     </el-button>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             let showIpEditButton = (SUPER_ADMIN_ID === that.$store.state.userInfo['id']
                 || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
-                type: 'white',
+                type: 0,
                 tableDataRequest: {
                     url: that.$global.URL.dataDictionary.ipFilter.getPageList,
                     data: {
@@ -118,8 +118,7 @@
                             url: that.$global.URL.dataDictionary.ipFilter.delete,
                             method: 'post',
                             data: {
-                                id,
-                                type: that.type
+                                id
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');

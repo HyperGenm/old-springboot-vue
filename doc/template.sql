@@ -29,13 +29,13 @@ CREATE TABLE `data_dictionary`  (
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '字典创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `code`(`code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_dictionary
 -- ----------------------------
-INSERT INTO `data_dictionary` VALUES (1, 'ipFilterWhite', 'ipFilterWhite', 'ip白名单', '2019-08-05 09:44:41');
-INSERT INTO `data_dictionary` VALUES (2, 'ipFilterBlack', 'ipFilterBlack', 'ip黑名单', '2019-08-05 09:45:00');
+INSERT INTO `data_dictionary` VALUES (1, 'ipFilter', 'ipFilter', 'ip名单', '2019-09-18 14:43:27');
+INSERT INTO `data_dictionary` VALUES (2, 'abnormalIp', 'abnormalIp', '异常ip', '2019-09-18 15:55:16');
 
 -- ----------------------------
 -- Table structure for data_dictionary_value
@@ -46,38 +46,20 @@ CREATE TABLE `data_dictionary_value`  (
   `dictionary_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典编号',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '值',
+  `type` int(3) NOT NULL DEFAULT 0 COMMENT '类型(自定义)：\r\nipFilter：ip名单---0：白名单，1：黑名单',
+  `order` int(11) NOT NULL DEFAULT 0 COMMENT '排序(自定义,默认为排序)\r\n abnormalIp:异常ip---异常出错次数',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
-  `order` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `dictionary_code`(`dictionary_code`) USING BTREE,
   CONSTRAINT `data_dictionary_value_ibfk_1` FOREIGN KEY (`dictionary_code`) REFERENCES `data_dictionary` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_dictionary_value
 -- ----------------------------
-INSERT INTO `data_dictionary_value` VALUES (1, 'ipFilterwhite', '127.0.0.1', '127.0.0.1', '', 0, '2019-08-05 14:15:14');
-
--- ----------------------------
--- Table structure for sys_abnormal_ip
--- ----------------------------
-DROP TABLE IF EXISTS `sys_abnormal_ip`;
-CREATE TABLE `sys_abnormal_ip`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
-  `ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
-  `number` int(10) NOT NULL DEFAULT 0 COMMENT '次数',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
-  `lase_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近违规时间',
-  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `ip`(`ip`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '异常ip记录' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_abnormal_ip
--- ----------------------------
-INSERT INTO `sys_abnormal_ip` VALUES (1, '1.1.1.1', 0, '测试数据', '2019-08-05 14:55:59', '2019-08-05 14:55:59');
+INSERT INTO `data_dictionary_value` VALUES (1, 'ipFilter', '127.0.0.1', '127.0.0.1', 0, 0, '本地，ip白名单', '2019-09-18 14:44:08');
+INSERT INTO `data_dictionary_value` VALUES (2, 'abnormalIp', '1.1.1.1', '1.1.1.1', 0, 2, '测试ip', '2019-09-18 15:56:03');
 
 -- ----------------------------
 -- Table structure for sys_function
@@ -109,7 +91,7 @@ INSERT INTO `sys_function` VALUES (4, 2, 'sysRole', 'sysRole', '角色管理', '
 INSERT INTO `sys_function` VALUES (5, 2, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 2, '管理后台的用户', '2019-05-09 16:56:52');
 INSERT INTO `sys_function` VALUES (6, 2, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 3, '记录系统用户的操作', '2019-05-13 15:30:57');
 INSERT INTO `sys_function` VALUES (7, 2, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', '/pc/dataDictionary/ipFilter/getPageList', 0, 'el-icon-platform-eleme', 4, '对ip进行限制，白名单将不进行任何限制，黑名单将拒绝访问', '2019-08-05 10:13:42');
-INSERT INTO `sys_function` VALUES (8, 2, 'sysAbnormalIp', 'sysAbnormalIp', '异常ip管理', '/pc/sysAbnormalIp/getPageList', 0, 'el-icon-s-help', 5, '展示异常访问的ip，如：请求过快等，以便于进行安全排查', '2019-08-05 14:39:33');
+INSERT INTO `sys_function` VALUES (8, 2, 'dataDictionaryAbnormalIp', 'abnormalIp', '异常ip管理', '/pc/dataDictionary/abnormalIp/getPageList', 0, 'el-icon-s-help', 5, '展示异常访问的ip，如：请求过快等，以便于进行安全排查', '2019-08-05 14:39:33');
 INSERT INTO `sys_function` VALUES (9, 3, 'sysFunc_add', 'add', '新增', '/pc/sysFunction/addFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:20:41');
 INSERT INTO `sys_function` VALUES (10, 3, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
 INSERT INTO `sys_function` VALUES (11, 3, 'sysFunc_delete', 'delete', '删除', '/pc/sysFunction/deleteFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:34');

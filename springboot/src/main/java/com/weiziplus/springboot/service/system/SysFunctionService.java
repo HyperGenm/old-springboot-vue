@@ -94,7 +94,7 @@ public class SysFunctionService extends BaseService {
         if (null == sysFunction) {
             return resultList;
         }
-        List<SysFunction> menuList = mapper.getALLFunList();
+        List<SysFunction> menuList = mapper.getAllFunList();
         for (SysFunction sysFun : menuList) {
             if (!sysFunction.getParentId().equals(sysFun.getParentId())) {
                 continue;
@@ -210,7 +210,7 @@ public class SysFunctionService extends BaseService {
             return ToolUtils.objectOfSet(object, String.class);
         }
         Set<String> result = new HashSet<>();
-        for (SysFunction sysFunction : mapper.getALLFunList()) {
+        for (SysFunction sysFunction : mapper.getAllFunList()) {
             String containApi = sysFunction.getContainApi();
             if (StringUtil.isBlank(containApi)) {
                 continue;

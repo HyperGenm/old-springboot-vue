@@ -11,6 +11,7 @@ import java.io.Serializable;
 /**
  * 数据字典值
  * data_dictionary_value
+ *
  * @author WeiziPlus
  * @date 2019-08-05 09:52:05
  */
@@ -43,16 +44,24 @@ public class DataDictionaryValue implements Serializable {
     private String value;
 
     /**
+     * 类型(自定义)：
+     * ipFilter：ip名单---0：白名单，1：黑名单
+     */
+    @Column("type")
+    private Integer type;
+
+    /**
+     * 排序(自定义,默认为排序)
+     * abnormalIp:异常ip---异常出错次数
+     */
+    @Column("order")
+    private Integer order;
+
+    /**
      * 备注
      */
     @Column("remark")
     private String remark;
-
-    /**
-     * 排序
-     */
-    @Column("order")
-    private Integer order;
 
     /**
      * 创建时间

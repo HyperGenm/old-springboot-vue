@@ -34,7 +34,7 @@ public class DataDictionaryIpFilterController {
     public ResultUtils getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-            @RequestParam(value = "type", defaultValue = "white") String type) {
+            @RequestParam(value = "type", defaultValue = "0") Integer type) {
         return service.getPageList(pageNum, pageSize, type);
     }
 
@@ -47,7 +47,7 @@ public class DataDictionaryIpFilterController {
      * @return
      */
     @PostMapping("/add")
-    public ResultUtils add(HttpServletRequest request, String ip, String type) {
+    public ResultUtils add(HttpServletRequest request, String ip, Integer type) {
         return service.add(request, ip, type);
     }
 
@@ -56,11 +56,10 @@ public class DataDictionaryIpFilterController {
      *
      * @param request
      * @param id
-     * @param type
      * @return
      */
     @PostMapping("/delete")
-    public ResultUtils delete(HttpServletRequest request, Long id, String type) {
-        return service.delete(request, id, type);
+    public ResultUtils delete(HttpServletRequest request, Long id) {
+        return service.delete(request, id);
     }
 }

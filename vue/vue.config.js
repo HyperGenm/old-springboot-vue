@@ -5,7 +5,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //获取配置
-let {NODE_ENV, outputDir, productionSourceMap, removeConsole} = process.env;
+let {NODE_ENV, outputDir, productionSourceMap, removeConsole, showFileInfo} = process.env;
 
 module.exports = {
     /** 区分生产环境与开发环境
@@ -41,23 +41,6 @@ module.exports = {
         }
     },
     configureWebpack: config => {
-        //查看打包后的文件信息
-        config.plugins.push(new BundleAnalyzerPlugin(
-            {
-                analyzerMode: 'server',
-                analyzerHost: 'localhost',
-                // 运行后的端口号
-                analyzerPort: 8000,
-                reportFilename: 'report.html',
-                defaultSizes: 'parsed',
-                //是否自动打开浏览器
-                openAnalyzer: false,
-                generateStatsFile: false,
-                statsFilename: 'stats.json',
-                statsOptions: null,
-                logLevel: 'info'
-            }
-        ));
         //如果是生产环境
         if (PRODUCTION === NODE_ENV) {
             //打包去除的资源
@@ -95,6 +78,26 @@ module.exports = {
                 sourceMap: false,
                 parallel: true,
             }));
+        }
+        //是否显示文件信息(一般打包时启用)，0:是,1:否
+        if ('0' === showFileInfo) {
+            //查看打包后的文件信息
+            config.plugins.push(new BundleAnalyzerPlugin(
+                {
+                    analyzerMode: 'server',
+                    analyzerHost: 'localhost',
+                    // 运行后的端口号
+                    analyzerPort: 8000,
+                    reportFilename: 'report.html',
+                    defaultSizes: 'parsed',
+                    //是否自动打开浏览器
+                    openAnalyzer: true,
+                    generateStatsFile: false,
+                    statsFilename: 'stats.json',
+                    statsOptions: null,
+                    logLevel: 'info'
+                }
+            ));
         }
     },
     //本地项目运行时的环境配置

@@ -1,8 +1,11 @@
 package com.weiziplus.springboot.filter;
 
-import com.weiziplus.springboot.mapper.system.SysAbnormalIpMapper;
-import com.weiziplus.springboot.models.SysAbnormalIp;
+import com.weiziplus.springboot.base.BaseService;
+import com.weiziplus.springboot.mapper.data.dictionary.DataDictionaryAbnormalIpMapper;
+import com.weiziplus.springboot.models.DataDictionaryValue;
+import com.weiziplus.springboot.service.data.dictionary.DataDictionaryAbnormalIpService;
 import com.weiziplus.springboot.service.data.dictionary.DataDictionaryIpFilterService;
+import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.HttpRequestUtils;
 import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.RedisUtils;
@@ -23,13 +26,16 @@ import java.util.Set;
  */
 @Slf4j
 @Component
-public class IpFilter implements Filter {
+public class IpFilter extends BaseService implements Filter {
 
     @Autowired
     DataDictionaryIpFilterService dataDictionaryIpFilterService;
 
     @Autowired
-    SysAbnormalIpMapper sysAbnormalIpMapper;
+    DataDictionaryAbnormalIpMapper dataDictionaryAbnormalIpMapper;
+
+    @Autowired
+    DataDictionaryAbnormalIpService dataDictionaryAbnormalIpService;
 
     /**
      * 10秒内多少次请求，暂时封ip
@@ -94,15 +100,20 @@ public class IpFilter implements Filter {
      * @param ip
      */
     private void handleAbnormalIp(String ip) {
-        SysAbnormalIp oneInfoByIp = sysAbnormalIpMapper.getOneInfoByIp(ip);
+        DataDictionaryValue oneInfoByIp = dataDictionaryAbnormalIpMapper.getOneInfoByIp(ip);
+        String nowDateTime = DateUtils.getNowDateTime();
         if (null == oneInfoByIp) {
-            sysAbnormalIpMapper.addAbnormalIpAndRemark(ip, "访问频率过快");
+            dataDictionaryAbnormalIpService.add(ip);
             return;
         }
-        sysAbnormalIpMapper.updateAbnormalIpAndRemark(ip, "访问频率过快");
+        Integer oldNumber = oneInfoByIp.getOrder();
+        //异常次数加一
+        oneInfoByIp.setOrder(oldNumber + 1);
+        oneInfoByIp.setRemark("最后一次异常时间" + nowDateTime);
+        baseUpdate(oneInfoByIp);
         //异常最大次数---超过将自动拉黑
-        int maxNumber = 5;
-        if (maxNumber <= oneInfoByIp.getNumber()) {
+        int maxNumber = 10;
+        if (maxNumber <= oldNumber) {
             dataDictionaryIpFilterService.autoAddBlack(ip);
         }
     }
