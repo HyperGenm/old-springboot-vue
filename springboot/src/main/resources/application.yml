@@ -18,11 +18,20 @@ spring:
       max-wait: 60000
       # 配置一个连接在池中最小生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 300000
-  #指定使用redis数据库
   redis:
     #索引(默认为0)
     database: 0
     host: 127.0.0.1
+    port: 6379
+    #password: 123456
+    #连接超时时间
+    timeout: 10000ms
+  servlet:
+    multipart:
+      #设置单个文件上传最大限制
+      max-file-size: 5MB
+      #设置多个文件上传最大限制
+      max-request-size: 100MB
   jackson:
     #配置时间格式
     date-format: yyyy-MM-dd HH:mm:ss

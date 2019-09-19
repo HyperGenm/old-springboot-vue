@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @data 2019/5/6 15:50
  */
 @Component
-public final class GlobalConfig {
+public class GlobalConfig {
 
     /**
      * 身份验证，请求头，token
