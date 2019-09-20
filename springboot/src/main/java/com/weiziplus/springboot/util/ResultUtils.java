@@ -19,19 +19,19 @@ public class ResultUtils implements Serializable {
     /**
      * 返回状态码code
      */
-    @ApiModelProperty("状态码，200:成功")
+    @ApiModelProperty("状态码:200表示成功")
     private Integer code;
 
     /**
      * 返回提示信息
      */
-    @ApiModelProperty("失败时的提示信息")
+    @ApiModelProperty("提示信息")
     private String msg;
 
     /**
      * 返回数据
      */
-    @ApiModelProperty("成功时的返回数据")
+    @ApiModelProperty("数据")
     private Object data;
 
     /**
