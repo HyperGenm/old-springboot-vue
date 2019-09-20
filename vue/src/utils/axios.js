@@ -76,8 +76,10 @@ export function weiAxios({
         axios(_axios).then((res) => {
             /**关闭加载中动画*/
             loading.close();
+            //获取响应状态码
+            let {http_code, axios_result_code} = that.$global.GLOBAL;
             /**处理status不为200的出错请求*/
-            if (200 !== res.status) {
+            if (http_code['success'] !== res.status) {
                 _Vue.$globalFun.errorMsg('请求出错:' + res.status);
                 console.warn(url, '-----status:', res.status, '------请求出错-----res:', res);
                 return;
@@ -88,7 +90,7 @@ export function weiAxios({
                 return;
             }
             /**token过期处理*/
-            if (401 === res.data.code) {
+            if (axios_result_code['errorToken'] === res.data.code) {
                 _Vue.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
                 that.$store.dispatch('resetState');
                 sessionStorage.setItem('loginStatus', 'logout');
@@ -104,7 +106,7 @@ export function weiAxios({
                 return;
             }
             /**处理code不为200的出错请求*/
-            if (200 !== res.data.code) {
+            if (axios_result_code['success'] !== res.data.code) {
                 _Vue.$globalFun.errorMsg(res.data.msg);
                 console.warn(url, '-----code:', res.data.code, '------请求出错-----res:', res);
                 return;
@@ -185,8 +187,10 @@ export function weiAxiosDown({
                     let resData = JSON.parse(this.result);
                     if (resData && resData['code']) {
                         let {code, msg} = resData;
+                        //获取响应状态码
+                        let {axios_result_code} = that.$global.GLOBAL;
                         /**token过期处理*/
-                        if ('401' === (code + '')) {
+                        if (axios_result_code['errorToken'] === code) {
                             _Vue.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
                             that.$store.dispatch('resetState');
                             sessionStorage.setItem('loginStatus', 'logout');
@@ -197,7 +201,7 @@ export function weiAxiosDown({
                             return;
                         }
                         /**处理code不为200的出错请求*/
-                        if ('200' !== (code + '')) {
+                        if (axios_result_code['success'] !== code) {
                             _Vue.$globalFun.errorMsg(msg);
                             console.warn(url, '-----code:', code, '------请求出错-----res:', res);
                             return;

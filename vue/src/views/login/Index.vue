@@ -84,7 +84,9 @@
                         method: 'post',
                         data: that.form,
                         success(res) {
-                            if ('200' !== res.code + '') {
+                            //获取响应状态码
+                            let {axios_result_code} = that.$global.GLOBAL;
+                            if (axios_result_code['success'] !== res.code) {
                                 that.$globalFun.errorMsg(res.msg);
                                 that.changeCode();
                                 return;

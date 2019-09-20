@@ -319,15 +319,17 @@
                 axios(_axios).then((res) => {
                     /**关闭加载中动画*/
                     that.loading = false;
+                    //获取响应状态码
+                    let {http_code, axios_result_code} = that.$global.GLOBAL;
                     /**处理status不为200的出错请求*/
-                    if (200 !== res.status) {
+                    if (http_code['success'] !== res.status) {
                         that.$globalFun.errorMsg('请求出错:' + res.status);
                         that.emptyText = JSON.stringify(res);
                         console.warn(_url, '-----status:', res.status, '------请求出错-----res:', res);
                         return;
                     }
                     /**token过期处理*/
-                    if (401 === res.data.code) {
+                    if (axios_result_code['errorToken'] === res.data.code) {
                         that.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
                         that.$store.dispatch('resetState');
                         sessionStorage.setItem('loginStatus', 'logout');
@@ -338,7 +340,7 @@
                         return;
                     }
                     /**处理code不为200的出错请求*/
-                    if (200 !== res.data.code) {
+                    if (axios_result_code['success'] !== res.data.code) {
                         that.$globalFun.errorMsg(res.data.msg);
                         that.emptyText = JSON.stringify(res['data']);
                         console.warn(_url, '-----code:', res.data.code, '------请求出错-----res:', res);

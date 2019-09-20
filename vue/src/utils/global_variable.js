@@ -8,7 +8,25 @@ const GLOBAL = {
     //超级管理员id
     super_admin_id: 1,
     //超级管理员roleId
-    super_admin_role_id: 1
+    super_admin_role_id: 1,
+    //http状态码
+    http_code: {
+        //成功
+        success: 200
+    },
+    //后台状态码
+    axios_result_code: {
+        //成功
+        success: 200,
+        //token异常
+        errorToken: 401,
+        //error
+        error: 402,
+        //没有权限,拒绝访问
+        errorRole: 403,
+        //后台系统异常
+        errorException: 500
+    }
 };
 
 /**
