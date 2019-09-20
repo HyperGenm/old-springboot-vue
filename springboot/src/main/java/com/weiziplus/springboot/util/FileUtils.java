@@ -93,7 +93,7 @@ public class FileUtils {
         //  获取文件后缀类型
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         // 生成新文件名
-        fileName = ToolUtils.createUuid() + suffixName;
+        fileName = ToolUtils.createUUID() + suffixName;
         resultPath = resultPath + fileName;
         File dest = new File(BASE_FILE_PATH + resultPath);
         if (!dest.getParentFile().exists()) {

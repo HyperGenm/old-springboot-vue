@@ -7,7 +7,11 @@
 *tip:多个用户同时登陆可能会被顶掉*
 
 ## 结构简介
-tip:前后端分离项目，代码通过*阿里巴巴编码规约扫描*、95%*findbugs*
+tip:前后端分离项目，代码通过90%*阿里巴巴编码规约扫描*、*findbugs*
+
+##项目环境
+   * JDK1.8、mysql8、lombok、redis
+   * node、vue-cli3
 
 ### 后端:
 #### springboot、mybatis、redis

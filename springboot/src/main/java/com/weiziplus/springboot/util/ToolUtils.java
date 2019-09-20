@@ -41,7 +41,7 @@ public class ToolUtils {
      *
      * @return
      */
-    public static String createUuid() {
+    public static String createUUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
