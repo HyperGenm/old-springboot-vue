@@ -13,7 +13,7 @@
                 <span>Copyright ©{{nowYear}}</span>
                 <el-link class="link" type="primary" target="_blank"
                          href="https://github.com/WeiziPlus/springboot2-vue3">
-                    WeiziPlus
+                    WeiziPlus-GitHub
                 </el-link>
             </div>
         </div>
