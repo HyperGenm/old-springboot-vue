@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * @author wanglongwei
- * @data 2019/5/9 11:24
+ * @date 2019/5/9 11:24
  */
 @Mapper
 public interface SysUserMapper {

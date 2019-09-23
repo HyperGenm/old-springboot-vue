@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * 系统用户token配置
  *
  * @author wanglongwei
- * @data 2019/5/7 9:53
+ * @date 2019/5/7 9:53
  */
 @Component
 public class AdminTokenUtils {

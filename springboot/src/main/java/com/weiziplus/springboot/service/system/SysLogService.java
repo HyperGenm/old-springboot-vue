@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wanglongwei
- * @data 2019/5/13 15:34
+ * @date 2019/5/13 15:34
  */
 @Service
 public class SysLogService {

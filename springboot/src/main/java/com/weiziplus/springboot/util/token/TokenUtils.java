@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * 用户token配置
  *
  * @author wanglongwei
- * @data 2019/5/8 9:06
+ * @date 2019/5/8 9:06
  */
 @Slf4j
 public class TokenUtils {

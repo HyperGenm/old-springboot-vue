@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author wanglongwei
- * @data 2019/7/19 10:52
+ * @date 2019/7/19 10:52
  */
 @Component
 public class RedisUtils {

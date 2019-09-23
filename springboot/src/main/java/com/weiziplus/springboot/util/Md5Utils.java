@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
  * MD5工具类
  *
  * @author wanglongwei
- * @data 2019/5/7 10:15
+ * @date 2019/5/7 10:15
  */
 public class Md5Utils {
     /**

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 自定义系统日志注解
  *
  * @author wanglongwei
- * @data 2019/5/13 14:49
+ * @date 2019/5/13 14:49
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

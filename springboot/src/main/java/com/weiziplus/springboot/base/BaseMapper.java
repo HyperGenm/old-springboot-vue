@@ -9,7 +9,7 @@ import java.util.Map;
  * 基础mapper
  *
  * @author wanglongwei
- * @data 2019/5/20 10:44
+ * @date 2019/5/20 10:44
  */
 @Mapper
 public interface BaseMapper {

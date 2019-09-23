@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author wanglongwei
- * @data 2019/5/9 12:00
+ * @date 2019/5/9 12:00
  */
 @Mapper
 public interface SysFunctionMapper {

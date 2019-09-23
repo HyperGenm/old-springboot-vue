@@ -17,7 +17,7 @@ import java.util.List;
  * 配置过滤器、拦截器等
  *
  * @author wanglongwei
- * @data 2019/5/7 8:42
+ * @date 2019/5/7 8:42
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

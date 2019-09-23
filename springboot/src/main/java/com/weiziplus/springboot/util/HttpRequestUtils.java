@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * @author wanglongwei
- * @data 2019/8/5 8:56
+ * @date 2019/8/5 8:56
  */
 @Slf4j
 public class HttpRequestUtils {

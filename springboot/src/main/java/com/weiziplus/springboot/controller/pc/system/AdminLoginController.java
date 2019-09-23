@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author wanglongwei
- * @data 2019/5/9 11:07
+ * @date 2019/5/9 11:07
  */
 @RestController
 @ApiIgnore

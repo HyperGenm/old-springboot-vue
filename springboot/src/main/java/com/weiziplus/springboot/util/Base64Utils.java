@@ -7,7 +7,7 @@ import java.util.Base64;
  * 字符串加密解密
  *
  * @author wanglongwei
- * @data 2019/9/11 16:13
+ * @date 2019/9/11 16:13
  */
 public class Base64Utils {
     /**

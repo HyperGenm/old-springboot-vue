@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * @author wanglongwei
- * @data 2019/6/20 15:45
+ * @date 2019/6/20 15:45
  */
 @Slf4j
 @Component

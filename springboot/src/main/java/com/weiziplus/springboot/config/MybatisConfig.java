@@ -15,7 +15,7 @@ import java.util.Map;
  * 将resultType类型为map的下划线转驼峰
  *
  * @author wanglongwei
- * @data 2019/7/19 10:57
+ * @date 2019/7/19 10:57
  */
 @Configuration
 public class MybatisConfig {

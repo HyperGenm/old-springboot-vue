@@ -8,19 +8,10 @@ import java.util.Map;
 
 /**
  * @author wanglongwei
- * @data 2019/5/13 15:07
+ * @date 2019/5/13 15:07
  */
 @Mapper
 public interface SysLogMapper {
-    /**
-     * 添加系统日志
-     *
-     * @param userId
-     * @param description
-     * @param ip
-     * @return
-     */
-    int addSysLog(@Param("userId") Long userId, @Param("description") String description, @Param("ip") String ip);
 
     /**
      * 获取日志列表

@@ -10,7 +10,7 @@
 tip:前后端分离项目，代码通过90%*阿里巴巴编码规约扫描*、*findbugs*
 
 ##项目环境
-   * JDK1.8、mysql8、lombok、redis
+   * JDK1.8、mysql 8、redis、rabbitmq、lombok
    * node、vue-cli3
 
 ### 后端:

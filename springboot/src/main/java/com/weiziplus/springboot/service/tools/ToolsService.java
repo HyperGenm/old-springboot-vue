@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  * @author wanglongwei
- * @data 2019/8/24 16:27
+ * @date 2019/8/24 16:27
  */
 @Service
 public class ToolsService extends BaseService {

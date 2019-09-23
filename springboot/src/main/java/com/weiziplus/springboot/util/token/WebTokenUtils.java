@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * web用户token配置
  *
  * @author wanglongwei
- * @data 2019/5/8 9:01
+ * @date 2019/5/8 9:01
  */
 @Component
 public class WebTokenUtils {

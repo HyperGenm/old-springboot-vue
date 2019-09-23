@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wanglongwei
- * @data 2019/5/10 17:02
+ * @date 2019/5/10 17:02
  */
 @RestController
 @RequestMapping("/api")

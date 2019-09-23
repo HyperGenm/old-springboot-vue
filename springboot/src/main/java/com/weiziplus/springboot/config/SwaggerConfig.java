@@ -24,7 +24,7 @@ import java.util.List;
  * swagger配置
  *
  * @author wanglongwei
- * @data 2019/4/22 16:04
+ * @date 2019/4/22 16:04
  */
 @Configuration
 @EnableSwagger2

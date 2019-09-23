@@ -21,7 +21,7 @@ import java.time.Duration;
  * redis常用配置
  *
  * @author wanglongwei
- * @data 2019/5/27 9:53
+ * @date 2019/5/27 9:53
  */
 @Configuration
 @EnableCaching

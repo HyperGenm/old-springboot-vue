@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * @author wanglongwei
- * @data 2019/8/5 9:25
+ * @date 2019/8/5 9:25
  */
 @Slf4j
 @Component
@@ -40,12 +40,8 @@ public class IpFilter extends BaseService implements Filter {
     /**
      * 10秒内多少次请求，暂时封ip
      */
-    private static Integer MAX_NUM = 57;
-
-    @Value("${global.ip-filter-max-num:57}")
-    private void setMaxNum(String maxNum) {
-        IpFilter.MAX_NUM = ToolUtils.valueOfInteger(maxNum);
-    }
+    @Value("${global.ip-filter-max-num:77}")
+    private final Integer MAX_NUM = 77;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

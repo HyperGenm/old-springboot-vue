@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author wanglongwei
- * @data 2019/5/9 14:04
+ * @date 2019/5/9 14:04
  */
 @Mapper
 public interface SysRoleMapper {

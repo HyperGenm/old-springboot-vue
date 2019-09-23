@@ -5,7 +5,9 @@ import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.mapper.user.UserMapper;
+import com.weiziplus.springboot.models.SysLog;
 import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.rabbitmq.RabbitmqConfig;
 import com.weiziplus.springboot.service.system.SysFunctionService;
 import com.weiziplus.springboot.service.system.SysRoleService;
 import com.weiziplus.springboot.util.HttpRequestUtils;
@@ -16,6 +18,7 @@ import com.weiziplus.springboot.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.util.token.WebTokenUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -32,7 +35,7 @@ import java.util.Set;
  * 自定义的拦截器interceptor
  *
  * @author wanglongwei
- * @data 2019/4/22 16:08
+ * @date 2019/4/22 16:08
  */
 @Slf4j
 @Component
@@ -51,6 +54,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     SysFunctionService sysFunctionService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     /**
      * 请求之前拦截
@@ -112,7 +118,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             //查看是否有日志注解，有的话将日志信息放入数据库
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
             if (null != systemLog) {
-                sysLogMapper.addSysLog(JwtTokenUtils.getUserIdByToken(token), systemLog.description(), HttpRequestUtils.getIpAddress(request));
+                SysLog sysLog = new SysLog();
+                sysLog.setUserId(JwtTokenUtils.getUserIdByToken(token));
+                sysLog.setDescription(systemLog.description());
+                sysLog.setIpAddress(HttpRequestUtils.getIpAddress(request));
+                this.rabbitTemplate.convertAndSend(RabbitmqConfig.QUEUE_SYS_LOG, sysLog);
             }
             return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
         } else if (WebTokenUtils.AUDIENCE.equals(tokenAudience)) {

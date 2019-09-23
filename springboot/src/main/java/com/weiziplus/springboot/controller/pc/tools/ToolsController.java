@@ -12,7 +12,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author wanglongwei
- * @data 2019/8/24 16:46
+ * @date 2019/8/24 16:46
  */
 @RestController
 @ApiIgnore

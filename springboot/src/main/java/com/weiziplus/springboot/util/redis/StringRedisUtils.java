@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * StringRedisTemplate常用工具类
  *
  * @author wanglongwei
- * @data 2019/4/22 16:10
+ * @date 2019/4/22 16:10
  */
 @Component
 public class StringRedisUtils {

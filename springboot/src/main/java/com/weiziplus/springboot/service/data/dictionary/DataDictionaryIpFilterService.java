@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * @author wanglongwei
- * @data 2019/8/5 9:53
+ * @date 2019/8/5 9:53
  */
 @Service
 public class DataDictionaryIpFilterService extends BaseService {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author wanglongwei
- * @data 2019/7/16 14:11
+ * @date 2019/7/16 14:11
  */
 @Component
 @Configuration

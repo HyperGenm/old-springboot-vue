@@ -12,7 +12,7 @@ import java.util.Random;
  * 图片验证码工具类
  *
  * @author wanglongwei
- * @data 2019/5/24 8:24
+ * @date 2019/5/24 8:24
  */
 @Slf4j
 public class ImageValidateCodeUtils {

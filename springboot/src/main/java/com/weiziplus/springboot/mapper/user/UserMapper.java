@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @author wanglongwei
- * @data 2019/5/10 17:05
+ * @date 2019/5/10 17:05
  */
 @Mapper
 public interface UserMapper {

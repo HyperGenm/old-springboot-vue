@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author wanglongwei
- * @data 2019/9/18 19:53
+ * @date 2019/9/18 19:53
  */
 @Service
 public class DataDictionaryAbnormalIpService extends BaseService {

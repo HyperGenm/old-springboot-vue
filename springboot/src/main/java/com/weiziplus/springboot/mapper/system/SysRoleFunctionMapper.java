@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @author wanglongwei
- * @data 2019/5/10 8:54
+ * @date 2019/5/10 8:54
  */
 @Mapper
 public interface SysRoleFunctionMapper {

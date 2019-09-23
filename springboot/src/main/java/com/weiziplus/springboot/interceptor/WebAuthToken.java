@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 自定义注解webAuthToken，web端用户token
  *
  * @author wanglongwei
- * @data 2019/5/8 9:03
+ * @date 2019/5/8 9:03
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

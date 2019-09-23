@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author wanglongwei
- * @data 2019/8/5 9:51
+ * @date 2019/8/5 9:51
  */
 @Mapper
 public interface DataDictionaryAbnormalIpMapper {

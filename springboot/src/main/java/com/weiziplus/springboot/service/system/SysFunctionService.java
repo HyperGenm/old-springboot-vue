@@ -15,7 +15,7 @@ import java.util.*;
 
 /**
  * @author wanglongwei
- * @data 2019/5/9 15:18
+ * @date 2019/5/9 15:18
  */
 @Service
 public class SysFunctionService extends BaseService {

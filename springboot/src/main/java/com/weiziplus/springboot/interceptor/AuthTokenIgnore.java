@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * token忽略注解
  *
  * @author wanglongwei
- * @data 2019/6/24 8:23
+ * @date 2019/6/24 8:23
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 统一返回结果
  *
  * @author wanglongwei
- * @data 2019/5/24 15:58
+ * @date 2019/5/24 15:58
  */
 @Getter
 @ApiModel("返回说明")

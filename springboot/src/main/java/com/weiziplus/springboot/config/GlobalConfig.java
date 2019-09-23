@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
  * 设置全局静态常量
  *
  * @author wanglongwei
- * @data 2019/5/6 15:50
+ * @date 2019/5/6 15:50
  */
 @Component
 public class GlobalConfig {

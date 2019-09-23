@@ -14,7 +14,7 @@ import java.util.Date;
  * JwtToken
  *
  * @author wanglongwei
- * @data 2019/5/7 9:50
+ * @date 2019/5/7 9:50
  */
 public class JwtTokenUtils {
 
