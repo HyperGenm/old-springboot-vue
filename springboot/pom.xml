@@ -183,7 +183,7 @@
                 <executions>
                     <!--将配置文件复制到config目录-->
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-config</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -199,6 +199,22 @@
                                 </resource>
                             </resources>
                             <outputDirectory>${project.build.directory}/build/config</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <!--将static目录复制到static目录-->
+                    <execution>
+                        <id>copy-static</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/static</directory>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.build.directory}/build/static</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
