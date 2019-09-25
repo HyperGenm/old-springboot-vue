@@ -321,7 +321,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .icons {
         overflow: hidden;
         .icon {

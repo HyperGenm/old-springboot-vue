@@ -338,7 +338,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #index {
         display: flex;
         .role {

@@ -136,7 +136,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #index {
         display: flex;
         box-sizing: border-box;

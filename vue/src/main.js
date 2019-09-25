@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 
 import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+import './assets/sass/element-variables.scss'
 
 if (process.env.NODE_ENV !== 'production') {
     Vue.use(ElementUI);

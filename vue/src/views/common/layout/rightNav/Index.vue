@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="edit">
-            <wei-dialog :show.sync="dialogEditForm"  title="修改密码">
+            <wei-dialog :show.sync="dialogEditForm" title="修改密码">
                 <edit-form @closeDialog="dialogEditForm = false"></edit-form>
             </wei-dialog>
         </div>
@@ -96,7 +96,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #rightNav {
         .header {
             overflow: hidden;

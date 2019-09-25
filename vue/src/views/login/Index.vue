@@ -172,7 +172,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="scss">
     /* reset element-ui css */
     #login {
         .el-input {
@@ -202,7 +202,7 @@
     }
 </style>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #login {
         position: fixed;
         height: 100%;

@@ -460,7 +460,7 @@
     }
 </script>
 
-<style lang="less">
+<style lang="scss">
     #weiTable {
         overflow: hidden;
         .search {
@@ -471,7 +471,7 @@
     }
 </style>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     #weiTable {
         height: 100%;
         overflow: hidden;

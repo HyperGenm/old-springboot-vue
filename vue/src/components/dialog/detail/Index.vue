@@ -73,7 +73,7 @@
     }
 </script>
 
-<style lang="less">
+<style lang="scss">
     #wei-dialog-detail {
         .el-row {
             color: #666;

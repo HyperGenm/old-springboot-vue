@@ -69,7 +69,7 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .tip {
         margin-bottom: 20px;
         font-size: 17px;
