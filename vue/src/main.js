@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 
 import ElementUI from "element-ui";
+//引入覆盖element-ui的css
 import './assets/sass/element-variables.scss'
 
 if (process.env.NODE_ENV !== 'production') {
@@ -26,7 +27,13 @@ import globalFunction from './utils/global_function'
 Vue.prototype.$global = globalVariable;
 Vue.prototype.$globalFun = globalFunction;
 
-Vue.config.productionTip = false;
+window.onkeydown = window.onkeyup = window.onkeypress = function (event) {
+    // 判断是否按下F12，F12键码为123
+    if (event['keyCode'] = 123) {
+        globalFunction.errorMsg('不是粉红，是品红哒');
+        console.log('element-ui样式覆盖:/src/assets/sass/element-variables.scss文件');
+    }
+};
 
 new Vue({
     router,

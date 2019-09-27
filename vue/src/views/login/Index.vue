@@ -3,15 +3,20 @@
         <el-form class="login-form" ref="form" :model="form" :rules="rules" label-position="left">
             <h3 class="title">WeiziPlus</h3>
             <el-form-item prop="username">
-                <el-input name="username" type="text" clearable v-model="form.username" placeholder="用户名"/>
+                <el-input name="username" type="text" clearable
+                          v-model="form.username" placeholder="用户名"
+                          @keydown.13="handleLogin"/>
             </el-form-item>
             <el-form-item prop="password">
-                <el-input name="password" type="password" show-password v-model="form.password" placeholder="密码"/>
+                <el-input name="password" type="password" show-password
+                          v-model="form.password" placeholder="密码"
+                          @keydown.13="handleLogin"/>
             </el-form-item>
             <el-row>
                 <el-col :span="16">
                     <el-form-item prop="code">
-                        <el-input v-model="form.code" placeholder="验证码"/>
+                        <el-input v-model="form.code" placeholder="验证码"
+                                  @keydown.13="handleLogin"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">

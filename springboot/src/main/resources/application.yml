@@ -52,7 +52,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   resources:
-    static-locations: classpath:static/,classpath:public/,file:static/
+    static-locations: classpath:static/,file:static/
 mybatis:
   #设置MyBatis配置
   configuration:
