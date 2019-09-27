@@ -26,7 +26,7 @@
                 </el-col>
             </el-row>
             <el-form-item>
-                <el-button type="primary" class="btn" @click="handleLogin">
+                <el-button type="success" class="btn" @click="handleLogin">
                     登录
                 </el-button>
             </el-form-item>

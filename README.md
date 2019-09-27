@@ -12,6 +12,11 @@ tip:前后端分离项目，代码通过90%*阿里巴巴编码规约扫描*、*f
 ##项目环境
    * JDK1.8、mysql 8、redis、rabbitmq、lombok
    * node、vue-cli3
+   
+##常见错误
+   * `/login ------请求失败-----error: Error: Cannot find module './q/Index'`
+       * 出错：后台创建新菜单(该菜单没有下级)并且权限添加该菜单后，重新登录出现该错误
+       * 解决：vue项目中/src/views/index/路径下添加该菜单目录，以及Index.vue文件 
 
 ### 后端:
 #### springboot、mybatis、redis
