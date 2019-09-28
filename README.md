@@ -1,19 +1,38 @@
 # springboot2-vue3
+*一款基于springboot2和vue3的后台通用模板，没有多余的功能，只有 *权限管理* 和常用功能*
+tip:前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、 *findbugs*
 
-## 演示地址
+## 上手指南
+以下指南将帮助你在本地机器上安装和运行该项目，进行开发和测试。关于如何将该项目部署到在线环境，请参考部署小节。
+### 安装要求、步骤
+   * 安装配置Java环境， *JDK1.8*
+   * 安装 *mysql 8* ，创建数据库(utf8mb4)导入sql(doc目录下)
+   * 安装 *redis* ,下载安装即可
+   * 开发工具需要安装 *lombok* 插件(开发工具推荐IDEA)
+   * ---后端运行(如果出问题一般是yml配置文件中数据源之类的配置出错)
+   * 安装配置 *node* 环境
+   * 安装 *vue-cli3* ,进入vue目录执行`npm install`
+   * ---前端运行`npm run serve`( *WebStorm* 或者 *IDEA* 可以直接点击 *package.json* 文件中第6行左边绿三角)
+
+### 演示地址
 [在线演示地址](http://39.96.52.201/)    
 用户名:superadmin  
 密码:111111  
 *tip:多个用户同时登陆可能会被顶掉*
 
-## 结构简介
-tip:前后端分离项目，代码通过90%*阿里巴巴编码规约扫描*、*findbugs*
-
-##项目环境
-   * JDK1.8、mysql 8、redis、rabbitmq、lombok
-   * node、vue-cli3
+## 部署
+   * springboot目录下运行`mvn clean package`命令打包,打包后生成文件在/target/build目录下
+        * config目录为存放的配置文件
+        * lib目录为maven依赖的jar包
+        * static目录存放静态文件
+        * jar文件为生成的jar包(以后pom依赖不变的话可以只替换该jar包)
+   * vue目录下运行`npm run build`命令打包，打包后生成文件在/dist目录下
+        * 打包配置在 *.env* 文件和 *vue.config.js* 文件中
+   * 部署服务器上面需要配置 *JDK1.8* 、 *mysql 8* 、 *redis* 环境
+   * jar包运行`nohup java -jar springboot.jar &`可以在后台运行并且将日志输出到当前目录下 *nohup.out* 文件
+   * 部署服务器建议配置 *nginx* ,vue打包后放在nginx下,不配置可以放在 *jar* 包同一目录 *static* 下面
    
-##常见错误
+## 常见错误
    * `/login ------请求失败-----error: Error: Cannot find module './q/Index'`
        * 出错：后台创建新菜单(该菜单没有下级)并且权限添加该菜单后，重新登录出现该错误
        * 解决：vue项目中/src/views/index/路径下添加该菜单目录，以及Index.vue文件 
@@ -72,3 +91,6 @@ tip:前后端分离项目，代码通过90%*阿里巴巴编码规约扫描*、*f
                          }}
                     ]` 接受一个数组---参考layui表格
             * formatter: 复杂展示，可以返回一个dom
+
+## 鸣谢
+   该项目参考了很多网上的示例，如果看到相似的代码，**那么，答案只有一个了**
