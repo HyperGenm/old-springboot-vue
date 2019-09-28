@@ -30,8 +30,14 @@
         },
         methods: {
             initData(data) {
+                //每一行展示数据,类似于表格展示字段
                 this.rows = [
-                    {label: '用户名', prop: data['username']},
+                    {
+                        //标题
+                        label: '用户名',
+                        //对应字段
+                        prop: data['username']
+                    },
                     {label: '真实姓名', prop: data['realName']},
                     {label: '角色名', prop: data['roleName']},
                     {

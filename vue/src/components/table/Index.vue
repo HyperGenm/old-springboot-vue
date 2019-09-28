@@ -71,7 +71,7 @@
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
                 <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
                            v-if="btn['show'] || false"
-                           :type="btn.primary || 'primary'" size="mini"
+                           :type="btn['primary'] || 'primary'" size="mini"
                            :icon="btn.icon" @click="btn.handleClick(JSON.parse(JSON.stringify(selection)))"
                 >{{btn.name}}
                 </el-button>

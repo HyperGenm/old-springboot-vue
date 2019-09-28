@@ -26,11 +26,7 @@
             return {
                 tableDataRequest: {
                     url: that.$global.URL.system.sysLog.getPageList,
-                    data: {
-                        username: '',
-                        roleId: '',
-                        createTime: ''
-                    }
+                    data: {}
                 },
                 tableColumns: [
                     {label: '用户名', prop: 'username'},

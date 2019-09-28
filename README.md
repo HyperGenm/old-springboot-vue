@@ -1,6 +1,5 @@
 # springboot2-vue3
-*一款基于springboot2和vue3的后台通用模板，没有多余的功能，只有 *权限管理* 和常用功能*
-tip:前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、 *findbugs*
+*一款基于springboot2和vue3的后台通用模板，没有多余的功能，只有 *权限管理* 和常用功能* 。前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、 *findbugs*
 
 ## 上手指南
 以下指南将帮助你在本地机器上安装和运行该项目，进行开发和测试。关于如何将该项目部署到在线环境，请参考部署小节。
@@ -41,17 +40,23 @@ tip:前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、
 #### springboot、mybatis、redis
 1. 简介
     * 基于 *springboot* 模板创建的项目
-    * 项目需要安装、启动 *redis* 环境
 2. 基本配置
-    * *.yml*文件可以配置相关信息
+    * *.yml* 文件可以配置相关信息
+    * *config* 目录下为常用模块配置
+    * *filter* 配置了 *跨域* 、 *ip过滤* 、 *参数过滤*等
+        * *参数过滤* 请求 *自动去除前后空格* ,使用了 *Jsoup* 过滤 *html标签* (可以自定义配置过滤级别)
 3. 权限管理
     * 带有`@AdminAuthToken`注解的接口，请求头必须有 *token* 才能访问
-    * 配合vue前端页面动态渲染路由，以及隐藏显示按钮:按钮保存在`$store.state.role['buttons']`中
-    * 精确到接口级别权限，必须完善 *功能管理* 中菜单或者按钮对应的 *对应api* ,否则默认放行
+    * 配合vue前端页面动态渲染路由，以及隐藏显示按钮:按钮保存在`$store.state.role['buttons']`中(前端)
+    * 精确到接口级别权限，必须完善 *功能管理* 中菜单或者按钮对应的 *对应api* ,否则存在 *token* 后默认放行
 4. 封装厂用CURD,继承 *BaseService* 即可
+    * `baseInsert()`和`baseUpdate()`会自动过滤值为null的字段
+    * `baseUpdate()`请做好参数过滤，或者 *new* 一个新的实体类进行赋值操作
 5. 根据数据库自动生成实体类 
     * 运行 *org.mybatis.generator.plugin.MyBatisTest.main()* 方法
     * 具体配置 *resources/config/generator-config.xml* 
+6. 日志按天存放，具体配置在 *resources/config/logback-spring.xml* 
+7. 自动记录 *admin* 用户日志， `@SystemLog`注解放在 *Controller* 上即可
 
 ### 前端:
 #### vue:
@@ -66,13 +71,17 @@ tip:前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、
                      });`
             * url:只需要域名之后的地址
             * success:回调只需要处理 *code为200* 的情况
+    * 全局变量和方法在 /src/utils目录下
+    * 覆盖element-ui样式在 /src/assets/sass/element-variables.scss 文件
+    * 引入iconfont字体库
+        * 覆盖 /src/assets/font/iconfont 目录下文件即可
+        * 引用`<i class="iconfont iconfont-address"></i>`
 
 2. 基本配置
-    * 初次运行需要进入vue文件运行 *npm install* 命令安装依赖
-    * 配合后端实现动态路由:功能管理表单填写path路径，默认根路径为*/src/views/index/*
-    * .env.production/development文件为配置文件
+    * 配合后端实现动态路由:功能管理表单填写path路径，默认根路径为 */src/views/index/*
+    * *.env.production/development* 文件和 *vue.config.js* 为配置文件
                      
-3. 封装的常用组件
+3. 封装的常用组件(具体可以参考 */src/views/index/system/sysUser/* )
     * dialog:弹出框  
         * detail: 标题+内容的方式展示数据
         * form: 表单提交,`@submit`只需要处理表单验证之后的情况
