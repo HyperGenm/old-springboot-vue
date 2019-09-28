@@ -4,19 +4,16 @@
             <h3 class="title">WeiziPlus</h3>
             <el-form-item prop="username">
                 <el-input name="username" type="text" clearable
-                          v-model="form.username" placeholder="用户名"
-                          @keydown.13="handleLogin"/>
+                          v-model="form.username" placeholder="用户名"/>
             </el-form-item>
             <el-form-item prop="password">
                 <el-input name="password" type="password" show-password
-                          v-model="form.password" placeholder="密码"
-                          @keydown.13="handleLogin"/>
+                          v-model="form.password" placeholder="密码"/>
             </el-form-item>
             <el-row>
                 <el-col :span="16">
                     <el-form-item prop="code">
-                        <el-input v-model="form.code" placeholder="验证码"
-                                  @keydown.13="handleLogin"/>
+                        <el-input v-model="form.code" placeholder="验证码"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">
@@ -139,7 +136,7 @@
                 });
                 let parentRouters = [{
                     path: '/',
-                    components: require('@/views/common/layout/Index'),
+                    components: require('@/views/layout/Index'),
                     name: 'index',
                     children: routers
                 }];

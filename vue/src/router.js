@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
         });
         let parentRouters = [{
             path: '/',
-            components: require('@/views/common/layout/Index'),
+            components: require('@/views/layout/Index'),
             name: 'index',
             children
         }];

@@ -1,14 +1,10 @@
 <template>
     <div id="leftNav">
-        <el-row class="tac" :style="menuCollapse?'width: 70px;':'width: 220px;'">
+        <el-row class="tac" :style="'width: ' + (menuCollapse ? 70 : 220) + 'px'">
             <el-col>
-                <el-menu
-                        class="el-menu-vertical-demo"
-                        :default-active="defaultActive"
-                        router unique-opened :collapse="menuCollapse"
-                        background-color="#545c64"
-                        text-color="#fff"
-                        active-text-color="#ffd04b">
+                <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
+                         router unique-opened
+                         :default-active="defaultActive" :collapse="menuCollapse">
                     <div v-for="(item,index) in $store.state.routers.routersTree" :key="index" :index="item.name">
                         <el-menu-item v-if="null == item.children || 0 >= item.children.length" :index="item.name">
                             <i :class="item['icon'] || 'el-icon-info'"></i>

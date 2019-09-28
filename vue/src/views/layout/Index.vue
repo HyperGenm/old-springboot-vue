@@ -1,10 +1,10 @@
 <template>
     <div id="layout">
-        <div class="leftNav" :style="menuCollapse?'width: 50px;':'width: 200px;'">
+        <div class="leftNav" :style="'width: ' + (menuCollapse ? 50 : 200) + 'px'">
             <h2>weiziplus</h2>
             <left-nav :menuCollapse="menuCollapse"></left-nav>
         </div>
-        <div class="rightNav" :style="menuCollapse?'margin-left: 50px;':'margin-left: 200px;'">
+        <div class="rightNav" :style="'margin-left: ' + (menuCollapse ? 50 : 200) + 'px'">
             <right-nav :menuCollapse="menuCollapse" @collapseChange="collapseChange"></right-nav>
             <div id="mainApp">
                 <router-view/>

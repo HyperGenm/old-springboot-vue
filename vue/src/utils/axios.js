@@ -68,7 +68,8 @@ export function weiAxios({
         /**axios请求参数添加随机字符串*/
         data['__t'] = (new Date()).getTime();
         /**axios请求处理不同请求方式时的参数*/
-        if (method === 'get' || method === 'GET') {
+        method = method.toUpperCase();
+        if (method === 'GET') {
             _axios['params'] = data;
         } else {
             _axios['data'] = Qs.stringify(data, {indices: false});

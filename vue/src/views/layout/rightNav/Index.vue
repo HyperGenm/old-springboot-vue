@@ -73,7 +73,7 @@
                 this.$axios({
                     url: that.$global.URL.logout,
                     success() {
-                        that.$globalFun.errorMsg('注销成功，即将返回登录页面');
+                        that.$globalFun.successMsg('注销成功，即将返回登录页面');
                         that.$store.dispatch('resetState');
                         sessionStorage.setItem('loginStatus', 'logout');
                         let timer = setTimeout(() => {
