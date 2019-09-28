@@ -81,7 +81,7 @@
     * 配合后端实现动态路由:功能管理表单填写path路径，默认根路径为 */src/views/index/*
     * *.env.production/development* 文件和 *vue.config.js* 为配置文件
                      
-3. 封装的常用组件(具体可以参考 */src/views/index/system/sysUser/* )
+3. 封装的常用组件(具体可以参考 */src/views/index/system/sysUser/* 详细注释)
     * dialog:弹出框  
         * detail: 标题+内容的方式展示数据
         * form: 表单提交,`@submit`只需要处理表单验证之后的情况
@@ -102,4 +102,5 @@
             * formatter: 复杂展示，可以返回一个dom
 
 ## 鸣谢
-   该项目参考了很多网上的示例，如果看到相似的代码，**那么，答案只有一个了**
+   首先感谢 *springboot* 、 *vue* 、*element-ui* 等优秀的开源项目  
+   其次该项目参考了很多网上的示例，如果看到相似的代码，**那么，答案只有一个了**
