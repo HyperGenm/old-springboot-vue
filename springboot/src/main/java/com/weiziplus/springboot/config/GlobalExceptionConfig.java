@@ -2,6 +2,7 @@ package com.weiziplus.springboot.config;
 
 import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,9 +31,20 @@ public class GlobalExceptionConfig {
     public ResultUtils runtimeExceptionHandler(RuntimeException ex) {
         ex.printStackTrace();
         if (RESPONSE_SHOW_RUNTIME_EXCEPTION) {
-            return ResultUtils.errorException(String.valueOf(ex));
+            return ResultUtils.errorException("系统异常，详情:" + ex.getMessage());
         } else {
             return ResultUtils.errorException("系统错误，请重试");
         }
     }
+
+    /**
+     * 405异常
+     *
+     * @return
+     */
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public ResultUtils httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        return ResultUtils.error("请使用" + ex.getSupportedHttpMethods() + "方法请求,详情:" + ex.getMessage());
+    }
+
 }
