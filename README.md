@@ -17,7 +17,7 @@
 [在线演示地址](http://39.96.52.201/)    
 用户名:superadmin  
 密码:111111  
-*tip:多个用户同时登陆可能会被顶掉*
+*tip:多个用户同时登陆可能会被顶掉,数据库10分钟，如果登录异常，请每个整10分钟之后重试*
 
 ## 部署
    * springboot目录下运行`mvn clean package`命令打包,打包后生成文件在/target/build目录下
@@ -76,12 +76,13 @@
     * 引入iconfont字体库
         * 覆盖 /src/assets/font/iconfont 目录下文件即可
         * 引用`<i class="iconfont iconfont-address"></i>`
+    * 项目中大部分都有注释
 
 2. 基本配置
     * 配合后端实现动态路由:功能管理表单填写path路径，默认根路径为 */src/views/index/*
     * *.env.production/development* 文件和 *vue.config.js* 为配置文件
                      
-3. 封装的常用组件(具体可以参考 */src/views/index/system/sysUser/* 详细注释)
+3. 封装的常用组件( **具体可以参考 /src/views/index/system/sysUser/ 详细注释**)
     * dialog:弹出框  
         * detail: 标题+内容的方式展示数据
         * form: 表单提交,`@submit`只需要处理表单验证之后的情况
