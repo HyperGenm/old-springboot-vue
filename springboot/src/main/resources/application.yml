@@ -26,21 +26,6 @@ spring:
     #password: 123456
     #连接超时时间
     timeout: 10000ms
-  rabbitmq:
-    port: 5672
-    host: 127.0.0.1
-    username: guest
-    password: guest
-    # 开启发送确认
-    publisher-confirms: true
-    # 开启发送失败退回
-    publisher-returns: true
-    # 开启ACK
-    listener:
-      direct:
-        acknowledge-mode: manual
-      simple:
-        acknowledge-mode: manual
   servlet:
     multipart:
       #设置单个文件上传最大限制
