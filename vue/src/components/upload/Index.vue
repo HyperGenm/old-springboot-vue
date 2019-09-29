@@ -314,6 +314,7 @@
                         console.warn('文件上传失败，code:', status, '---详情:', data);
                         return;
                     }
+                    that.$globalFun.successMsg('上传成功');
                     item.onSuccess();
                     let {nowFileList} = that;
                     for (let i = 0; i < nowFileList.length; i++) {
