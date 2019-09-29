@@ -9,6 +9,8 @@ const GLOBAL = {
     super_admin_id: 1,
     //超级管理员roleId
     super_admin_role_id: 1,
+    //请求头token名称
+    token: 'token',
     //http状态码
     http_code: {
         //成功

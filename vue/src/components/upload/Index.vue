@@ -46,10 +46,11 @@
             headers: {
                 type: Object,
                 default() {
+                    let res = {};
                     let token = this.$store.state.token;
-                    return {
-                        'token': token || ''
-                    }
+                    let tokenHeader = this.$global.GLOBAL.token;
+                    res[tokenHeader] = token || '';
+                    return res;
                 }
             },
             //是否支持多文件上传
@@ -271,11 +272,13 @@
                 let that = this;
                 let formData = new FormData();
                 formData.append('file', item['file']);
+                let headers = {
+                    'Content-Type': 'multipart/form-data'
+                };
+                //每个请求加上请求头
+                headers[that.$global.GLOBAL.token] = that.$store.state.token || '';
                 axios({
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'token': that.$store.state.token || ''
-                    },
+                    headers,
                     method: 'post',
                     url: that.$global.GLOBAL.base_url + that.action,
                     data: formData,

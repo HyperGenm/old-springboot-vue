@@ -3,6 +3,7 @@ package com.weiziplus.springboot.service.system;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.models.SysUser;
 import com.weiziplus.springboot.util.*;
+import com.weiziplus.springboot.util.redis.RedisUtils;
 import com.weiziplus.springboot.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
@@ -46,17 +47,21 @@ public class AdminLoginService {
      */
     private final String LOGIN_RANDOM_CODE = "loginRandomCoe";
 
+    private final String REDIS_KEY = "service:system:AdminLoginService:loginRandomCode:";
+
     /**
      * 生成图片验证码
      *
-     * @param request
      * @param response
      * @return
      */
-    public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
+    public void getValidateCode(HttpServletResponse response, String uuid) {
+        if (ToolUtils.isBlank(uuid)) {
+            return;
+        }
         Map<String, Object> validateCode = ImageValidateCodeUtils.getValidateCode();
-        HttpSession session = request.getSession();
-        session.setAttribute(LOGIN_RANDOM_CODE, validateCode.get("random"));
+        String redisKey = REDIS_KEY + uuid;
+        RedisUtils.set(redisKey, validateCode.get("random"), 60L);
         //设置相应类型,告诉浏览器输出的内容为图片
         response.setContentType("image/jpeg");
         //设置响应头信息，告诉浏览器不要缓存此内容
@@ -77,17 +82,23 @@ public class AdminLoginService {
      * @param password
      * @return
      */
-    public ResultUtils login(HttpServletRequest request, HttpSession session, String username, String password, String code) {
+    public ResultUtils login(HttpServletRequest request, String username, String password, String code, String uuid) {
         if (ToolUtils.isBlank(username) || ToolUtils.isBlank(password)) {
             return ResultUtils.error("用户名或密码为空");
         }
         if (ToolUtils.isBlank(code) || ImageValidateCodeUtils.RANDOM_NUM != code.length()) {
-            session.removeAttribute(LOGIN_RANDOM_CODE);
             return ResultUtils.error("验证码错误");
         }
-        Object randomCode = session.getAttribute(LOGIN_RANDOM_CODE);
-        session.removeAttribute(LOGIN_RANDOM_CODE);
-        if (null == randomCode || !code.equalsIgnoreCase(randomCode.toString())) {
+        if (ToolUtils.isBlank(uuid)) {
+            return ResultUtils.error("uuid为空");
+        }
+        String redisKey = REDIS_KEY + uuid;
+        String randomCode = ToolUtils.valueOfString(RedisUtils.get(redisKey));
+        if (null == randomCode) {
+            return ResultUtils.error("验证码已过期");
+        }
+        if (!code.equalsIgnoreCase(randomCode)) {
+            RedisUtils.delete(redisKey);
             return ResultUtils.error("验证码错误");
         }
         SysUser sysUser = sysUserMapper.getInfoByUsername(username);

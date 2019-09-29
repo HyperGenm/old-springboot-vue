@@ -302,16 +302,18 @@
                     url: that.$global.GLOBAL.base_url + _url,
                     method: _method,
                     headers: {
-                        'Content-Type': _header,
-                        'token': that.$store.state.token || ''
+                        'Content-Type': _header
                     },
                     timeout: _timeout
                 };
+                //每个请求加上请求头
+                _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
                 let _data = that.tableDataRequest.data || {};
                 _data['pageNum'] = that.pageNum;
                 _data['pageSize'] = that.pageSize;
                 _data['__t'] = (new Date()).getTime();
-                if (_method === 'get' || _method === 'GET') {
+                _method = _method.toUpperCase();
+                if (_method === 'GET') {
                     _axios['params'] = _data;
                 } else {
                     _axios['data'] = Qs.stringify(_data, {indices: false});

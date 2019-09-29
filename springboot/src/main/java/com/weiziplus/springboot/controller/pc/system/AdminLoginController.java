@@ -2,8 +2,8 @@ package com.weiziplus.springboot.controller.pc.system;
 
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
-import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.AdminLoginService;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author wanglongwei
@@ -30,26 +29,28 @@ public class AdminLoginController {
     /**
      * 生成验证码
      *
-     * @param request
      * @param response
-     * @return
+     * @param uuid
      */
     @GetMapping("/getValidateCode")
-    public void getValidateCode(HttpServletRequest request, HttpServletResponse response) {
-        service.getValidateCode(request, response);
+    public void getValidateCode(HttpServletResponse response, String uuid) {
+        service.getValidateCode(response, uuid);
     }
 
     /**
      * 系统用户登录
      *
+     * @param request
      * @param username
      * @param password
+     * @param code
+     * @param uuid
      * @return
      */
     @PostMapping("/login")
     @SystemLog(description = "系统用户登录")
-    public ResultUtils login(HttpServletRequest request, HttpSession session, String username, String password, String code) {
-        return service.login(request, session, username, password, code);
+    public ResultUtils login(HttpServletRequest request, String username, String password, String code, String uuid) {
+        return service.login(request, username, password, code, uuid);
     }
 
     /**

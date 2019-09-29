@@ -35,9 +35,9 @@
     export default {
         name: "login",
         data() {
-            let that = this;
             return {
-                imgCodeUrl: that.$global.GLOBAL.base_url + that.$global.URL.loginValidateCode,
+                imgUUID: '',
+                imgCodeUrl: '',
                 form: {
                     username: '',
                     password: '',
@@ -69,10 +69,14 @@
                 sessionStorage.removeItem('loginStatus');
                 window.location.reload();
             }
+            this.changeCode();
         },
         methods: {
             changeCode() {
-                this.imgCodeUrl = this.$global.GLOBAL.base_url + this.$global.URL.loginValidateCode + '?__t' + Math.random();
+                let uuid = this.$globalFun.createUUID();
+                let {GLOBAL, URL} = this.$global;
+                this.imgCodeUrl = GLOBAL.base_url + URL.loginValidateCode + '?uuid=' + uuid;
+                this.imgUUID = uuid;
             },
             handleLogin() {
                 const that = this;
@@ -80,7 +84,8 @@
                     if (!valid) {
                         return false;
                     }
-                    this.$axios({
+                    that.form['uuid'] = that.imgUUID;
+                    that.$axios({
                         allSuccess: true,
                         url: that.$global.URL.login,
                         method: 'post',
