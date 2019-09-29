@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @AdminAuthToken
 @RequestMapping("/pc/sysLog")
 public class SysLogController {
+
     @Autowired
     SysLogService service;
 

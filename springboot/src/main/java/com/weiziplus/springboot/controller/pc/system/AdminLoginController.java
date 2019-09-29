@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 @ApiIgnore
 @RequestMapping("/pc")
 public class AdminLoginController {
+
     @Autowired
     AdminLoginService service;
 

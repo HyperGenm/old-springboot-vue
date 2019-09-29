@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api")
 @Api(tags = "登陆接口")
 public class LoginController {
+
     @Autowired
     LoginService service;
 

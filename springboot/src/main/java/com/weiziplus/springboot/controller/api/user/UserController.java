@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.controller.api.user;
 
+import com.weiziplus.springboot.models.User;
 import com.weiziplus.springboot.service.user.UserService;
 import com.weiziplus.springboot.interceptor.WebAuthToken;
 import com.weiziplus.springboot.util.ResultUtils;
@@ -21,12 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/user")
 @Api(tags = "用户管理")
 public class UserController {
+
     @Autowired
     UserService service;
 
     @ApiOperation(value = "获取用户信息")
     @GetMapping("/getInfo")
-    public ResultUtils getInfo(HttpServletRequest request) {
+    public ResultUtils<User> getInfo(HttpServletRequest request) {
         return service.getInfo(request);
     }
 }

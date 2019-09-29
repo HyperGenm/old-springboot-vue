@@ -22,6 +22,7 @@ import java.util.Map;
 @Slf4j
 @Service
 public class SysUserService extends BaseService {
+
     @Autowired
     SysUserMapper mapper;
 

@@ -18,6 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @AdminAuthToken
 @RequestMapping("/pc/sysFunction")
 public class SysFunctionController {
+
     @Autowired
     SysFunctionService service;
 

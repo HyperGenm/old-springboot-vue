@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 public class SysLogService {
+
     @Autowired
     SysLogMapper mapper;
 

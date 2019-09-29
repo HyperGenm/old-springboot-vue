@@ -13,8 +13,8 @@ import java.io.Serializable;
  * @date 2019/5/24 15:58
  */
 @Getter
-@ApiModel("返回说明")
-public class ResultUtils implements Serializable {
+@ApiModel("统一返回结果")
+public class ResultUtils<T> implements Serializable {
 
     /**
      * 返回状态码code
@@ -32,7 +32,7 @@ public class ResultUtils implements Serializable {
      * 返回数据
      */
     @ApiModelProperty("数据")
-    private Object data;
+    private T data;
 
     /**
      * 创建无参数ResultUtil对象---fastjson反序列化需要无参数
@@ -47,28 +47,39 @@ public class ResultUtils implements Serializable {
      * @param msg
      * @param data
      */
-    private ResultUtils(Integer code, String msg, Object data) {
+    private ResultUtils(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
     /**
-     * 基础返回处理
+     * 成功
+     */
+    private static final Integer SUCCESS_CODE = 200;
+
+    /**
+     * 成功
      *
-     * @param code
-     * @param msg
      * @param data
      * @return
      */
-    private static ResultUtils content(Integer code, String msg, Object data) {
-        return new ResultUtils(code, msg, data);
+    public static <T> ResultUtils<T> success(T data) {
+        ResultUtils<T> resultUtils = new ResultUtils<>();
+        resultUtils.code = SUCCESS_CODE;
+        resultUtils.msg = "success";
+        resultUtils.data = data;
+        return resultUtils;
     }
 
     /**
      * 成功
+     *
+     * @return
      */
-    private static final Integer SUCCESS_CODE = 200;
+    public static ResultUtils success() {
+        return success(null);
+    }
 
     /**
      * token出错
@@ -96,22 +107,14 @@ public class ResultUtils implements Serializable {
     private static final Integer ERROR_EXCEPTION = 500;
 
     /**
-     * 成功
+     * 异常
      *
-     * @param data
+     * @param code
+     * @param msg
      * @return
      */
-    public static ResultUtils success(Object data) {
-        return content(SUCCESS_CODE, "success", data);
-    }
-
-    /**
-     * 成功
-     *
-     * @return
-     */
-    public static ResultUtils success() {
-        return content(SUCCESS_CODE, "success", null);
+    private static ResultUtils baseError(Integer code, String msg) {
+        return new ResultUtils<>(code, msg, null);
     }
 
     /**
@@ -121,7 +124,7 @@ public class ResultUtils implements Serializable {
      * @return
      */
     public static ResultUtils errorToken(String msg) {
-        return content(ERROR_TOKEN_CODE, msg, null);
+        return baseError(ERROR_TOKEN_CODE, msg);
     }
 
     /**
@@ -131,7 +134,7 @@ public class ResultUtils implements Serializable {
      * @return
      */
     public static ResultUtils error(String msg) {
-        return content(ERROR_CODE, msg, null);
+        return baseError(ERROR_CODE, msg);
     }
 
     /**
@@ -141,7 +144,7 @@ public class ResultUtils implements Serializable {
      * @return
      */
     public static ResultUtils errorRole(String msg) {
-        return content(ERROR_ROLE_CODE, msg, null);
+        return baseError(ERROR_ROLE_CODE, msg);
     }
 
     /**
@@ -150,7 +153,7 @@ public class ResultUtils implements Serializable {
      * @return
      */
     public static ResultUtils errorSuspend() {
-        return content(ERROR_SUSPEND_CODE, "Rider Kick", null);
+        return baseError(ERROR_SUSPEND_CODE, "Rider Kick");
     }
 
     /**
@@ -160,6 +163,6 @@ public class ResultUtils implements Serializable {
      * @return
      */
     public static ResultUtils errorException(String msg) {
-        return content(ERROR_EXCEPTION, msg, null);
+        return baseError(ERROR_EXCEPTION, msg);
     }
 }

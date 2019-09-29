@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @AdminAuthToken
 @RequestMapping("/pc/sysUser")
 public class SysUserController {
+
     @Autowired
     SysUserService service;
 

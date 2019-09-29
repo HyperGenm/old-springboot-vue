@@ -40,6 +40,7 @@ import java.util.Set;
 @Slf4j
 @Component
 public class AuthorizationInterceptor extends BaseService implements HandlerInterceptor {
+
     @Autowired
     SysUserMapper sysUserMapper;
 

@@ -30,7 +30,7 @@ public class MyBatisPlugin extends PluginAdapter {
      */
     private final List<String> IGNORE_TABLE = Arrays.asList(
             "data_dictionary", "data_dictionary_value",
-            "sys_function", "sys_log", "sys_role", "sys_role_function", "sys_user", "sys_abnormal_ip");
+            "sys_function", "sys_log", "sys_role", "sys_role_function", "sys_user");
 
     /**
      * 设置类的注释
@@ -50,6 +50,8 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addImportedType("com.weiziplus.springboot.base.Id");
         topLevelClass.addImportedType("com.weiziplus.springboot.base.Table");
         topLevelClass.addImportedType("lombok.Data");
+        topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
+        topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
 
         //添加@注解
         topLevelClass.addAnnotation("@JsonInclude(JsonInclude.Include.NON_NULL)");
@@ -64,6 +66,7 @@ public class MyBatisPlugin extends PluginAdapter {
             for (String remarkLine : remarkLines) {
                 topLevelClass.addJavaDocLine(" * " + remarkLine);
             }
+            topLevelClass.addAnnotation("@ApiModel(\"" + remarks.replace("\r\n"," ") + "\")");
         }
         StringBuilder sb = new StringBuilder();
         sb.append(" * ").append(introspectedTable.getFullyQualifiedTable());
@@ -99,12 +102,14 @@ public class MyBatisPlugin extends PluginAdapter {
             for (String remarkLine : remarkLines) {
                 field.addJavaDocLine(" * " + remarkLine);
             }
+            field.addAnnotation("@ApiModelProperty(\"" + remarks.replace("\r\n", " ") + "\")");
         }
         field.addJavaDocLine(" */");
+        String actualColumnName = introspectedColumn.getActualColumnName();
         if (introspectedTable.getPrimaryKeyColumns().contains(introspectedColumn)) {
-            field.addAnnotation("@Id(\"" + introspectedColumn.getActualColumnName() + "\")");
+            field.addAnnotation("@Id(\"" + actualColumnName + "\")");
         } else {
-            field.addAnnotation("@Column(\"" + introspectedColumn.getActualColumnName() + "\")");
+            field.addAnnotation("@Column(\"" + actualColumnName + "\")");
         }
         return true;
     }
