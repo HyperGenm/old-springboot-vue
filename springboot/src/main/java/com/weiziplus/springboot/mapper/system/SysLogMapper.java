@@ -21,11 +21,12 @@ public interface SysLogMapper {
      * @param roleId
      * @param description
      * @param ipAddress
-     * @param createTime
+     * @param startTime
+     * @param endTime
      * @return
      */
     List<Map<String, Object>> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
                                       @Param("username") String username, @Param("roleId") Long roleId,
                                       @Param("description") String description, @Param("ipAddress") String ipAddress,
-                                      @Param("createTime") String createTime);
+                                      @Param("startTime") String startTime, @Param("endTime") String endTime);
 }

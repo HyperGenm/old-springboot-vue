@@ -23,8 +23,11 @@
         <if test="null != ipAddress and '' != ipAddress">
             AND position(#{ipAddress} IN sl.ip_address)
         </if>
-        <if test="null != createTime and '' != createTime">
-            AND sl.create_time LIKE concat(#{createTime},'%')
+        <if test="null != startTime and '' != startTime">
+            AND sl.create_time <![CDATA[>]]> #{startTime}
+        </if>
+        <if test="null != endTime and '' != endTime">
+            AND sl.create_time <![CDATA[<=]]> #{endTime}
         </if>
         ORDER BY sl.create_time DESC
     </select>

@@ -52,7 +52,8 @@
                     {type: 'select', prop: 'roleId', placeholder: '角色', options: []},
                     {type: 'input', prop: 'description', placeholder: '操作'},
                     {type: 'input', prop: 'ipAddress', placeholder: 'ip地址'},
-                    {type: 'datePicker', prop: 'createTime', placeholder: '创建时间'}
+                    {type: 'dateTimePicker', prop: 'startTime', placeholder: '开始时间'},
+                    {type: 'dateTimePicker', prop: 'endTime', placeholder: '结束时间'}
                 ],
                 dialogDetail: false,
                 rowData: {}

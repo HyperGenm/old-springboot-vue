@@ -36,7 +36,9 @@ public class SysLogController {
             @RequestParam(value = "roleId", required = false) Long roleId,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "ipAddress", required = false) String ipAddress,
-            @RequestParam(value = "createTime", required = false) String createTime) {
-        return service.getPageList(request, pageNum, pageSize, username, roleId, description, ipAddress, createTime);
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime) {
+        return service.getPageList(request, pageNum, pageSize, username, roleId
+                , description, ipAddress, startTime, endTime);
     }
 }

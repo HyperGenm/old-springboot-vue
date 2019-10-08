@@ -54,6 +54,12 @@
                                         v-model="tableDataRequest.data[item.prop]"
                                         :disabled="item.disabled || false"></el-date-picker>
                     </template>
+                    <template v-else-if="'dateTimePicker' === item.type">
+                        <el-date-picker type="datetime" :placeholder="item.placeholder || '选择时间'"
+                                        v-model="tableDataRequest.data[item.prop]"
+                                        :value-format="item.valueFormat || 'yyyy-MM-dd HH:mm:ss'"
+                                        :disabled="item.disabled || false"></el-date-picker>
+                    </template>
                     <template v-else>
                         {{item.label}}没有指定type
                     </template>
