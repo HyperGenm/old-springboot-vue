@@ -165,4 +165,6 @@ public class ResultUtils<T> implements Serializable {
     public static ResultUtils errorException(String msg) {
         return baseError(ERROR_EXCEPTION, msg);
     }
+
+    private static final long serialVersionUID = 1L;
 }
