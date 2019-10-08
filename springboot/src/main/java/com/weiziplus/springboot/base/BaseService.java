@@ -201,6 +201,10 @@ public class BaseService {
                 put("value", value);
             }});
         }
+        //如果没有需要更新的字段
+        if (0 >= columnValues.size()) {
+            return null;
+        }
         result.put("COLUMNS_VALUES", columnValues);
         return result;
     }
@@ -368,7 +372,12 @@ public class BaseService {
      * @return
      */
     protected int baseUpdate(Object object) {
-        return mapper.update(handleTableUpdate(object));
+        Map<String, Object> stringObjectMap = handleTableUpdate(object);
+        //没有需要更新的字段
+        if (null == stringObjectMap) {
+            return 0;
+        }
+        return mapper.update(stringObjectMap);
     }
 
     /**
