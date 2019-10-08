@@ -109,7 +109,12 @@
                                 name: data['role'],
                                 buttons: roleButtons
                             });
-                            that.handleRouter(data['routerTree']);
+                            try {
+                                that.handleRouter(data['routerTree']);
+                            } catch (e) {
+                                that.$globalFun.errorMsg('路由加载出错,详情请看控制台打印');
+                                console.error('src/views/index/路径下添加该菜单目录，以及Index.vue文件 ，路由加载出错,详情:', e);
+                            }
                         }
                     });
                 });
@@ -145,7 +150,7 @@
                     name: 'index',
                     children: routers
                 }];
-                that.$store.dispatch('setRouters', {
+                this.$store.dispatch('setRouters', {
                     routers: routers,
                     routersTree: data
                 });

@@ -35,6 +35,9 @@
    * `java.lang.RuntimeException: Cannot resolve classpath entry: E:\maven-repository\mysql\mysql-connector-java\8.0.15\mysql-connector-java-8.0.15.jar`
        * 出错: 根据数据库生成实体类
        * 解决: *resources/config/generator-config.xml* 第6行jar包路径改成自己的jar包路径
+   * `npm install`
+       * 出错: vue安装依赖出错，一般是 *node-sass*
+       * 解决: 更换淘宝镜像或者`npm install --save node-sass --registry=https://registry.npm.taobao.org --disturl=https://npm.taobao.org/dist --sass-binary-site=http://npm.taobao.org/mirrors/node-sass`   
    * `/login ------请求失败-----error: Error: Cannot find module './q/Index'`
        * 出错：后台创建新菜单(该菜单没有下级)并且权限添加该菜单后，重新登录出现该错误
        * 解决：vue项目中/src/views/index/路径下添加该菜单目录，以及Index.vue文件 
