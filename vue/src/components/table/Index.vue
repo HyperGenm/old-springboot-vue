@@ -207,7 +207,7 @@
         <div class="pagination" ref="pagination">
             <!--表格分页-->
             <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                           :page-sizes="[10, 20, 50, 100,1000]" :page-size="pageSize" :total="total"
+                           :page-sizes="[10, 20, 50, 100, 200]" :page-size="pageSize" :total="total"
                            @size-change="handleSizeChange"
                            @current-change="handleCurrentChange"
             ></el-pagination>
