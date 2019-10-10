@@ -124,6 +124,10 @@ export function weiAxios(
                 loading.close();
             }
             that.$globalFun.errorMsg('请求失败');
+            if (error.response) {
+                error = error['response']['data'];
+            }
+            that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
     });
@@ -253,7 +257,7 @@ export function weiAxiosDown(
             if (error.response) {
                 error = error['response']['data'];
             }
-            that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
+            that.$globalFun.consoleWarnTable(`文件下载失败url:${url}`, error);
             fail(error);
         });
     });
