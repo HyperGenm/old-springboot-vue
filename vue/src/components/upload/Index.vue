@@ -292,15 +292,8 @@
                         loading.close();
                     }
                     //获取响应状态码
-                    let {http_code, axios_result_code} = that.$global.GLOBAL;
-                    let {status, data} = res;
-                    /**status不是200*/
-                    if (http_code['success'] !== status) {
-                        item.onError();
-                        that.$globalFun.errorMsg('文件上传失败');
-                        that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, res['data']);
-                        return;
-                    }
+                    let {axios_result_code} = that.$global.GLOBAL;
+                    let {data} = res;
                     /**token过期处理*/
                     if (axios_result_code['errorToken'] === data['code']) {
                         that.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
@@ -337,6 +330,10 @@
                         loading.close();
                     }
                     item.onError();
+                    // 如果请求被取消则进入该方法
+                    if (axios.isCancel(error)) {
+                        return;
+                    }
                     that.$globalFun.errorMsg('文件上传失败');
                     if (error.response) {
                         error = error['response']['data'];

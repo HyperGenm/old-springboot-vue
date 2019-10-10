@@ -1,9 +1,28 @@
+/**引入Vue*/
+import Vue from 'vue'
 /**引入axios*/
 import axios from "axios";
 /**引入参数处理*/
 import Qs from 'qs';
 /**引入element-ui组件*/
 import {Loading} from 'element-ui';
+
+//请求拦截器
+axios.interceptors.request.use(
+    config => {
+        let that = Vue.prototype;
+        // 将请求放入全局变量中，便于取消请求
+        config.cancelToken = new axios.CancelToken(cancel => {
+            let cancelArray = window[that.$global.GLOBAL.window['axiosCancelToken']] || [];
+            cancelArray.push(cancel);
+        });
+        return config;
+    },
+    error => {
+        // 对请求错误的处理
+        return Promise.reject(error);
+    }
+);
 
 /**
  * 封装axios请求
@@ -80,19 +99,13 @@ export function weiAxios(
             if (null != loading) {
                 loading.close();
             }
-            //获取响应状态码
-            let {http_code, axios_result_code} = that.$global.GLOBAL;
-            /**处理status不为200的出错请求*/
-            if (http_code['success'] !== res.status) {
-                that.$globalFun.errorMsg('请求失败:' + res.status);
-                that.$globalFun.consoleWarnTable(`请求失败url:${url}`, res['data']);
-                return;
-            }
             /***请求的url如果是全部url的话,返回所有res['data']响应***/
             if (allUrl) {
                 success(res['data']);
                 return;
             }
+            //获取响应状态码
+            let {axios_result_code} = that.$global.GLOBAL;
             /**token过期处理*/
             if (axios_result_code['errorToken'] === res.data.code) {
                 that.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
@@ -104,7 +117,7 @@ export function weiAxios(
                 }, 3000);
                 return;
             }
-            /**返回所有成功回调,不包含status不是200的出错请求*/
+            /**返回所有成功回调,不包含status不是401的出错请求*/
             if (allSuccess) {
                 success(res.data);
                 return;
@@ -122,6 +135,11 @@ export function weiAxios(
             clearTimeout(loadingTimer);
             if (null != loading) {
                 loading.close();
+            }
+            // 如果请求被取消则进入该方法
+            if (axios.isCancel(error)) {
+                fail(error);
+                return;
             }
             that.$globalFun.errorMsg('请求失败');
             if (error.response) {
@@ -252,6 +270,11 @@ export function weiAxiosDown(
             clearTimeout(loadingTimer);
             if (null != loading) {
                 loading.close();
+            }
+            // 如果请求被取消则进入该方法
+            if (axios.isCancel(error)) {
+                fail(error);
+                return;
             }
             that.$globalFun.errorMsg('文件下载失败，请重试');
             if (error.response) {

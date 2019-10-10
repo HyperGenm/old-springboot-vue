@@ -11,11 +11,6 @@ const GLOBAL = {
     super_admin_role_id: 1,
     //请求头token名称
     token: 'token',
-    //http状态码
-    http_code: {
-        //成功
-        success: 200
-    },
     //后台状态码
     axios_result_code: {
         //成功
@@ -28,6 +23,10 @@ const GLOBAL = {
         errorRole: 403,
         //后台系统异常
         errorException: 500
+    },
+    //放到window中的变量key
+    window: {
+        axiosCancelToken: '_axiosCancelToken'
     }
 };
 

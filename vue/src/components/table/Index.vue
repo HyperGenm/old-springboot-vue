@@ -328,14 +328,7 @@
                     /**关闭加载中动画*/
                     that.loading = false;
                     //获取响应状态码
-                    let {http_code, axios_result_code} = that.$global.GLOBAL;
-                    /**处理status不为200的出错请求*/
-                    if (http_code['success'] !== res.status) {
-                        that.$globalFun.errorMsg('请求出错:' + res.status);
-                        that.emptyText = JSON.stringify(res['data']);
-                        that.$globalFun.consoleWarnTable(`请求失败url:${url}`, res['data']);
-                        return;
-                    }
+                    let {axios_result_code} = that.$global.GLOBAL;
                     /**token过期处理*/
                     if (axios_result_code['errorToken'] === res.data.code) {
                         that.$globalFun.errorMsg('登陆过期，即将跳转到登录页面');
@@ -366,6 +359,10 @@
                 }).catch((error) => {
                     /**关闭加载中动画*/
                     that.loading = false;
+                    // 如果请求被取消则进入该方法
+                    if (axios.isCancel(error)) {
+                        return;
+                    }
                     that.$globalFun.errorMsg('请求失败');
                     if (error.response) {
                         error = error['response']['data'];
