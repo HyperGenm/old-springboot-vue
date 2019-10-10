@@ -1,6 +1,10 @@
-/* 改变主题色变量 */
+/* 覆盖element-ui默认颜色 */
+
+//默认颜色
+$--color-primary: #409EFF;
+//danger颜色
 //不是粉红，是品红哒
-$--color-primary: #E4007F;
+$--color-danger: #E4007F;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';

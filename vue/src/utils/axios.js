@@ -75,8 +75,8 @@ export function weiAxios({
             let {http_code, axios_result_code} = that.$global.GLOBAL;
             /**处理status不为200的出错请求*/
             if (http_code['success'] !== res.status) {
-                that.$globalFun.errorMsg('请求出错:' + res.status);
-                console.warn(url, '-----status:', res.status, '------请求出错-----res:', res);
+                that.$globalFun.errorMsg('请求失败:' + res.status);
+                that.$globalFun.consoleWarnTable(`请求失败url:${url}`, res['data']);
                 return;
             }
             /***请求的url如果是全部url的话,返回所有res['data']响应***/
@@ -103,7 +103,7 @@ export function weiAxios({
             /**处理code不为200的出错请求*/
             if (axios_result_code['success'] !== res.data.code) {
                 that.$globalFun.errorMsg(res.data.msg);
-                console.warn(url, '-----code:', res.data.code, '------请求出错-----res:', res);
+                that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
                 return;
             }
             /**成功回调*/
@@ -113,10 +113,9 @@ export function weiAxios({
             loading.close();
             that.$globalFun.errorMsg('请求失败');
             if (error.response) {
-                console.warn(url, '------请求失败-----error:', error, '---失败详情:', error.response);
-            } else {
-                console.warn(url, '------请求失败-----error:', error);
+                error = error['response']['data'];
             }
+            that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
     });
@@ -198,7 +197,7 @@ export function weiAxiosDown({
                         /**处理code不为200的出错请求*/
                         if (axios_result_code['success'] !== code) {
                             that.$globalFun.errorMsg(msg);
-                            console.warn(url, '-----code:', code, '------请求出错-----res:', res);
+                            that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
                             return;
                         }
                         console.log('文件下载成功回调，不是文件流', resData);
@@ -231,10 +230,9 @@ export function weiAxiosDown({
             loading.close();
             that.$globalFun.errorMsg('文件下载失败，请重试');
             if (error.response) {
-                console.warn(url, '------请求失败-----error:', error, '---失败详情:', error.response);
-            } else {
-                console.warn(url, '------请求失败-----error:', error);
+                error = error['response']['data'];
             }
+            that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
     });

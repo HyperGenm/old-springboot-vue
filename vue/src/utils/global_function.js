@@ -161,8 +161,19 @@ function createUUID() {
 }
 
 /**
+ * 将错误信息以console.table打印出来
+ * @param msg
+ * @param object
+ */
+function consoleWarnTable(msg, object = {}) {
+    console.warn(msg);
+    console.table(object);
+    console.warn('↑↑以上为错误详情↑↑↑↑↑');
+}
+
+/**
  * 将方法暴露出去
  */
 export default {
-    isBlank, notPhone, errorMsg, successMsg, messageBox, messageBoxInput, createUUID
+    isBlank, notPhone, errorMsg, successMsg, messageBox, messageBoxInput, createUUID, consoleWarnTable
 };

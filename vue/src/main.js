@@ -27,14 +27,6 @@ import globalFunction from './utils/global_function'
 Vue.prototype.$global = globalVariable;
 Vue.prototype.$globalFun = globalFunction;
 
-window.onkeyup = function (event) {
-    // 判断是否按下F12，F12键码为123
-    if (123 === event['keyCode']) {
-        globalFunction.errorMsg('不是粉红，是品红哒');
-        console.log('element-ui样式覆盖:/src/assets/sass/element-variables.scss文件');
-    }
-};
-
 new Vue({
     router,
     store,

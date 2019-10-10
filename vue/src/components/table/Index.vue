@@ -332,8 +332,8 @@
                     /**处理status不为200的出错请求*/
                     if (http_code['success'] !== res.status) {
                         that.$globalFun.errorMsg('请求出错:' + res.status);
-                        that.emptyText = JSON.stringify(res);
-                        console.warn(_url, '-----status:', res.status, '------请求出错-----res:', res);
+                        that.emptyText = JSON.stringify(res['data']);
+                        that.$globalFun.consoleWarnTable(`请求失败url:${url}`, res['data']);
                         return;
                     }
                     /**token过期处理*/
@@ -351,7 +351,7 @@
                     if (axios_result_code['success'] !== res.data.code) {
                         that.$globalFun.errorMsg(res.data.msg);
                         that.emptyText = JSON.stringify(res['data']);
-                        console.warn(_url, '-----code:', res.data.code, '------请求出错-----res:', res);
+                        that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
                         return;
                     }
                     /**判断返回格式是否正确*/
@@ -368,12 +368,10 @@
                     that.loading = false;
                     that.$globalFun.errorMsg('请求失败');
                     if (error.response) {
-                        console.warn(_url, '------请求失败-----error:', error, '---失败详情:', error.response);
-                        that.emptyText = error.response.data.message;
-                    } else {
-                        console.warn(_url, '------请求失败-----error:', error);
-                        that.emptyText = 'error:' + JSON.stringify(error);
+                        error = error['response']['data'];
                     }
+                    that.$globalFun.consoleWarnTable(`请求失败url:${_url}`, error);
+                    that.emptyText = JSON.stringify(error);
                 });
             },
             //pageSize改变触发
@@ -475,6 +473,17 @@
             .el-form-item {
                 margin-bottom: 3px;
             }
+        }
+    }
+</style>
+
+<style lang="scss">
+    @import "@/assets/sass/element-variables.scss";
+
+    #weiTable {
+        /*没有数据，或者出错时显示的文字*/
+        span.el-table__empty-text {
+            color: $--color-primary !important;
         }
     }
 </style>

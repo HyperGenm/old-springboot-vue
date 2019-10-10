@@ -17,7 +17,7 @@
                 :on-exceed="onExceed"
                 :accept="accept"
                 :http-request="httpRequest">
-            <el-button size="small" type="primary">点击上传</el-button>
+            <el-button size="small" type="primary">选择文件</el-button>
             <el-button v-if="!autoUpload" size="small" type="success"
                        @click.stop="submitUpload">上传到服务器
             </el-button>
@@ -143,13 +143,13 @@
                 if (!this.beforeValidateFileSize(raw)) {
                     this.nowFileList = fileList.filter(value => value['uid'] !== file['uid']);
                     this.$globalFun.errorMsg('文件超出最大尺寸');
-                    console.warn('上传文件超出最大尺寸file:', file);
+                    this.$globalFun.consoleWarnTable('上传文件超出最大尺寸file:', file);
                     return;
                 }
                 if (!this.beforeValidateFileType(raw)) {
                     this.$globalFun.errorMsg('文件格式不正确');
                     this.nowFileList = fileList.filter(value => value['uid'] !== file['uid']);
-                    console.warn('上传文件格式不正确file:', file);
+                    this.$globalFun.consoleWarnTable('上传文件格式不正确file:', file);
                     return;
                 }
                 this.nowFileList = fileList;
@@ -225,13 +225,13 @@
                 //尺寸是否正确
                 if (!this.beforeValidateFileSize(file)) {
                     this.$globalFun.errorMsg('文件超出最大尺寸');
-                    console.warn('上传文件超出最大尺寸file:', file);
+                    this.$globalFun.consoleWarnTable('文件超出最大尺寸:', file);
                     return false;
                 }
                 //如果文件格式不正确
                 if (!this.beforeValidateFileType(file)) {
                     this.$globalFun.errorMsg('文件格式不正确');
-                    console.warn('上传文件格式不正确file:', file);
+                    this.$globalFun.consoleWarnTable('上传文件格式不正确file:', file);
                     return false;
                 }
                 let flag = true;
@@ -292,7 +292,7 @@
                     if (http_code['success'] !== status) {
                         item.onError();
                         that.$globalFun.errorMsg('文件上传失败');
-                        console.warn('文件上传失败，status:', status, '---详情:', res);
+                        that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, res['data']);
                         return;
                     }
                     /**token过期处理*/
@@ -311,7 +311,7 @@
                     if (axios_result_code['success'] !== data['code']) {
                         item.onError();
                         that.$globalFun.errorMsg('文件上传失败');
-                        console.warn('文件上传失败，code:', status, '---详情:', data);
+                        that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, data);
                         return;
                     }
                     that.$globalFun.successMsg('上传成功');
@@ -329,7 +329,10 @@
                     loading.close();
                     item.onError();
                     that.$globalFun.errorMsg('文件上传失败');
-                    console.warn('文件上传失败，详情:', (error.response || error));
+                    if (error.response) {
+                        error = error['response']['data'];
+                    }
+                    that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, error);
                 });
             }
         }
