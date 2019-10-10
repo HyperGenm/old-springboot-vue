@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.weiziplus.springboot.base.BaseService;
+import com.weiziplus.springboot.async.SystemAsync;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysLogMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
@@ -10,7 +10,6 @@ import com.weiziplus.springboot.models.SysLog;
 import com.weiziplus.springboot.models.User;
 import com.weiziplus.springboot.service.system.SysFunctionService;
 import com.weiziplus.springboot.service.system.SysRoleService;
-import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.HttpRequestUtils;
 import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.util.ToolUtils;
@@ -39,7 +38,7 @@ import java.util.Set;
  */
 @Slf4j
 @Component
-public class AuthorizationInterceptor extends BaseService implements HandlerInterceptor {
+public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     SysUserMapper sysUserMapper;
@@ -55,6 +54,9 @@ public class AuthorizationInterceptor extends BaseService implements HandlerInte
 
     @Autowired
     SysFunctionService sysFunctionService;
+
+    @Autowired
+    SystemAsync systemAsync;
 
     /**
      * 请求之前拦截
@@ -120,8 +122,8 @@ public class AuthorizationInterceptor extends BaseService implements HandlerInte
                 sysLog.setUserId(JwtTokenUtils.getUserIdByToken(token));
                 sysLog.setDescription(systemLog.description());
                 sysLog.setIpAddress(HttpRequestUtils.getIpAddress(request));
-                sysLog.setCreateTime(DateUtils.getNowDateTime());
-                baseInsert(sysLog);
+                //将日志异步放入数据库
+                systemAsync.handleSysLog(sysLog);
             }
             return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
         } else if (WebTokenUtils.AUDIENCE.equals(tokenAudience)) {
@@ -160,13 +162,8 @@ public class AuthorizationInterceptor extends BaseService implements HandlerInte
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
-        //更新用户最后活跃时间
-        int i = sysUserMapper.updateLastActiveTimeByIdAndIp(userId, HttpRequestUtils.getIpAddress(request));
-        //如果更新成功，证明有该用户，反之没有该用户
-        if (0 >= i) {
-            handleResponse(response, ResultUtils.errorToken("token失效"));
-            return false;
-        }
+        //异步更新用户最后活跃时间
+        systemAsync.updateLastActiveTime(userId, HttpRequestUtils.getIpAddress(request));
         //如果当前是超级管理员---直接放过
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
             //更新token过期时间
