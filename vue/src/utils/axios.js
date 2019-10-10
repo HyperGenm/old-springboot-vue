@@ -15,34 +15,40 @@ import {Loading} from 'element-ui';
  * @param headers 请求头
  * @param data 请求参数
  * @param timeout 请求超时时间---某些请求需要单独设置超时时间
+ * @param timeShowLoadAnimation 多长时间之后显示加载中动画,单位毫秒
  * @param success 成功回调
  * @param fail 失败回调
  * @returns {Promise<any>}
  * @private
  */
-export function weiAxios({
-                             allUrl = false,
-                             allSuccess = false,
-                             url = '',
-                             method = 'get',
-                             header = 'application/x-www-form-urlencoded; charset=UTF-8',
-                             data = {},
-                             timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT),
-                             success = function () {
-                             },
-                             fail = function () {
-                             }
-                         } = {}) {
+export function weiAxios(
+    {
+        allUrl = false,
+        allSuccess = false,
+        url = '',
+        method = 'get',
+        header = 'application/x-www-form-urlencoded; charset=UTF-8',
+        data = {},
+        timeout = parseInt(process.env.VUE_APP_AXIOS_TIMEOUT),
+        timeShowLoadAnimation = 555,
+        success = function () {
+        },
+        fail = function () {
+        }
+    } = {}) {
     return new Promise(() => {
         /**保留this指针*/
         let that = this;
-        /**开启加载中动画*/
-        let loading = Loading.service({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-        });
+        /**timeShowLoadAnimation时间之后开启加载中动画*/
+        let loading = null;
+        let loadingTimer = setTimeout(() => {
+            loading = Loading.service({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+        }, timeShowLoadAnimation);
         /**axios请求所需参数*/
         let _axios = {
             method,
@@ -70,7 +76,10 @@ export function weiAxios({
         }
         axios(_axios).then((res) => {
             /**关闭加载中动画*/
-            loading.close();
+            clearTimeout(loadingTimer);
+            if (null != loading) {
+                loading.close();
+            }
             //获取响应状态码
             let {http_code, axios_result_code} = that.$global.GLOBAL;
             /**处理status不为200的出错请求*/
@@ -110,12 +119,11 @@ export function weiAxios({
             success(res.data.data);
         }).catch((error) => {
             /**关闭加载中动画*/
-            loading.close();
-            that.$globalFun.errorMsg('请求失败');
-            if (error.response) {
-                error = error['response']['data'];
+            clearTimeout(loadingTimer);
+            if (null != loading) {
+                loading.close();
             }
-            that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
+            that.$globalFun.errorMsg('请求失败');
             fail(error);
         });
     });
@@ -126,31 +134,38 @@ export function weiAxios({
  * @param url
  * @param method
  * @param data
- * @param filename
+ * @param filename 文件名字
+ * @param timeShowLoadAnimation 多长时间之后显示加载中动画，单位毫秒
  * @param success
  * @param fail
  * @returns {Promise<any>}
  */
-export function weiAxiosDown({
-                                 url = '',
-                                 method = 'post',
-                                 data = {},
-                                 filename = '新建文件',
-                                 success = function () {
-                                 },
-                                 fail = function () {
-                                 }
-                             } = {}) {
+export function weiAxiosDown(
+    {
+        url = '',
+        method = 'post',
+        data = {},
+        filename = '新建文件',
+        timeShowLoadAnimation = 555,
+        success = function () {
+        },
+        fail = function () {
+        }
+    } = {}
+) {
     return new Promise(() => {
         /**保留this指针*/
         let that = this;
-        /**开启加载中动画*/
-        let loading = Loading.service({
-            lock: true,
-            text: '下载中',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-        });
+        /**timeShowLoadAnimation时间之后开启加载中动画*/
+        let loading = null;
+        let loadingTimer = setTimeout(() => {
+            loading = Loading.service({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            });
+        }, timeShowLoadAnimation);
         /**axios请求所需参数*/
         let _axios = {
             url: that.$global.GLOBAL.base_url + url,
@@ -170,7 +185,10 @@ export function weiAxiosDown({
         }
         axios(_axios).then((res) => {
             /**关闭加载中动画*/
-            loading.close();
+            clearTimeout(loadingTimer);
+            if (null != loading) {
+                loading.close();
+            }
             let {data} = res;
             let fileReader = new FileReader();
             fileReader.readAsText(data);
@@ -227,7 +245,10 @@ export function weiAxiosDown({
             success(res);
         }).catch((error) => {
             /**关闭加载中动画*/
-            loading.close();
+            clearTimeout(loadingTimer);
+            if (null != loading) {
+                loading.close();
+            }
             that.$globalFun.errorMsg('文件下载失败，请重试');
             if (error.response) {
                 error = error['response']['data'];

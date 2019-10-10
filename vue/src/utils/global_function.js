@@ -172,8 +172,47 @@ function consoleWarnTable(msg, object = {}) {
 }
 
 /**
+ * session中存放的key前缀
+ * @type {string}
+ */
+const sessionStorageItemKeyPrefix = 'weiziplus_';
+
+/**
+ * 获取session存储的数据
+ * @param key
+ * @returns {*}
+ */
+function getSessionStorage(key) {
+    if (null == key) {
+        return null;
+    }
+    return JSON.parse(sessionStorage.getItem(sessionStorageItemKeyPrefix + key));
+}
+
+/**
+ * 将数据保存到session中
+ * @param key
+ * @param value
+ */
+function setSessionStorage(key, value = '') {
+    if (null == key) {
+        return;
+    }
+    sessionStorage.setItem(sessionStorageItemKeyPrefix + key, JSON.stringify(value));
+}
+
+/**
  * 将方法暴露出去
  */
 export default {
-    isBlank, notPhone, errorMsg, successMsg, messageBox, messageBoxInput, createUUID, consoleWarnTable
+    isBlank,
+    notPhone,
+    errorMsg,
+    successMsg,
+    messageBox,
+    messageBoxInput,
+    createUUID,
+    consoleWarnTable,
+    getSessionStorage,
+    setSessionStorage
 };

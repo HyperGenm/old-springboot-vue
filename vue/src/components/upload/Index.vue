@@ -262,13 +262,16 @@
              * @param item
              */
             httpRequest(item) {
-                /**开启加载中动画*/
-                let loading = Loading.service({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                });
+                /**timeShowLoadAnimation时间之后开启加载中动画*/
+                let loading = null;
+                let loadingTimer = setTimeout(() => {
+                    loading = Loading.service({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                }, 555);
                 let that = this;
                 let formData = new FormData();
                 formData.append('file', item['file']);
@@ -284,7 +287,10 @@
                     data: formData,
                 }).then(res => {
                     /**关闭加载中动画*/
-                    loading.close();
+                    clearTimeout(loadingTimer);
+                    if (null != loading) {
+                        loading.close();
+                    }
                     //获取响应状态码
                     let {http_code, axios_result_code} = that.$global.GLOBAL;
                     let {status, data} = res;
@@ -326,7 +332,10 @@
                     that.nowFileList = nowFileList;
                 }).catch(error => {
                     /**关闭加载中动画*/
-                    loading.close();
+                    clearTimeout(loadingTimer);
+                    if (null != loading) {
+                        loading.close();
+                    }
                     item.onError();
                     that.$globalFun.errorMsg('文件上传失败');
                     if (error.response) {
