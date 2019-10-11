@@ -3,8 +3,7 @@ package com.weiziplus.springboot.util;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,10 +14,9 @@ import java.util.List;
  * @author wanglongwei
  * @date 2019/5/7 17:06
  */
-@Getter
-@Setter
+@Data
 @ApiModel("分页")
-public class PageUtils implements Serializable {
+public class PageUtils<T> implements Serializable {
 
     @ApiModelProperty("当前页码")
     private Integer pageNum;
@@ -32,9 +30,9 @@ public class PageUtils implements Serializable {
     @ApiModelProperty("数据")
     private List list;
 
-    public static PageUtils pageInfo(List list) {
+    public static <T> PageUtils<T> pageInfo(List list) {
         PageInfo pageInfo = new PageInfo(list);
-        PageUtils pageUtil = new PageUtils();
+        PageUtils<T> pageUtil = new PageUtils<>();
         pageUtil.setPageNum(pageInfo.getPageNum());
         pageUtil.setPageSize(pageInfo.getSize());
         pageUtil.setTotal(pageInfo.getTotal());
