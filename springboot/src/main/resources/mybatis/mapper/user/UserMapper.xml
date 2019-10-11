@@ -21,4 +21,8 @@
         VALUES
         (#{username},#{password},now())
     </insert>
+    <select id="getList" resultType="com.weiziplus.springboot.models.User">
+        SELECT *
+        FROM user
+    </select>
 </mapper>
