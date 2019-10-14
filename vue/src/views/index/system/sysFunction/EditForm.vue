@@ -23,20 +23,6 @@
 </template>
 
 <script>
-    const baseOptions = [
-        {type: 'input', label: '标题', prop: 'title', required: true},
-        {type: 'input', label: '功能名name', prop: 'name', required: true},
-        {type: 'input', label: '功能路径', prop: 'path', required: true},
-        {type: 'textarea', label: '功能对应的api', prop: 'containApi'},
-        {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
-        {
-            type: 'radio', label: '类型', prop: 'type', required: true, options: [
-                {label: '菜单', value: 0},
-                {label: '按钮', value: 1}
-            ]
-        },
-        {type: 'textarea', label: '路由描述', prop: 'description'}
-    ];
     export default {
         name: "EditForm",
         components: {
@@ -60,26 +46,41 @@
                 this.form = formData;
             },
             handleType(handleType) {
-                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
-                if ('update' === handleType) {
-                    this.formOptions[1]['disabled'] = true;
-                }
+                this.formOptions[1]['disabled'] = 'update' === handleType;
             }
         },
         data() {
             return {
-                formOptions: JSON.parse(JSON.stringify(baseOptions)),
+                formOptions: [
+                    {type: 'input', label: '标题', prop: 'title', required: true},
+                    {type: 'input', label: '功能名name', prop: 'name', required: true, disabled: false},
+                    {type: 'input', label: '功能路径', prop: 'path', required: true},
+                    {type: 'textarea', label: '功能对应的api', prop: 'containApi'},
+                    {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
+                    {
+                        type: 'radio', label: '类型', prop: 'type', required: true, options: [
+                            {label: '菜单', value: 0},
+                            {label: '按钮', value: 1}
+                        ]
+                    },
+                    {type: 'textarea', label: '路由描述', prop: 'description'}
+                ],
                 form: this.formData,
                 dialogIcons: false
             }
         },
         methods: {
-            submit() {
+            submit(form) {
+                if ('add' === this.handleType) {
+                    form['parentId'] = this.parentData['id'];
+                } else {
+                    form['parentId'] = this.formData['parentId'];
+                }
                 let that = this;
                 that.$axios({
                     url: that.$global.URL['system']['sysFunction'][that.handleType],
                     method: 'post',
-                    data: that.form,
+                    data: form,
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');

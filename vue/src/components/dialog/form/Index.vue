@@ -1,7 +1,7 @@
 <template>
     <div id="dialogForm" style="overflow: hidden;">
         <el-form ref="form" size="mini" :label-width="labelWidth"
-                 :model="formData" :rules="formRules || {}">
+                 :model="formData || {}" :rules="formRules || {}">
             <slot name="itemHead"></slot>
             <el-form-item v-for="(item,index) in formOptions" :key="index"
                           :label='item.label' :prop="item.prop" :required="item.required || false">
@@ -115,7 +115,20 @@
                     if (!valid) {
                         return false;
                     }
-                    that.$emit('submit');
+                    let form = {};
+                    for (let key in that.formData) {
+                        if (!that.formData.hasOwnProperty(key)) {
+                            break;
+                        }
+                        for (let i = 0; i < that.formOptions.length; i++) {
+                            let {prop} = that.formOptions[i];
+                            if ('id' === key || key === prop) {
+                                form[key] = that.formData[key];
+                                break;
+                            }
+                        }
+                    }
+                    that.$emit('submit', form);
                 });
             },
             //重置表单

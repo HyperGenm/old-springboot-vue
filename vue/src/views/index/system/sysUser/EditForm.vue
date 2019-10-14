@@ -9,29 +9,6 @@
 <!--简单表单可以参考/src/views/index/system/sysRole/EditForm.vue-->
 
 <script>
-    // 表单每一项，具体参考 /src/components/dialog/form/Index.vue
-    const baseOptions = [
-        {type: 'input', label: '用户名', prop: 'username'},
-        {type: 'input', label: '真实姓名', prop: 'realName', required: true},
-        {
-            //类型
-            type: 'radio',
-            //标题
-            label: '是否允许登录',
-            //对应字段
-            prop: 'allowLogin',
-            //下拉框、单选按钮的选项
-            options: [
-                {
-                    //选项名称
-                    label: '允许',
-                    //选项值
-                    value: 0
-                },
-                {label: '禁止', value: 1}
-            ]
-        }
-    ];
     export default {
         name: "EditForm",
         components: {
@@ -69,32 +46,58 @@
                     ]
                 },
                 form: this.formData,
-                formOptions: []
+                // 表单每一项，具体参考 /src/components/dialog/form/Index.vue
+                formOptions: [
+                    {type: 'input', label: '用户名', prop: 'username'},
+                    {type: 'input', label: '真实姓名', prop: 'realName', required: true},
+                    {
+                        //类型
+                        type: 'radio',
+                        //标题
+                        label: '是否允许登录',
+                        //对应字段
+                        prop: 'allowLogin',
+                        //下拉框、单选按钮的选项
+                        options: [
+                            {
+                                //选项名称
+                                label: '允许',
+                                //选项值
+                                value: 0
+                            },
+                            {label: '禁止', value: 1}
+                        ]
+                    },
+                    {type: 'input', label: '密码', prop: 'password', inputType: 'password', disabled: true}
+                ]
             }
         },
         mounted() {
             this.changeFormOptions();
         },
         methods: {
-            //本次，新增和编辑有不同表单项，所以作此判断
             changeFormOptions() {
-                this.formOptions = JSON.parse(JSON.stringify(baseOptions));
                 if ('add' === this.handleType) {
-                    this.formOptions.push({type: 'input', label: '密码', prop: 'password', inputType: 'password'});
+                    //新增
+                    this.rules.password[0]['required'] = true;
+                    this.formOptions[0]['disabled'] = false;
+                    this.formOptions[2]['disabled'] = false;
+                    this.formOptions[3]['disabled'] = false;
                 } else {
+                    //编辑
+                    this.rules.password[0]['required'] = false;
                     this.formOptions[0]['disabled'] = true;
+                    this.formOptions[3]['disabled'] = true;
                     //如果当前用户被封号
-                    if (2 === this.formData['allowLogin']) {
-                        this.formOptions.splice(2);
-                    }
+                    this.formOptions[2]['disabled'] = 2 === this.formData['allowLogin'];
                 }
             },
-            submit() {
+            submit(form) {
                 let that = this;
                 that.$axios({
                     url: that.$global.URL['system']['sysUser'][that.handleType],
                     method: 'post',
-                    data: that.form,
+                    data: form,
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');

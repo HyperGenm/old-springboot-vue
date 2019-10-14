@@ -59,13 +59,13 @@
             }
         },
         methods: {
-            submit() {
+            submit(form) {
+                form['parentId'] = this.form['parentId'];
                 let that = this;
-                delete that.form['children'];
                 that.$axios({
                     url: that.$global.URL['system']['sysRole'][that.handleType],
                     method: 'post',
-                    data: that.form,
+                    data: form,
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');

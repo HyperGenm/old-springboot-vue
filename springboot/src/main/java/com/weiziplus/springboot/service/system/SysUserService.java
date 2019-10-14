@@ -107,11 +107,11 @@ public class SysUserService extends BaseService {
             }
         }
         SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
-        if (null != user && !sysUser.getId().equals(user.getId())) {
+        if (null != user && !user.getId().equals(sysUser.getId())) {
             return ResultUtils.error("用户名已存在");
         }
         if (null != user && ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
-            return ResultUtils.error("用户封号中，不能修改状态");
+            user.setAllowLogin(null);
         }
         //如果用户禁用---强制用户下线
         if (ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
