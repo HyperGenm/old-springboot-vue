@@ -1,6 +1,6 @@
 <template>
     <div class="treeMenu">
-        <div v-for="(item,index) in data" :key="index" :index="item.name">
+        <div v-for="item in data" :key="item.name" :index="item.name">
             <el-menu-item v-if="null == item.children || 0 >= item.children.length" :index="item.name">
                 <el-tooltip :content="item.title" placement="right">
                     <div>

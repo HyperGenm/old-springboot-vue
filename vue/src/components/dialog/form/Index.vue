@@ -3,7 +3,7 @@
         <el-form ref="form" size="mini" :label-width="labelWidth"
                  :model="formData || {}" :rules="formRules || {}">
             <slot name="itemHead"></slot>
-            <el-form-item v-for="(item,index) in formOptions" :key="index"
+            <el-form-item v-for="item in formOptions" :key="item.prop"
                           :label='item.label' :prop="item.prop" :required="item.required || false">
                 <template v-if="'input' === item.type">
                     <el-input v-model="formData[item.prop]" :size="item.size" :type="item.inputType || 'text'"
@@ -15,7 +15,7 @@
                                clearable :disabled="item.disabled || false"
                                :placeholder="item.placeholder || '请选择'"
                                @change="selectChange(formData[item.prop],item.prop)">
-                        <el-option v-for="(option,index) in item.options" :key="index"
+                        <el-option v-for="option in item.options" :key="option.value"
                                    :label="option.label" :value="option.value"
                                    :disabled="option.disabled || false"></el-option>
                     </el-select>
@@ -23,7 +23,7 @@
                 <template v-else-if="'radio' === item.type">
                     <el-radio-group v-model="formData[item.prop]" :size="item.size"
                                     :disabled="item.disabled || false">
-                        <el-radio v-for="(option,index) in item.options" :key="index"
+                        <el-radio v-for="option in item.options" :key="option.value"
                                   :label="option.value" :disabled="option.disabled || false">
                             {{option.label}}
                         </el-radio>
@@ -36,7 +36,7 @@
                 <template v-else-if="'checkbox' === item.type">
                     <el-checkbox-group v-model="formData[item.prop]" :size="item.size"
                                        :disabled="item.disabled || false">
-                        <el-checkbox v-for="(option,index) in options" :key="index"
+                        <el-checkbox v-for="option in options" :key="option.value"
                                      :label="option.value" :disabled="option.disabled || false">{{option.label}}
                         </el-checkbox>
                     </el-checkbox-group>

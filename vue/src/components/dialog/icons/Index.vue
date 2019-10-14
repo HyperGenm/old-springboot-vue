@@ -2,7 +2,7 @@
     <div id="icons">
         <el-dialog title="请选择图标" :visible.sync="visible">
             <div class="icons">
-                <div @click="chooseIcon(icon)" class="icon" v-for="(icon,index) in icons" :key="index">
+                <div @click="chooseIcon(icon)" class="icon" v-for="icon in icons" :key="icon">
                     <i :class="icon"></i>
                 </div>
             </div>

@@ -5,7 +5,7 @@
                 <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
                          router unique-opened
                          :default-active="defaultActive" :collapse="menuCollapse">
-                    <div v-for="(item,index) in $store.state.routers.routersTree" :key="index" :index="item.name">
+                    <div v-for="item in $store.state.routers.routersTree" :key="item.name" :index="item.name">
                         <el-menu-item v-if="null == item.children || 0 >= item.children.length" :index="item.name">
                             <i :class="item['icon'] || 'el-icon-info'"></i>
                             <span slot="title">{{item.title}}</span>

@@ -3,7 +3,7 @@
         <div class="search" v-show="tableSearch && 0 < tableSearch.length" ref="search">
             <!--表格查询-->
             <el-form inline size="mini">
-                <el-form-item v-for="(item,index) in tableSearch" :key="index">
+                <el-form-item v-for="item in tableSearch" :key="item.prop">
                     <template v-if="'input' === item.type">
                         <el-input v-model="tableDataRequest.data[item.prop]" :type="item.inputType || 'text'"
                                   :placeholder="item.placeholder" clearable
@@ -13,7 +13,7 @@
                         <el-select v-model="tableDataRequest.data[item.prop]"
                                    clearable filterable :disabled="item.disabled || false"
                                    :placeholder="item.placeholder || '请选择'">
-                            <el-option v-for="(option,index) in item.options" :key="index"
+                            <el-option v-for="option in item.options" :key="option.value"
                                        :label="option.label" :value="option.value"
                                        :disabled="option.disabled || false"></el-option>
                         </el-select>
@@ -21,7 +21,7 @@
                     <template v-else-if="'radio' === item.type">
                         <el-radio-group v-model="tableDataRequest.data[item.prop]"
                                         :disabled="item.disabled || false">
-                            <el-radio v-for="(option,index) in item.options" :key="index"
+                            <el-radio v-for="option in item.options" :key="option.value"
                                       :label="option.value" :disabled="option.disabled || false">
                                 {{option.label}}
                             </el-radio>
@@ -34,7 +34,7 @@
                     <template v-else-if="'checkbox' === item.type">
                         <el-checkbox-group v-model="tableDataRequest.data[item.prop]"
                                            :disabled="item.disabled || false">
-                            <el-checkbox v-for="(option,index) in options" :key="index"
+                            <el-checkbox v-for="option in options" :key="option.value"
                                          :label="option.value" :disabled="option.disabled || false">{{option.label}}
                             </el-checkbox>
                         </el-checkbox-group>
@@ -75,6 +75,9 @@
             <!--表格头部按钮组-->
             <el-row>
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
+                <!--<el-button type="primary" size="mini" icon="el-icon-s-tools"
+                           @click="columnChangeDialog = true">字段
+                </el-button>-->
                 <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
                            v-if="btn['show'] || false"
                            :type="btn['primary'] || 'primary'" size="mini"
@@ -86,7 +89,7 @@
         <div class="content">
             <!--表格-->
             <el-table ref="table" :show-summary="tableShowSummary" :summary-method="summaryMethod"
-                      :data="tableData" height="1000000px"
+                      :data="tableData" height="10000px"
                       :max-height="maxHeight || tableMaxHeight"
                       v-loading="loading" :empty-text="emptyText" @header-click="headerClick"
                       :stripe="null == selection || 0 >= selection.length"
@@ -97,8 +100,8 @@
                 <el-table-column type="index" width="50"></el-table-column>
                 <slot name="startColumn"></slot>
                 <el-table-column
-                        v-for="(column, index) in tableColumns"
-                        :key="index"
+                        v-for="column in tableShowColumns"
+                        :key="column.prop"
                         :prop="column.prop"
                         :label="column.label"
                         :width="column.width"
@@ -212,6 +215,20 @@
                            @current-change="handleCurrentChange"
             ></el-pagination>
         </div>
+        <div class="columnChoose">
+            <wei-dialog :show.sync="columnChangeDialog">
+                <el-checkbox-group v-model="columnCheckBox">
+                    <el-checkbox v-for="item in tableColumns" :key="item.prop"
+                                 style="margin-bottom: 10px;"
+                                 :label="item.label" border></el-checkbox>
+                </el-checkbox-group>
+                <div style="overflow: hidden;margin-bottom: 20px;">
+                    <el-button type="primary" style="float: right;margin-top: 20px;"
+                               @click="changeColumn">保存
+                    </el-button>
+                </div>
+            </wei-dialog>
+        </div>
     </div>
 </template>
 
@@ -223,6 +240,9 @@
 
     export default {
         name: "Index",
+        components: {
+            'wei-dialog': () => import('@/components/dialog/index/Index.vue')
+        },
         props: {
             // 表格数据请求
             tableDataRequest: {
@@ -262,6 +282,7 @@
             }
         },
         data() {
+            let that = this;
             return {
                 tableData: [],
                 pageSize: 20,
@@ -273,7 +294,13 @@
                 //空数据时显示的内容
                 emptyText: '',
                 //当前选中行
-                selection: []
+                selection: [],
+                //表格展示的表头
+                tableShowColumns: that.tableColumns,
+                //选择展示字段
+                columnChangeDialog: false,
+                //当前选中的表格字段
+                columnCheckBox: that.tableColumns.map(value => value['label'])
             }
         },
         mounted() {
@@ -385,6 +412,18 @@
             //刷新表格数据
             renderTable() {
                 this.getTableList();
+            },
+            //字段展示---选择部分字段展示
+            changeColumn() {
+                let columns = [];
+                let {columnCheckBox, tableColumns} = this;
+                for (let i = 0; i < tableColumns.length; i++) {
+                    if (columnCheckBox.includes(tableColumns[i]['label'])) {
+                        columns.push(tableColumns[i]);
+                    }
+                }
+                this.tableShowColumns = columns;
+                this.columnChangeDialog = false;
             },
             //表格内部操作按钮是否折叠展示
             isShowTableOperatesPopover(buttons) {
