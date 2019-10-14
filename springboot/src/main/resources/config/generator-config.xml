@@ -5,7 +5,7 @@
     <!--导入属性配置-->
     <properties resource="application-dev.yml"/>
     <!--mysql驱动jar路径-->
-    <classPathEntry location="D:\maven-repository\mysql\mysql-connector-java\8.0.15\mysql-connector-java-8.0.15.jar"/>
+    <classPathEntry location="E:\apache-maven-3.6.0\maven-repository\mysql\mysql-connector-java\8.0.15\mysql-connector-java-8.0.15.jar"/>
     <context id="default" targetRuntime="MyBatis3">
         <!--获取application-dev.yml中的配置信息-->
         <property name="url" value="${spring.datasource.url}"/>

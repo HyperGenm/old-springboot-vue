@@ -49,10 +49,10 @@ public class UserController {
         return service.getUserList(pageNum, pageSize);
     }
 
-    @ApiOperation(value = "删除redis缓存---示例")
-    @PostMapping("/deleteRedis")
+    @ApiOperation(value = "新增用户")
+    @PostMapping("/addUser")
     @AuthTokenIgnore
-    public ResultUtils deleteRedis() {
-        return service.deleteRedis();
+    public ResultUtils addUser() {
+        return service.addUser();
     }
 }

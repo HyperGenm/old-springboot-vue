@@ -4,8 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.mapper.user.UserMapper;
 import com.weiziplus.springboot.models.User;
+import com.weiziplus.springboot.util.DateUtils;
 import com.weiziplus.springboot.util.PageUtils;
 import com.weiziplus.springboot.util.ResultUtils;
+import com.weiziplus.springboot.util.ToolUtils;
 import com.weiziplus.springboot.util.redis.RedisUtils;
 import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +66,15 @@ public class UserService extends BaseService {
      * 模拟删除redis
      * 删除两次防止redis与数据库内容不一致
      */
-    public ResultUtils deleteRedis() {
+    public ResultUtils addUser() {
         //通过默认过期时间删除redis
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
-        ///////////
-        //逻辑处理  baseInsert()  baseUpdate()等等
-        ///////////
-        //直接删除redis
+        User user = new User();
+        user.setUsername(ToolUtils.createUUID().substring(0, 5));
+        user.setPassword(ToolUtils.createUUID().substring(10));
+        user.setCreateTime(DateUtils.getNowDateTime());
+        baseInsert(user);
+        //删除redis
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
         return ResultUtils.success();
     }
