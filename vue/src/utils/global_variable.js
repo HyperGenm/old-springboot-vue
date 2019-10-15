@@ -23,10 +23,6 @@ const GLOBAL = {
         errorRole: 403,
         //后台系统异常
         errorException: 500
-    },
-    //放到window中的变量key
-    window: {
-        axiosCancelToken: '_axiosCancelToken'
     }
 };
 

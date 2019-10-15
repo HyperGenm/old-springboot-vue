@@ -2,15 +2,20 @@ package com.weiziplus.springboot.service.system;
 
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
+import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;
+import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.SysFunction;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.util.*;
 import com.weiziplus.springboot.util.redis.RedisUtils;
+import com.weiziplus.springboot.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.util.token.JwtTokenUtils;
 import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -22,6 +27,9 @@ public class SysFunctionService extends BaseService {
 
     @Autowired
     SysFunctionMapper mapper;
+
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     /**
      * SysFunction基础redis的key
@@ -302,10 +310,11 @@ public class SysFunctionService extends BaseService {
     /**
      * 新增功能
      *
+     * @param request
      * @param sysFunction
      * @return
      */
-    public ResultUtils addFunction(SysFunction sysFunction) {
+    public ResultUtils addFunction(HttpServletRequest request, SysFunction sysFunction) {
         if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
@@ -315,13 +324,21 @@ public class SysFunctionService extends BaseService {
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
         }
+        //如果非超级管理员  新增功能 进行封号处理
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+            sysUserMapper.suspendSysUser(nowUserId);
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
+        }
         SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
         if (null != sysFun) {
             return ResultUtils.error("name已存在");
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
             sysFunction.setContainApi(sysFunction.getContainApi()
-                    .replaceAll("[^(a-zA-Z/)]*", "").replace("，", ","));
+                    .replaceAll("[^(a-zA-Z/)]*", "")
+                    .replace("，", ","));
         }
         sysFunction.setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
@@ -333,10 +350,11 @@ public class SysFunctionService extends BaseService {
     /**
      * 修改功能
      *
+     * @param request
      * @param sysFunction
      * @return
      */
-    public ResultUtils updateFunction(SysFunction sysFunction) {
+    public ResultUtils updateFunction(HttpServletRequest request, SysFunction sysFunction) {
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
         }
@@ -348,8 +366,30 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("name已存在");
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
+            //如果非超级管理员 修改功能对应api 进行封号处理
+            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                sysUserMapper.suspendSysUser(nowUserId);
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
+            }
             sysFunction.setContainApi(sysFunction.getContainApi()
-                    .replaceAll("[^(a-zA-Z/)]*", "").replace("，", ","));
+                    .replaceAll("[^(a-zA-Z/)]*", "")
+                    .replace("，", ","));
+        } else {
+            //如果非超级管理员 清空功能对应api 取消本次操作
+            sysFunction.setContainApi(null);
+        }
+        if (!ToolUtils.isBlank(sysFunction.getPath())) {
+            //如果非超级管理员 修改功能路径 进行封号处理
+            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                sysUserMapper.suspendSysUser(nowUserId);
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
+            }
+        } else {
+            return ResultUtils.error("路径不能为空");
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysFunction);
@@ -360,12 +400,20 @@ public class SysFunctionService extends BaseService {
     /**
      * 根据ids删除功能
      *
+     * @param request
      * @param ids
      * @return
      */
-    public ResultUtils deleteFunction(Long[] ids) {
+    public ResultUtils deleteFunction(HttpServletRequest request, Long[] ids) {
         if (null == ids) {
             return ResultUtils.error("ids不能为空");
+        }
+        //如果非超级管理员 删除功能 进行封号处理
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+            sysUserMapper.suspendSysUser(nowUserId);
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
         for (Long id : ids) {
             if (null == id || 0 > id) {

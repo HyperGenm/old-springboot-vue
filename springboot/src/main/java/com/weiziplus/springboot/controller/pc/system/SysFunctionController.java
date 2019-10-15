@@ -3,11 +3,13 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysFunction;
-import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.SysFunctionService;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wanglongwei
@@ -79,8 +81,8 @@ public class SysFunctionController {
      */
     @PostMapping("/addFunction")
     @SystemLog(description = "新增功能")
-    public ResultUtils addFunction(SysFunction sysFunction) {
-        return service.addFunction(sysFunction);
+    public ResultUtils addFunction(HttpServletRequest request, SysFunction sysFunction) {
+        return service.addFunction(request, sysFunction);
     }
 
     /**
@@ -91,8 +93,8 @@ public class SysFunctionController {
      */
     @PostMapping("/updateFunction")
     @SystemLog(description = "修改功能")
-    public ResultUtils updateFunction(SysFunction sysFunction) {
-        return service.updateFunction(sysFunction);
+    public ResultUtils updateFunction(HttpServletRequest request, SysFunction sysFunction) {
+        return service.updateFunction(request, sysFunction);
     }
 
     /**
@@ -103,7 +105,7 @@ public class SysFunctionController {
      */
     @PostMapping("/deleteFunction")
     @SystemLog(description = "删除功能")
-    public ResultUtils deleteFunction(Long[] ids) {
-        return service.deleteFunction(ids);
+    public ResultUtils deleteFunction(HttpServletRequest request, Long[] ids) {
+        return service.deleteFunction(request, ids);
     }
 }

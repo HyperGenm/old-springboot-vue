@@ -66,9 +66,11 @@
                                 value: 0
                             },
                             {label: '禁止', value: 1}
-                        ]
+                        ],
+                        //是否隐藏，不设置默认显示
+                        hidden: false
                     },
-                    {type: 'input', label: '密码', prop: 'password', inputType: 'password', disabled: true}
+                    {type: 'input', label: '密码', prop: 'password', inputType: 'password'}
                 ]
             }
         },
@@ -82,14 +84,14 @@
                     this.rules.password[0]['required'] = true;
                     this.formOptions[0]['disabled'] = false;
                     this.formOptions[2]['disabled'] = false;
-                    this.formOptions[3]['disabled'] = false;
+                    this.formOptions[3]['hidden'] = false;
                 } else {
                     //编辑
                     this.rules.password[0]['required'] = false;
                     this.formOptions[0]['disabled'] = true;
-                    this.formOptions[3]['disabled'] = true;
-                    //如果当前用户被封号
-                    this.formOptions[2]['disabled'] = 2 === this.formData['allowLogin'];
+                    //如果当前用户被封号------2:封号状态码
+                    this.formOptions[2]['hidden'] = 2 === this.formData['allowLogin'];
+                    this.formOptions[3]['hidden'] = true;
                 }
             },
             submit(form) {

@@ -127,12 +127,13 @@
                     if ('home' === value['name']) {
                         haveHomePage = true;
                     }
-                    let router = {};
-                    router['path'] = "/" + value.name;
-                    router['name'] = value.name;
-                    router['meta'] = {
-                        title: value.title,
-                        icon: value.icon
+                    let router = {
+                        path: "/" + value.name,
+                        name: value.name,
+                        meta: {
+                            title: value.title,
+                            icon: value.icon
+                        }
                     };
                     let children = value.children;
                     if (null == children || 0 >= children.length) {
@@ -161,12 +162,13 @@
                 let routers = [];
                 let that = this;
                 data.forEach((value) => {
-                    let router = {};
-                    router['path'] = "/" + value.name;
-                    router['name'] = value.name;
-                    router['meta'] = {
-                        title: value.title,
-                        icon: value.icon
+                    let router = {
+                        path: "/" + value.name,
+                        name: value.name,
+                        meta: {
+                            title: value.title,
+                            icon: value.icon
+                        }
                     };
                     let children = value.children;
                     if (null == children || 0 >= children.length) {

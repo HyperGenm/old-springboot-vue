@@ -1,7 +1,8 @@
 <template>
     <div id="wei-dialog-detail">
         <slot name="rowHead"></slot>
-        <el-row v-for="(row,index) in rows" :key="index">
+        <el-row v-for="(row,index) in rows" :key="index"
+                v-if="!row['hidden']">
             <el-col :span="colNum">
                 <el-tooltip class="item" effect="dark" :content="row.label || '标题'" placement="top">
                     <div class="label">

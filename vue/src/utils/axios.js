@@ -13,7 +13,7 @@ axios.interceptors.request.use(
         let that = Vue.prototype;
         // 将请求放入全局变量中，便于取消请求
         config.cancelToken = new axios.CancelToken(cancel => {
-            let cancelArray = window[that.$global.GLOBAL.window['axiosCancelToken']] || [];
+            let cancelArray = window['_axiosCancelToken'] || [];
             cancelArray.push(cancel);
         });
         return config;

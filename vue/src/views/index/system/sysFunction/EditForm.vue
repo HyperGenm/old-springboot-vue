@@ -44,18 +44,31 @@
         watch: {
             formData(formData) {
                 this.form = formData;
+                this.formOptions[1]['disabled'] = 'update' === this.handleType;
             },
             handleType(handleType) {
                 this.formOptions[1]['disabled'] = 'update' === handleType;
             }
         },
         data() {
+            let SUPER_ADMIN_ID = this.$global.GLOBAL.super_admin_id;
+            let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
+            //是否可以编辑 功能对应的api
+            let isEditApi = (SUPER_ADMIN_ID === this.$store.state.userInfo['id']
+                || SUPER_ADMIN_ROLE_ID === this.$store.state.userInfo['roleId']);
+            let that = this;
             return {
                 formOptions: [
                     {type: 'input', label: '标题', prop: 'title', required: true},
-                    {type: 'input', label: '功能名name', prop: 'name', required: true, disabled: false},
-                    {type: 'input', label: '功能路径', prop: 'path', required: true},
-                    {type: 'textarea', label: '功能对应的api', prop: 'containApi'},
+                    {
+                        type: 'input',
+                        label: '功能名name',
+                        prop: 'name',
+                        required: true,
+                        disabled: 'update' === that.handleType
+                    },
+                    {type: 'input', label: '功能路径', prop: 'path', required: true, hidden: !isEditApi},
+                    {type: 'textarea', label: '功能对应的api', prop: 'containApi', hidden: !isEditApi},
                     {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
                     {
                         type: 'radio', label: '类型', prop: 'type', required: true, options: [

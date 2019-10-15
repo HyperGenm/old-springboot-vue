@@ -25,11 +25,11 @@ const router = new Router({
  *取消上一个页面的请求
  */
 function clearAxiosCancelToken() {
-    let cancelArray = window[Vue.prototype.$global.GLOBAL.window['axiosCancelToken']] || [];
+    let cancelArray = window['_axiosCancelToken'] || [];
     cancelArray.forEach(value => {
         value();
     });
-    window[Vue.prototype.$global.GLOBAL.window['axiosCancelToken']] = [];
+    window['_axiosCancelToken'] = [];
 }
 
 /**
@@ -44,12 +44,13 @@ function handleRouterChildren() {
         if ('home' === value['name']) {
             haveHomePage = true;
         }
-        let router = {};
-        router['path'] = value.path;
-        router['name'] = value.name;
-        router['meta'] = {
-            title: value.meta.title,
-            icon: value.meta.icon
+        let router = {
+            path: value.path,
+            name: value.name,
+            meta: {
+                title: value.meta.title,
+                icon: value.meta.icon
+            }
         };
         router['components'] = require('@/views/index/' + value.components_bak + '/Index');
         router['components_bak'] = value.components_bak;

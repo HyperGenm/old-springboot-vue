@@ -2,8 +2,8 @@
     <div id="rightNav">
         <div class="header">
             <div class="collapse" @click="collapseChange">
-                <i v-if="menuCollapse" class="el-icon-caret-right"></i>
-                <i v-else class="el-icon-caret-left"></i>
+                <i v-if="menuCollapse" class="el-icon-s-unfold"></i>
+                <i v-else class="el-icon-s-fold"></i>
             </div>
             <div class="tabs">
                 <wei-tabs></wei-tabs>

@@ -75,9 +75,9 @@
             <!--表格头部按钮组-->
             <el-row>
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
-                <!--<el-button type="primary" size="mini" icon="el-icon-s-tools"
+                <el-button type="primary" size="mini" icon="el-icon-s-tools"
                            @click="columnChangeDialog = true">字段
-                </el-button>-->
+                </el-button>
                 <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
                            v-if="btn['show'] || false"
                            :type="btn['primary'] || 'primary'" size="mini"
@@ -423,6 +423,12 @@
                     }
                 }
                 this.tableShowColumns = columns;
+                //初始化表格高度
+                this.initTableMaxHeight();
+                //重新渲染表格布局
+                this.$nextTick(() => {
+                    this.$refs['table'].doLayout()
+                });
                 this.columnChangeDialog = false;
             },
             //表格内部操作按钮是否折叠展示

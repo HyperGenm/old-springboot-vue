@@ -4,6 +4,7 @@
                  :model="formData || {}" :rules="formRules || {}">
             <slot name="itemHead"></slot>
             <el-form-item v-for="item in formOptions" :key="item.prop"
+                          v-if="!item['hidden']"
                           :label='item.label' :prop="item.prop" :required="item.required || false">
                 <template v-if="'input' === item.type">
                     <el-input v-model="formData[item.prop]" :size="item.size" :type="item.inputType || 'text'"
@@ -121,7 +122,11 @@
                             break;
                         }
                         for (let i = 0; i < that.formOptions.length; i++) {
-                            let {prop} = that.formOptions[i];
+                            let {prop, hidden} = that.formOptions[i];
+                            //如果当前项隐藏
+                            if (hidden) {
+                                continue;
+                            }
                             if ('id' === key || key === prop) {
                                 form[key] = that.formData[key];
                                 break;

@@ -43,8 +43,13 @@
         data() {
             let that = this;
             let {
-                sysFunc_add, sysFunc_update, sysFunc_delete
+                 sysFunc_update
             } = that.$store.state.role['buttons'];
+            let SUPER_ADMIN_ID = this.$global.GLOBAL.super_admin_id;
+            let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
+            //是否可以编辑 功能对应的api
+            let isAddAndDelete = (SUPER_ADMIN_ID === this.$store.state.userInfo['id']
+                || SUPER_ADMIN_ROLE_ID === this.$store.state.userInfo['roleId']);
             return {
                 //功能菜单树数据
                 data: [],
@@ -60,7 +65,7 @@
                 },
                 tableHeaderButtons: [
                     {
-                        name: '新增', icon: 'el-icon-plus', show: sysFunc_add, handleClick() {
+                        name: '新增', icon: 'el-icon-plus', show: isAddAndDelete, handleClick() {
                             that.handleType = 'add';
                             that.formData = {
                                 name: '',
@@ -76,7 +81,7 @@
                         }
                     },
                     {
-                        name: '删除', icon: 'el-icon-delete', show: sysFunc_delete, handleClick(rows) {
+                        name: '删除', icon: 'el-icon-delete', show: isAddAndDelete, handleClick(rows) {
                             let ids = [];
                             rows.forEach((value) => {
                                 ids.push(value.id);
@@ -128,7 +133,7 @@
                             }
                         },
                         {
-                            name: '删除', type: 'danger', show: sysFunc_delete, handleClick(row) {
+                            name: '删除', type: 'danger', show: isAddAndDelete, handleClick(row) {
                                 that.handleDeleteClick(row);
                             }
                         }
