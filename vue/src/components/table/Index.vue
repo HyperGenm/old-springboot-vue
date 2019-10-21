@@ -103,11 +103,22 @@
                         v-for="column in tableShowColumns"
                         :key="column.prop"
                         :prop="column.prop"
-                        :label="column.label"
                         :width="column.width"
                         min-width="80"
                         :sortable="column.sortable || false"
                         :show-overflow-tooltip="column.showOverflowTooltip || true">
+                    <template slot="header" slot-scope="scope">
+                        <!--自定义表头-->
+                        <template v-if="column.labelFormatter">
+                            <div v-html="column.labelFormatter()"></div>
+                        </template>
+                        <!--普通表头，只显示一行，超出部分隐藏-->
+                        <template v-else>
+                            <el-tooltip effect="dark" :content="column.label" placement="top">
+                                <span style="white-space: nowrap;overflow: hidden;">{{column.label}}</span>
+                            </el-tooltip>
+                        </template>
+                    </template>
                     <template slot-scope="scope">
                         <!--自定义，单元格直接编辑-->
                         <template v-if="column.edit">
@@ -133,7 +144,7 @@
                             <template v-if="'tag' === column.type">
                                 <el-tag :type="column.element(scope.row)['type'] || ''"
                                         :size="column.element(scope.row)['size'] || 'medium'"
-                                        :effect="column.element(scope.row)['effect'] || 'dark'">
+                                        :effect="column.element(scope.row)['effect'] || 'light'">
                                     {{column.element(scope.row)['content'] || scope.row[column.prop]}}
                                 </el-tag>
                             </template>
@@ -155,6 +166,23 @@
                                            :inactiveColor="column.element(scope.row)['inactiveColor'] || '#ff4949'"
                                            :activeText="column.element(scope.row)['activeText'] || ''"
                                            :inactiveText="column.element(scope.row)['inactiveText'] || ''"></el-switch>
+                            </template>
+                            <template v-else-if="'icon' === column.type">
+                                <i :class="column.element(scope.row)['leftIcon'] || ''"></i>
+                                <span style="margin-left: 5px">{{column.element(scope.row)['content'] || scope.row[column.prop]}}</span>
+                                <i :class="column.element(scope.row)['rightIcon'] || ''"></i>
+                            </template>
+                            <template v-else-if="'avatar' === column.type">
+                                <div @click="avatarClick(column.element(scope.row)['src'])">
+                                    <el-avatar :src="column.element(scope.row)['src']"
+                                               :size="column.element(scope.row)['size'] || 'small'"
+                                               :shape="column.element(scope.row)['shape'] || 'circle'"
+                                               :alt="column.element(scope.row)['alt'] || ''"
+                                               :fit="column.element(scope.row)['fit'] || 'cover'">
+                                        <img style="width: 40px;height: 40px;"
+                                             :src="column.element(scope.row)['errorSrc'] || errorPng"/>
+                                    </el-avatar>
+                                </div>
                             </template>
                             <template v-else><h1 style="color: #ff4949;">{{column.label}}没有指定type</h1></template>
                         </template>
@@ -215,6 +243,7 @@
                            @current-change="handleCurrentChange"
             ></el-pagination>
         </div>
+        <!--表格上面切换隐藏字段显示-->
         <div class="columnChoose">
             <wei-dialog :show.sync="columnChangeDialog">
                 <el-checkbox-group v-model="columnCheckBox">
@@ -227,6 +256,11 @@
                                @click="changeColumn">保存
                     </el-button>
                 </div>
+            </wei-dialog>
+        </div>
+        <div class="show">
+            <wei-dialog :show.sync="dialogShowImage">
+                <img width="100%" :src="dialogImageUrl">
             </wei-dialog>
         </div>
     </div>
@@ -300,7 +334,13 @@
                 //选择展示字段
                 columnChangeDialog: false,
                 //当前选中的表格字段
-                columnCheckBox: that.tableColumns.map(value => value['label'])
+                columnCheckBox: that.tableColumns.map(value => value['label']),
+                //错误图片
+                errorPng: require('@/assets/image/error.png'),
+                //弹窗展示图片
+                dialogShowImage: false,
+                //弹窗展示图片的路径
+                dialogImageUrl: ''
             }
         },
         mounted() {
@@ -503,6 +543,11 @@
                         });
                     }
                 });
+            },
+            //展示图片
+            avatarClick(src) {
+                this.dialogImageUrl = src;
+                this.dialogShowImage = true;
             }
         }
     }
@@ -527,6 +572,11 @@
         span.el-table__empty-text {
             color: $--color-primary !important;
         }
+        /*表头背景颜色*/
+        .el-table thead th {
+            background-color: #ddeeff;
+        }
+
     }
 </style>
 

@@ -3,10 +3,11 @@ package com.weiziplus.springboot.controller.pc.system;
 import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysUser;
-import com.weiziplus.springboot.util.ResultUtils;
 import com.weiziplus.springboot.service.system.SysUserService;
+import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,5 +131,16 @@ public class SysUserController {
     @SystemLog(description = "解除封号")
     public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
         return service.relieveSuspend(request, userId);
+    }
+
+    /**
+     * 修改头像
+     *
+     * @return
+     */
+    @PostMapping("/updateIcon")
+    @SystemLog(description = "修改头像")
+    public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
+        return service.updateIcon(request, file);
     }
 }

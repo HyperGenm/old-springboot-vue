@@ -52,7 +52,12 @@ function handleRouterChildren() {
                 icon: value.meta.icon
             }
         };
-        router['components'] = require('@/views/index/' + value.components_bak + '/Index');
+        try {
+            router['components'] = require('@/views/index/' + value.components_bak + '/Index');
+        } catch (e) {
+            console.debug(value.path, '没有找到对应组件');
+            router['components'] = require(`@/views/errorPage/404`);
+        }
         router['components_bak'] = value.components_bak;
         children.push(router);
     });

@@ -11,8 +11,10 @@ import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 
 /**
@@ -253,5 +255,37 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("userId错误");
         }
         return ResultUtils.success(mapper.relieveSuspend(userId));
+    }
+
+    /**
+     * 修改头像
+     *
+     * @param request
+     * @param file
+     * @return
+     */
+    public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
+        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        BufferedImage image = FileUtils.getImage(file);
+        if (null == image) {
+            return ResultUtils.error("请上传图片");
+        }
+        int height = image.getHeight();
+        int width = image.getWidth();
+        //长宽比
+        float minScale = 0.7F;
+        float maxScale = 1.2F;
+        if (height / width < minScale || height / width > maxScale) {
+            return ResultUtils.error("头像建议长宽比1:1");
+        }
+        String path = FileUtils.upFilePc(file, "user/icon");
+        if (null == path) {
+            return ResultUtils.error("文件上传失败，请重试");
+        }
+        SysUser user = new SysUser();
+        user.setId(userId);
+        user.setIcon(path);
+        baseUpdate(user);
+        return ResultUtils.success(GlobalConfig.MYBATIS_FILE_PATH_PREFIX + path);
     }
 }

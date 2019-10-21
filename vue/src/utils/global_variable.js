@@ -91,6 +91,8 @@ const URL = {
             resetUserPassword: '/sysUser/resetUserPassword',
             /*解除封号*/
             relieveSuspend: '/sysUser/relieveSuspend',
+            /*修改头像*/
+            updateIcon: '/sysUser/updateIcon'
         },
         /*********************日志管理*****************/
         sysLog: {

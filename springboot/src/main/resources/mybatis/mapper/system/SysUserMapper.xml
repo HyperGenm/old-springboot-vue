@@ -4,15 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weiziplus.springboot.mapper.system.SysUserMapper">
     <select id="getInfoByUsername" resultType="com.weiziplus.springboot.models.SysUser">
-        SELECT *
-        FROM sys_user
-        WHERE username = #{username}
+        SELECT CONCAT('${filePathPrefix}',icon) `icon`,su.*
+        FROM sys_user su
+        WHERE su.username = #{username}
         limit 1
     </select>
     <select id="getUserList" resultType="java.util.Map">
         SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.suspend_num AS suspendNum,
         su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName,
-        su.last_ip_address AS laseIpAddress
+        su.last_ip_address AS laseIpAddress,CONCAT('${filePathPrefix}',su.icon) `icon`
         FROM sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
         WHERE su.id <![CDATA[>]]> 1

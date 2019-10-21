@@ -58,6 +58,12 @@ public class SysUser implements Serializable {
     private Integer allowLogin;
 
     /**
+     * 用户头像
+     */
+    @Column("icon")
+    private String icon;
+
+    /**
      * 账户封号次数
      */
     @Column("suspend_num")

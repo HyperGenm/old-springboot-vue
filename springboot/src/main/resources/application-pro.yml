@@ -13,14 +13,14 @@ mybatis:
   #设置MyBatis全局变量
   configuration-properties:
   # 文件存放域名前缀
-  # filePathPrefix: http://192.168.3.233:8080/
+    filePathPrefix: http://39.96.52.201:8080
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
   #是否启用swagger
   swagger: false
   #图片存放路径--项目打包后的jar包同级目录static
-  base-file-path: /home/template/build/static/
+  base-file-path: /home/template/build/static
   #允许跨域地址(访问的浏览器的Origin)---多个地址用,(英文逗号)分隔开---可精确到端口号
   cors-filter-origins: http://localhost,https://xxx.xxx.xxx
   #是否將异常详情展示给前端

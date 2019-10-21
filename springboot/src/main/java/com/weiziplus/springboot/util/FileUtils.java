@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -34,7 +36,7 @@ public class FileUtils {
      * @return
      */
     public static String upFilePc(MultipartFile file, String mkdir) {
-        return upFile("pc", file, mkdir);
+        return upFile("/pc", file, mkdir);
     }
 
     /**
@@ -44,7 +46,7 @@ public class FileUtils {
      * @return
      */
     public static String upFilePc(MultipartFile file) {
-        return upFile("pc", file, null);
+        return upFile("/pc", file, null);
     }
 
     /**
@@ -55,7 +57,7 @@ public class FileUtils {
      * @return
      */
     public static String upFileApi(MultipartFile file, String mkdir) {
-        return upFile("api", file, mkdir);
+        return upFile("/api", file, mkdir);
     }
 
     /**
@@ -65,7 +67,7 @@ public class FileUtils {
      * @return
      */
     public static String upFileApi(MultipartFile file) {
-        return upFile("api", file, null);
+        return upFile("/api", file, null);
     }
 
     /**
@@ -109,6 +111,24 @@ public class FileUtils {
             return null;
         }
         return resultPath;
+    }
+
+    /**
+     * 如果返回null代表文件不是图片
+     *
+     * @param file
+     * @return
+     */
+    public static BufferedImage getImage(MultipartFile file) {
+        if (null == file) {
+            return null;
+        }
+        try {
+            return ImageIO.read(file.getInputStream());
+        } catch (IOException e) {
+            log.warn("上传的文件不是图片,详情:" + e);
+            return null;
+        }
     }
 
 }

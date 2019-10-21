@@ -13,7 +13,7 @@ mybatis:
   #设置MyBatis全局变量
   configuration-properties:
   # 文件存放域名前缀
-  # filePathPrefix: http://192.168.1.233:8080/
+    filePathPrefix: http://127.0.0.1:8080
   configuration:
     #IDEA的MyBatis Log插件以及控制台sql打印
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -23,7 +23,7 @@ global:
   #是否启用swagger
   swagger: true
   #图片存放路径--本地项目运行的target目录
-  base-file-path: E:\idea\WeiziPlus\template\springboot\target\classes\static\
+  base-file-path: F:\Workspaces\IDEA\github\springboot\target\classes\static
   #允许跨域地址(访问的浏览器的Origin)---多个地址用,(英文逗号)分隔开---可精确到端口号
   cors-filter-origins: http://localhost
   #是否將异常详情展示给前端

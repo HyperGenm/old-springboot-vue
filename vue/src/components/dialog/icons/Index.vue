@@ -309,7 +309,8 @@
                     'el-icon-ice-cream-square',
                     'el-icon-ice-cream-round',
                     'iconfont iconfont-address',
-                    'iconfont iconfont-sousuo'
+                    'iconfont iconfont-sousuo',
+                    'iconfont iconfont-quanping',
                 ]
             }
         },

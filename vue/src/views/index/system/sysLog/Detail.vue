@@ -36,7 +36,14 @@
                     {label: '角色名', prop: data['roleName']},
                     {label: '日志记录', prop: data['description']},
                     {label: 'ip地址', prop: data['ipAddress']},
-                    {label: '操作时间', prop: data['createTime']}
+                    {
+                        label: '操作时间', prop: data['createTime'], type: 'icon', element() {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: data['createTime']
+                            };
+                        }
+                    }
                 ];
             }
         }

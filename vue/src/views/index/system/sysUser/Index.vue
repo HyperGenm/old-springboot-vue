@@ -133,10 +133,31 @@
                             return result[allowLogin];
                         }
                     },
+                    {
+                        label: '头像', prop: 'icon', type: 'avatar', element({icon}) {
+                            return {
+                                src: icon
+                            }
+                        }
+                    },
                     {label: '封号次数', prop: 'suspendNum'},
                     {label: '用户最后活跃ip地址', prop: 'laseIpAddress'},
-                    {label: '用户最后活跃时间', prop: 'lastActiveTime'},
-                    {label: '用户创建时间', prop: 'createTime'}
+                    {
+                        label: '用户最后活跃时间', prop: 'lastActiveTime', type: 'icon', element(row) {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: row['lastActiveTime']
+                            };
+                        }
+                    },
+                    {
+                        label: '用户创建时间', prop: 'createTime', type: 'icon', element(row) {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: row['createTime']
+                            };
+                        }
+                    }
                 ],
                 //表格对应每一行按钮
                 tableOperates: {

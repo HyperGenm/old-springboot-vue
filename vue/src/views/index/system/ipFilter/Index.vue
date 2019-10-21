@@ -47,7 +47,14 @@
                 tableColumns: [
                     {label: 'ip', prop: 'name'},
                     {label: '备注', prop: 'remark'},
-                    {label: '创建时间', prop: 'createTime'}
+                    {
+                        label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: row['createTime']
+                            };
+                        }
+                    }
                 ],
                 tableHeaderButtons: [
                     {

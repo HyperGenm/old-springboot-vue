@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,5 +36,15 @@ public class GlobalConfig {
      * 超级管理员角色id为1
      */
     public static final Long SUPER_ADMIN_ROLE_ID = 1L;
+
+    /**
+     * mybatis全局变量，文件路径域名前缀
+     */
+    public static String MYBATIS_FILE_PATH_PREFIX = "";
+
+    @Value("${mybatis.configuration-properties.filePathPrefix:http://127.0.0.1:8080}")
+    public void setMybatisFilePathPrefix(String prefix) {
+        GlobalConfig.MYBATIS_FILE_PATH_PREFIX = prefix;
+    }
 
 }

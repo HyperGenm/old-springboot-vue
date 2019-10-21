@@ -309,7 +309,7 @@
                     /**code不是200*/
                     if (axios_result_code['success'] !== data['code']) {
                         item.onError();
-                        that.$globalFun.errorMsg('文件上传失败');
+                        that.$globalFun.errorMsg(data['msg']);
                         that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, data);
                         return;
                     }
@@ -323,6 +323,7 @@
                         }
                     }
                     that.nowFileList = nowFileList;
+                    that.$emit('success', nowFileList);
                 }).catch(error => {
                     /**关闭加载中动画*/
                     clearTimeout(loadingTimer);

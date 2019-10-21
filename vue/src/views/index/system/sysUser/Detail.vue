@@ -51,9 +51,31 @@
                             return result[data['allowLogin']];
                         }
                     },
+                    {
+                        label: '头像', prop: 'icon', type: 'avatar', element() {
+                            return {
+                                src: data['icon']
+                            }
+                        }
+                    },
+                    {label: '封号次数', prop: 'suspendNum'},
                     {label: '最后活跃ip', prop: data['laseIpAddress']},
-                    {label: '最后活跃时间', prop: data['lastActiveTime']},
-                    {label: '用户创建时间', prop: data['createTime']}
+                    {
+                        label: '最后活跃时间', prop: data['lastActiveTime'], type: 'icon', element() {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: data['lastActiveTime']
+                            };
+                        }
+                    },
+                    {
+                        label: '用户创建时间', prop: data['createTime'], type: 'icon', element() {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: data['createTime']
+                            };
+                        }
+                    }
                 ];
             }
         }

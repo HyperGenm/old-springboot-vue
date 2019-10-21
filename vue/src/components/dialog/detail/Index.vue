@@ -38,6 +38,22 @@
                                        :activeText="row.element(row)['activeText'] || ''"
                                        :inactiveText="row.element(row)['inactiveText'] || ''"></el-switch>
                         </template>
+                        <template v-else-if="'icon' === row.type">
+                            <i :class="row.element(row)['leftIcon'] || ''"></i>
+                            <span style="margin-left: 5px">{{row.element(row)['content'] || row.prop}}</span>
+                            <i :class="row.element(row)['rightIcon'] || ''"></i>
+                        </template>
+                        <template v-else-if="'avatar' === row.type">
+                            <div @click="avatarClick(row.element(row)['src'])">
+                                <el-avatar :src="row.element(row)['src']"
+                                           :size="row.element(row)['size'] || 'small'"
+                                           :shape="row.element(row)['shape'] || 'circle'"
+                                           :alt="row.element(row)['alt'] || ''"
+                                           :fit="row.element(row)['fit'] || 'cover'">
+                                    <img style="width: 40px;height: 40px;" :src="row.element(row)['errorSrc'] || errorPng"/>
+                                </el-avatar>
+                            </div>
+                        </template>
                         <template v-else><h1 style="color: #ff4949;">{{row.label}}没有指定type</h1></template>
                     </template>
                     <template v-else>
@@ -54,12 +70,20 @@
             </el-col>
         </el-row>
         <slot name="rowTail"></slot>
+        <div class="show">
+            <wei-dialog :show.sync="dialogShowImage">
+                <img width="100%" :src="dialogImageUrl">
+            </wei-dialog>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: "Index",
+        components: {
+            'wei-dialog': () => import('@/components/dialog/index/Index.vue')
+        },
         props: {
             rows: {
                 type: Array,
@@ -69,6 +93,23 @@
             colNum: {
                 type: Number,
                 default: 5
+            }
+        },
+        data() {
+            return {
+                //错误图片
+                errorPng: require('@/assets/image/error.png'),
+                //弹窗展示图片
+                dialogShowImage: false,
+                //弹窗展示图片的路径
+                dialogImageUrl: ''
+            }
+        },
+        methods: {
+            //展示图片
+            avatarClick(src) {
+                this.dialogImageUrl = src;
+                this.dialogShowImage = true;
             }
         }
     }

@@ -34,7 +34,14 @@
                     {label: '角色', prop: 'roleName'},
                     {label: '操作', prop: 'description'},
                     {label: 'ip地址', prop: 'ipAddress'},
-                    {label: '创建时间', prop: 'createTime'}
+                    {
+                        label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: row['createTime']
+                            };
+                        }
+                    }
                 ],
                 tableOperates: {
                     buttons:

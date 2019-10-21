@@ -1,30 +1,41 @@
 <template>
     <div id="rightNav">
         <div class="header">
-            <div class="collapse" @click="collapseChange">
+            <div class="collapse" @click="$emit('collapseChange')">
                 <i v-if="menuCollapse" class="el-icon-s-unfold"></i>
                 <i v-else class="el-icon-s-fold"></i>
             </div>
             <div class="tabs">
                 <wei-tabs></wei-tabs>
             </div>
-            <div class="user">
-                <el-dropdown @command="handleCommand">
-                    <div class="el-dropdown-link">
-                        <span>{{$store.state.userInfo['realName'] || $store.state.userInfo['username']}}</span>
-                        <i class="el-icon-arrow-down el-icon--right"></i>
-                    </div>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>{{$store.state.role.name}}</el-dropdown-item>
-                        <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
-                        <el-dropdown-item command="logout">安全退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+            <div class="right">
+                <div class="more">
+                    <i class="iconfont iconfont-quanping" style="font-size: 24px;" @click="changeSize"></i>
+                </div>
+                <div class="user">
+                    <el-dropdown @command="handleCommand">
+                        <div @click="updateIcon">
+                            <el-avatar :src="$store.state.userInfo['icon']">
+                                <img style="width: 40px;height: 40px;border-radius: 50%;"
+                                     src="../../../assets/image/error.png"/>
+                            </el-avatar>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-for="item in dropdownItems" :key="item.title"
+                                              :command="item.command"> {{item.title}}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
             </div>
         </div>
         <div class="edit">
             <wei-dialog :show.sync="dialogEditForm" title="修改密码">
                 <edit-form @closeDialog="dialogEditForm = false"></edit-form>
+            </wei-dialog>
+            <wei-dialog :show.sync="dialogEditIcon" title="修改头像">
+                <wei-upload :action="$global.URL.system.sysUser.updateIcon"
+                            @success="iconSuccess"></wei-upload>
             </wei-dialog>
         </div>
     </div>
@@ -36,7 +47,8 @@
         components: {
             'wei-tabs': () => import('./Tabs.vue'),
             'wei-dialog': () => import('@/components/dialog/index/Index.vue'),
-            'edit-form': () => import('./EditForm.vue')
+            'edit-form': () => import('./EditForm.vue'),
+            'wei-upload': () => import('@/components/upload/Index.vue')
         },
         props: {
             menuCollapse: {
@@ -45,8 +57,17 @@
             }
         },
         data() {
+            let storeState = this.$store.state;
             return {
-                dialogEditForm: false
+                dialogEditForm: false,
+                fullscreen: false,
+                dropdownItems: [
+                    {title: storeState.userInfo['realName'] || storeState.userInfo['username']},
+                    {title: storeState.role.name},
+                    {title: '修改密码', command: 'updatePassword'},
+                    {title: '安全退出', command: 'logout'}
+                ],
+                dialogEditIcon: false
             }
         },
         methods: {
@@ -64,9 +85,6 @@
 
                     }
                 }
-            },
-            collapseChange() {
-                this.$emit('collapseChange');
             },
             logout() {
                 const that = this;
@@ -91,6 +109,51 @@
                         that.dialogEditForm = true;
                     }
                 });
+            },
+            updateIcon() {
+                let that = this;
+                this.$globalFun.messageBox({
+                    message: '是否要修改头像!!!',
+                    confirm() {
+                        that.dialogEditIcon = true;
+                    }
+                });
+            },
+            iconSuccess(list) {
+                let src = list[0]['response']['data'];
+                let userInfo = this.$store.state.userInfo;
+                userInfo['icon'] = src;
+                this.$store.dispatch('setUserInfo', userInfo);
+                this.dialogEditIcon = false;
+            },
+            changeSize() {
+                let element = document.documentElement;
+                // 判断是否已经是全屏
+                // 如果是全屏，退出
+                if (this.fullscreen) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                } else {    // 否则，进入全屏
+                    if (element.requestFullscreen) {
+                        element.requestFullscreen();
+                    } else if (element.webkitRequestFullScreen) {
+                        element.webkitRequestFullScreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.msRequestFullscreen) {
+                        // IE11
+                        element.msRequestFullscreen();
+                    }
+                }
+                // 改变当前全屏状态
+                this.fullscreen = !this.fullscreen;
             }
         }
     }
@@ -111,11 +174,14 @@
             }
             .tabs {
                 float: left;
-                max-width: 77%;
+                max-width: calc(100% - 157px);
             }
-            .user {
+            .right {
                 float: right;
-                margin-right: 20px;
+                display: flex;
+                .user {
+                    margin: auto 10px;
+                }
             }
         }
     }
