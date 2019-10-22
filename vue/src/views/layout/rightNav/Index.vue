@@ -11,7 +11,7 @@
             <div ref="right" class="right">
                 <div class="more">
                     <i class="iconfont iconfont-quanping" style="font-size: 24px;" @click="changeSize"></i>
-                    <span style="margin: 0 5px;">Hi,{{$store.state.role.name}}</span>
+                    <span style="margin: 0 5px;">Hi,{{$store.state.userInfo['realName'] || $store.state.userInfo['username']}}</span>
                 </div>
                 <div class="user">
                     <el-dropdown @command="handleCommand">
@@ -79,7 +79,6 @@
                 let headerWidth = that.$refs['header'].getBoundingClientRect().width;
                 let collapseWidth = that.$refs['collapse'].getBoundingClientRect().width;
                 let rightWidth = that.$refs['right'].getBoundingClientRect().width;
-                console.log(headerWidth - collapseWidth - rightWidth)
                 that.tabsMaxWidth = headerWidth - collapseWidth - rightWidth - 30;
             });
         },
