@@ -63,9 +63,8 @@ export function weiAxios(
         let loadingTimer = setTimeout(() => {
             loading = Loading.service({
                 lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
+                // text: 'Loading',
+                spinner: 'none'
             });
         }, timeShowLoadAnimation);
         /**axios请求所需参数*/
@@ -183,9 +182,8 @@ export function weiAxiosDown(
         let loadingTimer = setTimeout(() => {
             loading = Loading.service({
                 lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
+                text: '下载打包中...',
+                spinner: 'none'
             });
         }, timeShowLoadAnimation);
         /**axios请求所需参数*/

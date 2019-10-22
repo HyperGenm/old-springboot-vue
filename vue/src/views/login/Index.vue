@@ -23,7 +23,7 @@
                 </el-col>
             </el-row>
             <el-form-item>
-                <el-button type="primary" class="btn" @click="handleLogin">
+                <el-button v-loading="loginLoad" type="primary" class="btn" @click="handleLogin">
                     登录
                 </el-button>
             </el-form-item>
@@ -56,7 +56,8 @@
                         {required: true, message: '请输入验证码', trigger: 'blur'},
                         {min: 4, max: 4, message: '验证码为4位', trigger: 'blur'}
                     ]
-                }
+                },
+                loginLoad: false
             };
         },
         mounted() {
@@ -77,6 +78,7 @@
                 let {GLOBAL, URL} = this.$global;
                 this.imgCodeUrl = GLOBAL.base_url + URL.loginValidateCode + '?uuid=' + uuid;
                 this.imgUUID = uuid;
+                this.loginLoad = false;
             },
             handleLogin() {
                 const that = this;
@@ -84,6 +86,7 @@
                     if (!valid) {
                         return false;
                     }
+                    that.loginLoad = true;
                     that.form['uuid'] = that.imgUUID;
                     that.$axios({
                         allSuccess: true,
@@ -91,6 +94,7 @@
                         method: 'post',
                         data: that.form,
                         success(res) {
+                            that.loginLoad = false;
                             //获取响应状态码
                             let {axios_result_code} = that.$global.GLOBAL;
                             if (axios_result_code['success'] !== res.code) {

@@ -21,8 +21,7 @@
                 || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.dataDictionary.abnormalIp.getPageList,
-                    data: {}
+                    url: that.$global.URL.dataDictionary.abnormalIp.getPageList
                 },
                 tableColumns: [
                     {label: 'ip', prop: 'value'},

@@ -267,9 +267,8 @@
                 let loadingTimer = setTimeout(() => {
                     loading = Loading.service({
                         lock: true,
-                        text: 'Loading',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(0, 0, 0, 0.7)'
+                        text: '上传中...',
+                        spinner: 'none'
                     });
                 }, 555);
                 let that = this;

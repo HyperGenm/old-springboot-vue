@@ -50,7 +50,8 @@
                                            :shape="row.element(row)['shape'] || 'circle'"
                                            :alt="row.element(row)['alt'] || ''"
                                            :fit="row.element(row)['fit'] || 'cover'">
-                                    <img style="width: 40px;height: 40px;" :src="row.element(row)['errorSrc'] || errorPng"/>
+                                    <img style="width: 40px;height: 40px;"
+                                         :src="row.element(row)['errorSrc'] || errorPng"/>
                                 </el-avatar>
                             </div>
                         </template>

@@ -1,14 +1,14 @@
 <template>
     <div id="tabs">
         <el-tabs v-if="null != tabs || 0 < tabs.length"
-                 type="card" closable stretch
+                 type="card" closable
                  v-model="tabValue"
                  @tab-remove="removeTab"
                  @tab-click="clickTab">
             <el-tab-pane v-for="item in tabs" :key="item.name" :name="item.name">
                 <span slot="label" @contextmenu.prevent="closeAll(item)">
                     <i :class="item.icon || 'el-icon-s-help'"></i>
-                    <span>{{item.title}}</span>
+                    <span style="margin-left: 5px;">{{item.title}}</span>
                 </span>
             </el-tab-pane>
         </el-tabs>
@@ -85,3 +85,9 @@
         }
     }
 </script>
+
+<style>
+    .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
+        height: 44px;
+    }
+</style>

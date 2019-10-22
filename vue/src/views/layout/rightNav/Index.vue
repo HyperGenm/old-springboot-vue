@@ -1,16 +1,17 @@
 <template>
     <div id="rightNav">
-        <div class="header">
-            <div class="collapse" @click="$emit('collapseChange')">
+        <div class="header" ref="header">
+            <div ref="collapse" class="collapse" @click="$emit('collapseChange')">
                 <i v-if="menuCollapse" class="el-icon-s-unfold"></i>
                 <i v-else class="el-icon-s-fold"></i>
             </div>
-            <div class="tabs">
+            <div class="tabs" :style="'max-width:' + tabsMaxWidth + 'px'">
                 <wei-tabs></wei-tabs>
             </div>
-            <div class="right">
+            <div ref="right" class="right">
                 <div class="more">
                     <i class="iconfont iconfont-quanping" style="font-size: 24px;" @click="changeSize"></i>
+                    <span style="margin: 0 5px;">Hi,{{$store.state.role.name}}</span>
                 </div>
                 <div class="user">
                     <el-dropdown @command="handleCommand">
@@ -67,8 +68,20 @@
                     {title: '修改密码', command: 'updatePassword'},
                     {title: '安全退出', command: 'logout'}
                 ],
-                dialogEditIcon: false
+                dialogEditIcon: false,
+                tabsMaxWidth: 0
             }
+        },
+        mounted() {
+            //初始化tabs的最大宽度
+            let that = this;
+            this.$nextTick(() => {
+                let headerWidth = that.$refs['header'].getBoundingClientRect().width;
+                let collapseWidth = that.$refs['collapse'].getBoundingClientRect().width;
+                let rightWidth = that.$refs['right'].getBoundingClientRect().width;
+                console.log(headerWidth - collapseWidth - rightWidth)
+                that.tabsMaxWidth = headerWidth - collapseWidth - rightWidth - 30;
+            });
         },
         methods: {
             handleCommand(command) {
@@ -160,12 +173,16 @@
 </script>
 
 <style lang="scss" scoped>
+
+    $height: 44px;
+
     #rightNav {
         .header {
             overflow: hidden;
             border-bottom: 1px solid #e2e2e2;
-            height: 44px;
-            line-height: 44px;
+            height: $height;
+            line-height: $height;
+            color: #954ae0;
             .collapse {
                 float: left;
                 width: 50px;
@@ -174,13 +191,19 @@
             }
             .tabs {
                 float: left;
-                max-width: calc(100% - 157px);
             }
             .right {
                 float: right;
                 display: flex;
+                height: $height;
+                line-height: $height;
+                .more {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
                 .user {
-                    margin: auto 10px;
+                    margin: auto 5px;
                 }
             }
         }

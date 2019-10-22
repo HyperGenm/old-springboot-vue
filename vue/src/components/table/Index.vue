@@ -89,7 +89,7 @@
         <div class="content">
             <!--表格-->
             <el-table ref="table" :show-summary="tableShowSummary" :summary-method="summaryMethod"
-                      :data="tableData" height="10000px"
+                      :data="tableData" height="10000px" :row-key="tableOther.rowKey"
                       :max-height="maxHeight || tableMaxHeight"
                       v-loading="loading" :empty-text="emptyText" @header-click="headerClick"
                       :stripe="null == selection || 0 >= selection.length"
@@ -280,9 +280,7 @@
         props: {
             // 表格数据请求
             tableDataRequest: {
-                type: Object,
-                default: () => {
-                }
+                type: Object
             },
             //表格搜索
             tableSearch: {
@@ -313,6 +311,13 @@
             tableShowSummary: {
                 type: Boolean,
                 default: false
+            },
+            //其他属性自定义扩展
+            tableOther: {
+                type: Object,
+                default: () => ({
+                    rowKey: 'id'
+                })
             }
         },
         data() {
