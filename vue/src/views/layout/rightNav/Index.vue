@@ -63,7 +63,6 @@
                 dialogEditForm: false,
                 fullscreen: false,
                 dropdownItems: [
-                    {title: storeState.userInfo['realName'] || storeState.userInfo['username']},
                     {title: storeState.role.name},
                     {title: '修改密码', command: 'updatePassword'},
                     {title: '安全退出', command: 'logout'}
