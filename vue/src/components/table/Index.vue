@@ -174,14 +174,15 @@
                             </template>
                             <template v-else-if="'avatar' === column.type">
                                 <div @click="avatarClick(column.element(scope.row)['src'])">
-                                    <el-avatar :src="column.element(scope.row)['src']"
-                                               :size="column.element(scope.row)['size'] || 'small'"
-                                               :shape="column.element(scope.row)['shape'] || 'circle'"
-                                               :alt="column.element(scope.row)['alt'] || ''"
-                                               :fit="column.element(scope.row)['fit'] || 'cover'">
-                                        <img style="width: 40px;height: 40px;"
-                                             :src="column.element(scope.row)['errorSrc'] || errorPng"/>
-                                    </el-avatar>
+                                    <el-image :src="column.element(scope.row)['src']"
+                                              :lazy="column.element(scope.row)['lazy'] || true"
+                                              :alt="column.element(scope.row)['alt'] || ''"
+                                              :fit="column.element(scope.row)['fit'] || 'cover'"
+                                              :style="column.element(scope.row)['style'] || 'width:30px;height:30px'">
+                                        <div slot="error">
+                                            <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
+                                        </div>
+                                    </el-image>
                                 </div>
                             </template>
                             <template v-else><h1 style="color: #ff4949;">{{column.label}}没有指定type</h1></template>
@@ -340,8 +341,6 @@
                 columnChangeDialog: false,
                 //当前选中的表格字段
                 columnCheckBox: that.tableColumns.map(value => value['label']),
-                //错误图片
-                errorPng: require('@/assets/image/error.png'),
                 //弹窗展示图片
                 dialogShowImage: false,
                 //弹窗展示图片的路径

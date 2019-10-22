@@ -45,14 +45,15 @@
                         </template>
                         <template v-else-if="'avatar' === row.type">
                             <div @click="avatarClick(row.element(row)['src'])">
-                                <el-avatar :src="row.element(row)['src']"
-                                           :size="row.element(row)['size'] || 'small'"
-                                           :shape="row.element(row)['shape'] || 'circle'"
-                                           :alt="row.element(row)['alt'] || ''"
-                                           :fit="row.element(row)['fit'] || 'cover'">
-                                    <img style="width: 40px;height: 40px;"
-                                         :src="row.element(row)['errorSrc'] || errorPng"/>
-                                </el-avatar>
+                                <el-image :src="row.element(row)['src']"
+                                          :lazy="row.element(row)['lazy'] || true"
+                                          :alt="row.element(row)['alt'] || ''"
+                                          :fit="row.element(row)['fit'] || 'cover'"
+                                          :style="row.element(row)['style'] || 'width:30px;height:30px'">
+                                    <div slot="error">
+                                        <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
+                                    </div>
+                                </el-image>
                             </div>
                         </template>
                         <template v-else><h1 style="color: #ff4949;">{{row.label}}没有指定type</h1></template>
@@ -98,8 +99,6 @@
         },
         data() {
             return {
-                //错误图片
-                errorPng: require('@/assets/image/error.png'),
                 //弹窗展示图片
                 dialogShowImage: false,
                 //弹窗展示图片的路径

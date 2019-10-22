@@ -15,11 +15,13 @@
                 </div>
                 <div class="user">
                     <el-dropdown @command="handleCommand">
-                        <div @click="updateIcon">
-                            <el-avatar :src="$store.state.userInfo['icon']">
-                                <img style="width: 40px;height: 40px;border-radius: 50%;"
-                                     src="../../../assets/image/error.png"/>
-                            </el-avatar>
+                        <div style="border-radius: 50%;overflow: hidden;border: 1px solid #f7f61a;display: flex;align-items: center;justify-content: center;padding: 5px;" @click="updateIcon">
+                            <el-image style="width: 30px;height: 30px;border-radius: 50%;"
+                                      :src="$store.state.userInfo['icon']">
+                                <div slot="error">
+                                    <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
+                                </div>
+                            </el-image>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in dropdownItems" :key="item.title"
