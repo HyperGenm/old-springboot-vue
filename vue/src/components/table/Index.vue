@@ -78,9 +78,9 @@
                 <el-button type="primary" size="mini" icon="el-icon-s-tools"
                            @click="columnChangeDialog = true">字段
                 </el-button>
-                <el-button v-for="(btn,index) in tableHeaderButtons" :key="index"
+                <el-button v-for="btn in tableHeaderButtons" :key="btn.name"
                            v-if="btn['show'] || false"
-                           :type="btn['primary'] || 'primary'" size="mini"
+                           :type="btn['type'] || 'primary'" size="mini"
                            :icon="btn.icon" @click="btn.handleClick(JSON.parse(JSON.stringify(selection)))"
                 >{{btn.name}}
                 </el-button>
@@ -206,7 +206,7 @@
                                  :width="tableOperates.width || 100">
                     <template slot-scope="scope">
                         <div v-if="isShowTableOperatesPopover(tableOperates['buttons'])">
-                            <el-button v-for="(btn, index) in tableOperates.buttons" :key="index"
+                            <el-button v-for="btn in tableOperates.buttons" :key="btn.name"
                                        v-if="( btn['showFormatter'] && btn['showFormatter'](JSON.parse(JSON.stringify(scope.row))))
                                        || btn['show'] || false"
                                        @click="btn.handleClick(JSON.parse(JSON.stringify(scope.row)),scope['$index'])"

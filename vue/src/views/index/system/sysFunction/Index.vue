@@ -43,7 +43,7 @@
         data() {
             let that = this;
             let {
-                 sysFunc_update
+                sysFunc_update
             } = that.$store.state.role['buttons'];
             let SUPER_ADMIN_ID = this.$global.GLOBAL.super_admin_id;
             let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
@@ -65,7 +65,7 @@
                 },
                 tableHeaderButtons: [
                     {
-                        name: '新增', icon: 'el-icon-plus', show: isAddAndDelete, handleClick() {
+                        name: '新增', icon: 'el-icon-plus', type: 'success', show: isAddAndDelete, handleClick() {
                             that.handleType = 'add';
                             that.formData = {
                                 name: '',
@@ -81,7 +81,7 @@
                         }
                     },
                     {
-                        name: '删除', icon: 'el-icon-delete', show: isAddAndDelete, handleClick(rows) {
+                        name: '删除', icon: 'el-icon-delete', type: 'danger', show: isAddAndDelete, handleClick(rows) {
                             let ids = [];
                             rows.forEach((value) => {
                                 ids.push(value.id);

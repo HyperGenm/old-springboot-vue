@@ -58,7 +58,7 @@
                 ],
                 tableHeaderButtons: [
                     {
-                        name: '新增', icon: 'el-icon-plus', show: showIpEditButton, handleClick() {
+                        name: '新增', icon: 'el-icon-plus', type: 'success', show: showIpEditButton, handleClick() {
                             that.addIp();
                         }
                     }

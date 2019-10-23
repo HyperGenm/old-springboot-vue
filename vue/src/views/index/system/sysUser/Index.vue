@@ -68,6 +68,8 @@
                         name: '新增',
                         //按钮前面图标样式
                         icon: 'el-icon-plus',
+                        //按钮的颜色样式
+                        type: 'success',
                         //是否展示该按钮,对应上面用户角色所对应的按钮
                         show: sysUser_add,
                         //按钮的点击事件,内置参数 rows ,当前所有选中的表格行数组
@@ -83,7 +85,7 @@
                         }
                     },
                     {
-                        name: '删除', icon: 'el-icon-delete', show: sysUser_delete, handleClick(rows) {
+                        name: '删除', icon: 'el-icon-delete', type: 'danger', show: sysUser_delete, handleClick(rows) {
                             if (0 >= rows.length) {
                                 that.$globalFun.errorMsg('请选择行');
                                 return;
