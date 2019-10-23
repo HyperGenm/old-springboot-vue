@@ -21,6 +21,14 @@
                                    :disabled="option.disabled || false"></el-option>
                     </el-select>
                 </template>
+                <template v-else-if="'cascader' === item.type">
+                    <el-cascader v-model="formData[item.prop]" :size="item.size"
+                                 clearable filterable :disabled="item.disabled || false"
+                                 :placeholder="item.placeholder || '请选择'"
+                                 :options="item.options || []"
+                                 :props="item['props'] || {  checkStrictly: true }"
+                                 @change="selectChange(formData[item.prop],item.prop)"></el-cascader>
+                </template>
                 <template v-else-if="'radio' === item.type">
                     <el-radio-group v-model="formData[item.prop]" :size="item.size"
                                     :disabled="item.disabled || false">

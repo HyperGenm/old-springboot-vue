@@ -25,6 +25,16 @@ public class SysFunctionController {
     SysFunctionService service;
 
     /**
+     * 获取所有功能树形分页类型数据
+     *
+     * @return
+     */
+    @GetMapping("/getAllFunctionTreePageList")
+    public ResultUtils getAllFunctionTreePageList() {
+        return service.getAllFunctionTreePageList();
+    }
+
+    /**
      * 获取所有功能树形列表
      *
      * @return
@@ -55,22 +65,6 @@ public class SysFunctionController {
     @GetMapping("/getRoleFunList")
     public ResultUtils getRoleFunList(Long roleId) {
         return ResultUtils.success(service.getRoleFunList(roleId));
-    }
-
-    /**
-     * 根据parentId获取功能列表
-     *
-     * @param parentId
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @GetMapping("/getFunctionList")
-    public ResultUtils getFunctionList(
-            @RequestParam(value = "parentId", defaultValue = "0") Long parentId,
-            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return service.getFunctionListByParentId(parentId, pageNum, pageSize);
     }
 
     /**

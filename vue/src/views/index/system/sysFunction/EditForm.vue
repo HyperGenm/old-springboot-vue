@@ -2,11 +2,6 @@
     <div id="form">
         <dialog-form :formData="form" :formOptions="formOptions"
                      @closeDialog="$emit('closeDialog')" @submit="submit">
-            <template v-slot:itemHead>
-                <el-form-item label="上级路由">
-                    <el-input disabled v-model="parentData.title"></el-input>
-                </el-form-item>
-            </template>
             <template v-slot:itemTail>
                 <el-form-item label="路由图标">
                     <el-input v-model="form.icon" style="display: none;"></el-input>
@@ -30,9 +25,6 @@
             'wei-icons': () => import('@/components/dialog/icons/Index.vue')
         },
         props: {
-            parentData: {
-                type: Object
-            },
             handleType: {
                 type: String,
                 default: 'add'
@@ -42,12 +34,11 @@
             }
         },
         watch: {
-            formData(formData) {
-                this.form = formData;
-                this.formOptions[1]['disabled'] = 'update' === this.handleType;
+            formData() {
+                this.changeOptions();
             },
-            handleType(handleType) {
-                this.formOptions[1]['disabled'] = 'update' === handleType;
+            handleType() {
+                this.changeOptions();
             }
         },
         data() {
@@ -67,27 +58,91 @@
                         required: true,
                         disabled: 'update' === that.handleType
                     },
+                    {
+                        type: 'cascader',
+                        label: '上级菜单',
+                        prop: 'parentId',
+                        required: true,
+                        options: [],
+                        hidden: !isEditApi,
+                        disabled: 'update' === that.handleType
+                    },
                     {type: 'input', label: '功能路径', prop: 'path', required: true, hidden: !isEditApi},
                     {type: 'textarea', label: '功能对应的api', prop: 'containApi', hidden: !isEditApi},
                     {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
                     {
-                        type: 'radio', label: '类型', prop: 'type', required: true, options: [
+                        type: 'radio', label: '类型', prop: 'type', required: true, hidden: !isEditApi, options: [
                             {label: '菜单', value: 0},
                             {label: '按钮', value: 1}
                         ]
                     },
                     {type: 'textarea', label: '路由描述', prop: 'description'}
                 ],
-                form: this.formData,
-                dialogIcons: false
+                form: that.formData,
+                dialogIcons: false,
+                funTreeList: []
             }
         },
+        mounted() {
+            console.error('此页面可能有bug，不影响使用,应该是`el-select`级联选择器问题.\nError in callback for watcher "value": "TypeError: Cannot read property "level" of null"');
+            this.initFunTreeSelect();
+        },
         methods: {
+            initFunTreeSelect() {
+                let that = this;
+                this.$axios({
+                    url: that.$global.URL.system.sysFunction.getAllFunctionTreeNotButton,
+                    success(data) {
+                        let result = [];
+                        data.forEach(value => {
+                            let {id, title, children} = value;
+                            let item = {
+                                label: title,
+                                value: id
+                            };
+                            if (null != children && 0 < children.length) {
+                                item['children'] = that.handleFunTreeChildrenList(children);
+                            }
+                            result.push(item);
+                        });
+                        that.formOptions[2]['options'] = [{
+                            label: '最高级',
+                            value: 0,
+                            children: result
+                        }];
+                    }
+                });
+            },
+            handleFunTreeChildrenList(list) {
+                let that = this;
+                let result = [];
+                list.forEach(value => {
+                    let {id, title, children} = value;
+                    let item = {
+                        label: title,
+                        value: id
+                    };
+                    if (null != children && 0 < children.length) {
+                        item['children'] = that.handleFunTreeChildrenList(children);
+                    }
+                    result.push(item);
+                });
+                return result;
+            },
+            changeOptions() {
+                this.form = this.formData;
+                this.formOptions[1]['disabled'] = 'update' === this.handleType;
+                this.formOptions[2]['disabled'] = 'update' === this.handleType;
+            },
             submit(form) {
-                if ('add' === this.handleType) {
-                    form['parentId'] = this.parentData['id'];
-                } else {
-                    form['parentId'] = this.formData['parentId'];
+                //`el-select`级联选择器是个数组
+                let {parentId} = form;
+                if (Array.isArray(parentId)) {
+                    let max = 0;
+                    parentId.forEach(value => {
+                        max = max > value ? max : value;
+                    });
+                    form['parentId'] = max;
                 }
                 let that = this;
                 that.$axios({
@@ -98,7 +153,7 @@
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');
                         that.$emit('renderTable');
-                        that.$emit('renderTree');
+                        that.initFunTreeSelect();
                     }
                 });
             },

@@ -42,6 +42,51 @@ public class SysFunctionService extends BaseService {
     public static final String ROLE_FUNCTION_LIST_REDIS_KEY = BASE_REDIS_KEY + "getFunctionListByRoleId:";
 
     /**
+     * 根据父级id和功能列表获取子级功能列表
+     *
+     * @param parentId
+     * @param funList
+     * @return
+     */
+    public List<SysFunction> getChildrenListByParentIdAndFunList(Long parentId, List<SysFunction> funList) {
+        List<SysFunction> newFunList = new ArrayList<>();
+        for (SysFunction sysFunction : funList) {
+            if (!parentId.equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFunction.setChildren(getChildrenListByParentIdAndFunList(sysFunction.getId(), funList));
+            newFunList.add(sysFunction);
+        }
+        return newFunList;
+    }
+
+    /**
+     * 获取所有功能树形分页列表
+     *
+     * @return
+     */
+    public ResultUtils getAllFunctionTreePageList() {
+        String key = createRedisKey(BASE_REDIS_KEY + "getAllFunctionTreePageList");
+        Object object = RedisUtils.get(key);
+        if (null != object) {
+            return ResultUtils.success(object);
+        }
+        SysFunction baseSysFunction = mapper.getMinParentIdFunInfo();
+        List<SysFunction> allFunList = mapper.getAllFunList();
+        List<SysFunction> newFunList = new ArrayList<>();
+        for (SysFunction sysFunction : allFunList) {
+            if (!baseSysFunction.getParentId().equals(sysFunction.getParentId())) {
+                continue;
+            }
+            sysFunction.setChildren(getChildrenListByParentIdAndFunList(sysFunction.getId(), allFunList));
+            newFunList.add(sysFunction);
+        }
+        PageUtils pageUtil = PageUtils.pageInfo(newFunList);
+        RedisUtils.set(key, pageUtil);
+        return ResultUtils.success(pageUtil);
+    }
+
+    /**
      * 根据角色id获取功能树形列表
      *
      * @param roleId
@@ -107,29 +152,10 @@ public class SysFunctionService extends BaseService {
             if (!sysFunction.getParentId().equals(sysFun.getParentId())) {
                 continue;
             }
-            sysFun.setChildren(getChildrenFun(menuList, sysFun.getId()));
+            sysFun.setChildren(getChildrenListByParentIdAndFunList(sysFun.getId(), menuList));
             resultList.add(sysFun);
         }
         RedisUtils.set(key, resultList);
-        return resultList;
-    }
-
-    /**
-     * 遍历子级功能列表
-     *
-     * @param menuList
-     * @param parentId
-     * @return
-     */
-    private List<SysFunction> getChildrenFun(List<SysFunction> menuList, Long parentId) {
-        List<SysFunction> resultList = new ArrayList<>();
-        for (SysFunction sysFunction : menuList) {
-            if (!parentId.equals(sysFunction.getParentId())) {
-                continue;
-            }
-            sysFunction.setChildren(getChildrenFun(menuList, sysFunction.getId()));
-            resultList.add(sysFunction);
-        }
         return resultList;
     }
 
@@ -154,56 +180,11 @@ public class SysFunctionService extends BaseService {
             if (!sysFun.getParentId().equals(sysFunction.getParentId())) {
                 continue;
             }
-            sysFun.setChildren(getChildrenFunctionNotButton(menuList, sysFun.getId()));
+            sysFun.setChildren(getChildrenListByParentIdAndFunList(sysFun.getId(), menuList));
             resultList.add(sysFun);
         }
         RedisUtils.set(key, resultList);
         return resultList;
-    }
-
-    /**
-     * 遍历子级功能列表---不包含按钮
-     *
-     * @param menuList
-     * @param parentId
-     * @return
-     */
-    private List<SysFunction> getChildrenFunctionNotButton(List<SysFunction> menuList, Long parentId) {
-        List<SysFunction> resultList = new ArrayList<>();
-        for (SysFunction sysFunction : menuList) {
-            if (!parentId.equals(sysFunction.getParentId())) {
-                continue;
-            }
-            sysFunction.setChildren(getChildrenFunctionNotButton(menuList, sysFunction.getId()));
-            resultList.add(sysFunction);
-        }
-        return resultList;
-    }
-
-    /**
-     * 根据父级id获取子级列表
-     *
-     * @param parentId
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    public ResultUtils getFunctionListByParentId(Long parentId, Integer pageNum, Integer pageSize) {
-        if (null == parentId || 0 > parentId) {
-            return ResultUtils.error("parentId错误");
-        }
-        if (0 >= pageNum || 0 >= pageSize) {
-            return ResultUtils.error("pageNum,pageSize格式错误");
-        }
-        String key = createRedisKey(BASE_REDIS_KEY + "getFunctionListByParentId", parentId, pageNum, pageSize);
-        Object object = RedisUtils.get(key);
-        if (null != object) {
-            return ResultUtils.success(object);
-        }
-        PageHelper.startPage(pageNum, pageSize);
-        PageUtils pageUtil = PageUtils.pageInfo(mapper.getFunListByParentId(parentId));
-        RedisUtils.set(key, pageUtil);
-        return ResultUtils.success(pageUtil);
     }
 
     /**
@@ -365,31 +346,25 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
         }
+        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+            //如果不是超级管理员，不能进行下面的操作
+            sysFunction.setPath(null);
+            sysFunction.setType(null);
+            sysFunction.setParentId(null);
+            sysFunction.setContainApi(null);
+        }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
-            //如果非超级管理员 修改功能对应api 进行封号处理
-            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
-            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                sysUserMapper.suspendSysUser(nowUserId);
-                AdminTokenUtils.deleteToken(nowUserId);
-                return ResultUtils.errorSuspend();
-            }
             sysFunction.setContainApi(sysFunction.getContainApi()
                     .replaceAll("[^(a-zA-Z/)]*", "")
                     .replace("，", ","));
-        } else {
-            //如果非超级管理员 清空功能对应api 取消本次操作
-            sysFunction.setContainApi(null);
         }
-        if (!ToolUtils.isBlank(sysFunction.getPath())) {
-            //如果非超级管理员 修改功能路径 进行封号处理
-            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
-            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                sysUserMapper.suspendSysUser(nowUserId);
-                AdminTokenUtils.deleteToken(nowUserId);
-                return ResultUtils.errorSuspend();
+        //如果要修改为按钮
+        if (1 == sysFunction.getType()) {
+            List<SysFunction> list = mapper.getFunListByParentId(sysFunction.getId());
+            if (null != list && 0 < list.size()) {
+                return ResultUtils.error("有下级，不能修改为按钮");
             }
-        } else {
-            return ResultUtils.error("路径不能为空");
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysFunction);

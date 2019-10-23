@@ -41,12 +41,12 @@ const URL = {
     system: {
         /*********************功能管理*****************/
         sysFunction: {
+            /*获取所有功能树形数据*/
+            getAllFunctionTreePageList: '/sysFunction/getAllFunctionTreePageList',
             /*获取所有功能菜单树*/
             getAllFunctionTree: '/sysFunction/getAllFunctionTree',
             /*获取所有功能菜单树*/
             getAllFunctionTreeNotButton: '/sysFunction/getAllFunctionTreeNotButton',
-            /*获取功能列表*/
-            getList: '/sysFunction/getFunctionList',
             /*新增功能*/
             add: '/sysFunction/addFunction',
             /*修改功能*/

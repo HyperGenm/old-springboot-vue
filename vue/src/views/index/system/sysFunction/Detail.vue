@@ -13,9 +13,6 @@
         props: {
             detailData: {
                 type: Object
-            },
-            parentData: {
-                type: Object
             }
         },
         watch: {
@@ -50,7 +47,6 @@
                             return dom;
                         }
                     },
-                    {label: '上级', prop: this.parentData.title},
                     {
                         label: '图标', formatter() {
                             return `<i class="${icon}"></i>`;
@@ -58,8 +54,12 @@
                     },
                     {label: '排序', prop: data['sort']},
                     {
-                        label: '类型', formatter() {
-                            return ('0' === type + '') ? '菜单' : '按钮';
+                        label: '类型', type: 'tag', element() {
+                            let result = [
+                                {content: '菜单'},
+                                {content: '按钮', type: 'success'}
+                            ];
+                            return result[data['type']];
                         }
                     },
                     {label: '描述', prop: data['description']}

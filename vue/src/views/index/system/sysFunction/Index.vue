@@ -1,31 +1,20 @@
 <template>
     <div id="index">
-        <div class="tree">
-            <div class="title">功能菜单</div>
-            <el-tree ref="tree" node-key="id"
-                     highlight-current default-expand-all
-                     :expand-on-click-node="false" :data="[{title:'最高级',id:0,children:data}]" :props="treeProps"
-                     @node-click="handleNodeClick"></el-tree>
-        </div>
-        <div class="wei-table">
-            <wei-table ref="table"
-                       :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
-                       :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
-            <div class="handle">
-                <div class="show">
-                    <wei-dialog :show.sync="dialogDetail">
-                        <detail :detailData="formData" :parentData="parentData"></detail>
-                    </wei-dialog>
-                </div>
-                <div class="edit">
-                    <wei-dialog :show.sync="dialogEditForm" :title="'add' === handleType ? '新增' : '编辑'">
-                        <edit-form :parentData="parentData" :handleType="handleType"
-                                   :formData="formData"
-                                   @closeDialog="dialogEditForm = false"
-                                   @renderTable="$refs.table.renderTable()"
-                                   @renderTree="getAllFunctionTreeNotButton"></edit-form>
-                    </wei-dialog>
-                </div>
+        <wei-table ref="table"
+                   :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
+                   :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
+        <div class="handle">
+            <div class="show">
+                <wei-dialog :show.sync="dialogDetail">
+                    <detail :detailData="formData"></detail>
+                </wei-dialog>
+            </div>
+            <div class="edit">
+                <wei-dialog :show.sync="dialogEditForm" :title="'add' === handleType ? '新增' : '编辑'">
+                    <edit-form :handleType="handleType" :formData="formData"
+                               @closeDialog="dialogEditForm = false"
+                               @renderTable="$refs.table.renderTable()"></edit-form>
+                </wei-dialog>
             </div>
         </div>
     </div>
@@ -51,17 +40,8 @@
             let isAddAndDelete = (SUPER_ADMIN_ID === this.$store.state.userInfo['id']
                 || SUPER_ADMIN_ROLE_ID === this.$store.state.userInfo['roleId']);
             return {
-                //功能菜单树数据
-                data: [],
-                //功能菜单树label字段替换为title
-                treeProps: {
-                    label: 'title'
-                },
                 tableDataRequest: {
-                    url: that.$global.URL.system.sysFunction.getList,
-                    data: {
-                        parentId: 0
-                    }
+                    url: that.$global.URL.system.sysFunction.getAllFunctionTreePageList
                 },
                 tableHeaderButtons: [
                     {
@@ -75,7 +55,7 @@
                                 sort: 0,
                                 type: 0,
                                 description: '',
-                                parentId: that.parentData.id
+                                parentId: 0
                             };
                             that.dialogEditForm = true;
                         }
@@ -95,16 +75,16 @@
                     }
                 ],
                 tableColumns: [
-                    {label: '功能名', prop: 'name'},
+                    {label: '路由标题', prop: 'title', width: 210},
                     {label: '路径', prop: 'path'},
-                    {label: '路由标题', prop: 'title'},
+                    {label: '功能名', prop: 'name'},
                     {label: '对应api', prop: 'containApi'},
                     {
                         label: '类型', prop: 'type', type: 'tag',
                         element({type}) {
                             let result = [
                                 {content: '菜单'},
-                                {content: '按钮'}
+                                {content: '按钮', type: 'success'}
                             ];
                             return result[type];
                         }
@@ -134,7 +114,7 @@
                         },
                         {
                             name: '删除', type: 'danger', show: isAddAndDelete, handleClick(row) {
-                                that.handleDeleteClick(row);
+                                that.deleteFunction([row.id]);
                             }
                         }
                     ]
@@ -145,41 +125,11 @@
                 handleType: 'add',
                 //表单数据
                 formData: {},
-                //父级功能信息
-                parentData: {
-                    id: 0,
-                    title: '最高级'
-                },
                 //详情弹窗
                 dialogDetail: false
             };
         },
-        mounted() {
-            this.getAllFunctionTreeNotButton();
-        },
         methods: {
-            //获取所有功能列表树形结构
-            getAllFunctionTreeNotButton() {
-                let that = this;
-                this.$axios({
-                    url: that.$global.URL.system.sysFunction.getAllFunctionTreeNotButton,
-                    success(data) {
-                        that.data = data;
-                        that.$nextTick(() => {
-                            that.$refs['tree'].setCurrentKey(that.parentData.id);
-                        });
-                    }
-                });
-            },
-            //处理树点击事件
-            handleNodeClick(data) {
-                this.tableDataRequest.data.parentId = data.id;
-                this.parentData = data;
-                this.$refs.table.renderTable();
-            },
-            handleDeleteClick(row) {
-                this.deleteFunction([row.id]);
-            },
             //删除方法
             deleteFunction(ids) {
                 let that = this;
@@ -194,14 +144,7 @@
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
-                                let {tableData, total} = that.$refs['table'];
-                                for (let i = 0; i < ids.length; i++) {
-                                    tableData = tableData.filter(value => value['id'] !== ids[i]);
-                                }
-                                total -= ids.length;
-                                that.$refs['table']['tableData'] = tableData;
-                                that.$refs['table']['total'] = total;
-                                that.getAllFunctionTreeNotButton();
+                                that.$refs['table'].renderTable();
                             }
                         })
                     }
@@ -210,21 +153,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    #index {
-        display: flex;
-        .tree {
-            flex: 2.1;
-            .title {
-                font-weight: bold;
-                margin-bottom: 30px;
-            }
-        }
-        .wei-table {
-            flex: 5.7;
-            border-left: 1px solid #eee;
-            padding-left: 2%;
-        }
-    }
-</style>

@@ -581,6 +581,11 @@
             background-color: #ddeeff;
         }
 
+        /*表格树形结构，箭头错位*/
+        .el-table table tbody tr td:nth-child(3) .cell.el-tooltip {
+            display: flex;
+        }
+
     }
 </style>
 

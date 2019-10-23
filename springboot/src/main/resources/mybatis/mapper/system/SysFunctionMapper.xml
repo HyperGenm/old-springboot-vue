@@ -31,7 +31,7 @@
     <select id="getAllFunList" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
         FROM sys_function
-        ORDER BY sort ASC
+        ORDER BY parent_id ASC, sort ASC
     </select>
     <select id="getFunListByParentId" resultType="com.weiziplus.springboot.models.SysFunction">
         SELECT *
