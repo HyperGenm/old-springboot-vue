@@ -84,7 +84,9 @@
             }
         },
         mounted() {
-            console.error('此页面可能有bug，不影响使用,应该是`el-select`级联选择器问题.\nError in callback for watcher "value": "TypeError: Cannot read property "level" of null"');
+            console.error('此页面可能有bug，不影响使用,应该是`el-select`级联选择器问题.\n' +
+                '而且级联选择器打包后页面好像显示不正常,后期不推荐使用级联选择器(还有可能是我太菜了)\n' +
+                'Error in callback for watcher "value": "TypeError: Cannot read property "level" of null"');
             this.initFunTreeSelect();
         },
         methods: {
