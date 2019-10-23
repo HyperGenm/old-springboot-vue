@@ -83,9 +83,10 @@ router.beforeEach((to, from, next) => {
             children
         }];
         router.addRoutes(parentRouters);
-        next(haveHomePage ? '/home' : '/');
+        next(haveHomePage ? '/home' : children[0]['path'] || '/');
         return;
     }
+    //正常放行
     next();
 });
 

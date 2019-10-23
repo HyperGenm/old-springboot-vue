@@ -160,7 +160,7 @@
                     routersTree: data
                 });
                 this.$router.addRoutes(parentRouters);
-                this.$router.push(haveHomePage ? '/home' : '/');
+                this.$router.push(haveHomePage ? '/home' : routers[0]['path'] || '/');
             },
             childrenRouter(parentName, data) {
                 let routers = [];

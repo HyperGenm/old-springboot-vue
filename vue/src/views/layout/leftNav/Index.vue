@@ -46,6 +46,9 @@
             return {
                 defaultActive: ''
             }
+        },
+        mounted() {
+            this.defaultActive = this.$router.history.current.name;
         }
     }
 </script>

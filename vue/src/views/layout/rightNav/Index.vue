@@ -11,18 +11,19 @@
             <div ref="right" class="right">
                 <div class="more">
                     <i class="iconfont iconfont-quanping" style="font-size: 24px;" @click="changeSize"></i>
-                    <span style="margin: 0 5px;">Hi,{{$store.state.userInfo['realName'] || $store.state.userInfo['username']}}</span>
+                    <div style="border-radius: 50%;overflow: hidden;border: 1px solid #f7f61a;display: flex;align-items: center;justify-content: center;padding: 5px;margin: 0 5px;"
+                         @click="updateIcon">
+                        <el-image style="width: 30px;height: 30px;border-radius: 50%;"
+                                  :src="$store.state.userInfo['icon']">
+                            <div slot="error">
+                                <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
+                            </div>
+                        </el-image>
+                    </div>
                 </div>
                 <div class="user">
                     <el-dropdown @command="handleCommand">
-                        <div style="border-radius: 50%;overflow: hidden;border: 1px solid #f7f61a;display: flex;align-items: center;justify-content: center;padding: 5px;" @click="updateIcon">
-                            <el-image style="width: 30px;height: 30px;border-radius: 50%;"
-                                      :src="$store.state.userInfo['icon']">
-                                <div slot="error">
-                                    <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
-                                </div>
-                            </el-image>
-                        </div>
+                        <span style="color: #954ae0">Hi,{{$store.state.userInfo['realName'] || $store.state.userInfo['username']}}</span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in dropdownItems" :key="item.title"
                                               :command="item.command"> {{item.title}}

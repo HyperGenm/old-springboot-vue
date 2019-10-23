@@ -46,6 +46,15 @@
                 });
             }
         },
+        mounted() {
+            let {name, meta} = this.$router.history.current;
+            this.tabs = [{
+                title: meta.title,
+                name: name,
+                icon: meta.icon || 'el-icon-s-help'
+            }];
+            this.tabValue = name;
+        },
         methods: {
             removeTab(targetName) {
                 let tabs = this.tabs;
