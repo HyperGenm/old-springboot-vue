@@ -205,6 +205,8 @@ INSERT INTO `sys_role_function` VALUES (268, 666, 20);
 INSERT INTO `sys_role_function` VALUES (269, 666, 21);
 INSERT INTO `sys_role_function` VALUES (270, 666, 6);
 INSERT INTO `sys_role_function` VALUES (274, 666, 2);
+INSERT INTO `sys_role_function` VALUES (275, 1, 9);
+INSERT INTO `sys_role_function` VALUES (276, 1, 11);
 
 -- ----------------------------
 -- Table structure for sys_user
