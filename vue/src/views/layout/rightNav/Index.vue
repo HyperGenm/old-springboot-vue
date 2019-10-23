@@ -74,17 +74,25 @@
                 tabsMaxWidth: 0
             }
         },
+        watch: {
+            menuCollapse() {
+                this.initTabsWidth();
+            }
+        },
         mounted() {
-            //初始化tabs的最大宽度
-            let that = this;
-            this.$nextTick(() => {
-                let headerWidth = that.$refs['header'].getBoundingClientRect().width;
-                let collapseWidth = that.$refs['collapse'].getBoundingClientRect().width;
-                let rightWidth = that.$refs['right'].getBoundingClientRect().width;
-                that.tabsMaxWidth = headerWidth - collapseWidth - rightWidth - 30;
-            });
+            this.initTabsWidth();
         },
         methods: {
+            initTabsWidth() {
+                //初始化tabs的最大宽度
+                let that = this;
+                this.$nextTick(() => {
+                    let headerWidth = that.$refs['header'].getBoundingClientRect().width;
+                    let collapseWidth = that.$refs['collapse'].getBoundingClientRect().width;
+                    let rightWidth = that.$refs['right'].getBoundingClientRect().width;
+                    that.tabsMaxWidth = headerWidth - collapseWidth - rightWidth - 30;
+                });
+            },
             handleCommand(command) {
                 switch (command) {
                     case 'logout': {
