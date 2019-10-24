@@ -1,6 +1,5 @@
 package com.weiziplus.springboot.service.system;
 
-import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.mapper.system.SysFunctionMapper;

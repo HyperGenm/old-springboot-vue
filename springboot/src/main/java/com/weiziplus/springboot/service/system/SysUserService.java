@@ -289,9 +289,9 @@ public class SysUserService extends BaseService {
         //异步删除原来的图片
         Map<String, Object> sysUserMap = baseFindByClassAndId(SysUser.class, userId);
         systemAsync.deleteFile(ToolUtils.valueOfString(sysUserMap.get("icon")));
-        SysUser user = new SysUser();
-        user.setId(userId);
-        user.setIcon(path);
+        SysUser user = new SysUser()
+                .setId(userId)
+                .setIcon(path);
         baseUpdate(user);
         return ResultUtils.success(GlobalConfig.MYBATIS_FILE_PATH_PREFIX + path);
     }
