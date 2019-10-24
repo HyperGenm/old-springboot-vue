@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.service.system;
 
 import com.github.pagehelper.PageHelper;
+import com.weiziplus.springboot.async.SystemAsync;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.models.SysUser;
@@ -27,6 +28,9 @@ public class SysUserService extends BaseService {
 
     @Autowired
     SysUserMapper mapper;
+
+    @Autowired
+    SystemAsync systemAsync;
 
     /**
      * 用户允许禁止登录
@@ -282,6 +286,9 @@ public class SysUserService extends BaseService {
         if (null == path) {
             return ResultUtils.error("文件上传失败，请重试");
         }
+        //异步删除原来的图片
+        Map<String, Object> sysUserMap = baseFindByClassAndId(SysUser.class, userId);
+        systemAsync.deleteFile(ToolUtils.valueOfString(sysUserMap.get("icon")));
         SysUser user = new SysUser();
         user.setId(userId);
         user.setIcon(path);

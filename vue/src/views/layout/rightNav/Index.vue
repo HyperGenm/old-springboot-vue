@@ -39,6 +39,7 @@
             </wei-dialog>
             <wei-dialog :show.sync="dialogEditIcon" title="修改头像">
                 <wei-upload :action="$global.URL.system.sysUser.updateIcon"
+                            tip="建议长宽比1:1"
                             @success="iconSuccess"></wei-upload>
             </wei-dialog>
         </div>

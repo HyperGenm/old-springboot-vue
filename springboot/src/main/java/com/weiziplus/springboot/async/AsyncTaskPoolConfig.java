@@ -47,6 +47,11 @@ public class AsyncTaskPoolConfig {
         return executor;
     }
 
+    /**
+     * 将系统用户操作存放日志
+     *
+     * @return
+     */
     @Bean("sysLog")
     public Executor sysLog() {
         ThreadPoolTaskExecutor executor = createExecutor();
@@ -57,6 +62,11 @@ public class AsyncTaskPoolConfig {
         return executor;
     }
 
+    /**
+     * 更新系统用户最后活跃时间
+     *
+     * @return
+     */
     @Bean("updateAdminUserLastActiveTime")
     public Executor updateAdminUserLastActiveTime() {
         ThreadPoolTaskExecutor executor = createExecutor();
@@ -64,6 +74,23 @@ public class AsyncTaskPoolConfig {
         executor.setThreadNamePrefix("updateAdminUserLastActiveTime-");
         //丢弃最老的一个请求任务
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
+        return executor;
+    }
+
+    /**
+     * 删除本地文件
+     *
+     * @return
+     */
+    @Bean("deleteFile")
+    public Executor deleteFile() {
+        ThreadPoolTaskExecutor executor = createExecutor();
+        //线程池最大的线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
+        executor.setMaxPoolSize(10);
+        //线程池名的前缀
+        executor.setThreadNamePrefix("deleteFile-");
+        //在调用者线程中运行
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
     }
 

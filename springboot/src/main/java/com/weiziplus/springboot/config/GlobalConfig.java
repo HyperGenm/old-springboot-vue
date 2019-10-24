@@ -47,4 +47,14 @@ public class GlobalConfig {
         GlobalConfig.MYBATIS_FILE_PATH_PREFIX = prefix;
     }
 
+    /**
+     * 设置图片上传基础路径
+     */
+    public static String BASE_FILE_PATH;
+
+    @Value("${global.base-file-path}")
+    private void setBaseFilePath(String baseFilePath) {
+        GlobalConfig.BASE_FILE_PATH = baseFilePath;
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.util;
 
+import com.weiziplus.springboot.config.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,16 +17,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class FileUtils {
-
-    /**
-     * 设置图片上传基础路径
-     */
-    private static String BASE_FILE_PATH;
-
-    @Value("${global.base-file-path}")
-    private void setBaseFilePath(String baseFilePath) {
-        FileUtils.BASE_FILE_PATH = baseFilePath;
-    }
 
     /**
      * /pc/   后台文件上传
@@ -97,7 +87,7 @@ public class FileUtils {
         // 生成新文件名
         fileName = ToolUtils.createUUID() + suffixName;
         resultPath = resultPath + fileName;
-        File dest = new File(BASE_FILE_PATH + resultPath);
+        File dest = new File(GlobalConfig.BASE_FILE_PATH + resultPath);
         if (!dest.getParentFile().exists()) {
             boolean flag = dest.getParentFile().mkdirs();
             if (!flag) {
