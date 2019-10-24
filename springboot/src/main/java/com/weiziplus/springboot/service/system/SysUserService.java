@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.service.system;
 
 import com.github.pagehelper.PageHelper;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.weiziplus.springboot.async.SystemAsync;
 import com.weiziplus.springboot.base.BaseService;
 import com.weiziplus.springboot.config.GlobalConfig;
@@ -274,12 +275,14 @@ public class SysUserService extends BaseService {
         if (null == image) {
             return ResultUtils.error("请上传图片");
         }
-        int height = image.getHeight();
-        int width = image.getWidth();
         //长宽比
         float minScale = 0.7F;
         float maxScale = 1.2F;
-        if (height / width < minScale || height / width > maxScale) {
+        double scale = 1F;
+        if (0 != image.getWidth()) {
+            scale = (float) image.getHeight() / image.getWidth();
+        }
+        if (scale < minScale || scale > maxScale) {
             return ResultUtils.error("头像建议长宽比1:1");
         }
         String path = FileUtils.upFilePc(file, "user/icon");
@@ -293,6 +296,6 @@ public class SysUserService extends BaseService {
                 .setId(userId)
                 .setIcon(path);
         baseUpdate(user);
-        return ResultUtils.success(GlobalConfig.MYBATIS_FILE_PATH_PREFIX + path);
+        return ResultUtils.success(GlobalConfig.getMybatisFilePathPrefix() + path);
     }
 }

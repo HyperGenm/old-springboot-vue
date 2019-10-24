@@ -47,6 +47,8 @@ mybatis:
     map-underscore-to-camel-case: true
   #指定sql映射文件位置
   mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
+  #所在包配置别名
+  type-aliases-package: com.weiziplus.springboot.models
 #pagehelper分页插件配置
 pagehelper:
   helper-dialect: mysql

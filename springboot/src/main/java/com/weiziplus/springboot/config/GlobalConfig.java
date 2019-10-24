@@ -40,21 +40,41 @@ public class GlobalConfig {
     /**
      * mybatis全局变量，文件路径域名前缀
      */
-    public static String MYBATIS_FILE_PATH_PREFIX = "";
+    private static String MYBATIS_FILE_PATH_PREFIX = "";
 
     @Value("${mybatis.configuration-properties.filePathPrefix:http://127.0.0.1:8080}")
-    public void setMybatisFilePathPrefix(String prefix) {
-        GlobalConfig.MYBATIS_FILE_PATH_PREFIX = prefix;
+    private void setMybatisFilePathPrefix(String mybatisFilePathPrefix) {
+        GlobalConfig.MYBATIS_FILE_PATH_PREFIX = mybatisFilePathPrefix;
+    }
+
+    /**
+     * mybatis全局变量，文件路径域名前缀
+     * 只暴露属性值，不提供修改属性的方式
+     *
+     * @return
+     */
+    public static String getMybatisFilePathPrefix() {
+        return MYBATIS_FILE_PATH_PREFIX;
     }
 
     /**
      * 设置图片上传基础路径
      */
-    public static String BASE_FILE_PATH;
+    private static String BASE_FILE_PATH = "";
 
     @Value("${global.base-file-path}")
     private void setBaseFilePath(String baseFilePath) {
         GlobalConfig.BASE_FILE_PATH = baseFilePath;
+    }
+
+    /**
+     * 图片上传基础路径
+     * 只暴露属性值，不提供修改属性的方式
+     *
+     * @return
+     */
+    public static String getBaseFilePath() {
+        return BASE_FILE_PATH;
     }
 
 }

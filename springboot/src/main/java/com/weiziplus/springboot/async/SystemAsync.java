@@ -66,13 +66,13 @@ public class SystemAsync extends BaseService {
         if (ToolUtils.isBlank(relativePath)) {
             return;
         }
-        File file = new File(GlobalConfig.BASE_FILE_PATH + relativePath);
+        File file = new File(GlobalConfig.getBaseFilePath() + relativePath);
         //如果是目录，不进行操作
         if (file.isDirectory()) {
             return;
         }
         if (file.isFile() && file.exists()) {
-            file.delete();
+            boolean delete = file.delete();
         }
     }
 
@@ -87,13 +87,13 @@ public class SystemAsync extends BaseService {
             return;
         }
         for (String path : relativePathList) {
-            File file = new File(GlobalConfig.BASE_FILE_PATH + path);
+            File file = new File(GlobalConfig.getBaseFilePath() + path);
             //如果是目录，不进行操作
             if (file.isDirectory()) {
                 continue;
             }
             if (file.isFile() && file.exists()) {
-                file.delete();
+                boolean delete = file.delete();
             }
         }
     }

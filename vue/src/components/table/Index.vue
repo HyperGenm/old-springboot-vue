@@ -89,12 +89,14 @@
         <div class="content">
             <!--表格-->
             <el-table ref="table" :show-summary="tableShowSummary" :summary-method="summaryMethod"
-                      :data="tableData" height="10000px" :row-key="tableOther.rowKey"
+                      :data="tableData" height="10000px"
                       :max-height="maxHeight || tableMaxHeight"
                       v-loading="loading" :empty-text="emptyText" @header-click="headerClick"
                       :stripe="null == selection || 0 >= selection.length"
                       @selection-change="selectionChange" :row-style="rowStyle"
                       @sort-change="sortChange"
+                      :row-key="tableOther.rowKey"
+                      :default-expand-all="tableOther.defaultExpandAll"
                       border highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
                 <el-table-column type="index" width="50"></el-table-column>
@@ -317,7 +319,8 @@
             tableOther: {
                 type: Object,
                 default: () => ({
-                    rowKey: 'id'
+                    rowKey: 'id',
+                    defaultExpandAll: true
                 })
             }
         },

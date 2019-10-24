@@ -3,6 +3,7 @@ package com.weiziplus.springboot.mapper.system;
 import com.weiziplus.springboot.models.SysFunction;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public interface SysFunctionMapper {
      *
      * @return
      */
+    @Select("SELECT * " +
+            "FROM sys_function " +
+            "ORDER BY parent_id ASC " +
+            "LIMIT 1")
     SysFunction getMinParentIdFunInfo();
 
     /**
@@ -49,6 +54,9 @@ public interface SysFunctionMapper {
      *
      * @return
      */
+    @Select("SELECT * " +
+            "FROM sys_function " +
+            "ORDER BY parent_id ASC,sort ASC")
     List<SysFunction> getAllFunList();
 
     /**
@@ -64,6 +72,10 @@ public interface SysFunctionMapper {
      *
      * @return
      */
+    @Select("SELECT * " +
+            "FROM sys_function " +
+            "WHERE `type` = 0 " +
+            "ORDER BY parent_id ASC,sort ASC")
     List<SysFunction> getFunNotButtonList();
 
     /**

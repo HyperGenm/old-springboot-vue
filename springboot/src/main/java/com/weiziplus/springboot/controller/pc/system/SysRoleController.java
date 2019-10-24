@@ -4,7 +4,6 @@ import com.weiziplus.springboot.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.interceptor.SystemLog;
 import com.weiziplus.springboot.models.SysRole;
 import com.weiziplus.springboot.service.system.SysRoleService;
-import com.weiziplus.springboot.util.PageUtils;
 import com.weiziplus.springboot.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,7 @@ public class SysRoleController {
      */
     @GetMapping("/getAllRoleTreePageList")
     @SystemLog(description = "查看角色树数据")
-    public ResultUtils<PageUtils> getAllRoleTreePageList() {
+    public ResultUtils getAllRoleTreePageList() {
         return service.getAllRoleTreePageList();
     }
 

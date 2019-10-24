@@ -54,11 +54,13 @@ public class UserService extends BaseService {
         String key = createRedisKey(BASE_REDIS_KEY + "getUserList", pageNum, pageSize);
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ResultUtils.success((PageUtils<List<User>>) object);
+            List<User> userList = ToolUtils.objectOfList(object, User.class);
+            return ResultUtils.success(PageUtils.pageInfo(userList));
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<User>> pageUtil = PageUtils.pageInfo(mapper.getList());
-        RedisUtils.set(key, pageUtil);
+        List<User> userList = mapper.getList();
+        RedisUtils.set(key, userList);
+        PageUtils<List<User>> pageUtil = PageUtils.pageInfo(userList);
         return ResultUtils.success(pageUtil);
     }
 

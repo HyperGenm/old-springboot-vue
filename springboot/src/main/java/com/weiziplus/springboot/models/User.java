@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * 用户表
  * user
  * @author 16028
- * @date 2019-10-24 14:21:16
+ * @date 2019-10-24 21:20:14
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -42,6 +43,7 @@ public class User implements Serializable {
      */
     @ApiModelProperty("密码")
     @Column("password")
+    @JsonIgnore
     private String password;
 
     /**

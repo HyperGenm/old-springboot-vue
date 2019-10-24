@@ -70,5 +70,8 @@ public interface SysRoleMapper {
      *
      * @return
      */
+    @Select("SELECT * " +
+            "FROM sys_role " +
+            "ORDER BY sort ASC,parent_id ASC")
     List<SysRole> getRoleList();
 }
