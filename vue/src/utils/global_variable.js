@@ -56,6 +56,8 @@ const URL = {
         },
         /*********************角色管理*****************/
         sysRole: {
+            /*获取所有角色树形结构*/
+            getAllRoleTreePageList: '/sysRole/getAllRoleTreePageList',
             /*获取角色树形列表*/
             getRoleTree: '/sysRole/getRoleTree',
             /*获取角色所有功能列表*/

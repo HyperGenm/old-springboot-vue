@@ -115,7 +115,7 @@ public class AdminLoginService {
         if (null == sysRole) {
             return ResultUtils.error("您还没有角色，请联系管理员添加");
         }
-        if (!SysRoleService.ADMIN_ROLE_IS_STOP.equals(sysRole.getIsStop())) {
+        if (!SysRoleService.ADMIN_ROLE_IS_STOP_ZERO.equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
         String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request), sysRole.getId());

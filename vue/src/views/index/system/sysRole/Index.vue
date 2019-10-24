@@ -1,51 +1,31 @@
 <template>
     <div id="index">
-        <div class="role">
-            <div class="btn">
-                <el-popover placement="right"
-                            width="400"
-                            trigger="click">
-                    <el-button v-for="btn in roleHeaderButtons" :key="btn['name']"
-                               v-if="btn['show']" style="margin-bottom: 20px;"
-                               :type="btn['type']" size="mini"
-                               @click="btn['handleClick']">
-                        {{btn['title']}}
-                    </el-button>
-                    <el-button slot="reference" type="primary" size="mini" icon="el-icon-s-tools">编辑</el-button>
-                </el-popover>
-            </div>
-            <el-tree ref="roleTree" node-key="id"
-                     highlight-current default-expand-all
-                     :expand-on-click-node="false" :data="roleData" :props="roleProps"
-                     @node-click="handleRoleNodeClick"></el-tree>
-            <div class="handle">
-                <div class="show">
-                    <wei-dialog :show.sync="dialogDetail">
-                        <detail :isShow="dialogDetail" :detailData="parentData"></detail>
-                    </wei-dialog>
-                </div>
-                <div class="edit">
-                    <wei-dialog :show.sync="dialogEditForm" :title="'add' === handleType ? '新增' : '编辑'">
-                        <edit-form :parentData="parentData" :handleType="handleType"
-                                   :formData="formData"
-                                   @closeDialog="dialogEditForm = false"
-                                   @renderTree="initGetRoleTree"></edit-form>
-                    </wei-dialog>
-                </div>
-            </div>
+        <wei-table ref="table"
+                   :tableDataRequest="tableDataRequest" :tableHeaderButtons="tableHeaderButtons"
+                   :tableColumns="tableColumns" :tableOperates="tableOperates"></wei-table>
+        <div class="show">
+            <wei-dialog :show.sync="dialogDetail">
+                <detail :detailData="formData"></detail>
+            </wei-dialog>
         </div>
-        <div class="function">
-            <div class="title">
-                <span>功能列表</span>
+        <div class="edit">
+            <wei-dialog :show.sync="dialogEditForm" :title="'add' === handleType ? '新增' : '编辑'">
+                <edit-form :handleType="handleType" :formData="formData"
+                           @closeDialog="dialogEditForm = false"
+                           @renderTable="$refs.table.renderTable()"></edit-form>
+            </wei-dialog>
+        </div>
+        <div class="tree">
+            <wei-dialog :show.sync="dialogFunList">
+                <el-tree ref="funTree" node-key="id"
+                         highlight-current default-expand-all show-checkbox
+                         :expand-on-click-node="false" :data="[{title:'最高级',id:0,children:funData}]"
+                         :props="{label: 'title'}"
+                         :default-checked-keys="checkedRoleFunctionData"></el-tree>
                 <el-button v-if="$store.state.role['buttons']['sysRole_save']" type="primary" size="mini"
-                           @click="saveRole">
-                    保存
+                           @click="saveRole">保存
                 </el-button>
-            </div>
-            <el-tree ref="funTree" node-key="id"
-                     highlight-current default-expand-all show-checkbox
-                     :expand-on-click-node="false" :data="[{title:'最高级',id:0,children:funData}]" :props="funProps"
-                     :default-checked-keys="checkedRoleFunctionData"></el-tree>
+            </wei-dialog>
         </div>
     </div>
 </template>
@@ -56,74 +36,18 @@
         components: {
             'wei-dialog': () => import('@/components/dialog/index/Index.vue'),
             'edit-form': () => import('./EditForm.vue'),
-            'detail': () => import('./Detail.vue')
+            'detail': () => import('./Detail.vue'),
+            'wei-table': () => import('@/components/table/Index.vue')
         },
         data() {
             let that = this;
             //用户角色拥有的按钮
-            let storeStateRoleButtons = this.$store.state.role.buttons;
+            let {sysRole_add, sysRole_update, sysRole_delete, sysRole_save, sysRole_status} = this.$store.state.role.buttons;
+            //超级管理员角色id
+            let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
             return {
-                //角色上面的按钮列表
-                roleHeaderButtons: [
-                    {
-                        title: '刷新', type: 'primary', show: true,
-                        handleClick() {
-                            that.initGetRoleTree();
-                        }
-                    },
-                    {
-                        title: '查看角色', type: 'success', show: true,
-                        handleClick() {
-                            that.detailRole();
-                        }
-                    },
-                    {
-                        title: '新增角色', type: 'primary', show: storeStateRoleButtons['sysRole_add'],
-                        handleClick() {
-                            that.addRole();
-                        }
-                    },
-                    {
-                        title: '修改角色', type: 'success', show: storeStateRoleButtons['sysRole_update'],
-                        handleClick() {
-                            that.updateRole();
-                        }
-                    },
-                    {
-                        title: '删除角色', type: 'danger', show: storeStateRoleButtons['sysRole_delete'],
-                        handleClick() {
-                            that.deleteRole();
-                        }
-                    },
-                    {
-                        title: '启用角色', type: 'success', show: storeStateRoleButtons['sysRole_status'],
-                        handleClick() {
-                            that.changeRoleIsStop(0);
-                        }
-                    },
-                    {
-                        title: '禁用角色', type: 'danger', show: storeStateRoleButtons['sysRole_status'],
-                        handleClick() {
-                            that.changeRoleIsStop(1);
-                        }
-                    }
-                ],
-                //角色树的数据
-                roleData: [],
-                roleProps: {
-                    label(data) {
-                        let {name, isStop} = data;
-                        return name + '-----' + (('0' === isStop + '') ? '正常' : "禁用");
-                    },
-                    disabled(data) {
-                        return '0' !== data.isStop + '';
-                    }
-                },
                 //功能树的数据
                 funData: [],
-                funProps: {
-                    label: 'title'
-                },
                 funParentData: [],
                 //选中的功能树的数据
                 checkedRoleFunctionData: [],
@@ -133,18 +57,158 @@
                 handleType: 'add',
                 //表单数据
                 formData: {},
-                //父级功能信息,当前选中的功能信息
-                parentData: {
-                    id: 1,
-                    name: '超级管理员',
-                    isStop: 0
+                //详情
+                dialogDetail: false,
+                //选择功能
+                dialogFunList: false,
+                tableDataRequest: {
+                    url: that.$global.URL.system.sysRole.getAllRoleTreePageList
                 },
-                dialogDetail: false
+                tableHeaderButtons: [
+                    {
+                        name: '新增',
+                        icon: 'el-icon-plus',
+                        type: 'success',
+                        show: sysRole_add,
+                        handleClick() {
+                            that.handleType = 'add';
+                            that.formData = {
+                                parentId: SUPER_ADMIN_ROLE_ID,
+                                name: '',
+                                sort: 0,
+                                isStop: 0,
+                                description: ''
+                            };
+                            that.dialogEditForm = true;
+                        }
+                    }
+                ],
+                tableColumns: [
+                    {label: '名称', prop: 'name', width: 210},
+                    {
+                        label: '状态', prop: 'isStop', type: 'tag',
+                        element({isStop}) {
+                            let result = [
+                                {content: '正常'},
+                                {content: '禁用', type: 'danger'}
+                            ];
+                            return result[isStop];
+                        }
+                    },
+                    {label: '排序', prop: 'sort'},
+                    {label: '描述', prop: 'description'},
+                    {
+                        label: '创建时间', prop: 'createTime', type: 'icon',
+                        element({createTime}) {
+                            return {
+                                leftIcon: 'el-icon-time',
+                                content: createTime
+                            };
+                        }
+                    }
+                ],
+                tableOperates: {
+                    buttons: [
+                        {
+                            name: '查看', type: 'primary', show: true, handleClick(row) {
+                                that.formData = row;
+                                that.dialogDetail = true;
+                            }
+                        },
+                        {
+                            name: '编辑', type: 'success',
+                            showFormatter(row) {
+                                if (!sysRole_update) {
+                                    return false;
+                                }
+                                if (null == row) {
+                                    return true;
+                                }
+                                return SUPER_ADMIN_ROLE_ID !== row['id'];
+                            },
+                            handleClick(row) {
+                                that.handleType = 'update';
+                                that.formData = row;
+                                that.dialogEditForm = true;
+                            }
+                        },
+                        {
+                            name: '修改功能', type: 'primary',
+                            showFormatter(row) {
+                                if (!sysRole_save) {
+                                    return false;
+                                }
+                                if (null == row) {
+                                    return true;
+                                }
+                                //角色被禁用不显示该按钮
+                                return 0 === row['isStop'];
+                            },
+                            handleClick(row) {
+                                that.formData = row;
+                                that.getRoleFunList(row['id']);
+                                that.dialogFunList = true;
+                            }
+                        },
+                        {
+                            name: '删除', type: 'danger',
+                            showFormatter(row) {
+                                if (!sysRole_delete) {
+                                    return false;
+                                }
+                                if (null == row) {
+                                    return true;
+                                }
+                                return SUPER_ADMIN_ROLE_ID !== row['id'];
+                            },
+                            handleClick(row) {
+                                that.deleteRole(row);
+                            }
+                        },
+                        {
+                            name: '启用', type: 'success',
+                            showFormatter(row) {
+                                if (!sysRole_status) {
+                                    return false;
+                                }
+                                if (null == row) {
+                                    return true;
+                                }
+                                if (SUPER_ADMIN_ROLE_ID === row['id']) {
+                                    return false;
+                                }
+                                return 0 !== row['isStop'];
+                            },
+                            handleClick(row) {
+                                that.formData = row;
+                                that.changeRoleIsStop(row, 0);
+                            }
+                        },
+                        {
+                            name: '禁用', type: 'danger',
+                            showFormatter(row) {
+                                if (!sysRole_status) {
+                                    return false;
+                                }
+                                if (null == row) {
+                                    return true;
+                                }
+                                if (SUPER_ADMIN_ROLE_ID === row['id']) {
+                                    return false;
+                                }
+                                return 1 !== row['isStop'];
+                            },
+                            handleClick(row) {
+                                that.formData = row;
+                                that.changeRoleIsStop(row, 1);
+                            }
+                        }
+                    ]
+                },
             }
         },
         mounted() {
             let that = this;
-            this.initGetRoleTree();
             //获取功能树形列表
             this.$axios({
                 url: that.$global.URL.system.sysFunction.getAllFunctionTree,
@@ -178,28 +242,13 @@
                 });
                 return result;
             },
-            //获取角色树形列表
-            initGetRoleTree() {
-                let that = this;
-                this.$axios({
-                    url: that.$global.URL.system.sysRole.getRoleTree,
-                    success(data) {
-                        that.roleData = data;
-                        that.$nextTick(() => {
-                            that.$refs['roleTree'].setCurrentKey(1);
-                        });
-                        that.parentData = data[0];
-                        that.getRoleFunList();
-                    }
-                });
-            },
             //获取角色的功能列表
-            getRoleFunList() {
+            getRoleFunList(roleId) {
                 let that = this;
                 this.$axios({
                     url: that.$global.URL.system.sysRole.getRoleFunList,
                     data: {
-                        roleId: that.parentData.id
+                        roleId
                     },
                     success(data) {
                         that.$refs['funTree'].setCheckedKeys([]);
@@ -221,49 +270,7 @@
                     }
                 });
             },
-            //查看详情
-            detailRole() {
-                this.dialogDetail = true;
-            },
-            //新增角色
-            addRole() {
-                let isStop = this.parentData.isStop;
-                if ('0' !== isStop + '') {
-                    this.$globalFun.errorMsg('角色禁用中,禁止添加下级');
-                    return;
-                }
-                this.formData = {
-                    name: '',
-                    isStop: 0,
-                    sort: 0,
-                    description: '',
-                    parentId: this.parentData.id
-                };
-                this.dialogEditForm = true;
-                this.handleType = 'add';
-            },
-            //修改角色
-            updateRole() {
-                let data = this.parentData;
-                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
-                    this.$globalFun.errorMsg('超级管理员不能修改');
-                    return;
-                }
-                let isStop = this.parentData.isStop;
-                if ('0' !== isStop + '') {
-                    this.$globalFun.errorMsg('角色禁用中,禁止修改');
-                    return;
-                }
-                this.formData = data;
-                this.dialogEditForm = true;
-                this.handleType = 'update';
-            },
-            deleteRole() {
-                let data = this.parentData;
-                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
-                    this.$globalFun.errorMsg('超级管理员不能删除');
-                    return;
-                }
+            deleteRole(row) {
                 let that = this;
                 this.$globalFun.messageBox({
                     message: '确定删除,该操作无法撤销',
@@ -272,27 +279,18 @@
                             url: that.$global.URL.system.sysRole.delete,
                             method: 'post',
                             data: {
-                                roleId: data.id
+                                roleId: row.id
                             },
                             success() {
                                 that.$globalFun.successMsg('删除成功');
-                                that.initGetRoleTree();
+                                that.$refs.table.renderTable();
                             }
                         })
                     }
                 });
             },
-            handleRoleNodeClick(data) {
-                this.parentData = data;
-                this.getRoleFunList();
-            },
             //保存角色的功能
             saveRole() {
-                let isStop = this.parentData.isStop;
-                if ('0' !== isStop + '') {
-                    this.$globalFun.errorMsg('角色禁用中,禁止保存功能');
-                    return;
-                }
                 let getCheckedKeys = this.$refs['funTree'].getCheckedKeys();
                 let getHalfCheckedKeys = this.$refs['funTree'].getHalfCheckedKeys();
                 let funIds = getCheckedKeys.concat(getHalfCheckedKeys);
@@ -306,7 +304,7 @@
                     url: that.$global.URL.system.sysRole.addRoleFun,
                     method: 'post',
                     data: {
-                        roleId: that.parentData.id,
+                        roleId: that.formData['id'],
                         funIds
                     },
                     success() {
@@ -314,26 +312,21 @@
                     }
                 });
             },
-            changeRoleIsStop(isStop) {
-                let data = this.parentData;
-                if (null != data && (this.$global.GLOBAL.super_admin_role_id === data.id || '超级管理员' === data.name)) {
-                    this.$globalFun.errorMsg('超级管理员禁止操作');
-                    return;
-                }
+            changeRoleIsStop(row, isStop) {
                 let that = this;
                 this.$globalFun.messageBox({
-                    message: '是否' + ('0' === isStop + '' ? '启用' : '禁用') + '角色,该操作将会同时改变下级状态',
+                    message: `是否${0 === isStop ? '启用' : '禁用'}角色,该操作将会同时改变下级状态`,
                     confirm() {
                         that.$axios({
                             url: that.$global.URL.system.sysRole.changeRoleIsStop,
                             method: 'post',
                             data: {
-                                roleId: that.parentData.id,
+                                roleId: that.formData.id,
                                 isStop
                             },
                             success() {
                                 that.$globalFun.successMsg('成功');
-                                that.initGetRoleTree();
+                                that.$refs.table.renderTable();
                             }
                         });
                     }
@@ -342,29 +335,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    #index {
-        display: flex;
-        .role {
-            flex: 1;
-            button {
-                margin-bottom: 20px;
-            }
-        }
-        .function {
-            flex: 2.5;
-            padding-left: 2%;
-            border-left: 1px solid #eee;
-            .title {
-                margin-bottom: 20px;
-                span {
-                    color: #666;
-                }
-                button {
-                    margin-left: 20px;
-                }
-            }
-        }
-    }
-</style>

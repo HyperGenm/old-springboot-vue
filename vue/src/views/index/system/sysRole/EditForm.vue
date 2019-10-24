@@ -2,11 +2,6 @@
     <div id="form">
         <dialog-form :formData="form" :formOptions="formOptions" :formRules="rules"
                      @closeDialog="$emit('closeDialog')" @submit="submit">
-            <template v-if="'add' === handleType" v-slot:itemHead>
-                <el-form-item label="上级角色名称">
-                    <el-input disabled v-model="parentData.name"></el-input>
-                </el-form-item>
-            </template>
         </dialog-form>
     </div>
 </template>
@@ -18,11 +13,6 @@
             'dialog-form': () => import('@/components/dialog/form/Index.vue')
         },
         props: {
-            parentData: {
-                type: Object,
-                default: () => {
-                }
-            },
             handleType: {
                 type: String,
                 default: 'add'
@@ -32,11 +22,16 @@
             }
         },
         watch: {
+            handleType(type) {
+                this.formOptions[0]['hidden'] = 'update' === type;
+                this.formOptions[3]['hidden'] = 'update' === type;
+            },
             formData(formData) {
                 this.form = formData;
             }
         },
         data() {
+            let that = this;
             return {
                 rules: {
                     name: [
@@ -45,22 +40,45 @@
                     ]
                 },
                 formOptions: [
-                    {type: 'input', label: '角色名', prop: 'name'},
+                    {
+                        type: 'select', label: '上级', prop: 'parentId', required: true,
+                        options: [], hidden: 'update' === that.handleType
+                    },
+                    {type: 'input', label: '角色名', prop: 'name', required: true},
                     {type: 'input', label: '排序', prop: 'sort', inputType: 'number'},
                     {
-                        type: 'radio', label: '是否启用', prop: 'isStop', options: [
+                        type: 'radio', label: '是否启用', prop: 'isStop', required: true, options: [
                             {label: '启用', value: 0},
                             {label: '禁用', value: 1}
-                        ]
+                        ],
+                        hidden: 'update' === that.handleType
                     },
                     {type: 'textarea', label: '描述', prop: 'description'}
                 ],
-                form: this.formData
+                form: that.formData
             }
         },
+        mounted() {
+            this.getRoleList();
+        },
         methods: {
+            getRoleList() {
+                let that = this;
+                this.$axios({
+                    url: that.$global.URL.system.sysRole.getList,
+                    success(data) {
+                        let options = [];
+                        data.forEach(value => {
+                            options.push({
+                                label: value['name'],
+                                value: value['id']
+                            });
+                        });
+                        that.formOptions[0]['options'] = options;
+                    }
+                });
+            },
             submit(form) {
-                form['parentId'] = this.form['parentId'];
                 let that = this;
                 that.$axios({
                     url: that.$global.URL['system']['sysRole'][that.handleType],
@@ -69,7 +87,7 @@
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');
-                        that.$emit('renderTree');
+                        that.$emit('renderTable');
                     }
                 });
             }

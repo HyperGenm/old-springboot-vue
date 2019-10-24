@@ -203,7 +203,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("[^(a-zA-Z/)]*", "")
+            String[] split = containApi.replaceAll("[^(a-zA-Z/，,)]*", "")
                     .replace("，", ",").split(",");
             result.addAll(Arrays.asList(split));
         }
@@ -279,7 +279,7 @@ public class SysFunctionService extends BaseService {
             if (StringUtil.isBlank(containApi)) {
                 continue;
             }
-            String[] split = containApi.replaceAll("[^(a-zA-Z/)]*", "")
+            String[] split = containApi.replaceAll("[^(a-zA-Z/，,)]*", "")
                     .replace("，", ",").split(",");
             resultList.addAll(Arrays.asList(split));
         }
@@ -317,7 +317,7 @@ public class SysFunctionService extends BaseService {
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
             sysFunction.setContainApi(sysFunction.getContainApi()
-                    .replaceAll("[^(a-zA-Z/)]*", "")
+                    .replaceAll("[^(a-zA-Z/，,)]*", "")
                     .replace("，", ","));
         }
         sysFunction.setCreateTime(DateUtils.getNowDateTime());
@@ -355,7 +355,7 @@ public class SysFunctionService extends BaseService {
         }
         if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
             sysFunction.setContainApi(sysFunction.getContainApi()
-                    .replaceAll("[^(a-zA-Z/)]*", "")
+                    .replaceAll("[^(a-zA-Z/，,)]*", "")
                     .replace("，", ","));
         }
         //如果要修改为按钮

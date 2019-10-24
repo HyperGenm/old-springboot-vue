@@ -39,8 +39,8 @@
                 imgUUID: '',
                 imgCodeUrl: '',
                 form: {
-                    username: '',
-                    password: '',
+                    username: 'superadmin',
+                    password: '111111',
                     code: ''
                 },
                 rules: {

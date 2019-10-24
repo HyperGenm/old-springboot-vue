@@ -7,10 +7,7 @@ import com.weiziplus.springboot.mapper.system.SysRoleFunctionMapper;
 import com.weiziplus.springboot.mapper.system.SysRoleMapper;
 import com.weiziplus.springboot.mapper.system.SysUserMapper;
 import com.weiziplus.springboot.models.SysRole;
-import com.weiziplus.springboot.util.DateUtils;
-import com.weiziplus.springboot.util.ResultUtils;
-import com.weiziplus.springboot.util.ToolUtils;
-import com.weiziplus.springboot.util.ValidateUtils;
+import com.weiziplus.springboot.util.*;
 import com.weiziplus.springboot.util.redis.RedisUtils;
 import com.weiziplus.springboot.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.util.token.JwtTokenUtils;
@@ -47,7 +44,7 @@ public class SysRoleService extends BaseService {
     /**
      * 角色允许使用为0，禁止为1
      */
-    public static final Integer ADMIN_ROLE_IS_STOP = 0;
+    public static final Integer ADMIN_ROLE_IS_STOP_ZERO = 0;
 
     /**
      * 系统功能表中角色管理id为4
@@ -58,6 +55,45 @@ public class SysRoleService extends BaseService {
      * SysRole基础redis的key
      */
     private static final String BASE_REDIS_KEY = "service:system:SysRoleService:";
+
+    /**
+     * 根据父级id和role列表获取子级列表
+     *
+     * @param parentId
+     * @param roleList
+     * @return
+     */
+    private List<SysRole> getChildrenListByParentIdAndRoleList(Long parentId, List<SysRole> roleList) {
+        List<SysRole> resultList = new ArrayList<>();
+        for (SysRole sysRole : roleList) {
+            if (!parentId.equals(sysRole.getParentId())) {
+                continue;
+            }
+            sysRole.setChildren(getChildrenListByParentIdAndRoleList(sysRole.getId(), roleList));
+            resultList.add(sysRole);
+        }
+        return resultList;
+    }
+
+    /**
+     * 获取角色树形结构
+     *
+     * @return
+     */
+    public ResultUtils<PageUtils> getAllRoleTreePageList() {
+        List<SysRole> resultList = new ArrayList<>();
+        SysRole minParentIdRoleInfo = mapper.getMinParentIdRoleInfo();
+        List<SysRole> roleList = mapper.getRoleList();
+        for (SysRole sysRole : roleList) {
+            if (!minParentIdRoleInfo.getParentId().equals(sysRole.getParentId())) {
+                continue;
+            }
+            sysRole.setChildren(getChildrenListByParentIdAndRoleList(sysRole.getId(), roleList));
+            resultList.add(sysRole);
+        }
+        PageUtils pageUtil = PageUtils.pageInfo(resultList);
+        return ResultUtils.success(pageUtil);
+    }
 
     /**
      * 获取角色树形结构
@@ -177,7 +213,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("角色名已存在");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
-        if (!ADMIN_ROLE_IS_STOP.equals(superRole.getIsStop())) {
+        if (!ADMIN_ROLE_IS_STOP_ZERO.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtils.getNowDateTime());
@@ -212,13 +248,7 @@ public class SysRoleService extends BaseService {
         if (null != role && null != role.getId() && !role.getId().equals(sysRole.getId())) {
             return ResultUtils.error("角色名已存在");
         }
-        if (!ADMIN_ROLE_IS_STOP.equals(sysRole.getIsStop())) {
-            return ResultUtils.error("操作失败，角色处于禁用状态");
-        }
-        SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
-        if (!ADMIN_ROLE_IS_STOP.equals(superRole.getIsStop())) {
-            return ResultUtils.error("操作失败，父级处于禁用状态");
-        }
+        sysRole.setIsStop(null);
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysRole);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
@@ -282,10 +312,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("状态不能为空");
         }
         //判断是否启用
-        if (ADMIN_ROLE_IS_STOP.equals(isStop)) {
+        if (ADMIN_ROLE_IS_STOP_ZERO.equals(isStop)) {
             SysRole role = mapper.getInfoByRoleId(roleId);
             SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
-            if (!ADMIN_ROLE_IS_STOP.equals(superRole.getIsStop())) {
+            if (!ADMIN_ROLE_IS_STOP_ZERO.equals(superRole.getIsStop())) {
                 return ResultUtils.error("父级当前处于禁用状态");
             }
         }

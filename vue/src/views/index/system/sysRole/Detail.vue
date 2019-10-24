@@ -11,20 +11,13 @@
             'dialog-detail': () => import('@/components/dialog/detail/Index.vue')
         },
         props: {
-            isShow: {
-                type: Boolean,
-                default: false
-            },
             detailData: {
                 type: Object
             }
         },
         watch: {
-            isShow(show) {
-                if (!show) {
-                    return;
-                }
-                this.initData(this.detailData);
+            detailData(data) {
+                this.initData(data);
             }
         },
         data() {
@@ -42,8 +35,13 @@
                     {label: '角色', prop: name},
                     {label: '排序', prop: sort},
                     {
-                        label: '是否启用', formatter() {
-                            return ('0' === isStop + '') ? '启用' : '禁用';
+                        label: '状态', type: 'tag',
+                        element() {
+                            let result = [
+                                {content: '正常'},
+                                {content: '禁用', type: 'danger'}
+                            ];
+                            return result[isStop];
                         }
                     },
                     {label: '描述', prop: description},

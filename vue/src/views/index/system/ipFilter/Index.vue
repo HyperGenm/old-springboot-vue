@@ -73,7 +73,7 @@
                                         return false;
                                     }
                                     if (null == row) {
-                                        return false;
+                                        return true;
                                     }
                                     return '127.0.0.1' !== row['name'];
                                 },

@@ -3,6 +3,7 @@ package com.weiziplus.springboot.mapper.system;
 import com.weiziplus.springboot.models.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -27,6 +28,17 @@ public interface SysRoleMapper {
      * @return
      */
     List<SysRole> getRoleListByParentId(@Param("parentId") Long parentId);
+
+    /**
+     * 获取parent_id最小的功能信息
+     *
+     * @return
+     */
+    @Select("SELECT * " +
+            "FROM sys_role " +
+            "ORDER BY parent_id ASC " +
+            "LIMIT 1")
+    SysRole getMinParentIdRoleInfo();
 
     /**
      * 根据name获取角色信息

@@ -10,7 +10,6 @@ import {Loading} from 'element-ui';
 //请求拦截器
 axios.interceptors.request.use(
     config => {
-        let that = Vue.prototype;
         // 将请求放入全局变量中，便于取消请求
         config.cancelToken = new axios.CancelToken(cancel => {
             let cancelArray = window['_axiosCancelToken'] || [];

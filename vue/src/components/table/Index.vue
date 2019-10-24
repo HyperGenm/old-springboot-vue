@@ -413,9 +413,9 @@
                     }
                     /**处理code不为200的出错请求*/
                     if (axios_result_code['success'] !== res.data.code) {
-                        that.$globalFun.errorMsg(res.data.msg);
+                        that.$globalFun.errorMsg(res.data['msg']);
                         that.emptyText = JSON.stringify(res['data']);
-                        that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
+                        that.$globalFun.consoleWarnTable(`请求出错url:${_url}`, res['data']);
                         return;
                     }
                     /**判断返回格式是否正确*/

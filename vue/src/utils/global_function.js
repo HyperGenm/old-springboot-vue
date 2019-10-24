@@ -167,7 +167,11 @@ function createUUID() {
  */
 function consoleWarnTable(msg, object = {}) {
     console.warn(msg);
-    console.table(object);
+    if (object instanceof Object) {
+        console.table(object);
+    } else {
+        console.log(object);
+    }
     console.warn('↑↑以上为错误详情↑↑↑↑↑');
 }
 
