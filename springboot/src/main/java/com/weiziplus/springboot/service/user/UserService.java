@@ -69,10 +69,10 @@ public class UserService extends BaseService {
     public ResultUtils addUser() {
         //通过默认过期时间删除redis
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
-        User user = new User();
-        user.setUsername(ToolUtils.createUUID().substring(0, 5));
-        user.setPassword(ToolUtils.createUUID().substring(10));
-        user.setCreateTime(DateUtils.getNowDateTime());
+        User user = new User()
+                .setUsername(ToolUtils.createUUID().substring(0, 5))
+                .setPassword(ToolUtils.createUUID().substring(10))
+                .setCreateTime(DateUtils.getNowDateTime());
         baseInsert(user);
         //删除redis
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);

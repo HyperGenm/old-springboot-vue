@@ -5,6 +5,7 @@ import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("sys_role_function")
+@Accessors(chain = true)
 public class SysRoleFunction implements Serializable {
     /**
      * 角色功能表主键，自增

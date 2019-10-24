@@ -6,6 +6,7 @@ import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("sys_user")
+@Accessors(chain = true)
 public class SysUser implements Serializable {
     /**
      * 系统用户表主键id，自增

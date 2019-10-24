@@ -128,12 +128,12 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return ResultUtils.error("ip已存在");
         }
-        DataDictionaryValue value = new DataDictionaryValue();
-        value.setDictionaryCode(DICTIONARY_CODE);
-        value.setType(type);
-        value.setName(ip);
-        value.setValue(ip);
-        value.setCreateTime(DateUtils.getNowDateTime());
+        DataDictionaryValue value = new DataDictionaryValue()
+                .setDictionaryCode(DICTIONARY_CODE)
+                .setType(type)
+                .setName(ip)
+                .setValue(ip)
+                .setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseInsert(value);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);
@@ -174,13 +174,13 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != oneInfoByIp && null != oneInfoByIp.getId()) {
             return;
         }
-        DataDictionaryValue value = new DataDictionaryValue();
-        value.setDictionaryCode(DICTIONARY_CODE);
-        //1为黑名单
-        value.setType(TYPE_BLACK);
-        value.setName(ip);
-        value.setValue(ip);
-        value.setCreateTime(DateUtils.getNowDateTime());
+        DataDictionaryValue value = new DataDictionaryValue()
+                .setDictionaryCode(DICTIONARY_CODE)
+                //1为黑名单
+                .setType(TYPE_BLACK)
+                .setName(ip)
+                .setValue(ip)
+                .setCreateTime(DateUtils.getNowDateTime());
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseInsert(value);
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);

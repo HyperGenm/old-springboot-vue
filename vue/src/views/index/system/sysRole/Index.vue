@@ -2,12 +2,17 @@
     <div id="index">
         <div class="role">
             <div class="btn">
-                <el-button v-for="(btn,index) in roleHeaderButtons" :key="index"
-                           v-if="btn['show']"
-                           :type="btn['type']" size="mini"
-                           @click="btn['handleClick']">
-                    {{btn['title']}}
-                </el-button>
+                <el-popover placement="right"
+                            width="400"
+                            trigger="click">
+                    <el-button v-for="btn in roleHeaderButtons" :key="btn['name']"
+                               v-if="btn['show']" style="margin-bottom: 20px;"
+                               :type="btn['type']" size="mini"
+                               @click="btn['handleClick']">
+                        {{btn['title']}}
+                    </el-button>
+                    <el-button slot="reference" type="primary" size="mini" icon="el-icon-s-tools">编辑</el-button>
+                </el-popover>
             </div>
             <el-tree ref="roleTree" node-key="id"
                      highlight-current default-expand-all

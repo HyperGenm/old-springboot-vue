@@ -1,6 +1,5 @@
 package com.weiziplus.springboot.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
@@ -8,18 +7,20 @@ import com.weiziplus.springboot.base.Table;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 /**
  * 用户表
  * user
- * @author Administrator
- * @date 2019-09-29 09:16:40
+ * @author 16028
+ * @date 2019-10-24 14:21:16
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("user")
+@Accessors(chain = true)
 @ApiModel("用户表")
 public class User implements Serializable {
     /**
@@ -39,7 +40,6 @@ public class User implements Serializable {
     /**
      * 密码
      */
-    @JsonIgnore
     @ApiModelProperty("密码")
     @Column("password")
     private String password;

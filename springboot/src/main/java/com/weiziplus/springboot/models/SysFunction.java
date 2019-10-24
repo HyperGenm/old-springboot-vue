@@ -5,6 +5,7 @@ import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("sys_function")
+@Accessors(chain = true)
 public class SysFunction implements Serializable {
     /**
      * 系统功能表主键，自增

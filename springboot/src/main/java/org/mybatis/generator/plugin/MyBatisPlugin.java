@@ -50,6 +50,7 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addImportedType("com.weiziplus.springboot.base.Id");
         topLevelClass.addImportedType("com.weiziplus.springboot.base.Table");
         topLevelClass.addImportedType("lombok.Data");
+        topLevelClass.addImportedType("lombok.experimental.Accessors");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
 
@@ -57,6 +58,7 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addAnnotation("@JsonInclude(JsonInclude.Include.NON_NULL)");
         topLevelClass.addAnnotation("@Data");
         topLevelClass.addAnnotation("@Table(\"" + introspectedTable.getFullyQualifiedTable() + "\")");
+        topLevelClass.addAnnotation("@Accessors(chain = true)");
 
         //设置类上面的注释
         topLevelClass.addJavaDocLine("/**");
@@ -66,7 +68,7 @@ public class MyBatisPlugin extends PluginAdapter {
             for (String remarkLine : remarkLines) {
                 topLevelClass.addJavaDocLine(" * " + remarkLine);
             }
-            topLevelClass.addAnnotation("@ApiModel(\"" + remarks.replace("\r\n"," ") + "\")");
+            topLevelClass.addAnnotation("@ApiModel(\"" + remarks.replace("\r\n", " ") + "\")");
         }
         StringBuilder sb = new StringBuilder();
         sb.append(" * ").append(introspectedTable.getFullyQualifiedTable());

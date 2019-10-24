@@ -82,10 +82,10 @@ public class SysUserService extends BaseService {
         if (null != user) {
             return ResultUtils.error("用户名已存在");
         }
-        sysUser.setPassword(Md5Utils.encode(sysUser.getPassword()));
-        sysUser.setCreateTime(DateUtils.getNowDateTime());
-        sysUser.setSuspendNum(null);
-        sysUser.setRoleId(null);
+        sysUser.setPassword(Md5Utils.encode(sysUser.getPassword()))
+                .setCreateTime(DateUtils.getNowDateTime())
+                .setSuspendNum(null)
+                .setRoleId(null);
         return ResultUtils.success(baseInsert(sysUser));
     }
 
@@ -123,11 +123,11 @@ public class SysUserService extends BaseService {
         if (ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
             AdminTokenUtils.deleteToken(sysUser.getId());
         }
-        SysUser newUser = new SysUser();
-        newUser.setId(sysUser.getId());
-        newUser.setAllowLogin(sysUser.getAllowLogin());
-        newUser.setRealName(sysUser.getRealName());
-        newUser.setUsername(sysUser.getUsername());
+        SysUser newUser = new SysUser()
+                .setId(sysUser.getId())
+                .setAllowLogin(sysUser.getAllowLogin())
+                .setRealName(sysUser.getRealName())
+                .setUsername(sysUser.getUsername());
         return ResultUtils.success(baseUpdate(newUser));
     }
 

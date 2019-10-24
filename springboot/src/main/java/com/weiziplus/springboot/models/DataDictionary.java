@@ -7,6 +7,7 @@ import com.weiziplus.springboot.base.Table;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @Data
 @Table("data_dictionary")
 @ApiModel("数据字典表")
+@Accessors(chain = true)
 public class DataDictionary implements Serializable {
     /**
      * 自增

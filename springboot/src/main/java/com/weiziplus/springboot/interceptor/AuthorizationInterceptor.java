@@ -118,10 +118,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             //查看是否有日志注解，有的话将日志信息放入数据库
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
             if (null != systemLog) {
-                SysLog sysLog = new SysLog();
-                sysLog.setUserId(JwtTokenUtils.getUserIdByToken(token));
-                sysLog.setDescription(systemLog.description());
-                sysLog.setIpAddress(HttpRequestUtils.getIpAddress(request));
+                SysLog sysLog = new SysLog()
+                        .setUserId(JwtTokenUtils.getUserIdByToken(token))
+                        .setDescription(systemLog.description())
+                        .setIpAddress(HttpRequestUtils.getIpAddress(request));
                 //将日志异步放入数据库
                 systemAsync.handleSysLog(sysLog);
             }

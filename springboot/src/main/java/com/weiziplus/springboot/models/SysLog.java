@@ -5,6 +5,7 @@ import com.weiziplus.springboot.base.Column;
 import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("sys_log")
+@Accessors(chain = true)
 public class SysLog implements Serializable {
     /**
      * 系统日志表主键，自增
