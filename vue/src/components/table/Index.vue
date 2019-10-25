@@ -95,8 +95,8 @@
                       :stripe="null == selection || 0 >= selection.length"
                       @selection-change="selectionChange" :row-style="rowStyle"
                       @sort-change="sortChange"
-                      :row-key="tableOther.rowKey"
-                      :default-expand-all="tableOther.defaultExpandAll"
+                      :row-key="tableOther.rowKey || 'id'"
+                      :default-expand-all="tableOther.defaultExpandAll || true"
                       border highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
                 <el-table-column type="index" width="50"></el-table-column>

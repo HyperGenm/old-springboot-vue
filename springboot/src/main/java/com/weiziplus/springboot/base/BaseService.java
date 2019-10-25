@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.base;
 
-import com.weiziplus.springboot.config.GlobalConfig;
 import com.weiziplus.springboot.util.ToolUtils;
+import com.weiziplus.springboot.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 基础service
+ * 基础service,封装了常用的增删改查
  *
  * @author wanglongwei
  * @date 2019/5/20 10:44
@@ -24,6 +24,11 @@ public class BaseService {
     BaseMapper mapper;
 
     /**
+     * BaseService基础redis的key
+     */
+    private static final String BASE_REDIS_KEY = "base:BaseService:";
+
+    /**
      * 根据实体类class获取数据库表名
      *
      * @param nowClass
@@ -33,8 +38,15 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
+        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", nowClass.getName());
+        Object redisObject = RedisUtils.get(key);
+        if (null != redisObject) {
+            return String.valueOf(redisObject);
+        }
         Table table = (Table) nowClass.getAnnotation(Table.class);
-        return table.value();
+        String value = table.value();
+        RedisUtils.set(key, value, 60L * 60 * 3);
+        return value;
     }
 
     /**
@@ -51,7 +63,14 @@ public class BaseService {
         if (null == object.getClass().getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + object.getClass());
         }
-        return object.getClass().getAnnotation(Table.class).value();
+        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", object.getClass().getName());
+        Object redisObject = RedisUtils.get(key);
+        if (null != redisObject) {
+            return String.valueOf(redisObject);
+        }
+        String value = object.getClass().getAnnotation(Table.class).value();
+        RedisUtils.set(key, value, 60L * 60 * 3);
+        return value;
     }
 
     /**
@@ -64,10 +83,17 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
+        String key = createRedisKey(BASE_REDIS_KEY + "getPrimaryKey:", nowClass.getName());
+        Object redisObject = RedisUtils.get(key);
+        if (null != redisObject) {
+            return String.valueOf(redisObject);
+        }
         Field[] fields = nowClass.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(Id.class)) {
-                return field.getAnnotation(Id.class).value();
+                String value = field.getAnnotation(Id.class).value();
+                RedisUtils.set(key, value, 60L * 60 * 3);
+                return value;
             }
         }
         throw new RuntimeException("当前实体类没有设置主键==========" + nowClass);
