@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @Data
 @Table("data_dictionary_value")
 @ApiModel("数据字典值")
+@Alias("DataDictionaryValue")
 @Accessors(chain = true)
 public class DataDictionaryValue implements Serializable {
     /**

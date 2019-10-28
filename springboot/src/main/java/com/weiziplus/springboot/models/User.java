@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 
@@ -16,12 +17,13 @@ import java.io.Serializable;
  * 用户表
  * user
  * @author 16028
- * @date 2019-10-24 21:20:14
+ * @date 2019-10-28 18:50:38
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("user")
 @Accessors(chain = true)
+@Alias("User")
 @ApiModel("用户表")
 public class User implements Serializable {
     /**

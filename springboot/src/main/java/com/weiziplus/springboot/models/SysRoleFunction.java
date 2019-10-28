@@ -6,6 +6,7 @@ import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @Data
 @Table("sys_role_function")
 @Accessors(chain = true)
+@Alias("SysRoleFunction")
 public class SysRoleFunction implements Serializable {
     /**
      * 角色功能表主键，自增

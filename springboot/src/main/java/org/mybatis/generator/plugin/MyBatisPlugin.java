@@ -1,7 +1,9 @@
 package org.mybatis.generator.plugin;
 
 import com.weiziplus.springboot.util.DateUtils;
+import com.weiziplus.springboot.util.ToolUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -53,12 +55,15 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addImportedType("lombok.experimental.Accessors");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
+        topLevelClass.addImportedType("org.apache.ibatis.type.Alias");
 
+        FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
         //添加@注解
         topLevelClass.addAnnotation("@JsonInclude(JsonInclude.Include.NON_NULL)");
         topLevelClass.addAnnotation("@Data");
-        topLevelClass.addAnnotation("@Table(\"" + introspectedTable.getFullyQualifiedTable() + "\")");
+        topLevelClass.addAnnotation("@Table(\"" + fullyQualifiedTable + "\")");
         topLevelClass.addAnnotation("@Accessors(chain = true)");
+        topLevelClass.addAnnotation("@Alias(\"" + underlineToCamelHump(fullyQualifiedTable.toString()) + "\")");
 
         //设置类上面的注释
         topLevelClass.addJavaDocLine("/**");
@@ -126,5 +131,34 @@ public class MyBatisPlugin extends PluginAdapter {
     public boolean modelGetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
         //不生成setter
         return false;
+    }
+
+    /**
+     * 将下划线风格替换为驼峰风格---首字母大写
+     *
+     * @param name
+     * @return
+     */
+    private String underlineToCamelHump(String name) {
+        if (ToolUtils.isBlank(name)) {
+            return "";
+        }
+        String underline = "_";
+        // 不含下划线，仅将首字母小写
+        if (!name.contains(underline)) {
+            return name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
+        StringBuilder result = new StringBuilder();
+        // 用下划线将原始字符串分割
+        String[] camels = name.split(underline);
+        for (String camel : camels) {
+            // 跳过原始字符串中开头、结尾的下换线或双重下划线
+            if (camel.isEmpty()) {
+                continue;
+            }
+            result.append(camel.substring(0, 1).toUpperCase());
+            result.append(camel.substring(1).toLowerCase());
+        }
+        return result.toString();
     }
 }

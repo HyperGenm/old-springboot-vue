@@ -7,6 +7,7 @@ import com.weiziplus.springboot.base.Id;
 import com.weiziplus.springboot.base.Table;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @Data
 @Table("sys_user")
 @Accessors(chain = true)
+@Alias("SysUser")
 public class SysUser implements Serializable {
     /**
      * 系统用户表主键id，自增

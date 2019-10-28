@@ -55,7 +55,7 @@
                                 sort: 0,
                                 type: 0,
                                 description: '',
-                                parentId: 0
+                                parentId: [0]
                             };
                             that.dialogEditForm = true;
                         }
