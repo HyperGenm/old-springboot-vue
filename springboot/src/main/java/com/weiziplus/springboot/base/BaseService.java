@@ -150,7 +150,7 @@ public class BaseService {
      * @param list
      * @return
      */
-    private Map<String, Object> handleTableListInsert(List<Object> list) {
+    private <T> Map<String, Object> handleTableListInsert(List<T> list) {
         Map<String, Object> result = new HashMap<>(3);
         result.put("TABLE_NAME", getTableName(list.get(0)));
 
@@ -316,7 +316,7 @@ public class BaseService {
      * @param list
      * @return
      */
-    protected int baseInsertList(List<Object> list) {
+    protected <T> int baseInsertList(List<T> list) {
         if (null == list || 0 >= list.size()) {
             return 0;
         }

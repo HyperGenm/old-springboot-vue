@@ -77,7 +77,7 @@ public class ResultUtils<T> implements Serializable {
      *
      * @return
      */
-    public static ResultUtils success() {
+    public static <T> ResultUtils<T> success() {
         return success(null);
     }
 
@@ -113,7 +113,7 @@ public class ResultUtils<T> implements Serializable {
      * @param msg
      * @return
      */
-    private static ResultUtils baseError(Integer code, String msg) {
+    private static <T> ResultUtils<T> baseError(Integer code, String msg) {
         return new ResultUtils<>(code, msg, null);
     }
 
@@ -123,7 +123,7 @@ public class ResultUtils<T> implements Serializable {
      * @param msg
      * @return
      */
-    public static ResultUtils errorToken(String msg) {
+    public static <T> ResultUtils<T> errorToken(String msg) {
         return baseError(ERROR_TOKEN_CODE, msg);
     }
 
@@ -133,7 +133,7 @@ public class ResultUtils<T> implements Serializable {
      * @param msg
      * @return
      */
-    public static ResultUtils error(String msg) {
+    public static <T> ResultUtils<T> error(String msg) {
         return baseError(ERROR_CODE, msg);
     }
 
@@ -143,7 +143,7 @@ public class ResultUtils<T> implements Serializable {
      * @param msg
      * @return
      */
-    public static ResultUtils errorRole(String msg) {
+    public static <T> ResultUtils<T> errorRole(String msg) {
         return baseError(ERROR_ROLE_CODE, msg);
     }
 
@@ -152,7 +152,7 @@ public class ResultUtils<T> implements Serializable {
      *
      * @return
      */
-    public static ResultUtils errorSuspend() {
+    public static <T> ResultUtils<T> errorSuspend() {
         return baseError(ERROR_SUSPEND_CODE, "Rider Kick");
     }
 
@@ -162,7 +162,7 @@ public class ResultUtils<T> implements Serializable {
      * @param msg
      * @return
      */
-    public static ResultUtils errorException(String msg) {
+    public static <T> ResultUtils<T> errorException(String msg) {
         return baseError(ERROR_EXCEPTION, msg);
     }
 

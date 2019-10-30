@@ -117,6 +117,7 @@
 
 <style lang="scss">
     #wei-dialog-detail {
+        overflow: hidden;
         .el-row {
             color: #666;
             margin-bottom: 5px;
