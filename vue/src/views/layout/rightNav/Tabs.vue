@@ -57,20 +57,27 @@
         },
         methods: {
             removeTab(targetName) {
-                let tabs = this.tabs;
-                let activeName = this.tabValue;
-                if (activeName === targetName) {
-                    tabs.forEach((tab, index) => {
-                        if (tab.name === targetName) {
-                            let nextTab = tabs[index + 1] || tabs[index - 1];
-                            if (nextTab) {
-                                activeName = nextTab.name;
-                            }
-                        }
-                    });
+                let {tabs, tabValue} = this;
+                //关闭的页面不是当前活跃页面
+                if (targetName !== tabValue) {
+                    this.tabs = tabs.filter(tab => tab.name !== targetName);
+                    return;
                 }
-                this.tabValue = activeName;
+                //当前只有一个页面
+                if (1 >= tabs.length) {
+                    return;
+                }
+                tabs.forEach((tab, index) => {
+                    if (tab.name === targetName) {
+                        let nextTab = tabs[index + 1] || tabs[index - 1];
+                        if (nextTab) {
+                            tabValue = nextTab.name;
+                        }
+                    }
+                });
+                this.tabValue = tabValue;
                 this.tabs = tabs.filter(tab => tab.name !== targetName);
+                this.$router.push(tabValue);
             },
             clickTab(tab) {
                 this.$router.push(tab.name);
