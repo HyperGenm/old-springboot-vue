@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysFunctionMapper">
+    <select id="getMinParentIdMenuFunInfoByRoleId" resultType="SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.type = 0 AND sf.id = srf.function_id
+        ORDER BY sf.parent_id ASC
+        LIMIT 1
+    </select>
+    <select id="getMenuListByRoleId" resultType="SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.type = 0 AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+    <select id="getButtonListByRoleId" resultType="SysFunction">
+        SELECT sf.id,sf.name
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.type = 1 AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+    <select id="getFunListByParentId" resultType="SysFunction">
+        SELECT *
+        FROM sys_function
+        WHERE parent_id = #{parentId}
+        ORDER BY sort ASC
+    </select>
+    <select id="getFunInfoByName" resultType="SysFunction">
+        SELECT *
+        FROM sys_function
+        WHERE `name` = #{name}
+        LIMIT 1
+    </select>
+    <select id="getFunListByRoleId" resultType="SysFunction">
+        SELECT sf.*
+        FROM sys_function sf,sys_role_function srf
+        WHERE srf.role_id = #{roleId} AND sf.id = srf.function_id
+        ORDER BY sf.sort ASC
+    </select>
+</mapper>

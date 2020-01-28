@@ -1,7 +1,7 @@
 package org.mybatis.generator.plugin;
 
-import com.weiziplus.springboot.util.DateUtils;
-import com.weiziplus.springboot.util.ToolUtils;
+import com.weiziplus.springboot.common.util.DateUtils;
+import com.weiziplus.springboot.common.util.ToolUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -48,9 +48,9 @@ public class MyBatisPlugin extends PluginAdapter {
         }
         //添加import
         topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonInclude");
-        topLevelClass.addImportedType("com.weiziplus.springboot.base.Column");
-        topLevelClass.addImportedType("com.weiziplus.springboot.base.Id");
-        topLevelClass.addImportedType("com.weiziplus.springboot.base.Table");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Column");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Id");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Table");
         topLevelClass.addImportedType("lombok.Data");
         topLevelClass.addImportedType("lombok.experimental.Accessors");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");

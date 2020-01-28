@@ -42,7 +42,7 @@
 
         <!-- targetPackage：生成的实体类所在的包 -->
         <!-- targetProject：生成的实体类所在的硬盘位置 -->
-        <javaModelGenerator targetPackage="com.weiziplus.springboot.models"
+        <javaModelGenerator targetPackage="com.weiziplus.springboot.common.models"
                             targetProject="src/main/java">
             <!-- 是否允许子包 -->
             <property name="enableSubPackages" value="false"/>
