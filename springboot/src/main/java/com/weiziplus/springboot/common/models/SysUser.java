@@ -53,7 +53,7 @@ public class SysUser implements Serializable {
      * 系统角色表id
      */
     @Column("role_id")
-    private Long roleId;
+    private Integer roleId;
 
     /**
      * 是否允许登录;0:允许，1:禁止，2:封号

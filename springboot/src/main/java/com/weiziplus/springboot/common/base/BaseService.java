@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 基础service,封装了常用的增删改查
@@ -347,6 +344,17 @@ public class BaseService {
      * @param id
      * @return
      */
+    protected int baseDeleteByClassAndId(Class nowClass, Integer id) {
+        return baseDeleteByClassAndId(nowClass, Long.valueOf(id));
+    }
+
+    /**
+     * 删除
+     *
+     * @param nowClass
+     * @param id
+     * @return
+     */
     protected int baseDeleteByClassAndId(Class nowClass, String id) {
         if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
             return 0;
@@ -372,6 +380,25 @@ public class BaseService {
             put("TABLE_NAME", getTableName(nowClass));
             put("ids", ids);
         }});
+    }
+
+    /**
+     * 删除多个
+     *
+     * @param nowClass
+     * @param ids
+     * @return
+     */
+    protected int baseDeleteByClassAndIds(Class nowClass, Integer[] ids) {
+        if (null == nowClass || null == ids || 0 >= ids.length) {
+            return 0;
+        }
+        List<Long> longList = new ArrayList<>(ids.length);
+        for (Integer id : ids) {
+            longList.add(Long.valueOf(id));
+        }
+        Long[] longs = new Long[]{};
+        return baseDeleteByClassAndIds(nowClass, longList.toArray(longs));
     }
 
     /**

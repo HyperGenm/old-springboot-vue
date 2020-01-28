@@ -33,13 +33,13 @@ public class SysRoleFunction implements Serializable {
      * 角色表id
      */
     @Column("role_id")
-    private Long roleId;
+    private Integer roleId;
 
     /**
      * 功能表id
      */
     @Column("function_id")
-    private Long functionId;
+    private Integer functionId;
 
     private static final long serialVersionUID = 1L;
 }

@@ -10,6 +10,14 @@
     <!--CDN引入Vue后，element-ui才可以CDN引入-->
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
     <script>window.Vue || document.write(`<script src="<%= BASE_URL %>static/cdn/vue-2.6.10.min.js"><\/script>`)</script>
+    <!--CDN引入element-ui，减少打包体积-->
+    <script src="https://cdn.bootcss.com/element-ui/2.8.2/index.js"></script>
+    <script>window.ELEMENT || document.write(`<script src="<%= BASE_URL %>static/cdn/element-ui-2.8.2.min.js"><\/script>`)</script>
+    <!--CDN引入wangEditor，减少打包体积-->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/wangEditor/3.1.1/wangEditor.min.css">
+    <script src="https://cdn.bootcss.com/wangEditor/3.1.1/wangEditor.min.js"></script>
+    <script>window.wangEditor || document.write(`<script src="<%= BASE_URL %>static/cdn/wangEditor-3.1.1.min.js"><\/script>`)</script>
+    <script>window.wangEditor || document.write(`<link rel="stylesheet" href="<%= BASE_URL %>static/cdn/wangEditor/3.1.1/wangEditor.min.css">`)</script>
     <!--CDN引入vue-router，减少打包体积-->
     <script src="https://cdn.bootcss.com/vue-router/3.0.3/vue-router.min.js"></script>
     <script>window.VueRouter || document.write(`<script src="<%= BASE_URL %>static/cdn/vue-router-3.0.3.min.js"><\/script>`)</script>
@@ -19,14 +27,6 @@
     <!--CDN引入axios，减少打包体积-->
     <script src="https://cdn.bootcss.com/axios/0.18.1/axios.min.js"></script>
     <script>window.axios || document.write(`<script src="<%= BASE_URL %>static/cdn/axios-0.18.1.min.js"><\/script>`)</script>
-    <!--CDN引入element-ui，减少打包体积-->
-    <script src="https://cdn.bootcss.com/element-ui/2.8.2/index.js"></script>
-    <script>window.ELEMENT || document.write(`<script src="<%= BASE_URL %>static/cdn/element-ui-2.8.2.min.js"><\/script>`)</script>
-    <!--CDN引入wangEditor，减少打包体积-->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/wangEditor/3.1.1/wangEditor.min.css">
-    <script src="https://cdn.bootcss.com/wangEditor/3.1.1/wangEditor.min.js"></script>
-    <script>window.wangEditor || document.write(`<script src="<%= BASE_URL %>static/cdn/wangEditor-3.1.1.min.js"><\/script>`)</script>
-    <script>window.wangEditor || document.write(`<link rel="stylesheet" href="<%= BASE_URL %>static/cdn/wangEditor/3.1.1/wangEditor.min.css">`)</script>
     <% } %>
 </head>
 <body>

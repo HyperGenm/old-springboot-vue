@@ -30,7 +30,7 @@ public class DataDictionary implements Serializable {
      */
     @ApiModelProperty("自增")
     @Id("id")
-    private Long id;
+    private Integer id;
 
     /**
      * 字典标识

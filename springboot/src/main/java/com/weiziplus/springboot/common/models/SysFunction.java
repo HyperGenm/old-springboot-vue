@@ -28,13 +28,13 @@ public class SysFunction implements Serializable {
      * 系统功能表主键，自增
      */
     @Id("id")
-    private Long id;
+    private Integer id;
 
     /**
      * 上级id
      */
     @Column("parent_id")
-    private Long parentId;
+    private Integer parentId;
 
     /**
      * 功能唯一标识

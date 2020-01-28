@@ -67,4 +67,4 @@ global:
   #web用户token过期时间,单位秒
   token-web-expire-time: 259200
   #10秒内超过多少次请求，暂时封ip
-  ip-filter-max-num: 77
+  ip-filter-max-num: 100

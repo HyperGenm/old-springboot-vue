@@ -28,13 +28,13 @@ public class SysRole implements Serializable {
      * 系统角色表主键，自增
      */
     @Id("id")
-    private Long id;
+    private Integer id;
 
     /**
      * 上级角色id
      */
     @Column("parent_id")
-    private Long parentId;
+    private Integer parentId;
 
     /**
      * 角色名称

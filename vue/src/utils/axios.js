@@ -139,7 +139,7 @@ export function weiAxios(
                 fail(error);
                 return;
             }
-            that.$globalFun.errorMsg('请求失败');
+            that.$globalFun.errorMsg('内部服务器错误，请稍后重试');
             if (error.response) {
                 error = error['response']['data'];
             }

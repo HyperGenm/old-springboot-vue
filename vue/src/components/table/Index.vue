@@ -579,6 +579,7 @@
         span.el-table__empty-text {
             color: $--color-primary !important;
         }
+
         /*表头背景颜色*/
         .el-table thead th {
             background-color: #ddeeff;

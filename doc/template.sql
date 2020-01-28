@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `data_dictionary`;
 CREATE TABLE `data_dictionary`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增',
   `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典标识',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典名字',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典备注',
@@ -66,8 +66,8 @@ INSERT INTO `data_dictionary_value` VALUES (2, 'abnormalIp', '1.1.1.1', '1.1.1.1
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_function`;
 CREATE TABLE `sys_function`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '系统功能表主键，自增',
-  `parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '上级id',
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT '系统功能表主键，自增',
+  `parent_id` int(7) NOT NULL DEFAULT 0 COMMENT '上级id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能唯一标识',
   `path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能路径',
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '功能标题',
@@ -131,8 +131,8 @@ INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志', '127.0.0.1', '2019-08-
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`  (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '系统角色表主键，自增',
-  `parent_id` bigint(11) NOT NULL DEFAULT 1 COMMENT '上级角色id',
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT '系统角色表主键，自增',
+  `parent_id` int(7) NOT NULL DEFAULT 1 COMMENT '上级角色id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '角色名称',
   `is_stop` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否启用;0:启用,1:禁用',
   `sort` tinyint(2) NOT NULL DEFAULT 0 COMMENT '排序，数字越小越靠前',
@@ -156,9 +156,9 @@ INSERT INTO `sys_role` VALUES (1000002, 666, '管理员下级', 1, 0, '', '2019-
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_function`;
 CREATE TABLE `sys_role_function`  (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '角色功能表主键，自增',
-  `role_id` bigint(11) NOT NULL COMMENT '角色表id',
-  `function_id` bigint(11) NOT NULL COMMENT '功能表id',
+  `id` bigint(17) NOT NULL AUTO_INCREMENT COMMENT '角色功能表主键，自增',
+  `role_id` int(7) NOT NULL COMMENT '角色表id',
+  `function_id` int(7) NOT NULL COMMENT '功能表id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `role_id`(`role_id`) USING BTREE,
   INDEX `function_id`(`function_id`) USING BTREE,
@@ -217,7 +217,7 @@ CREATE TABLE `sys_user`  (
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录用户名',
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录密码',
   `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户真实姓名',
-  `role_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
+  `role_id` int(7) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
   `allow_login` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止，2:封号中',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/pc/user/icon/default.png' COMMENT '用户头像',
   `suspend_num` int(5) NOT NULL DEFAULT 0 COMMENT '账户封号次数',
