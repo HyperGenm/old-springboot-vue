@@ -20,7 +20,7 @@ public interface SysFunctionMapper {
      * @param roleId
      * @return
      */
-    SysFunction getMinParentIdMenuFunInfoByRoleId(@Param("roleId") Long roleId);
+    SysFunction getMinParentIdMenuFunInfoByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 根据角色id获取菜单列表
@@ -28,7 +28,7 @@ public interface SysFunctionMapper {
      * @param roleId
      * @return
      */
-    List<SysFunction> getMenuListByRoleId(@Param("roleId") Long roleId);
+    List<SysFunction> getMenuListByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 根据roleId获取按钮列表
@@ -36,7 +36,7 @@ public interface SysFunctionMapper {
      * @param roleId
      * @return
      */
-    List<SysFunction> getButtonListByRoleId(@Param("roleId") Long roleId);
+    List<SysFunction> getButtonListByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 获取parent_id最小的功能信息
@@ -65,7 +65,7 @@ public interface SysFunctionMapper {
      * @param parentId
      * @return
      */
-    List<SysFunction> getFunListByParentId(@Param("parentId") Long parentId);
+    List<SysFunction> getFunListByParentId(@Param("parentId") Integer parentId);
 
     /**
      * 根据父级id获取功能列表不包含按钮
@@ -92,5 +92,5 @@ public interface SysFunctionMapper {
      * @param roleId
      * @return
      */
-    List<SysFunction> getFunListByRoleId(@Param("roleId") Long roleId);
+    List<SysFunction> getFunListByRoleId(@Param("roleId") Integer roleId);
 }

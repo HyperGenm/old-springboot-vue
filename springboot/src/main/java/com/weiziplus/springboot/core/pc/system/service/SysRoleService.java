@@ -63,7 +63,7 @@ public class SysRoleService extends BaseService {
      * @param roleList
      * @return
      */
-    private List<SysRole> getChildrenListByParentIdAndRoleList(Long parentId, List<SysRole> roleList) {
+    private List<SysRole> getChildrenListByParentIdAndRoleList(Integer parentId, List<SysRole> roleList) {
         List<SysRole> resultList = new ArrayList<>();
         for (SysRole sysRole : roleList) {
             if (!parentId.equals(sysRole.getParentId())) {
@@ -106,21 +106,21 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
-    public List<SysRole> getRoleTree() {
+    public ResultUtils<List<SysRole>> getRoleTree() {
         String key = createRedisKey(BASE_REDIS_KEY + "getRoleTree");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ToolUtils.objectOfList(object, SysRole.class);
+            return ResultUtils.success(ToolUtils.objectOfList(object, SysRole.class));
         }
         List<SysRole> resultList = new ArrayList<>();
         //默认根节点为0
-        List<SysRole> menuList = mapper.getRoleListByParentId(0L);
+        List<SysRole> menuList = mapper.getRoleListByParentId(0);
         for (SysRole sysRole : menuList) {
             sysRole.setChildren(findChildren(sysRole));
             resultList.add(sysRole);
         }
         RedisUtils.set(key, resultList);
-        return resultList;
+        return ResultUtils.success(resultList);
     }
 
     /**
@@ -144,15 +144,15 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
-    public List<SysRole> getRoleList() {
+    public ResultUtils<List<SysRole>> getRoleList() {
         String key = createRedisKey(BASE_REDIS_KEY + "getRoleList");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ToolUtils.objectOfList(object, SysRole.class);
+            return ResultUtils.success(ToolUtils.objectOfList(object, SysRole.class));
         }
         List<SysRole> roleList = mapper.getRoleList();
         RedisUtils.set(key, roleList);
-        return roleList;
+        return ResultUtils.success(roleList);
     }
 
     /**
@@ -267,7 +267,7 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @return
      */
-    public ResultUtils deleteRole(HttpServletRequest request, Long roleId) {
+    public ResultUtils deleteRole(HttpServletRequest request, Integer roleId) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("roleId错误");
         }
@@ -300,7 +300,7 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ResultUtils changeRoleIsStop(HttpServletRequest request, Long roleId, Integer isStop) {
+    public ResultUtils changeRoleIsStop(HttpServletRequest request, Integer roleId, Integer isStop) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("id不能为空");
         }
@@ -349,7 +349,7 @@ public class SysRoleService extends BaseService {
      * @param roleId
      * @param isStop
      */
-    private void findChildrenChangeIsStop(Long roleId, Integer isStop) throws Exception {
+    private void findChildrenChangeIsStop(Integer roleId, Integer isStop) throws Exception {
         mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
         for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
             findChildrenChangeIsStop(sysRole.getId(), isStop);

@@ -35,7 +35,7 @@ public class GlobalConfig {
     /**
      * 超级管理员角色id为1
      */
-    public static final Long SUPER_ADMIN_ROLE_ID = 1L;
+    public static final Integer SUPER_ADMIN_ROLE_ID = 1;
 
     /**
      * mybatis全局变量，文件路径域名前缀

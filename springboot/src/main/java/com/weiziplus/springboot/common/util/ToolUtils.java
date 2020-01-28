@@ -152,4 +152,14 @@ public class ToolUtils {
         }
         return null;
     }
+
+    /**
+     * 获取本地项目md5路径
+     *
+     * @return
+     */
+    public static String getLocalUserDirMd5() {
+        String property = System.getProperty("user.dir");
+        return Md5Utils.encode(property);
+    }
 }

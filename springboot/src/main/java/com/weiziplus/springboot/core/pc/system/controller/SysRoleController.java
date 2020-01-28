@@ -43,7 +43,7 @@ public class SysRoleController {
     @GetMapping("/getRoleTree")
     @SystemLog(description = "查看角色树")
     public ResultUtils getRoleTree() {
-        return ResultUtils.success(service.getRoleTree());
+        return service.getRoleTree();
     }
 
     /**
@@ -54,7 +54,7 @@ public class SysRoleController {
     @GetMapping("/getRoleList")
     @SystemLog(description = "查看角色列表")
     public ResultUtils getRoleList() {
-        return ResultUtils.success(service.getRoleList());
+        return service.getRoleList();
     }
 
     /**
@@ -104,7 +104,7 @@ public class SysRoleController {
      */
     @PostMapping("/deleteRole")
     @SystemLog(description = "删除角色")
-    public ResultUtils deleteRole(HttpServletRequest request, Long roleId) {
+    public ResultUtils deleteRole(HttpServletRequest request, Integer roleId) {
         return service.deleteRole(request, roleId);
     }
 
@@ -116,7 +116,7 @@ public class SysRoleController {
      */
     @PostMapping("/changeRoleIsStop")
     @SystemLog(description = "改变角色状态")
-    public ResultUtils changeRoleIsStop(HttpServletRequest request, Long roleId, Integer isStop) {
+    public ResultUtils changeRoleIsStop(HttpServletRequest request, Integer roleId, Integer isStop) {
         return service.changeRoleIsStop(request, roleId, isStop);
     }
 }

@@ -47,7 +47,7 @@ public class SysFunctionService extends BaseService {
      * @param funList
      * @return
      */
-    public List<SysFunction> getChildrenListByParentIdAndFunList(Long parentId, List<SysFunction> funList) {
+    public List<SysFunction> getChildrenListByParentIdAndFunList(Integer parentId, List<SysFunction> funList) {
         List<SysFunction> newFunList = new ArrayList<>();
         for (SysFunction sysFunction : funList) {
             if (!parentId.equals(sysFunction.getParentId())) {
@@ -91,7 +91,7 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    public List<SysFunction> getMenuTreeByRoleId(Long roleId) {
+    public List<SysFunction> getMenuTreeByRoleId(Integer roleId) {
         List<SysFunction> resultList = new ArrayList<>();
         if (null == roleId || 0 > roleId) {
             return resultList;
@@ -118,7 +118,7 @@ public class SysFunctionService extends BaseService {
      * @param parentId
      * @return
      */
-    private List<SysFunction> getChildrenByMenuListAndParentId(List<SysFunction> menuList, Long parentId) {
+    private List<SysFunction> getChildrenByMenuListAndParentId(List<SysFunction> menuList, Integer parentId) {
         List<SysFunction> resultList = new ArrayList<>();
         for (SysFunction sysFunction : menuList) {
             if (!parentId.equals(sysFunction.getParentId())) {
@@ -135,16 +135,16 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    public List<SysFunction> getFunTree() {
+    public ResultUtils getFunTree() {
         String key = createRedisKey(BASE_REDIS_KEY + "getFunTree");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ToolUtils.objectOfList(object, SysFunction.class);
+            return ResultUtils.success(ToolUtils.objectOfList(object, SysFunction.class));
         }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
         if (null == sysFunction) {
-            return resultList;
+            return ResultUtils.success(resultList);
         }
         List<SysFunction> menuList = mapper.getAllFunList();
         for (SysFunction sysFun : menuList) {
@@ -155,7 +155,7 @@ public class SysFunctionService extends BaseService {
             resultList.add(sysFun);
         }
         RedisUtils.set(key, resultList);
-        return resultList;
+        return ResultUtils.success(resultList);
     }
 
     /**
@@ -163,16 +163,16 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    public List<SysFunction> getAllFunctionTreeNotButton() {
+    public ResultUtils<List<SysFunction>> getAllFunctionTreeNotButton() {
         String key = createRedisKey(BASE_REDIS_KEY + "getAllFunctionTreeNotButton");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ToolUtils.objectOfList(object, SysFunction.class);
+            return ResultUtils.success(ToolUtils.objectOfList(object, SysFunction.class));
         }
         List<SysFunction> resultList = new ArrayList<>();
         SysFunction sysFunction = mapper.getMinParentIdFunInfo();
         if (null == sysFunction) {
-            return resultList;
+            return ResultUtils.success(resultList);
         }
         List<SysFunction> menuList = mapper.getFunNotButtonList();
         for (SysFunction sysFun : menuList) {
@@ -183,7 +183,7 @@ public class SysFunctionService extends BaseService {
             resultList.add(sysFun);
         }
         RedisUtils.set(key, resultList);
-        return resultList;
+        return ResultUtils.success(resultList);
     }
 
     /**
@@ -217,7 +217,7 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    private List<SysFunction> getFunctionListByRoleId(Long roleId) {
+    private List<SysFunction> getFunctionListByRoleId(Integer roleId) {
         if (null == roleId || 0 > roleId) {
             return null;
         }
@@ -237,15 +237,15 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    public List<Long> getRoleFunList(Long roleId) {
-        List<Long> resultList = new ArrayList<>();
+    public ResultUtils<List<Integer>> getRoleFunList(Integer roleId) {
+        List<Integer> resultList = new ArrayList<>();
         if (null == roleId || 0 > roleId) {
-            return resultList;
+            return ResultUtils.success(resultList);
         }
         for (SysFunction sysFunction : getFunctionListByRoleId(roleId)) {
             resultList.add(sysFunction.getId());
         }
-        return resultList;
+        return ResultUtils.success(resultList);
     }
 
     /**
@@ -254,7 +254,7 @@ public class SysFunctionService extends BaseService {
      * @param roleId
      * @return
      */
-    public Set<String> getFunContainApiByRoleId(Long roleId) {
+    public Set<String> getFunContainApiByRoleId(Integer roleId) {
         if (null == roleId || 0 > roleId) {
             return null;
         }
@@ -378,7 +378,7 @@ public class SysFunctionService extends BaseService {
      * @param ids
      * @return
      */
-    public ResultUtils deleteFunction(HttpServletRequest request, Long[] ids) {
+    public ResultUtils deleteFunction(HttpServletRequest request, Integer[] ids) {
         if (null == ids) {
             return ResultUtils.error("ids不能为空");
         }
@@ -389,7 +389,7 @@ public class SysFunctionService extends BaseService {
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
-        for (Long id : ids) {
+        for (Integer id : ids) {
             if (null == id || 0 > id) {
                 return ResultUtils.error("ids错误");
             }

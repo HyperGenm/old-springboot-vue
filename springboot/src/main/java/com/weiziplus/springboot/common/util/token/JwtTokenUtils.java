@@ -41,7 +41,7 @@ public class JwtTokenUtils {
      * @param userId
      * @return
      */
-    protected static String createToken(Long userId, String audience, String ipAddress, Long roleId) {
+    protected static String createToken(Long userId, String audience, String ipAddress, Integer roleId) {
         return Jwts.builder()
                 //用户id
                 .setId(Base64Utils.encode(ToolUtils.valueOfString(userId)))
@@ -125,8 +125,8 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    public static Long getRoleIdByToken(String token) {
-        return ToolUtils.valueOfLong(Base64Utils.decode(getTokenBody(token).getSubject()));
+    public static Integer getRoleIdByToken(String token) {
+        return ToolUtils.valueOfInteger(Base64Utils.decode(getTokenBody(token).getSubject()));
     }
 
 }

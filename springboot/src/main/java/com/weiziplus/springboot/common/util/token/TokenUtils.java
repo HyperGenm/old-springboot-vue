@@ -33,7 +33,7 @@ public class TokenUtils {
      * @param expireTime---过期时间
      * @return
      */
-    protected static String createToken(String audience, Long userId, Long expireTime, String ipAddress, Long roleId) {
+    protected static String createToken(String audience, Long userId, Long expireTime, String ipAddress, Integer roleId) {
         String token = JwtTokenUtils.createToken(userId, audience, ipAddress, roleId);
         StringRedisUtils.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;

@@ -69,6 +69,16 @@ public class HttpRequestUtils {
         return ip;
     }
 
+    /**
+     * 获取请求User-Agent信息
+     *
+     * @param request
+     * @return
+     */
+    public static String getUserAgent(HttpServletRequest request) {
+        return request.getHeader("User-Agent");
+    }
+
     public static String post(String url, List<NameValuePair> params) {
         CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom()
                 .setConnectionRequestTimeout(2000).setConnectTimeout(2000).setSocketTimeout(2000).build()).build();

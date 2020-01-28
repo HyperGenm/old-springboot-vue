@@ -27,7 +27,7 @@ public interface SysRoleMapper {
      * @param parentId
      * @return
      */
-    List<SysRole> getRoleListByParentId(@Param("parentId") Long parentId);
+    List<SysRole> getRoleListByParentId(@Param("parentId") Integer parentId);
 
     /**
      * 获取parent_id最小的功能信息
@@ -55,7 +55,7 @@ public interface SysRoleMapper {
      * @param isStop
      * @return
      */
-    int changeRoleIsStopByIdAndIsStop(@Param("id") Long id, @Param("isStop") Integer isStop);
+    int changeRoleIsStopByIdAndIsStop(@Param("id") Integer id, @Param("isStop") Integer isStop);
 
     /**
      * 根据角色id获取角色信息
@@ -63,7 +63,7 @@ public interface SysRoleMapper {
      * @param id
      * @return
      */
-    SysRole getInfoByRoleId(@Param("id") Long id);
+    SysRole getInfoByRoleId(@Param("id") Integer id);
 
     /**
      * 获取所有角色列表

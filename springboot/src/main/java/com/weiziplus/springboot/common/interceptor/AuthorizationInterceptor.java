@@ -121,7 +121,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 SysLog sysLog = new SysLog()
                         .setUserId(JwtTokenUtils.getUserIdByToken(token))
                         .setDescription(systemLog.description())
-                        .setIpAddress(HttpRequestUtils.getIpAddress(request));
+                        .setIpAddress(HttpRequestUtils.getIpAddress(request))
+                        .setUserAgent(HttpRequestUtils.getUserAgent(request));
                 //将日志异步放入数据库
                 systemAsync.handleSysLog(sysLog);
             }
@@ -180,7 +181,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
         //获取roleId
-        Long roleId = JwtTokenUtils.getRoleIdByToken(token);
+        Integer roleId = JwtTokenUtils.getRoleIdByToken(token);
         if (null == roleId) {
             handleResponse(response, ResultUtils.errorRole("您没有权限"));
             return false;

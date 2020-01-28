@@ -43,7 +43,7 @@ public class SysFunctionController {
     @GetMapping("/getAllFunctionTree")
     @SystemLog(description = "查看功能列表")
     public ResultUtils getAllFunctionTree() {
-        return ResultUtils.success(service.getFunTree());
+        return service.getFunTree();
     }
 
     /**
@@ -54,7 +54,7 @@ public class SysFunctionController {
     @GetMapping("/getAllFunctionTreeNotButton")
     @SystemLog(description = "查看功能列表")
     public ResultUtils getAllFunctionTreeNotButton() {
-        return ResultUtils.success(service.getAllFunctionTreeNotButton());
+        return service.getAllFunctionTreeNotButton();
     }
 
     /**
@@ -64,8 +64,8 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getRoleFunList")
-    public ResultUtils getRoleFunList(Long roleId) {
-        return ResultUtils.success(service.getRoleFunList(roleId));
+    public ResultUtils getRoleFunList(Integer roleId) {
+        return service.getRoleFunList(roleId);
     }
 
     /**
@@ -100,7 +100,7 @@ public class SysFunctionController {
      */
     @PostMapping("/deleteFunction")
     @SystemLog(description = "删除功能")
-    public ResultUtils deleteFunction(HttpServletRequest request, Long[] ids) {
+    public ResultUtils deleteFunction(HttpServletRequest request, Integer[] ids) {
         return service.deleteFunction(request, ids);
     }
 }
