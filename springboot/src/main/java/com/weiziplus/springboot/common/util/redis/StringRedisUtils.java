@@ -1,11 +1,13 @@
 package com.weiziplus.springboot.common.util.redis;
 
+import com.weiziplus.springboot.common.util.ToolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +31,11 @@ public class StringRedisUtils {
     }
 
     /**
+     * 当前项目存放的redis前缀
+     */
+    private static final String BASE_REDIS_KEY = ToolUtils.getLocalUserDirMd5() + ":";
+
+    /**
      * 根据key和value存入redis---默认3分钟过期
      *
      * @param key
@@ -38,7 +45,7 @@ public class StringRedisUtils {
         if (null == key) {
             return;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, 3 * 60L, TimeUnit.SECONDS);
+        that.stringRedisTemplate.opsForValue().set(BASE_REDIS_KEY + key, value, 3 * 60L, TimeUnit.SECONDS);
     }
 
     /**
@@ -55,7 +62,7 @@ public class StringRedisUtils {
         if (null == timeout) {
             timeout = 3 * 60L;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+        that.stringRedisTemplate.opsForValue().set(BASE_REDIS_KEY + key, value, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -68,7 +75,7 @@ public class StringRedisUtils {
         if (null == key) {
             return;
         }
-        that.stringRedisTemplate.opsForValue().set(key, value, 0L);
+        that.stringRedisTemplate.opsForValue().set(BASE_REDIS_KEY + key, value, 0L);
     }
 
     /**
@@ -81,7 +88,7 @@ public class StringRedisUtils {
         if (null == key) {
             return null;
         }
-        return that.stringRedisTemplate.opsForValue().get(key);
+        return that.stringRedisTemplate.opsForValue().get(BASE_REDIS_KEY + key);
     }
 
     /**
@@ -95,7 +102,7 @@ public class StringRedisUtils {
         if (null == key) {
             return false;
         }
-        return that.stringRedisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+        return that.stringRedisTemplate.expire(BASE_REDIS_KEY + key, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -108,7 +115,7 @@ public class StringRedisUtils {
         if (null == key) {
             return false;
         }
-        return that.stringRedisTemplate.hasKey(key);
+        return that.stringRedisTemplate.hasKey(BASE_REDIS_KEY + key);
     }
 
     /**
@@ -121,7 +128,7 @@ public class StringRedisUtils {
         if (null == key) {
             return false;
         }
-        return that.stringRedisTemplate.delete(key);
+        return that.stringRedisTemplate.delete(BASE_REDIS_KEY + key);
     }
 
     /**
@@ -134,7 +141,11 @@ public class StringRedisUtils {
         if (null == keys) {
             return null;
         }
-        return that.stringRedisTemplate.delete(keys);
+        Set<String> newSet = new HashSet<>(keys.size());
+        for (String key : keys) {
+            newSet.add(BASE_REDIS_KEY + key);
+        }
+        return that.stringRedisTemplate.delete(newSet);
     }
 
     /**
@@ -147,7 +158,7 @@ public class StringRedisUtils {
         if (null == key) {
             return null;
         }
-        Set<String> keys = that.stringRedisTemplate.keys(key + "*");
+        Set<String> keys = that.stringRedisTemplate.keys(BASE_REDIS_KEY + key + "*");
         if (null == keys || 0 >= keys.size()) {
             return 0L;
         }
@@ -163,7 +174,7 @@ public class StringRedisUtils {
         if (null == key) {
             return;
         }
-        Set<String> keys = that.stringRedisTemplate.keys(key + "*");
+        Set<String> keys = that.stringRedisTemplate.keys(BASE_REDIS_KEY + key + "*");
         if (null == keys || 0 >= keys.size()) {
             return;
         }

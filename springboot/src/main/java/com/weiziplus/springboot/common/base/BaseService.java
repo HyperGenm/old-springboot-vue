@@ -536,9 +536,7 @@ public class BaseService {
      * @return
      */
     protected String createRedisKey(String onlyPrefix, Object... objects) {
-        StringBuffer stringBuffer = new StringBuffer(ToolUtils.getLocalUserDirMd5());
-        stringBuffer.append(":");
-        stringBuffer.append(onlyPrefix);
+        StringBuffer stringBuffer = new StringBuffer(onlyPrefix);
         for (Object object : objects) {
             stringBuffer.append("_&&&_").append(object);
         }
