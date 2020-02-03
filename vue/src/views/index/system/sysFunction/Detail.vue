@@ -59,7 +59,10 @@
                                 {content: '菜单'},
                                 {content: '按钮', type: 'success'}
                             ];
-                            return result[data['type']];
+                            return result[data['type']] || {
+                                content: '未知类型',
+                                type: 'danger'
+                            };
                         }
                     },
                     {label: '描述', prop: data['description']}

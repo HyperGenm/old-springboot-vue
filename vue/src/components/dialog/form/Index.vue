@@ -13,7 +13,7 @@
                 </template>
                 <template v-else-if="'select' === item.type">
                     <el-select v-model="formData[item.prop]" :size="item.size"
-                               clearable :disabled="item.disabled || false"
+                               clearable filterable :disabled="item.disabled || false"
                                :placeholder="item.placeholder || '请选择'"
                                @change="selectChange(formData[item.prop],item.prop)">
                         <el-option v-for="option in item.options" :key="option.value"

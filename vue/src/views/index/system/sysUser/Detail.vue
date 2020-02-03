@@ -48,7 +48,10 @@
                                 {content: '禁止', type: 'warning'},
                                 {content: '封号中', type: 'danger'}
                             ];
-                            return result[data['allowLogin']];
+                            return result[data['allowLogin']] || {
+                                content: '未知数据',
+                                type: 'danger'
+                            };
                         }
                     },
                     {

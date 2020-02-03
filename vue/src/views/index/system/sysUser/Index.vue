@@ -132,7 +132,10 @@
                                 {content: '禁止', type: 'warning'},
                                 {content: '封号中', type: 'danger'}
                             ];
-                            return result[allowLogin];
+                            return result[allowLogin] || {
+                                content: '未知数据',
+                                type: 'danger'
+                            };
                         }
                     },
                     {

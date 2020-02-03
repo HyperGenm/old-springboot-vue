@@ -86,7 +86,10 @@
                                 {content: '菜单'},
                                 {content: '按钮', type: 'success'}
                             ];
-                            return result[type];
+                            return result[type] || {
+                                content: '未知类型',
+                                type: 'danger'
+                            };
                         }
                     },
                     {

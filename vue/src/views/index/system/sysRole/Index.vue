@@ -92,7 +92,10 @@
                                 {content: '正常'},
                                 {content: '禁用', type: 'danger'}
                             ];
-                            return result[isStop];
+                            return result[isStop] || {
+                                content: '未知状态',
+                                type: 'danger'
+                            };
                         }
                     },
                     {label: '排序', prop: 'sort'},

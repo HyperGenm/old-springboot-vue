@@ -28,14 +28,17 @@
                     {
                         label: '异常次数', prop: 'order', type: 'tag',
                         element(row) {
-                            let {number} = row;
-                            let type = '';
-                            if (5 >= number && 0 < number) {
+                            let {order} = row;
+                            let type = 'info';
+                            if (5 >= order && 0 < order) {
                                 type = 'warning';
-                            } else if (5 < number) {
+                            } else if (5 < order) {
                                 type = 'danger';
                             }
-                            return {type};
+                            return {
+                                type,
+                                content: order
+                            };
                         }
                     },
                     {label: '备注', prop: 'remark'},
