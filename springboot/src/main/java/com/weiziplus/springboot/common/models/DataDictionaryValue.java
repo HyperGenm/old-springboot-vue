@@ -65,12 +65,12 @@ public class DataDictionaryValue implements Serializable {
     /**
      * ipFilter白名单
      */
-    public static Integer TYPE_IP_FILTER_WHITE = 0;
+    public final static Integer TYPE_IP_FILTER_WHITE = 0;
 
     /**
      * ipFilter黑名单
      */
-    public static Integer TYPE_IP_FILTER_BLACK = 1;
+    public final static Integer TYPE_IP_FILTER_BLACK = 1;
 
     /**
      * 排序(自定义,默认为排序)
