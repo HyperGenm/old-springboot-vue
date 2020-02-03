@@ -76,7 +76,7 @@ public interface SysUserMapper {
      * @param roleId
      * @return
      */
-    int updateRoleIdByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
+    int updateRoleIdByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Integer roleId);
 
     /**
      * 封号系统用户

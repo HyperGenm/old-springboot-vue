@@ -15,7 +15,7 @@ public interface SysRoleFunctionMapper {
      * @param roleId
      * @return
      */
-    int deleteByRoleId(@Param("roleId") Long roleId);
+    int deleteByRoleId(@Param("roleId") Integer roleId);
 
     /**
      * 新增权限功能
@@ -24,5 +24,5 @@ public interface SysRoleFunctionMapper {
      * @param funIds
      * @return
      */
-    int addRoleFunction(@Param("roleId") Long roleId, @Param("funIds") Long[] funIds);
+    int addRoleFunction(@Param("roleId") Integer roleId, @Param("funIds") Integer[] funIds);
 }

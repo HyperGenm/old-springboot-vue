@@ -49,6 +49,16 @@ public class SysRole implements Serializable {
     private Integer isStop;
 
     /**
+     * 0:启用
+     */
+    public static Integer IS_STOP_ENABLE = 0;
+
+    /**
+     * 1:禁用
+     */
+    public static Integer IS_STOP_DISABLE = 1;
+
+    /**
      * 排序，数字越小越靠前
      */
     @Column("sort")

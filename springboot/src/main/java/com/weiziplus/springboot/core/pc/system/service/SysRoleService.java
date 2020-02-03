@@ -42,14 +42,9 @@ public class SysRoleService extends BaseService {
     SysUserMapper sysUserMapper;
 
     /**
-     * 角色允许使用为0，禁止为1
+     * 系统功能表中角色管理id为3
      */
-    public static final Integer ADMIN_ROLE_IS_STOP_ZERO = 0;
-
-    /**
-     * 系统功能表中角色管理id为4
-     */
-    private static final Long SYS_FUNCTION_ROLE_ID = 4L;
+    private static final Integer SYS_FUNCTION_ROLE_ID = 3;
 
     /**
      * SysRole基础redis的key
@@ -163,13 +158,13 @@ public class SysRoleService extends BaseService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ResultUtils addRoleFun(Long roleId, Long[] funIds) {
+    public ResultUtils addRoleFun(Integer roleId, Integer[] funIds) {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("roleId不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             boolean haveRoleId = false;
-            for (Long id : funIds) {
+            for (Integer id : funIds) {
                 if (null == id || 0 > id) {
                     return ResultUtils.error("ids错误");
                 }
@@ -219,7 +214,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("角色名已存在");
         }
         SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
-        if (!ADMIN_ROLE_IS_STOP_ZERO.equals(superRole.getIsStop())) {
+        if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtils.getNowDateTime());
@@ -318,10 +313,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("状态不能为空");
         }
         //判断是否启用
-        if (ADMIN_ROLE_IS_STOP_ZERO.equals(isStop)) {
+        if (SysRole.IS_STOP_ENABLE.equals(isStop)) {
             SysRole role = mapper.getInfoByRoleId(roleId);
             SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
-            if (!ADMIN_ROLE_IS_STOP_ZERO.equals(superRole.getIsStop())) {
+            if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
                 return ResultUtils.error("父级当前处于禁用状态");
             }
         }

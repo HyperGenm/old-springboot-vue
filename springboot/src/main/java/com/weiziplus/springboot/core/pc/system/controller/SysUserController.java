@@ -97,7 +97,7 @@ public class SysUserController {
      */
     @PostMapping("/updateUserRole")
     @SystemLog(description = "更新用户角色")
-    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
+    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Integer roleId) {
         return service.updateUserRole(request, userId, roleId);
     }
 

@@ -23,9 +23,6 @@ public class Md5Utils {
      * @return
      */
     public static String encode(String str) {
-        if (ToolUtils.isBlank(str)) {
-            return null;
-        }
         //在字符串基础上添加加密盐
         str = SALT + str;
         return DigestUtils.md5DigestAsHex(str.getBytes(StandardCharsets.UTF_8));

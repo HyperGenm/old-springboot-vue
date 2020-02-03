@@ -24,7 +24,7 @@ public class AdminTokenUtils {
      */
     private static Long EXPIRE_TIME = 60L * 60 * 12;
 
-    @Value("${global.token-admin-expire-time:43200}")
+    @Value("${global.token.admin-expire-time:43200}")
     private void setExpireTime(String expireTime) {
         AdminTokenUtils.EXPIRE_TIME = ToolUtils.valueOfLong(expireTime);
     }

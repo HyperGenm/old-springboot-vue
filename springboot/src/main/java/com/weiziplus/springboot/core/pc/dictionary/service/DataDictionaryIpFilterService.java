@@ -38,16 +38,6 @@ public class DataDictionaryIpFilterService extends BaseService {
     private static final String DICTIONARY_CODE = "ipFilter";
 
     /**
-     * 白名单
-     */
-    private static final int TYPE_WHITE = 0;
-
-    /**
-     * 黑名单
-     */
-    private static final int TYPE_BLACK = 1;
-
-    /**
      * ipFilter基础redis的key
      */
     private static final String BASE_REDIS_KEY = "pc:dictionary:service:DataDictionaryIpFilterService:";
@@ -63,7 +53,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipWhiteList = mapper.getIpValueList(TYPE_WHITE);
+        Set<String> ipWhiteList = mapper.getIpValueList(DataDictionaryValue.TYPE_IP_FILTER_WHITE);
         RedisUtils.set(redisKey, ipWhiteList, 60 * 60 * 24L);
         return ipWhiteList;
     }
@@ -79,7 +69,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipBlackList = mapper.getIpValueList(TYPE_BLACK);
+        Set<String> ipBlackList = mapper.getIpValueList(DataDictionaryValue.TYPE_IP_FILTER_BLACK);
         RedisUtils.set(redisKey, ipBlackList, 60 * 60 * 24L);
         return ipBlackList;
     }
@@ -115,7 +105,8 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null == type) {
             return ResultUtils.error("type不能为空");
         }
-        if (TYPE_WHITE != type && TYPE_BLACK != type) {
+        if (!DataDictionaryValue.TYPE_IP_FILTER_WHITE.equals(type)
+                && !DataDictionaryValue.TYPE_IP_FILTER_BLACK.equals(type)) {
             return ResultUtils.error("type错误");
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
@@ -177,7 +168,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         DataDictionaryValue value = new DataDictionaryValue()
                 .setDictionaryCode(DICTIONARY_CODE)
                 //1为黑名单
-                .setType(TYPE_BLACK)
+                .setType(DataDictionaryValue.TYPE_IP_FILTER_BLACK)
                 .setName(ip)
                 .setValue(ip)
                 .setCreateTime(DateUtils.getNowDateTime());

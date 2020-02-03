@@ -62,6 +62,21 @@ public class SysUser implements Serializable {
     private Integer allowLogin;
 
     /**
+     * 0:允许
+     */
+    public static Integer ALLOW_LOGIN_ALLOW = 0;
+
+    /**
+     * 1:禁止
+     */
+    public static Integer ALLOW_LOGIN_FORBID = 1;
+
+    /**
+     * 2:封号
+     */
+    public static Integer ALLOW_LOGIN_DISABLE = 2;
+
+    /**
      * 用户头像
      */
     @Column("icon")

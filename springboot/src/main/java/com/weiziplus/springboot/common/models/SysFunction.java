@@ -67,6 +67,16 @@ public class SysFunction implements Serializable {
     private Integer type;
 
     /**
+     * 0：菜单
+     */
+    public static Integer TYPE_MENU = 0;
+
+    /**
+     * 1:按钮
+     */
+    public static Integer TYPE_BUTTON = 1;
+
+    /**
      * 功能图标
      */
     @Column("icon")

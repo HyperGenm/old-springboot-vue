@@ -67,8 +67,8 @@ public class SysRoleController {
     @PostMapping("/addRoleFun")
     @SystemLog(description = "新增角色功能")
     public ResultUtils addRoleFun(
-            @RequestParam(value = "roleId") Long roleId,
-            @RequestParam(value = "funIds", defaultValue = "") Long[] funIds) {
+            @RequestParam(value = "roleId") Integer roleId,
+            @RequestParam(value = "funIds", defaultValue = "") Integer[] funIds) {
         return service.addRoleFun(roleId, funIds);
     }
 

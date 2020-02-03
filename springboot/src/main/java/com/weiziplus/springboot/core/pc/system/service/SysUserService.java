@@ -33,16 +33,6 @@ public class SysUserService extends BaseService {
     SystemAsync systemAsync;
 
     /**
-     * 用户允许禁止登录
-     */
-    public static final Integer ADMIN_USER_ALLOW_LOGIN_ONE = 1;
-
-    /**
-     * 系统用户封号中
-     */
-    public static final Integer ADMIN_USER_ALLOW_LOGIN_TWO = 2;
-
-    /**
      * 获取用户列表
      *
      * @param pageNum
@@ -106,7 +96,8 @@ public class SysUserService extends BaseService {
         }
         Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            if (null != sysUser.getSuspendNum() || ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
+            if (null != sysUser.getSuspendNum()
+                    || SysUser.ALLOW_LOGIN_DISABLE.equals(sysUser.getAllowLogin())) {
                 mapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
@@ -116,11 +107,11 @@ public class SysUserService extends BaseService {
         if (null != user && !user.getId().equals(sysUser.getId())) {
             return ResultUtils.error("用户名已存在");
         }
-        if (null != user && ADMIN_USER_ALLOW_LOGIN_TWO.equals(user.getAllowLogin())) {
+        if (null != user && SysUser.ALLOW_LOGIN_DISABLE.equals(user.getAllowLogin())) {
             user.setAllowLogin(null);
         }
         //如果用户禁用---强制用户下线
-        if (ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
+        if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
             AdminTokenUtils.deleteToken(sysUser.getId());
         }
         SysUser newUser = new SysUser()
@@ -162,7 +153,7 @@ public class SysUserService extends BaseService {
      * @param roleId
      * @return
      */
-    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Long roleId) {
+    public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Integer roleId) {
         if (null == userId || 0 >= userId) {
             return ResultUtils.error("userId不能为空");
         }

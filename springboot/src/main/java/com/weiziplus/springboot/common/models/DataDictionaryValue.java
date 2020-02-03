@@ -15,6 +15,7 @@ import java.io.Serializable;
 /**
  * 数据字典值
  * data_dictionary_value
+ *
  * @author 16028
  * @date 2019-10-14 21:18:58
  */
@@ -60,6 +61,16 @@ public class DataDictionaryValue implements Serializable {
     @ApiModelProperty("类型(自定义)： ipFilter：ip名单---0：白名单，1：黑名单")
     @Column("type")
     private Integer type;
+
+    /**
+     * ipFilter白名单
+     */
+    public static Integer TYPE_IP_FILTER_WHITE = 0;
+
+    /**
+     * ipFilter黑名单
+     */
+    public static Integer TYPE_IP_FILTER_BLACK = 1;
 
     /**
      * 排序(自定义,默认为排序)

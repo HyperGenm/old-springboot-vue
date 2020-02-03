@@ -23,7 +23,7 @@ public class WebTokenUtils {
      */
     private static Long EXPIRE_TIME = 60L * 60 * 24 * 3;
 
-    @Value("${global.token-web-expire-time:259200}")
+    @Value("${global.token.web-expire-time:259200}")
     private void setExpireTime(String expireTime) {
         WebTokenUtils.EXPIRE_TIME = ToolUtils.valueOfLong(expireTime);
     }

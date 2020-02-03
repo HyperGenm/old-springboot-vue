@@ -99,17 +99,17 @@ public class AdminLoginService {
         if (null == sysUser || !sysUser.getPassword().equals(Md5Utils.encode(password))) {
             return ResultUtils.error("用户名或密码错误");
         }
-        if (SysUserService.ADMIN_USER_ALLOW_LOGIN_ONE.equals(sysUser.getAllowLogin())) {
+        if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号被禁用，请联系管理员");
         }
-        if (SysUserService.ADMIN_USER_ALLOW_LOGIN_TWO.equals(sysUser.getAllowLogin())) {
+        if (SysUser.ALLOW_LOGIN_DISABLE.equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号封号中，请联系管理员");
         }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
             return ResultUtils.error("您还没有角色，请联系管理员添加");
         }
-        if (!SysRoleService.ADMIN_ROLE_IS_STOP_ZERO.equals(sysRole.getIsStop())) {
+        if (SysRole.IS_STOP_DISABLE.equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
         String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request), sysRole.getId());
