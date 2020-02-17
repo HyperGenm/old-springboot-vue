@@ -11,7 +11,7 @@
         <div class="edit">
             <wei-dialog :show.sync="dialogEditForm" :title="'add' === handleType ? '新增' : '编辑'">
                 <edit-form :handleType="handleType" :formData="formData"
-                           @closeDialog="dialogEditForm = false"
+                           @closeDialog="dialogEditForm = false" :isShow="dialogEditForm"
                            @renderTable="$refs.table.renderTable()"></edit-form>
             </wei-dialog>
         </div>

@@ -19,9 +19,17 @@
             },
             formData: {
                 type: Object
+            },
+            isShow: {
+                type: Boolean
             }
         },
         watch: {
+            isShow(flag) {
+                if (flag) {
+                    this.getRoleList();
+                }
+            },
             handleType(type) {
                 this.formOptions[0]['hidden'] = 'update' === type;
                 this.formOptions[3]['hidden'] = 'update' === type;

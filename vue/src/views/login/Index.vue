@@ -102,18 +102,22 @@
                                 that.changeCode();
                                 return;
                             }
-                            let data = res.data;
-                            that.$store.dispatch('setUserInfo', data['userInfo']);
-                            that.$store.dispatch('setToken', data['token']);
+                            let {userInfo, token, role, routerTree} = res.data;
+                            if (null == routerTree || 0 >= routerTree.length) {
+                                that.$globalFun.errorMsg("您还没有可用菜单，请联系管理员添加")
+                                return;
+                            }
+                            that.$store.dispatch('setUserInfo', userInfo);
+                            that.$store.dispatch('setToken', token);
                             let roleButtons = {};
-                            data['roleButtons'].forEach((value) => {
+                            res.data['roleButtons'].forEach((value) => {
                                 roleButtons[value.name] = true;
                             });
                             that.$store.dispatch('setRole', {
-                                name: data['role'],
+                                name: role,
                                 buttons: roleButtons
                             });
-                            that.handleRouter(data['routerTree']);
+                            that.handleRouter(routerTree);
                         }
                     });
                 });

@@ -146,6 +146,7 @@
                     });
                     form['parentId'] = max;
                 }
+                form['icon'] = this.form['icon'];
                 let that = this;
                 that.$axios({
                     url: that.$global.URL['system']['sysFunction'][that.handleType],

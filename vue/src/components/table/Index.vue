@@ -116,9 +116,14 @@
                         </template>
                         <!--普通表头，只显示一行，超出部分隐藏-->
                         <template v-else>
-                            <el-tooltip effect="dark" :content="column.label" placement="top">
-                                <span style="white-space: nowrap;overflow: hidden;">{{column.label}}</span>
-                            </el-tooltip>
+                            <template v-if="null != column.label && 3 < column.label.length">
+                                <el-tooltip effect="dark" :content="column.label" placement="top">
+                                    <span style="white-space: nowrap;overflow: hidden;">{{column.label}}</span>
+                                </el-tooltip>
+                            </template>
+                            <template v-else>
+                                <span>{{column.label}}</span>
+                            </template>
                         </template>
                     </template>
                     <template slot-scope="scope">
