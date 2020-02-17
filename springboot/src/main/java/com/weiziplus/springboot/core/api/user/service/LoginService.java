@@ -7,7 +7,6 @@ import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.Md5Utils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ValidateUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.common.util.token.WebTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +83,7 @@ public class LoginService {
      * @return
      */
     public ResultUtils logout(HttpServletRequest request) {
-        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long userId = WebTokenUtils.getUserIdByHttpServletRequest(request);
         WebTokenUtils.deleteToken(userId);
         return ResultUtils.success();
     }

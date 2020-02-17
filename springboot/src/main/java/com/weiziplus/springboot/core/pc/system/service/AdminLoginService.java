@@ -5,7 +5,6 @@ import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.core.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysRoleMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
@@ -133,7 +132,7 @@ public class AdminLoginService {
      * @return
      */
     public ResultUtils logout(HttpServletRequest request) {
-        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         AdminTokenUtils.deleteToken(userId);
         return ResultUtils.success();
     }

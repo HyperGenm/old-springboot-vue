@@ -1,13 +1,11 @@
 package com.weiziplus.springboot.common.util.token;
 
-import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.util.Base64Utils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -82,7 +80,7 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    private static Claims getTokenBody(String token) {
+    protected static Claims getTokenBody(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)
@@ -97,36 +95,6 @@ public class JwtTokenUtils {
      */
     public static String getUserAudienceByToken(String token) {
         return Base64Utils.decode(getTokenBody(token).getAudience());
-    }
-
-    /**
-     * 根据token获取用户id
-     *
-     * @param token
-     * @return
-     */
-    public static Long getUserIdByToken(String token) {
-        return Long.valueOf(Base64Utils.decode(getTokenBody(token).getId()));
-    }
-
-    /**
-     * 根据request获取用户id
-     *
-     * @param request
-     * @return
-     */
-    public static Long getUserIdByHttpServletRequest(HttpServletRequest request) {
-        return Long.valueOf(Base64Utils.decode(getTokenBody(request.getHeader(GlobalConfig.TOKEN)).getId()));
-    }
-
-    /**
-     * 根据token获取用户角色
-     *
-     * @param token
-     * @return
-     */
-    public static Integer getRoleIdByToken(String token) {
-        return ToolUtils.valueOfInteger(Base64Utils.decode(getTokenBody(token).getSubject()));
     }
 
 }

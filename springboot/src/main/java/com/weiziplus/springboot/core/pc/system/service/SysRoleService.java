@@ -10,7 +10,6 @@ import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -236,7 +235,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("角色名不能包含特殊字符");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(sysRole.getId())) {
-            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+            Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                 sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
@@ -267,7 +266,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("roleId错误");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
-            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+            Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                 sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
@@ -300,7 +299,7 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("id不能为空");
         }
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
-            Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+            Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                 sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);

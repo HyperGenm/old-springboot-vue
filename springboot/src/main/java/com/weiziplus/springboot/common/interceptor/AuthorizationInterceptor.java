@@ -119,7 +119,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
             if (null != systemLog) {
                 SysLog sysLog = new SysLog()
-                        .setUserId(JwtTokenUtils.getUserIdByToken(token))
+                        .setUserId(AdminTokenUtils.getUserIdByToken(token))
                         .setDescription(systemLog.description())
                         .setIpAddress(HttpRequestUtils.getIpAddress(request))
                         .setUserAgent(HttpRequestUtils.getUserAgent(request));
@@ -147,7 +147,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     private boolean handleAdminToken(HttpServletRequest request, HttpServletResponse response, String token, AdminAuthToken authTokenClass, AdminAuthToken authTokenMethod) {
         //获取用户id
-        Long userId = JwtTokenUtils.getUserIdByToken(token);
+        Long userId = AdminTokenUtils.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
@@ -181,7 +181,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
         //获取roleId
-        Integer roleId = JwtTokenUtils.getRoleIdByToken(token);
+        Integer roleId = AdminTokenUtils.getRoleIdByToken(token);
         if (null == roleId) {
             handleResponse(response, ResultUtils.errorRole("您没有权限"));
             return false;
@@ -208,7 +208,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     private boolean handleWebToken(HttpServletResponse response, String token, WebAuthToken authTokenClass, WebAuthToken authTokenMethod) {
         //获取用户id
-        Long userId = JwtTokenUtils.getUserIdByToken(token);
+        Long userId = WebTokenUtils.getUserIdByToken(token);
         //判断当前注解是否和当前角色匹配
         if (null == authTokenClass && null == authTokenMethod) {
             handleResponse(response, ResultUtils.errorToken("token失效"));

@@ -2,6 +2,7 @@ package com.weiziplus.springboot.core.api.user.service;
 
 import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.common.base.BaseService;
+import com.weiziplus.springboot.common.util.token.WebTokenUtils;
 import com.weiziplus.springboot.core.api.user.mapper.UserMapper;
 import com.weiziplus.springboot.common.models.User;
 import com.weiziplus.springboot.common.util.DateUtils;
@@ -9,7 +10,6 @@ import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class UserService extends BaseService {
      * @return
      */
     public ResultUtils<User> getInfo(HttpServletRequest request) {
-        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long userId = WebTokenUtils.getUserIdByHttpServletRequest(request);
         return ResultUtils.success(mapper.getUserInfoByUserId(userId));
     }
 

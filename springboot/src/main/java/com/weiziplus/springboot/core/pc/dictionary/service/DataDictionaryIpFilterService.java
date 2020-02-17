@@ -12,7 +12,6 @@ import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,7 +108,7 @@ public class DataDictionaryIpFilterService extends BaseService {
                 && !DataDictionaryValue.TYPE_IP_FILTER_BLACK.equals(type)) {
             return ResultUtils.error("type错误");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
@@ -143,7 +142,7 @@ public class DataDictionaryIpFilterService extends BaseService {
         if (null == id || 1 >= id) {
             return ResultUtils.error("id为空");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);

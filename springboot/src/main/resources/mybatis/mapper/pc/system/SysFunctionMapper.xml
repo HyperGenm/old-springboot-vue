@@ -14,19 +14,19 @@
         SELECT sf.*
         FROM sys_function sf,sys_role_function srf
         WHERE srf.role_id = #{roleId} AND sf.type = 0 AND sf.id = srf.function_id
-        ORDER BY sf.sort ASC
+        ORDER BY sf.sort ASC,sf.create_time DESC
     </select>
     <select id="getButtonListByRoleId" resultType="SysFunction">
         SELECT sf.id,sf.name
         FROM sys_function sf,sys_role_function srf
         WHERE srf.role_id = #{roleId} AND sf.type = 1 AND sf.id = srf.function_id
-        ORDER BY sf.sort ASC
+        ORDER BY sf.sort ASC,sf.create_time DESC
     </select>
     <select id="getFunListByParentId" resultType="SysFunction">
         SELECT *
         FROM sys_function
         WHERE parent_id = #{parentId}
-        ORDER BY sort ASC
+        ORDER BY sort ASC,create_time DESC
     </select>
     <select id="getFunInfoByName" resultType="SysFunction">
         SELECT *
@@ -38,6 +38,6 @@
         SELECT sf.*
         FROM sys_function sf,sys_role_function srf
         WHERE srf.role_id = #{roleId} AND sf.id = srf.function_id
-        ORDER BY sf.sort ASC
+        ORDER BY sf.sort ASC,sf.create_time DESC
     </select>
 </mapper>

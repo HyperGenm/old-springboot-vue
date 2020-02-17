@@ -1,9 +1,13 @@
 package com.weiziplus.springboot.common.util.token;
 
+import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.util.Base64Utils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.StringRedisUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 系统用户token配置
@@ -12,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @date 2019/5/7 9:53
  */
 @Component
-public class AdminTokenUtils {
+public class AdminTokenUtils extends JwtTokenUtils {
 
     /**
      * 系统用户
@@ -67,5 +71,35 @@ public class AdminTokenUtils {
      */
     public static Boolean deleteToken(Long userId) {
         return StringRedisUtils.delete(getAudienceRedisKey(userId));
+    }
+
+    /**
+     * 根据token获取用户id
+     *
+     * @param token
+     * @return
+     */
+    public static Long getUserIdByToken(String token) {
+        return Long.valueOf(Base64Utils.decode(getTokenBody(token).getId()));
+    }
+
+    /**
+     * 根据request获取用户id
+     *
+     * @param request
+     * @return
+     */
+    public static Long getUserIdByHttpServletRequest(HttpServletRequest request) {
+        return Long.valueOf(Base64Utils.decode(getTokenBody(request.getHeader(GlobalConfig.TOKEN)).getId()));
+    }
+
+    /**
+     * 根据token获取用户角色
+     *
+     * @param token
+     * @return
+     */
+    public static Integer getRoleIdByToken(String token) {
+        return ToolUtils.valueOfInteger(Base64Utils.decode(getTokenBody(token).getSubject()));
     }
 }

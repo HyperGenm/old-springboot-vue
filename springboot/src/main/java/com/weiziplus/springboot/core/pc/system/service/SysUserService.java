@@ -7,7 +7,6 @@ import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +93,7 @@ public class SysUserService extends BaseService {
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             if (null != sysUser.getSuspendNum()
                     || SysUser.ALLOW_LOGIN_DISABLE.equals(sysUser.getAllowLogin())) {
@@ -134,7 +133,7 @@ public class SysUserService extends BaseService {
         }
         for (Long id : ids) {
             if (GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
-                Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+                Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
                 if (GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                     return ResultUtils.error("不能删除超级管理员");
                 }
@@ -157,7 +156,7 @@ public class SysUserService extends BaseService {
         if (null == userId || 0 >= userId) {
             return ResultUtils.error("userId不能为空");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
                 mapper.suspendSysUser(nowUserId);
@@ -193,7 +192,7 @@ public class SysUserService extends BaseService {
         if (ValidateUtils.notPassword(oldPwd) || ValidateUtils.notPassword(newPwd)) {
             return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         Map<String, Object> map = baseFindByClassAndId(SysUser.class, userId);
         String passwordFiled = "password";
         if (null == map || null == map.get(passwordFiled)) {
@@ -222,7 +221,7 @@ public class SysUserService extends BaseService {
         if (ValidateUtils.notPassword(password)) {
             return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             mapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
@@ -240,7 +239,7 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             mapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
@@ -260,7 +259,7 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
-        Long userId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         BufferedImage image = FileUtils.getImage(file);
         if (null == image) {
             return ResultUtils.error("请上传图片");

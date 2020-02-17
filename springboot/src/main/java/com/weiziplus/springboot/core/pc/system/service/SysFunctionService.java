@@ -9,7 +9,6 @@ import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -305,7 +304,7 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("标题不能为空");
         }
         //如果非超级管理员  新增功能 进行封号处理
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
@@ -345,7 +344,7 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
         }
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             //如果不是超级管理员，不能进行下面的操作
             sysFunction.setPath(null);
@@ -383,7 +382,7 @@ public class SysFunctionService extends BaseService {
             return ResultUtils.error("ids不能为空");
         }
         //如果非超级管理员 删除功能 进行封号处理
-        Long nowUserId = JwtTokenUtils.getUserIdByHttpServletRequest(request);
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             sysUserMapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
