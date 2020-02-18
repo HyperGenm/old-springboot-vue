@@ -74,11 +74,12 @@ public class SysRoleService extends BaseService {
      *
      * @return
      */
-    public ResultUtils getAllRoleTreePageList() {
+    public ResultUtils<PageUtils<List<SysRole>>> getAllRoleTreePageList() {
         String key = createRedisKey(BASE_REDIS_KEY + "getAllRoleTreePageList");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ResultUtils.success(object);
+            PageUtils<List<SysRole>> pageUtil = (PageUtils<List<SysRole>>) object;
+            return ResultUtils.success(pageUtil);
         }
         List<SysRole> resultList = new ArrayList<>();
         SysRole minParentIdRoleInfo = mapper.getMinParentIdRoleInfo();
@@ -90,7 +91,7 @@ public class SysRoleService extends BaseService {
             sysRole.setChildren(getChildrenListByParentIdAndRoleList(sysRole.getId(), roleList));
             resultList.add(sysRole);
         }
-        PageUtils pageUtil = PageUtils.pageInfo(resultList);
+        PageUtils<List<SysRole>> pageUtil = PageUtils.pageInfo(resultList);
         RedisUtils.set(key, pageUtil);
         return ResultUtils.success(pageUtil);
     }

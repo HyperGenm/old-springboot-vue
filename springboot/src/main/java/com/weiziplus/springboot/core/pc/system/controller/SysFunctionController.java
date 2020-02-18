@@ -3,13 +3,18 @@ package com.weiziplus.springboot.core.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysFunction;
-import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
+import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
+import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author wanglongwei
@@ -31,7 +36,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTreePageList")
     @SystemLog(description = "查看功能树形数据")
-    public ResultUtils getAllFunctionTreePageList() {
+    public ResultUtils<PageUtils<List<SysFunction>>> getAllFunctionTreePageList() {
         return service.getAllFunctionTreePageList();
     }
 
@@ -42,7 +47,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTree")
     @SystemLog(description = "查看功能列表")
-    public ResultUtils getAllFunctionTree() {
+    public ResultUtils<List<SysFunction>> getAllFunctionTree() {
         return service.getFunTree();
     }
 
@@ -53,7 +58,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTreeNotButton")
     @SystemLog(description = "查看功能列表")
-    public ResultUtils getAllFunctionTreeNotButton() {
+    public ResultUtils<List<SysFunction>> getAllFunctionTreeNotButton() {
         return service.getAllFunctionTreeNotButton();
     }
 
@@ -64,7 +69,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getRoleFunList")
-    public ResultUtils getRoleFunList(Integer roleId) {
+    public ResultUtils<List<Integer>> getRoleFunList(Integer roleId) {
         return service.getRoleFunList(roleId);
     }
 

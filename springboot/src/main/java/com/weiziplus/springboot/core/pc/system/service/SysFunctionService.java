@@ -63,11 +63,12 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    public ResultUtils getAllFunctionTreePageList() {
+    public ResultUtils<PageUtils<List<SysFunction>>> getAllFunctionTreePageList() {
         String key = createRedisKey(BASE_REDIS_KEY + "getAllFunctionTreePageList");
         Object object = RedisUtils.get(key);
         if (null != object) {
-            return ResultUtils.success(object);
+            PageUtils<List<SysFunction>> pageUtil = (PageUtils<List<SysFunction>>) object;
+            return ResultUtils.success(pageUtil);
         }
         SysFunction baseSysFunction = mapper.getMinParentIdFunInfo();
         List<SysFunction> allFunList = mapper.getAllFunList();
@@ -79,7 +80,7 @@ public class SysFunctionService extends BaseService {
             sysFunction.setChildren(getChildrenListByParentIdAndFunList(sysFunction.getId(), allFunList));
             newFunList.add(sysFunction);
         }
-        PageUtils pageUtil = PageUtils.pageInfo(newFunList);
+        PageUtils<List<SysFunction>> pageUtil = PageUtils.pageInfo(newFunList);
         RedisUtils.set(key, pageUtil);
         return ResultUtils.success(pageUtil);
     }
@@ -134,7 +135,7 @@ public class SysFunctionService extends BaseService {
      *
      * @return
      */
-    public ResultUtils getFunTree() {
+    public ResultUtils<List<SysFunction>> getFunTree() {
         String key = createRedisKey(BASE_REDIS_KEY + "getFunTree");
         Object object = RedisUtils.get(key);
         if (null != object) {

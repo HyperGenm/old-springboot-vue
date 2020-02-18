@@ -3,13 +3,15 @@ package com.weiziplus.springboot.core.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysRole;
-import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
+import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
+import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author wanglongwei
@@ -31,7 +33,7 @@ public class SysRoleController {
      */
     @GetMapping("/getAllRoleTreePageList")
     @SystemLog(description = "查看角色树数据")
-    public ResultUtils getAllRoleTreePageList() {
+    public ResultUtils<PageUtils<List<SysRole>>> getAllRoleTreePageList() {
         return service.getAllRoleTreePageList();
     }
 
@@ -42,7 +44,7 @@ public class SysRoleController {
      */
     @GetMapping("/getRoleTree")
     @SystemLog(description = "查看角色树")
-    public ResultUtils getRoleTree() {
+    public ResultUtils<List<SysRole>> getRoleTree() {
         return service.getRoleTree();
     }
 
@@ -53,7 +55,7 @@ public class SysRoleController {
      */
     @GetMapping("/getRoleList")
     @SystemLog(description = "查看角色列表")
-    public ResultUtils getRoleList() {
+    public ResultUtils<List<SysRole>> getRoleList() {
         return service.getRoleList();
     }
 

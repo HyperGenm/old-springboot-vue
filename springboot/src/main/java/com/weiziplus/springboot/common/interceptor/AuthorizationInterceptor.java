@@ -121,8 +121,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 SysLog sysLog = new SysLog()
                         .setUserId(AdminTokenUtils.getUserIdByToken(token))
                         .setDescription(systemLog.description())
-                        .setIpAddress(HttpRequestUtils.getIpAddress(request))
-                        .setUserAgent(HttpRequestUtils.getUserAgent(request));
+                        .setIpAddress(HttpRequestUtils.getIpAddress(request));
                 //将日志异步放入数据库
                 systemAsync.handleSysLog(sysLog);
             }

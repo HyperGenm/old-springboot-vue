@@ -1,10 +1,10 @@
 package com.weiziplus.springboot.core.pc.system.mapper;
 
+import com.weiziplus.springboot.core.pc.system.vo.SysLogVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wanglongwei
@@ -25,8 +25,8 @@ public interface SysLogMapper {
      * @param endTime
      * @return
      */
-    List<Map<String, Object>> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
-                                      @Param("username") String username, @Param("roleId") Long roleId,
-                                      @Param("description") String description, @Param("ipAddress") String ipAddress,
-                                      @Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<SysLogVo> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
+                           @Param("username") String username, @Param("roleId") Long roleId,
+                           @Param("description") String description, @Param("ipAddress") String ipAddress,
+                           @Param("startTime") String startTime, @Param("endTime") String endTime);
 }

@@ -3,14 +3,17 @@ package com.weiziplus.springboot.core.pc.system.controller;
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
 import com.weiziplus.springboot.common.models.SysUser;
-import com.weiziplus.springboot.core.pc.system.service.SysUserService;
+import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
+import com.weiziplus.springboot.core.pc.system.service.SysUserService;
+import com.weiziplus.springboot.core.pc.system.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author wanglongwei
@@ -39,7 +42,7 @@ public class SysUserController {
      */
     @GetMapping("/getPageList")
     @SystemLog(description = "查看用户列表")
-    public ResultUtils getPageList(
+    public ResultUtils<PageUtils<List<SysUserVo>>> getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,

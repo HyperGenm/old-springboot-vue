@@ -1,11 +1,11 @@
 package com.weiziplus.springboot.core.pc.system.mapper;
 
 import com.weiziplus.springboot.common.models.SysUser;
+import com.weiziplus.springboot.core.pc.system.vo.SysUserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wanglongwei
@@ -31,9 +31,9 @@ public interface SysUserMapper {
      * @param createTime
      * @return
      */
-    List<Map<String, Object>> getUserList(@Param("userName") String userName, @Param("roleId") Long roleId,
-                                          @Param("allowLogin") Integer allowLogin, @Param("lastActiveTime") String lastActiveTime,
-                                          @Param("createTime") String createTime);
+    List<SysUserVo> getUserList(@Param("userName") String userName, @Param("roleId") Long roleId,
+                                @Param("allowLogin") Integer allowLogin, @Param("lastActiveTime") String lastActiveTime,
+                                @Param("createTime") String createTime);
 
     /**
      * 根据用户名获取用户信息

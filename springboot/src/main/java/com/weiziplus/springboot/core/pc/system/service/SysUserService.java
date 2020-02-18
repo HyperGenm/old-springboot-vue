@@ -8,6 +8,7 @@ import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
+import com.weiziplus.springboot.core.pc.system.vo.SysUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,12 +42,12 @@ public class SysUserService extends BaseService {
      * @param allowLogin
      * @return
      */
-    public ResultUtils getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
+    public ResultUtils<PageUtils<List<SysUserVo>>> getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtils.error("pageNum,pageSize错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils pageUtil = PageUtils.pageInfo(mapper.getUserList(userName, roleId, allowLogin, lastActiveTime, createTime));
+        PageUtils<List<SysUserVo>> pageUtil = PageUtils.pageInfo(mapper.getUserList(userName, roleId, allowLogin, lastActiveTime, createTime));
         return ResultUtils.success(pageUtil);
     }
 

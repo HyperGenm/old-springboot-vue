@@ -6,10 +6,12 @@ import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper;
+import com.weiziplus.springboot.core.pc.system.vo.SysLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author wanglongwei
@@ -28,8 +30,8 @@ public class SysLogService {
      * @param pageSize
      * @return
      */
-    public ResultUtils getPageList(HttpServletRequest request, Integer pageNum, Integer pageSize, String username, Long roleId,
-                                   String description, String ipAddress, String startTime, String endTime) {
+    public ResultUtils<PageUtils<List<SysLogVo>>> getPageList(HttpServletRequest request, Integer pageNum, Integer pageSize, String username, Long roleId,
+                                                              String description, String ipAddress, String startTime, String endTime) {
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         //是否是超级管理员,0:是
         Integer isSuperAdmin = null;
@@ -37,7 +39,7 @@ public class SysLogService {
             isSuperAdmin = 0;
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils pageUtil = PageUtils.pageInfo(mapper.getList(isSuperAdmin, username, roleId, description, ipAddress, startTime, endTime));
+        PageUtils<List<SysLogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(isSuperAdmin, username, roleId, description, ipAddress, startTime, endTime));
         return ResultUtils.success(pageUtil);
     }
 }

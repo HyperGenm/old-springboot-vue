@@ -48,12 +48,6 @@ public class SysLog implements Serializable {
     private String ipAddress;
 
     /**
-     * 请求设备
-     */
-    @Column("user_agent")
-    private String userAgent;
-
-    /**
      * 创建时间
      */
     @Column("create_time")
