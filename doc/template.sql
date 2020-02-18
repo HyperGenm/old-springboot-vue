@@ -126,7 +126,7 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
-INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志','{"pageSize":["20"],"pageNum":["1"]}',1, '127.0.0.1', '2019-08-06 08:55:51');
+INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志','127.0.0.1','{"pageSize":["20"],"pageNum":["1"]}',1,  '2019-08-06 08:55:51');
 
 -- ----------------------------
 -- Table structure for sys_role
