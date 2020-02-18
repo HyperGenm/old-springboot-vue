@@ -56,9 +56,10 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils addUser(SysUser sysUser) {
-        //中英文开头、数字、下划线
-        if (ValidateUtils.notChinaEnglishNumberUnderline(sysUser.getUsername())) {
-            return ResultUtils.error("用户名不能包含特殊字符");
+        //用户名最小长度
+        int minUsernameLength = 2;
+        if (ToolUtils.isBlank(sysUser.getUsername()) || minUsernameLength >= sysUser.getUsername().length()) {
+            return ResultUtils.error("用户名不能少于两位");
         }
         if (ValidateUtils.notPassword(sysUser.getPassword())) {
             return ResultUtils.error("密码为6-20位大小写和数字");
@@ -85,9 +86,10 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
-        //中英文开头、数字、下划线
-        if (ValidateUtils.notChinaEnglishNumberUnderline(sysUser.getUsername())) {
-            return ResultUtils.error("用户名不能包含特殊字符");
+        //用户名最小长度
+        int minUsernameLength = 2;
+        if (ToolUtils.isBlank(sysUser.getUsername()) || minUsernameLength >= sysUser.getUsername().length()) {
+            return ResultUtils.error("用户名不能少于两位");
         }
         //正常格式真实姓名:中文或英文包括空格和点
         if (ValidateUtils.notRealName(sysUser.getRealName())) {

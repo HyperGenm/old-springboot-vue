@@ -50,24 +50,32 @@
             let that = this;
             return {
                 formOptions: [
-                    {type: 'input', label: '标题', prop: 'title', required: true},
                     {
-                        type: 'input',
-                        label: '功能名name',
-                        prop: 'name',
-                        required: true,
-                        disabled: 'update' === that.handleType
+                        items: [
+                            {type: 'input', label: '标题', prop: 'title', required: true},
+                            {
+                                type: 'input',
+                                label: '功能名name',
+                                prop: 'name',
+                                required: true,
+                                disabled: 'update' === that.handleType
+                            }
+                        ]
                     },
                     {
-                        type: 'cascader',
-                        label: '上级菜单',
-                        prop: 'parentId',
-                        required: true,
-                        options: [],
-                        hidden: !isEditApi,
-                        disabled: 'update' === that.handleType
+                        items: [
+                            {
+                                type: 'cascader',
+                                label: '上级菜单',
+                                prop: 'parentId',
+                                required: true,
+                                options: [],
+                                hidden: !isEditApi,
+                                disabled: 'update' === that.handleType
+                            },
+                            {type: 'input', label: '功能路径', prop: 'path', required: true, hidden: !isEditApi},
+                        ]
                     },
-                    {type: 'input', label: '功能路径', prop: 'path', required: true, hidden: !isEditApi},
                     {type: 'textarea', label: '功能对应的api', prop: 'containApi', hidden: !isEditApi},
                     {type: 'input', label: '排序', prop: 'sort', inputType: 'number', required: true},
                     {
@@ -107,7 +115,7 @@
                             }
                             result.push(item);
                         });
-                        that.formOptions[2]['options'] = [{
+                        that.formOptions[1]['items'][0]['options'] = [{
                             label: '最高级',
                             value: 0,
                             children: result
@@ -133,8 +141,8 @@
             },
             changeOptions() {
                 this.form = this.formData;
-                this.formOptions[1]['disabled'] = 'update' === this.handleType;
-                this.formOptions[2]['disabled'] = 'update' === this.handleType;
+                this.formOptions[0]['items'][1]['disabled'] = 'update' === this.handleType;
+                this.formOptions[1]['items'][0]['disabled'] = 'update' === this.handleType;
             },
             submit(form) {
                 //`el-select`级联选择器是个数组

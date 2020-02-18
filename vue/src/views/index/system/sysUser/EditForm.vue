@@ -46,10 +46,15 @@
                     ]
                 },
                 form: this.formData,
-                // 表单每一项，具体参考 /src/components/dialog/form/Index.vue
+                // 表单每一项，具体参考 /src/components/dialog/form/Item.vue
                 formOptions: [
-                    {type: 'input', label: '用户名', prop: 'username'},
-                    {type: 'input', label: '真实姓名', prop: 'realName', required: true},
+                    {
+                        //如果一行展示两项
+                        items: [
+                            {type: 'input', label: '用户名', prop: 'username'},
+                            {type: 'input', label: '真实姓名', prop: 'realName', required: true},
+                        ]
+                    },
                     {
                         //类型
                         type: 'radio',
@@ -81,17 +86,15 @@
             changeFormOptions() {
                 if ('add' === this.handleType) {
                     //新增
-                    this.rules.password[0]['required'] = true;
-                    this.formOptions[0]['disabled'] = false;
-                    this.formOptions[2]['disabled'] = false;
-                    this.formOptions[3]['hidden'] = false;
+                    this.formOptions[0]['items'][0]['disabled'] = false;
+                    this.formOptions[1]['disabled'] = false;
+                    this.formOptions[2]['hidden'] = false;
                 } else {
                     //编辑
-                    this.rules.password[0]['required'] = false;
-                    this.formOptions[0]['disabled'] = true;
+                    this.formOptions[0]['items'][0]['disabled'] = true;
                     //如果当前用户被封号------2:封号状态码
-                    this.formOptions[2]['hidden'] = 2 === this.formData['allowLogin'];
-                    this.formOptions[3]['hidden'] = true;
+                    this.formOptions[1]['hidden'] = 2 === this.formData['allowLogin'];
+                    this.formOptions[2]['hidden'] = true;
                 }
             },
             submit(form) {

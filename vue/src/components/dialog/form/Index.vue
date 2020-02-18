@@ -3,75 +3,23 @@
         <el-form ref="form" size="mini" :label-width="labelWidth"
                  :model="formData || {}" :rules="formRules || {}">
             <slot name="itemHead"></slot>
-            <el-form-item v-for="item in formOptions" :key="item.prop"
-                          v-if="!item['hidden']"
-                          :label='item.label' :prop="item.prop" :required="item.required || false">
-                <template v-if="'input' === item.type">
-                    <el-input v-model="formData[item.prop]" :size="item.size" :type="item.inputType || 'text'"
-                              :placeholder="item.placeholder || item.label || '请输入'" clearable
-                              :disabled="item.disabled || false"></el-input>
-                </template>
-                <template v-else-if="'select' === item.type">
-                    <el-select v-model="formData[item.prop]" :size="item.size"
-                               clearable filterable :disabled="item.disabled || false"
-                               :placeholder="item.placeholder || '请选择'"
-                               @change="selectChange(formData[item.prop],item.prop)">
-                        <el-option v-for="option in item.options" :key="option.value"
-                                   :label="option.label" :value="option.value"
-                                   :disabled="option.disabled || false"></el-option>
-                    </el-select>
-                </template>
-                <template v-else-if="'cascader' === item.type">
-                    <el-cascader v-model="formData[item.prop]" :size="item.size"
-                                 clearable filterable :disabled="item.disabled || false"
-                                 :placeholder="item.placeholder || '请选择'"
-                                 :options="item.options || []"
-                                 :props="item['props'] || {  checkStrictly: true }"
-                                 @change="selectChange(formData[item.prop],item.prop)"></el-cascader>
-                </template>
-                <template v-else-if="'radio' === item.type">
-                    <el-radio-group v-model="formData[item.prop]" :size="item.size"
-                                    :disabled="item.disabled || false">
-                        <el-radio v-for="option in item.options" :key="option.value"
-                                  :label="option.value" :disabled="option.disabled || false">
-                            {{option.label}}
-                        </el-radio>
-                    </el-radio-group>
-                </template>
-                <template v-else-if="'textarea' === item.type">
-                    <el-input type="textarea" :size="item.size" v-model="formData[item.prop]"
-                              :disabled="item.disabled || false" autosize></el-input>
-                </template>
-                <template v-else-if="'checkbox' === item.type">
-                    <el-checkbox-group v-model="formData[item.prop]" :size="item.size"
-                                       :disabled="item.disabled || false">
-                        <el-checkbox v-for="option in options" :key="option.value"
-                                     :label="option.value" :disabled="option.disabled || false">{{option.label}}
-                        </el-checkbox>
-                    </el-checkbox-group>
-                </template>
-                <template v-else-if="'datePicker' === item.type">
-                    <el-date-picker type="date" :placeholder="item.placeholder || '选择日期'"
-                                    v-model="formData[item.prop]" :size="item.size"
-                                    :value-format="item.valueFormat || 'yyyy-MM-dd'"
-                                    :disabled="item.disabled || false"></el-date-picker>
-                </template>
-                <template v-else-if="'timePicker' === item.type">
-                    <el-date-picker :placeholder="item.placeholder || '选择时间'"
-                                    v-model="formData[item.prop]" :size="item.size"
-                                    :value-format="item.valueFormat || 'HH:mm:ss'"
-                                    :disabled="item.disabled || false"></el-date-picker>
-                </template>
-                <template v-else-if="'dateTimePicker' === item.type">
-                    <el-date-picker type="datetime" :placeholder="item.placeholder || '选择时间'"
-                                    v-model="formData[item.prop]" :size="item.size"
-                                    :value-format="item.valueFormat || 'yyyy-MM-dd HH:mm:ss'"
-                                    :disabled="item.disabled || false"></el-date-picker>
-                </template>
-                <template v-else>
-                    {{item.label}}没有指定type
-                </template>
-            </el-form-item>
+            <div v-for="item in formOptions" :key="item.prop"
+                 v-if="!item['hidden']">
+                <!--一行展示多个-->
+                <div v-if="null != item.items && 0 < item.items.length">
+                    <div style="overflow: hidden">
+                        <wei-item v-for="(i,index) in item.items" :key="i.prop"
+                                  :item="i" :formData="formData"
+                                  v-if="!i['hidden']"
+                                  :style="'width:49%;float:' + (index % 2 === 0 ? 'left' : 'right')"></wei-item>
+                    </div>
+                </div>
+                <!--一行展示一个-->
+                <div v-else>
+                    <wei-item :item="item" :formData="formData"
+                              @selectChange="selectChange"></wei-item>
+                </div>
+            </div>
             <slot name="itemTail"></slot>
         </el-form>
         <div slot="footer">
@@ -88,6 +36,9 @@
 <script>
     export default {
         name: "Index",
+        components: {
+            'wei-item': () => import('./Item.vue')
+        },
         props: {
             //form表单
             formData: {
@@ -109,7 +60,7 @@
             //表单左边的宽度
             labelWidth: {
                 type: String,
-                default: '10rem'
+                default: '7rem'
             }
         },
         methods: {
@@ -129,15 +80,36 @@
                         if (!that.formData.hasOwnProperty(key)) {
                             break;
                         }
+                        if ('id' === key) {
+                            form['id'] = that.formData['id'];
+                            continue;
+                        }
                         for (let i = 0; i < that.formOptions.length; i++) {
-                            let {prop, hidden} = that.formOptions[i];
-                            //如果当前项隐藏
-                            if (hidden) {
+                            let {prop, hidden, items} = that.formOptions[i];
+                            //一行有一项
+                            if (null == items || 0 >= items.length) {
+                                //如果当前项隐藏
+                                if (hidden) {
+                                    continue;
+                                }
+                                if (key === prop) {
+                                    form[key] = that.formData[key];
+                                    break;
+                                }
                                 continue;
                             }
-                            if ('id' === key || key === prop) {
-                                form[key] = that.formData[key];
-                                break;
+                            //一行有多项
+                            for (let j = 0; j < items.length; j++) {
+                                let {prop, hidden} = items[j];
+                                //如果当前项隐藏
+                                if (hidden) {
+                                    continue;
+                                }
+                                if (key === prop) {
+                                    form[key] = that.formData[key];
+                                    i = that.formOptions.length;
+                                    break;
+                                }
                             }
                         }
                     }
