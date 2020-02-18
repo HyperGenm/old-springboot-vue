@@ -2,8 +2,8 @@ package com.weiziplus.springboot.core.pc.dictionary.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
 import com.weiziplus.springboot.common.interceptor.SystemLog;
-import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpFilterService;
 import com.weiziplus.springboot.common.util.ResultUtils;
+import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpFilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -49,7 +49,7 @@ public class DataDictionaryIpFilterController {
      * @return
      */
     @PostMapping("/add")
-    @SystemLog(description = "新增ip名单")
+    @SystemLog(description = "新增ip名单",type = SystemLog.TYPE_INSERT)
     public ResultUtils add(HttpServletRequest request, String ip, Integer type) {
         return service.add(request, ip, type);
     }
@@ -61,7 +61,7 @@ public class DataDictionaryIpFilterController {
      * @param id
      * @return
      */
-    @SystemLog(description = "删除ip名单")
+    @SystemLog(description = "删除ip名单",type = SystemLog.TYPE_DELETE)
     @PostMapping("/delete")
     public ResultUtils delete(HttpServletRequest request, Long id) {
         return service.delete(request, id);

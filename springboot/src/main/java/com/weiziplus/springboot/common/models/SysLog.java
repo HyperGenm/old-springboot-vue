@@ -42,6 +42,38 @@ public class SysLog implements Serializable {
     private String description;
 
     /**
+     * 当前请求的参数
+     */
+    @Column("param")
+    private String param;
+
+    /**
+     * 请求的类型,1:查询,2:新增,3:修改,4:删除
+     */
+    @Column("type")
+    private Integer type;
+
+    /**
+     * 1:查询
+     */
+    public static final Integer TYPE_SELECT = 1;
+
+    /**
+     * 2:新增
+     */
+    public static final Integer TYPE_INSERT = 2;
+
+    /**
+     * 3:修改
+     */
+    public static final Integer TYPE_UPDATE = 3;
+
+    /**
+     * 4:删除
+     */
+    public static final Integer TYPE_DELETE = 4;
+
+    /**
      * 用户最后活跃ip地址
      */
     @Column("ip_address")

@@ -80,7 +80,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/addFunction")
-    @SystemLog(description = "新增功能")
+    @SystemLog(description = "新增功能", type = SystemLog.TYPE_INSERT)
     public ResultUtils addFunction(HttpServletRequest request, SysFunction sysFunction) {
         return service.addFunction(request, sysFunction);
     }
@@ -92,7 +92,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/updateFunction")
-    @SystemLog(description = "修改功能")
+    @SystemLog(description = "修改功能", type = SystemLog.TYPE_UPDATE)
     public ResultUtils updateFunction(HttpServletRequest request, SysFunction sysFunction) {
         return service.updateFunction(request, sysFunction);
     }
@@ -104,7 +104,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/deleteFunction")
-    @SystemLog(description = "删除功能")
+    @SystemLog(description = "删除功能", type = SystemLog.TYPE_DELETE)
     public ResultUtils deleteFunction(HttpServletRequest request, Integer[] ids) {
         return service.deleteFunction(request, ids);
     }

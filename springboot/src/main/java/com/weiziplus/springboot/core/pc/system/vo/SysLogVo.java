@@ -25,6 +25,12 @@ public class SysLogVo implements Serializable {
     @ApiModelProperty("操作描述")
     private String description;
 
+    @ApiModelProperty("当前请求的参数")
+    private String param;
+
+    @ApiModelProperty("请求的类型,1:查询,2:新增,3:修改,4:删除")
+    private Integer type;
+
     @ApiModelProperty("用户最后活跃地址")
     private String ipAddress;
 

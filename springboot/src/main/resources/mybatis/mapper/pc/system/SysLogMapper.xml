@@ -20,6 +20,9 @@
         <if test="null != description and '' != description">
             AND position(#{description} IN sl.description)
         </if>
+        <if test="null != type">
+            AND sl.type = #{type}
+        </if>
         <if test="null != ipAddress and '' != ipAddress">
             AND position(#{ipAddress} IN sl.ip_address)
         </if>

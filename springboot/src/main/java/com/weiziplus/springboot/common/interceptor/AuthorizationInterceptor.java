@@ -3,13 +3,8 @@ package com.weiziplus.springboot.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.async.SystemAsync;
 import com.weiziplus.springboot.common.config.GlobalConfig;
-import com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper;
-import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
-import com.weiziplus.springboot.core.api.user.mapper.UserMapper;
 import com.weiziplus.springboot.common.models.SysLog;
 import com.weiziplus.springboot.common.models.User;
-import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
-import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
@@ -17,6 +12,11 @@ import com.weiziplus.springboot.common.util.redis.StringRedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.common.util.token.WebTokenUtils;
+import com.weiziplus.springboot.core.api.user.mapper.UserMapper;
+import com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper;
+import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
+import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
+import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +28,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -118,9 +121,16 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             //查看是否有日志注解，有的话将日志信息放入数据库
             SystemLog systemLog = method.getAnnotation(SystemLog.class);
             if (null != systemLog) {
+                //查看是否存在忽略参数
+                String paramIgnore = systemLog.paramIgnore();
+                Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+                //使用迭代器的remove()方法删除元素
+                parameterMap.keySet().removeIf(paramIgnore::contains);
                 SysLog sysLog = new SysLog()
                         .setUserId(AdminTokenUtils.getUserIdByToken(token))
                         .setDescription(systemLog.description())
+                        .setParam(JSON.toJSONString(parameterMap))
+                        .setType(systemLog.type())
                         .setIpAddress(HttpRequestUtils.getIpAddress(request));
                 //将日志异步放入数据库
                 systemAsync.handleSysLog(sysLog);

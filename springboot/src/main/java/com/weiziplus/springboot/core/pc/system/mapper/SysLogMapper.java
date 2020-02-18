@@ -20,6 +20,7 @@ public interface SysLogMapper {
      * @param username
      * @param roleId
      * @param description
+     * @param type
      * @param ipAddress
      * @param startTime
      * @param endTime
@@ -27,6 +28,6 @@ public interface SysLogMapper {
      */
     List<SysLogVo> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
                            @Param("username") String username, @Param("roleId") Long roleId,
-                           @Param("description") String description, @Param("ipAddress") String ipAddress,
-                           @Param("startTime") String startTime, @Param("endTime") String endTime);
+                           @Param("description") String description, @Param("type") Integer type,
+                           @Param("ipAddress") String ipAddress, @Param("startTime") String startTime, @Param("endTime") String endTime);
 }

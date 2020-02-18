@@ -38,10 +38,11 @@ public class SysLogController {
             @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "roleId", required = false) Long roleId,
             @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "type", required = false) Integer type,
             @RequestParam(value = "ipAddress", required = false) String ipAddress,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime) {
         return service.getPageList(request, pageNum, pageSize, username, roleId
-                , description, ipAddress, startTime, endTime);
+                , description, type, ipAddress, startTime, endTime);
     }
 }

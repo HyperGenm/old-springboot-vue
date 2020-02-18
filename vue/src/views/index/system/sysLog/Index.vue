@@ -33,6 +33,22 @@
                     {label: '真实姓名', prop: 'realName'},
                     {label: '角色', prop: 'roleName'},
                     {label: '操作', prop: 'description'},
+                    {label: '参数', prop: 'param'},
+                    {
+                        label: '类型', prop: 'type', type: 'tag',
+                        element({type}) {
+                            let result = [
+                                {content: '查询'},
+                                {content: '新增', type: 'success'},
+                                {content: '修改', type: 'warning'},
+                                {content: '删除', type: 'danger'}
+                            ];
+                            return result[type - 1] || {
+                                content: '未知类型',
+                                type: 'danger'
+                            };
+                        }
+                    },
                     {label: 'ip地址', prop: 'ipAddress'},
                     {
                         label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
@@ -58,6 +74,15 @@
                     {type: 'input', prop: 'username', placeholder: '用户名'},
                     {type: 'select', prop: 'roleId', placeholder: '角色', options: []},
                     {type: 'input', prop: 'description', placeholder: '操作'},
+                    {
+                        type: 'select', prop: 'type', placeholder: '类型',
+                        options: [
+                            {label: '查询', value: 1},
+                            {label: '新增', value: 2},
+                            {label: '修改', value: 3},
+                            {label: '删除', value: 4}
+                        ]
+                    },
                     {type: 'input', prop: 'ipAddress', placeholder: 'ip地址'},
                     {type: 'dateTimePicker', prop: 'startTime', placeholder: '开始时间'},
                     {type: 'dateTimePicker', prop: 'endTime', placeholder: '结束时间'}

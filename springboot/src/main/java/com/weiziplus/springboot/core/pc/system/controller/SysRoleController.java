@@ -67,7 +67,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRoleFun")
-    @SystemLog(description = "新增角色功能")
+    @SystemLog(description = "新增角色功能", type = SystemLog.TYPE_INSERT)
     public ResultUtils addRoleFun(
             @RequestParam(value = "roleId") Integer roleId,
             @RequestParam(value = "funIds", defaultValue = "") Integer[] funIds) {
@@ -81,7 +81,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRole")
-    @SystemLog(description = "新增角色")
+    @SystemLog(description = "新增角色", type = SystemLog.TYPE_INSERT)
     public ResultUtils addRole(SysRole sysRole) {
         return service.addRole(sysRole);
     }
@@ -93,7 +93,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/updateRole")
-    @SystemLog(description = "修改角色")
+    @SystemLog(description = "修改角色", type = SystemLog.TYPE_UPDATE)
     public ResultUtils updateRole(HttpServletRequest request, SysRole sysRole) {
         return service.updateRole(request, sysRole);
     }
@@ -105,7 +105,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/deleteRole")
-    @SystemLog(description = "删除角色")
+    @SystemLog(description = "删除角色", type = SystemLog.TYPE_DELETE)
     public ResultUtils deleteRole(HttpServletRequest request, Integer roleId) {
         return service.deleteRole(request, roleId);
     }
@@ -117,7 +117,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/changeRoleIsStop")
-    @SystemLog(description = "改变角色状态")
+    @SystemLog(description = "改变角色状态", type = SystemLog.TYPE_UPDATE)
     public ResultUtils changeRoleIsStop(HttpServletRequest request, Integer roleId, Integer isStop) {
         return service.changeRoleIsStop(request, roleId, isStop);
     }

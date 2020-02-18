@@ -60,7 +60,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/addUser")
-    @SystemLog(description = "新增用户")
+    @SystemLog(description = "新增用户", type = SystemLog.TYPE_INSERT)
     public ResultUtils addUser(SysUser sysUser) {
         return service.addUser(sysUser);
     }
@@ -72,7 +72,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUser")
-    @SystemLog(description = "更新用户")
+    @SystemLog(description = "更新用户", type = SystemLog.TYPE_UPDATE)
     public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
         return service.updateUser(request, sysUser);
     }
@@ -84,7 +84,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/deleteUser")
-    @SystemLog(description = "删除用户")
+    @SystemLog(description = "删除用户", type = SystemLog.TYPE_DELETE)
     public ResultUtils deleteUser(
             HttpServletRequest request,
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
@@ -99,7 +99,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUserRole")
-    @SystemLog(description = "更新用户角色")
+    @SystemLog(description = "更新用户角色", type = SystemLog.TYPE_UPDATE)
     public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Integer roleId) {
         return service.updateUserRole(request, userId, roleId);
     }
@@ -113,7 +113,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updatePassword")
-    @SystemLog(description = "修改密码")
+    @SystemLog(description = "修改密码",type = SystemLog.TYPE_UPDATE, paramIgnore = "oldPwd,newPwd")
     public ResultUtils updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
         return service.updatePassword(request, oldPwd, newPwd);
     }
@@ -122,7 +122,7 @@ public class SysUserController {
      * 重置密码
      */
     @PostMapping("/resetUserPassword")
-    @SystemLog(description = "重置用户密码")
+    @SystemLog(description = "重置用户密码", type = SystemLog.TYPE_UPDATE)
     public ResultUtils resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
     }
@@ -131,7 +131,7 @@ public class SysUserController {
      * 解除封号
      */
     @PostMapping("/relieveSuspend")
-    @SystemLog(description = "解除封号")
+    @SystemLog(description = "解除封号", type = SystemLog.TYPE_UPDATE)
     public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
         return service.relieveSuspend(request, userId);
     }
@@ -142,7 +142,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateIcon")
-    @SystemLog(description = "修改头像")
+    @SystemLog(description = "修改头像", type = SystemLog.TYPE_UPDATE)
     public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
         return service.updateIcon(request, file);
     }

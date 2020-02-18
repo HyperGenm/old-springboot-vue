@@ -37,9 +37,13 @@ public class SystemAsync extends BaseService {
         if (null == sysLog) {
             return;
         }
-        //将当前操作记录到数据库
-        sysLog.setCreateTime(DateUtils.getNowDateTime());
-        baseInsert(sysLog);
+        try {
+            //将当前操作记录到数据库
+            sysLog.setCreateTime(DateUtils.getNowDateTime());
+            baseInsert(sysLog);
+        } catch (Exception e) {
+            log.warn("将操作记录添加到数据库出错，详情:" + e);
+        }
     }
 
     /**
@@ -53,7 +57,11 @@ public class SystemAsync extends BaseService {
         if (null == userId || 0 > userId) {
             return;
         }
-        sysUserMapper.updateLastActiveTimeByIdAndIp(userId, ip);
+        try {
+            sysUserMapper.updateLastActiveTimeByIdAndIp(userId, ip);
+        } catch (Exception e) {
+            log.warn("更新系统用户最后活跃时间出错，详情:" + e);
+        }
     }
 
     /**

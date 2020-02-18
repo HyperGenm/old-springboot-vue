@@ -115,6 +115,8 @@ CREATE TABLE `sys_log`  (
   `user_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '用户表id',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '操作描述',
   `ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `param` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '当前请求的参数',
+  `type` int(2) NOT NULL DEFAULT '1' COMMENT '请求的类型,1:查询,2:新增,3:修改,4:删除',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE,
@@ -124,7 +126,7 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
-INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志', '127.0.0.1', '2019-08-06 08:55:51');
+INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志','{"pageSize":["20"],"pageNum":["1"]}',1, '127.0.0.1', '2019-08-06 08:55:51');
 
 -- ----------------------------
 -- Table structure for sys_role
