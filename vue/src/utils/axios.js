@@ -139,10 +139,10 @@ export function weiAxios(
                 fail(error);
                 return;
             }
-            that.$globalFun.errorMsg('内部服务器错误，请稍后重试');
             if (error.response) {
                 error = error['response']['data'];
             }
+            that.$globalFun.errorMsg('内部服务器错误，请稍后重试');
             that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
@@ -273,10 +273,10 @@ export function weiAxiosDown(
                 fail(error);
                 return;
             }
-            that.$globalFun.errorMsg('文件下载失败，请重试');
             if (error.response) {
                 error = error['response']['data'];
             }
+            that.$globalFun.errorMsg('文件下载失败，请重试', error);
             that.$globalFun.consoleWarnTable(`文件下载失败url:${url}`, error);
             fail(error);
         });

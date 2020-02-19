@@ -167,10 +167,14 @@ function createUUID() {
  */
 function consoleWarnTable(msg, object = {}) {
     console.warn(msg);
-    if (object instanceof Object) {
-        console.table(object);
-    } else {
-        console.log(object);
+    try {
+        if (object instanceof Object) {
+            console.table(object);
+        } else {
+            console.log(object);
+        }
+    } catch (e) {
+        console.log('此浏览器不支持console.table()', e, '---错误详情:', object);
     }
     console.warn('↑↑以上为错误详情↑↑↑↑↑');
 }
