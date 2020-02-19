@@ -1,5 +1,7 @@
 package com.weiziplus.springboot.common.base;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -436,96 +438,59 @@ public class BaseService {
     /**
      * 根据id查询
      *
-     * @param nowClass
+     * @param clazz
      * @param id
      * @return
      */
-    protected Map<String, Object> baseFindByClassAndId(Class nowClass, Long id) {
-        if (null == nowClass || null == id) {
+    protected <T> T baseFindByClassAndId(Class<T> clazz, Long id) {
+        if (null == clazz || null == id) {
             return null;
         }
-        return mapper.findById(new HashMap<String, Object>(2) {{
-            put("TABLE_NAME", getTableName(nowClass));
+        Map<String, Object> byId = mapper.findById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(clazz));
             put("id", id);
         }});
+        return JSON.parseObject(JSON.toJSONString(byId), clazz);
     }
 
     /**
      * 根据id查询
      *
-     * @param nowClass
+     * @param clazz
      * @param id
      * @return
      */
-    protected Map<String, Object> baseFindByClassAndId(Class nowClass, Integer id) {
-        return baseFindByClassAndId(nowClass, Long.valueOf(id));
+    protected <T> T baseFindByClassAndId(Class<T> clazz, Integer id) {
+        return baseFindByClassAndId(clazz, Long.valueOf(id));
     }
 
     /**
      * 根据id查询
      *
-     * @param nowClass
+     * @param clazz
      * @param id
      * @return
      */
-    protected Map<String, Object> baseFindByClassAndId(Class nowClass, String id) {
-        if (null == nowClass || null == id || ToolUtils.isBlank(id)) {
+    protected <T> T baseFindByClassAndId(Class<T> clazz, String id) {
+        if (null == clazz || ToolUtils.isBlank(id)) {
             return null;
         }
-        return mapper.findById(new HashMap<String, Object>(2) {{
-            put("TABLE_NAME", getTableName(nowClass));
+        Map<String, Object> byId = mapper.findById(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", getTableName(clazz));
             put("id", id);
         }});
+        return JSON.parseObject(JSON.toJSONString(byId), clazz);
     }
-
-    /**
-     * 降序
-     */
-    private final static String DESC = "DESC";
-
-    /**
-     * 升序
-     */
-    private final static String ASC = "ASC";
 
     /**
      * 获取所有数据---不指定排序字段，默认主键降序
      *
-     * @param nowClass
+     * @param clazz
      * @return
      */
-    protected List<Map<String, Object>> baseFindAllByClass(Class nowClass) {
-        return mapper.findAll(new HashMap<String, String>(3) {{
-            put("TABLE_NAME", getTableName(nowClass));
-            put("orderColumn", getPrimaryKey(nowClass));
-            put("desc", DESC);
-        }});
-    }
-
-    /**
-     * 获取所有数据
-     *
-     * @param nowClass
-     * @return
-     */
-    protected List<Map<String, Object>> baseFindAllByClass(Class nowClass, String orderColumn, String desc) {
-        if (ToolUtils.isBlank(orderColumn)) {
-            throw new RuntimeException("获取所有数据baseFindAllByClass，排序字段错误，class:" + nowClass);
-        }
-        orderColumn = orderColumn.trim();
-        //空格
-        String blankSpace = " ";
-        if (orderColumn.contains(blankSpace)) {
-            throw new RuntimeException("获取所有数据baseFindAllByClass，排序字段错误,内部不能包含空格,class:" + nowClass);
-        }
-        if (!DESC.equalsIgnoreCase(desc) && !ASC.equalsIgnoreCase(desc)) {
-            throw new RuntimeException("获取所有数据baseFindAllByClass，升序、降序字段错误,class:" + nowClass);
-        }
-        Map<String, String> param = new HashMap<>(3);
-        param.put("TABLE_NAME", getTableName(nowClass));
-        param.put("orderColumn", orderColumn);
-        param.put("desc", desc.toUpperCase());
-        return mapper.findAll(param);
+    protected <T> List<T> baseFindAllByClass(Class<T> clazz) {
+        List<Map<String, Object>> all = mapper.findAll(getTableName(clazz));
+        return JSONObject.parseArray(JSON.toJSONString(all), clazz);
     }
 
     /**

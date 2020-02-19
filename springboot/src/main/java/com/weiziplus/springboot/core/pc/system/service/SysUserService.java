@@ -197,12 +197,8 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("密码为6-20位大小写和数字");
         }
         Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
-        Map<String, Object> map = baseFindByClassAndId(SysUser.class, userId);
-        String passwordFiled = "password";
-        if (null == map || null == map.get(passwordFiled)) {
-            return ResultUtils.error("原密码错误");
-        }
-        if (!Md5Utils.encode(oldPwd).equals(ToolUtils.valueOfString(map.get(passwordFiled)))) {
+        SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
+        if (Md5Utils.encode(oldPwd).equals(sysUser.getPassword())) {
             return ResultUtils.error("原密码错误");
         }
         mapper.resetUserPassword(userId, Md5Utils.encode(newPwd));
@@ -263,7 +259,6 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
-        Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         BufferedImage image = FileUtils.getImage(file);
         if (null == image) {
             return ResultUtils.error("请上传图片");
@@ -282,13 +277,12 @@ public class SysUserService extends BaseService {
         if (null == path) {
             return ResultUtils.error("文件上传失败，请重试");
         }
+        Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+        SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
         //异步删除原来的图片
-        Map<String, Object> sysUserMap = baseFindByClassAndId(SysUser.class, userId);
-        systemAsync.deleteFile(ToolUtils.valueOfString(sysUserMap.get("icon")));
-        SysUser user = new SysUser()
-                .setId(userId)
-                .setIcon(path);
-        baseUpdate(user);
+        systemAsync.deleteFile(sysUser.getIcon());
+        sysUser.setIcon(path);
+        baseUpdate(sysUser);
         return ResultUtils.success(GlobalConfig.getMybatisFilePathPrefix() + path);
     }
 }

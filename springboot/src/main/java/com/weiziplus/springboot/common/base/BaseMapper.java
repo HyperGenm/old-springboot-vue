@@ -111,11 +111,10 @@ public interface BaseMapper {
     /**
      * 获取所有数据
      *
-     * @param map
+     * @param tableName
      * @return
      */
     @Select("SELECT * \r\n " +
-            "FROM `${TABLE_NAME}` \r\n " +
-            "ORDER BY #{orderColumn} #{desc}")
-    List<Map<String, Object>> findAll(Map<String, String> map);
+            "FROM `${TABLE_NAME}` ")
+    List<Map<String, Object>> findAll(@Param("tableName") String tableName);
 }

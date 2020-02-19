@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.async.SystemAsync;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysLog;
-import com.weiziplus.springboot.common.models.User;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
@@ -12,9 +11,6 @@ import com.weiziplus.springboot.common.util.redis.StringRedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
 import com.weiziplus.springboot.common.util.token.JwtTokenUtils;
 import com.weiziplus.springboot.common.util.token.WebTokenUtils;
-import com.weiziplus.springboot.core.api.user.mapper.UserMapper;
-import com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper;
-import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
 import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
 import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +25,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,15 +37,6 @@ import java.util.Set;
 @Slf4j
 @Component
 public class AuthorizationInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    SysUserMapper sysUserMapper;
-
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    SysLogMapper sysLogMapper;
 
     @Autowired
     SysRoleService sysRoleService;
@@ -230,12 +216,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //查看redis中token是否是当前token
         if (!StringRedisUtils.get(WebTokenUtils.getAudienceRedisKey(userId)).equals(token)) {
-            handleResponse(response, ResultUtils.errorToken("token失效"));
-            return false;
-        }
-        //查看是否存在该用户
-        User user = userMapper.getUserInfoByUserId(userId);
-        if (null == user) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }

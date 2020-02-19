@@ -9,20 +9,10 @@
         WHERE username = #{username}
         LIMIT 1
     </select>
-    <select id="getUserInfoByUserId" resultType="User">
-        SELECT *
-        FROM user
-        WHERE id = #{userId}
-        LIMIT 1
-    </select>
     <insert id="addUser">
         INSERT INTO user
         (username,password,create_time)
         VALUES
         (#{username},#{password},now())
     </insert>
-    <select id="getList" resultType="User">
-        SELECT *
-        FROM user
-    </select>
 </mapper>

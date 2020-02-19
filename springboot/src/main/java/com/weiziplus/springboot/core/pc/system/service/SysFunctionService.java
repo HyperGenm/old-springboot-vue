@@ -263,14 +263,12 @@ public class SysFunctionService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Map<String, Object> map = baseFindByClassAndId(SysRole.class, roleId);
-        if (null == map) {
+        SysRole sysRole = baseFindByClassAndId(SysRole.class, roleId);
+        if (null == sysRole) {
             return null;
         }
-        //是否启用;0:启用,1:禁用'
-        Object isStopObject = map.get("isStop");
-        String stopStatus = "1";
-        if (null == isStopObject || stopStatus.equals(ToolUtils.valueOfString(isStopObject))) {
+        //当前角色禁用
+        if (SysRole.IS_STOP_DISABLE.equals(sysRole.getIsStop())) {
             return null;
         }
         Set<String> resultList = new HashSet<>();

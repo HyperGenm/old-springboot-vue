@@ -39,7 +39,7 @@ public class UserService extends BaseService {
      */
     public ResultUtils<User> getInfo(HttpServletRequest request) {
         Long userId = WebTokenUtils.getUserIdByHttpServletRequest(request);
-        return ResultUtils.success(mapper.getUserInfoByUserId(userId));
+        return ResultUtils.success(baseFindByClassAndId(User.class, userId));
     }
 
     /**
@@ -58,7 +58,7 @@ public class UserService extends BaseService {
             return ResultUtils.success(PageUtils.pageInfo(userList));
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<User> userList = mapper.getList();
+        List<User> userList = baseFindAllByClass(User.class);
         RedisUtils.set(key, userList);
         PageUtils<List<User>> pageUtil = PageUtils.pageInfo(userList);
         return ResultUtils.success(pageUtil);
