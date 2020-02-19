@@ -26,7 +26,7 @@ public class CorsFilter implements Filter {
      */
     private static String[] CORS_FILTER_ORIGINS = {};
 
-    @Value("${global.cors-filter-origins:http://localhost}")
+    @Value("${global.cors-filter-origins:*}")
     private void setCorsFilterOrigins(String corsFilterOrigins) {
         if (ToolUtils.isBlank(corsFilterOrigins)) {
             return;

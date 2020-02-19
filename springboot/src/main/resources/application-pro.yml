@@ -21,7 +21,7 @@ global:
   swagger: false
   #图片存放路径--项目打包后的jar包同级目录static
   base-file-path: /home/template/build/static
-  #允许跨域地址(访问的浏览器的Origin)---多个地址用,(英文逗号)分隔开---可精确到端口号
+  #允许跨域地址(访问的浏览器的Origin,不设置默认*)---多个地址用,(英文逗号)分隔开---可精确到端口号
   cors-filter-origins: http://localhost,https://xxx.xxx.xxx
   #是否將异常详情展示给前端
   response-show-runtime-exception: false
