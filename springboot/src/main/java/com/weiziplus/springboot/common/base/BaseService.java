@@ -3,10 +3,13 @@ package com.weiziplus.springboot.common.base;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.util.Md5Utils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ public class BaseService {
     /**
      * BaseService基础redis的key
      */
-    private static final String BASE_REDIS_KEY = "base:BaseService:";
+    private static final String BASE_REDIS_KEY = createOnlyRedisKeyPrefix();
 
     /**
      * 根据实体类class获取数据库表名
@@ -642,6 +645,23 @@ public class BaseService {
     }
 
     /**
+     * 根据当前class创建唯一的redis的key的前缀
+     *
+     * @return
+     */
+    protected static String createOnlyRedisKeyPrefix() {
+        //获取项目路径
+        String property = System.getProperty("user.dir");
+        //获取调用该方法的class
+        String name = new Exception().getStackTrace()[1].getClassName();
+        //如果是生产环境
+        if (GlobalConfig.isSpringProfilesPro()) {
+            return Md5Utils.encode(property + name) + ":";
+        }
+        return Md5Utils.encode(property) + name + ":";
+    }
+
+    /**
      * 根据唯一前缀和方法参数创建唯一redis的key
      *
      * @param onlyPrefix
@@ -652,6 +672,10 @@ public class BaseService {
         StringBuffer stringBuffer = new StringBuffer(onlyPrefix);
         for (Object object : objects) {
             stringBuffer.append("_&&&_").append(object);
+        }
+        //如果是生产环境
+        if (GlobalConfig.isSpringProfilesPro()) {
+            return Md5Utils.encode(ToolUtils.valueOfString(stringBuffer));
         }
         return ToolUtils.valueOfString(stringBuffer);
     }

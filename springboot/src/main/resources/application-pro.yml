@@ -9,6 +9,10 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://localhost:3306/template?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+  #redis
+  redis:
+    #索引(默认为0)
+    database: 0
 mybatis:
   #设置MyBatis全局变量
   configuration-properties:

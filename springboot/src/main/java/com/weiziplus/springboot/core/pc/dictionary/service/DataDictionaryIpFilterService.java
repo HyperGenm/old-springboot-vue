@@ -39,7 +39,7 @@ public class DataDictionaryIpFilterService extends BaseService {
     /**
      * ipFilter基础redis的key
      */
-    private static final String BASE_REDIS_KEY = "pc:dictionary:service:DataDictionaryIpFilterService:";
+    private static final String BASE_REDIS_KEY = createOnlyRedisKeyPrefix();
 
     /**
      * 获取ip白名单列表

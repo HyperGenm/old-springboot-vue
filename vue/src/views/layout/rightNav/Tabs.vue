@@ -1,7 +1,7 @@
 <template>
     <div id="tabs">
         <el-tabs v-if="null != tabs || 0 < tabs.length"
-                 type="card" closable
+                 type="border-card" closable
                  v-model="tabValue"
                  @tab-remove="removeTab"
                  @tab-click="clickTab">

@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.core.pc.system.service;
 
+import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class AdminLoginService {
+public class AdminLoginService extends BaseService {
 
     @Autowired
     SysUserMapper sysUserMapper;
@@ -40,7 +41,7 @@ public class AdminLoginService {
     @Autowired
     SysFunctionService sysFunctionService;
 
-    private final String REDIS_KEY = "pc:system:service:AdminLoginService:loginRandomCode:";
+    private final String REDIS_KEY = createOnlyRedisKeyPrefix();
 
     /**
      * 生成图片验证码

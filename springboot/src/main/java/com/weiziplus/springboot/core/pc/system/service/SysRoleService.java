@@ -48,7 +48,7 @@ public class SysRoleService extends BaseService {
     /**
      * SysRole基础redis的key
      */
-    private static final String BASE_REDIS_KEY = "pc:system:service:SysRoleService:";
+    private static final String BASE_REDIS_KEY = createOnlyRedisKeyPrefix();
 
     /**
      * 根据父级id和role列表获取子级列表

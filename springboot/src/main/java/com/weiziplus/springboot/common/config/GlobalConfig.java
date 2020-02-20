@@ -77,4 +77,23 @@ public class GlobalConfig {
         return BASE_FILE_PATH;
     }
 
+    /**
+     * 当前是dev还是pro
+     */
+    private static String SPRING_PROFILES = "";
+
+    @Value("${spring.profiles:pro}")
+    private void setSpringProfiles(String springProfiles) {
+        GlobalConfig.SPRING_PROFILES = springProfiles;
+    }
+
+    /**
+     * 当前是pro
+     *
+     * @return
+     */
+    public static boolean isSpringProfilesPro() {
+        return "pro".equals(SPRING_PROFILES);
+    }
+
 }
