@@ -109,6 +109,31 @@ public interface BaseMapper {
     Map<String, Object> findById(Map<String, Object> map);
 
     /**
+     * 根据表名和字段以及值获取一条数据
+     *
+     * @param map
+     * @return
+     */
+    @Select("" +
+            "SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "WHERE `${COLUMN}` = #{value} \r\n " +
+            "LIMIT 1 ")
+    Map<String, Object> findOneDataByColumn(Map<String, Object> map);
+
+    /**
+     * 根据表名和字段以及值获取列表
+     *
+     * @param map
+     * @return
+     */
+    @Select("" +
+            "SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "WHERE `${COLUMN}` = #{value} \r\n ")
+    List<Map<String, Object>> findListByColumn(Map<String, Object> map);
+
+    /**
      * 获取所有数据
      *
      * @param tableName
@@ -117,4 +142,26 @@ public interface BaseMapper {
     @Select("SELECT * \r\n " +
             "FROM `${TABLE_NAME}` ")
     List<Map<String, Object>> findAll(@Param("tableName") String tableName);
+
+    /**
+     * 获取所有数据按照某个字段降序排列
+     *
+     * @param map
+     * @return
+     */
+    @Select("SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n" +
+            "ORDER BY ${COLUMN} DESC ")
+    List<Map<String, Object>> findAllOrderByColumnDesc(Map<String, String> map);
+
+    /**
+     * 获取所有数据按照某个字段升序排列
+     *
+     * @param map
+     * @return
+     */
+    @Select("SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n" +
+            "ORDER BY ${COLUMN} ASC ")
+    List<Map<String, Object>> findAllOrderByColumnAsc(Map<String, String> map);
 }

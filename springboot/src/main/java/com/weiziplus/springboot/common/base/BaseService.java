@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.common.base;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
@@ -73,7 +74,7 @@ public class BaseService {
     }
 
     /**
-     * 根据实体类class获取数据库表名
+     * 根据实体类class获取数据库表主键
      *
      * @param nowClass
      * @return
@@ -450,6 +451,9 @@ public class BaseService {
             put("TABLE_NAME", getTableName(clazz));
             put("id", id);
         }});
+        if (null == byId) {
+            return null;
+        }
         return JSON.parseObject(JSON.toJSONString(byId), clazz);
     }
 
@@ -479,18 +483,159 @@ public class BaseService {
             put("TABLE_NAME", getTableName(clazz));
             put("id", id);
         }});
+        if (null == byId) {
+            return null;
+        }
         return JSON.parseObject(JSON.toJSONString(byId), clazz);
     }
 
     /**
-     * 获取所有数据---不指定排序字段，默认主键降序
+     * 判断实体类是否包含某个字段
+     *
+     * @param clazz
+     * @param column
+     * @return
+     */
+    private boolean classIsContainsColumn(Class clazz, String column) {
+        if (null == clazz || null == column) {
+            throw new RuntimeException("判断实体类是否包含某个字段出错，column不能为空==========");
+        }
+        if (null == clazz.getAnnotation(Table.class)) {
+            throw new RuntimeException("当前实体类没有设置@Table注解==========" + clazz);
+        }
+        String key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName());
+        Object redisObject = RedisUtils.get(key);
+        if (null != redisObject) {
+            return (Boolean) redisObject;
+        }
+        //此处对应自动生成的实体类常量，COLUMN_ + 数据库字段全部大写
+        String prefix = "COLUMN_";
+        try {
+            Field field = clazz.getDeclaredField(prefix + column.toUpperCase());
+            if (null == field) {
+                throw new RuntimeException("根据实体类、字段、值获取实体类出错---请使用类常量==========" + clazz.getName());
+            }
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("根据实体类、字段、值获取实体类出错---请使用类常量==========" + clazz.getName() + "---" + e);
+        }
+        RedisUtils.set(key, true);
+        return true;
+    }
+
+    /**
+     * 根据实体类和字段和值获取一条数据
+     *
+     * @param clazz
+     * @param column
+     * @param object
+     * @param <T>
+     * @return
+     */
+    protected <T> T baseFindOneDataByClassAndColumnAndValue(Class<T> clazz, String column, Object object) {
+        if (null == clazz || ToolUtils.isBlank(column) || null == object) {
+            return null;
+        }
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含该字段
+        if (!classIsContainsColumn(clazz, column)) {
+            return null;
+        }
+        Map<String, Object> byId = mapper.findOneDataByColumn(new HashMap<String, Object>(3) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN", column);
+            put("value", object);
+        }});
+        if (null == byId) {
+            return null;
+        }
+        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+    }
+
+    /**
+     * 根据实体类和字段和值获取列表
+     *
+     * @param clazz
+     * @param column
+     * @param object
+     * @param <T>
+     * @return
+     */
+    protected <T> List<T> baseFindListByClassAndColumnAndValue(Class<T> clazz, String column, Object object) {
+        if (null == clazz || ToolUtils.isBlank(column) || null == object) {
+            return null;
+        }
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含该字段
+        if (!classIsContainsColumn(clazz, column)) {
+            return null;
+        }
+        List<Map<String, Object>> listByColumn = mapper.findListByColumn(new HashMap<String, Object>(3) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN", column);
+            put("value", object);
+        }});
+        if (null == listByColumn) {
+            return null;
+        }
+        return JSONArray.parseArray(JSON.toJSONString(listByColumn), clazz);
+    }
+
+    /**
+     * 获取所有数据
      *
      * @param clazz
      * @return
      */
     protected <T> List<T> baseFindAllByClass(Class<T> clazz) {
         List<Map<String, Object>> all = mapper.findAll(getTableName(clazz));
+        if (null == all) {
+            return null;
+        }
         return JSONObject.parseArray(JSON.toJSONString(all), clazz);
+    }
+
+    /**
+     * 获取所有数据按照某个字段降序排列
+     *
+     * @param clazz
+     * @return
+     */
+    protected <T> List<T> baseFindAllByClassOrderByColumnDesc(Class<T> clazz, String column) {
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含该字段
+        if (!classIsContainsColumn(clazz, column)) {
+            return null;
+        }
+        List<Map<String, Object>> allOrderByColumnDesc = mapper.findAllOrderByColumnDesc(new HashMap<String, String>(2) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN", column);
+        }});
+        if (null == allOrderByColumnDesc) {
+            return null;
+        }
+        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnDesc), clazz);
+    }
+
+    /**
+     * 获取所有数据按照某个字段升序排列
+     *
+     * @param clazz
+     * @return
+     */
+    protected <T> List<T> baseFindAllByClassOrderByColumnAsc(Class<T> clazz, String column) {
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含该字段
+        if (!classIsContainsColumn(clazz, column)) {
+            return null;
+        }
+        List<Map<String, Object>> allOrderByColumnAsc = mapper.findAllOrderByColumnAsc(new HashMap<String, String>(2) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN", column);
+        }});
+        if (null == allOrderByColumnAsc) {
+            return null;
+        }
+        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnAsc), clazz);
     }
 
     /**

@@ -118,6 +118,8 @@ public class MyBatisPlugin extends PluginAdapter {
         } else {
             field.addAnnotation("@Column(\"" + actualColumnName + "\")");
         }
+        //public static final String COLUMN_NAME = "name"
+        field.addAnnotation("public static final String COLUMN_" + cam1eHumpToUnderline(field.getName()) + " = \"" + actualColumnName + "\" ;");
         return true;
     }
 
@@ -160,5 +162,15 @@ public class MyBatisPlugin extends PluginAdapter {
             result.append(camel.substring(1).toLowerCase());
         }
         return result.toString();
+    }
+
+    /**
+     * 驼峰转为下划线
+     *
+     * @param str
+     * @return
+     */
+    public String cam1eHumpToUnderline(String str) {
+        return str.replaceAll("[A-Z]", "_$0").toUpperCase();
     }
 }

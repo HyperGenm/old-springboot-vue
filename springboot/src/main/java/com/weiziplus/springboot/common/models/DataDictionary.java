@@ -16,20 +16,21 @@ import java.io.Serializable;
  * 数据字典表
  * data_dictionary
  * @author 16028
- * @date 2019-10-14 21:18:58
+ * @date 2020-02-20 11:49:55
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("data_dictionary")
-@ApiModel("数据字典表")
-@Alias("DataDictionary")
 @Accessors(chain = true)
+@Alias("DataDictionary")
+@ApiModel("数据字典表")
 public class DataDictionary implements Serializable {
     /**
      * 自增
      */
     @ApiModelProperty("自增")
     @Id("id")
+    public static final String COLUMN_ID = "id" ;
     private Integer id;
 
     /**
@@ -37,6 +38,7 @@ public class DataDictionary implements Serializable {
      */
     @ApiModelProperty("字典标识")
     @Column("code")
+    public static final String COLUMN_CODE = "code" ;
     private String code;
 
     /**
@@ -44,6 +46,7 @@ public class DataDictionary implements Serializable {
      */
     @ApiModelProperty("字典名字")
     @Column("name")
+    public static final String COLUMN_NAME = "name" ;
     private String name;
 
     /**
@@ -51,6 +54,7 @@ public class DataDictionary implements Serializable {
      */
     @ApiModelProperty("字典备注")
     @Column("remark")
+    public static final String COLUMN_REMARK = "remark" ;
     private String remark;
 
     /**
@@ -58,6 +62,7 @@ public class DataDictionary implements Serializable {
      */
     @ApiModelProperty("字典创建时间")
     @Column("create_time")
+    public static final String COLUMN_CREATE_TIME = "create_time" ;
     private String createTime;
 
     private static final long serialVersionUID = 1L;

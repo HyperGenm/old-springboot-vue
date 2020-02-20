@@ -15,22 +15,22 @@ import java.io.Serializable;
 /**
  * 数据字典值
  * data_dictionary_value
- *
  * @author 16028
- * @date 2019-10-14 21:18:58
+ * @date 2020-02-20 11:50:46
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Table("data_dictionary_value")
-@ApiModel("数据字典值")
-@Alias("DataDictionaryValue")
 @Accessors(chain = true)
+@Alias("DataDictionaryValue")
+@ApiModel("数据字典值")
 public class DataDictionaryValue implements Serializable {
     /**
      * 自增
      */
     @ApiModelProperty("自增")
     @Id("id")
+    public static final String COLUMN_ID = "id" ;
     private Long id;
 
     /**
@@ -38,6 +38,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("字典编号")
     @Column("dictionary_code")
+    public static final String COLUMN_DICTIONARY_CODE = "dictionary_code" ;
     private String dictionaryCode;
 
     /**
@@ -45,6 +46,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("名称")
     @Column("name")
+    public static final String COLUMN_NAME = "name" ;
     private String name;
 
     /**
@@ -52,6 +54,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("值")
     @Column("value")
+    public static final String COLUMN_VALUE = "value" ;
     private String value;
 
     /**
@@ -60,6 +63,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("类型(自定义)： ipFilter：ip名单---0：白名单，1：黑名单")
     @Column("type")
+    public static final String COLUMN_TYPE = "type" ;
     private Integer type;
 
     /**
@@ -74,10 +78,11 @@ public class DataDictionaryValue implements Serializable {
 
     /**
      * 排序(自定义,默认为排序)
-     * abnormalIp:异常ip---异常出错次数
+     *  abnormalIp:异常ip---异常出错次数
      */
-    @ApiModelProperty("排序(自定义,默认为排序) abnormalIp:异常ip---异常出错次数")
+    @ApiModelProperty("排序(自定义,默认为排序)  abnormalIp:异常ip---异常出错次数")
     @Column("order")
+    public static final String COLUMN_ORDER = "order" ;
     private Integer order;
 
     /**
@@ -85,6 +90,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("备注")
     @Column("remark")
+    public static final String COLUMN_REMARK = "remark" ;
     private String remark;
 
     /**
@@ -92,6 +98,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("创建时间")
     @Column("create_time")
+    public static final String COLUMN_CREATE_TIME = "create_time" ;
     private String createTime;
 
     private static final long serialVersionUID = 1L;
