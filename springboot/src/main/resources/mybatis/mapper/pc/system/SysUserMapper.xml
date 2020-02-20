@@ -33,41 +33,9 @@
         </if>
         ORDER BY su.create_time ASC
     </select>
-    <select id="getUserInfoByName" resultType="SysUser">
-        SELECT *
-        FROM sys_user
-        WHERE username = #{userName}
-        LIMIT 1
-    </select>
-    <update id="resetUserPassword">
-        UPDATE sys_user
-        SET
-        password = #{password}
-        WHERE id = #{userId}
-    </update>
-    <select id="getInfoById" resultType="SysUser">
-        SELECT *
-        FROM sys_user
-        WHERE id = #{id}
-    </select>
-    <update id="updateLastActiveTimeByIdAndIp">
-        UPDATE sys_user
-        SET last_active_time = now(),last_ip_address = #{ip}
-        WHERE id = #{id}
-    </update>
-    <update id="updateRoleIdByUserIdAndRoleId">
-        UPDATE sys_user
-        SET role_id = #{roleId}
-        WHERE id = #{userId}
-    </update>
     <update id="suspendSysUser">
         UPDATE sys_user
         SET allow_login = 2,suspend_num = suspend_num + 1
-        WHERE id = #{userId}
-    </update>
-    <update id="relieveSuspend">
-        UPDATE sys_user
-        SET allow_login = 0
         WHERE id = #{userId}
     </update>
 </mapper>

@@ -503,7 +503,7 @@ public class BaseService {
         if (null == clazz.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + clazz);
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName());
+        String key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName(), column);
         Object redisObject = RedisUtils.get(key);
         if (null != redisObject) {
             return (Boolean) redisObject;

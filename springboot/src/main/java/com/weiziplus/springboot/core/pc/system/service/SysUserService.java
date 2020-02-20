@@ -70,7 +70,7 @@ public class SysUserService extends BaseService {
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
-        SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
+        SysUser user = baseFindOneDataByClassAndColumnAndValue(SysUser.class, SysUser.COLUMN_USERNAME, sysUser.getUsername());
         if (null != user) {
             return ResultUtils.error("用户名已存在");
         }
@@ -106,7 +106,7 @@ public class SysUserService extends BaseService {
                 return ResultUtils.errorSuspend();
             }
         }
-        SysUser user = mapper.getUserInfoByName(sysUser.getUsername());
+        SysUser user = baseFindOneDataByClassAndColumnAndValue(SysUser.class, SysUser.COLUMN_USERNAME, sysUser.getUsername());
         if (null != user && !user.getId().equals(sysUser.getId())) {
             return ResultUtils.error("用户名已存在");
         }
@@ -180,7 +180,10 @@ public class SysUserService extends BaseService {
         }
         //用户权限更改，强制下线
         AdminTokenUtils.deleteToken(userId);
-        mapper.updateRoleIdByUserIdAndRoleId(userId, roleId);
+        SysUser sysUser = new SysUser()
+                .setId(userId)
+                .setRoleId(roleId);
+        baseUpdate(sysUser);
         return ResultUtils.success();
     }
 
@@ -201,7 +204,8 @@ public class SysUserService extends BaseService {
         if (Md5Utils.encode(oldPwd).equals(sysUser.getPassword())) {
             return ResultUtils.error("原密码错误");
         }
-        mapper.resetUserPassword(userId, Md5Utils.encode(newPwd));
+        sysUser.setPassword(Md5Utils.encode(newPwd));
+        baseUpdate(sysUser);
         AdminTokenUtils.deleteToken(userId);
         return ResultUtils.success();
     }
@@ -228,7 +232,11 @@ public class SysUserService extends BaseService {
             return ResultUtils.errorSuspend();
         }
         String newPwd = Md5Utils.encode(password);
-        return ResultUtils.success(mapper.resetUserPassword(userId, newPwd));
+        SysUser sysUser = new SysUser()
+                .setId(userId)
+                .setPassword(Md5Utils.encode(newPwd));
+        baseUpdate(sysUser);
+        return ResultUtils.success();
     }
 
     /**
@@ -248,7 +256,11 @@ public class SysUserService extends BaseService {
         if (null == userId || 0 >= userId) {
             return ResultUtils.error("userId错误");
         }
-        return ResultUtils.success(mapper.relieveSuspend(userId));
+        SysUser sysUser = new SysUser()
+                .setId(userId)
+                .setAllowLogin(SysUser.ALLOW_LOGIN_ALLOW);
+        baseUpdate(sysUser);
+        return ResultUtils.success();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.weiziplus.springboot.common.async;
 
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
 import com.weiziplus.springboot.common.models.SysLog;
 import com.weiziplus.springboot.common.util.DateUtils;
@@ -58,7 +59,11 @@ public class SystemAsync extends BaseService {
             return;
         }
         try {
-            sysUserMapper.updateLastActiveTimeByIdAndIp(userId, ip);
+            SysUser sysUser = new SysUser()
+                    .setId(userId)
+                    .setLastIpAddress(ip)
+                    .setLastActiveTime(DateUtils.getNowDateTime());
+            baseUpdate(sysUser);
         } catch (Exception e) {
             log.warn("更新系统用户最后活跃时间出错，详情:" + e);
         }

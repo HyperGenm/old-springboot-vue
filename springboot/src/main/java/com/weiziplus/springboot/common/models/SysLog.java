@@ -15,9 +15,8 @@ import java.io.Serializable;
 /**
  * 系统日志表
  * sys_log
- *
  * @author 16028
- * @date 2020-02-20 11:52:20
+ * @date 2020-02-20 13:46:57
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -31,7 +30,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("系统日志表主键，自增")
     @Id("id")
-    public static final String COLUMN_ID = "id";
     private Long id;
 
     /**
@@ -39,7 +37,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("用户表id")
     @Column("user_id")
-    public static final String COLUMN_USER_ID = "user_id";
     private Long userId;
 
     /**
@@ -47,7 +44,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("操作描述")
     @Column("description")
-    public static final String COLUMN_DESCRIPTION = "description";
     private String description;
 
     /**
@@ -55,7 +51,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("当前请求的参数")
     @Column("param")
-    public static final String COLUMN_PARAM = "param";
     private String param;
 
     /**
@@ -63,7 +58,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("请求的类型,1:查询,2:新增,3:修改,4:删除")
     @Column("type")
-    public static final String COLUMN_TYPE = "type";
     private Integer type;
 
     /**
@@ -91,7 +85,6 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("ip地址")
     @Column("ip_address")
-    public static final String COLUMN_IP_ADDRESS = "ip_address";
     private String ipAddress;
 
     /**
@@ -99,8 +92,21 @@ public class SysLog implements Serializable {
      */
     @ApiModelProperty("创建时间")
     @Column("create_time")
-    public static final String COLUMN_CREATE_TIME = "create_time";
     private String createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public static final String COLUMN_ID = "id";
+
+    public static final String COLUMN_USER_ID = "user_id";
+
+    public static final String COLUMN_DESCRIPTION = "description";
+
+    public static final String COLUMN_PARAM = "param";
+
+    public static final String COLUMN_TYPE = "type";
+
+    public static final String COLUMN_IP_ADDRESS = "ip_address";
+
+    public static final String COLUMN_CREATE_TIME = "create_time";
 }

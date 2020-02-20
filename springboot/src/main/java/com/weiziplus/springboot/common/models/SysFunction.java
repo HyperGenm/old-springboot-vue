@@ -16,9 +16,8 @@ import java.util.List;
 /**
  * 系统功能表
  * sys_function
- *
  * @author 16028
- * @date 2020-02-20 11:51:31
+ * @date 2020-02-20 13:45:12
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -32,7 +31,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("系统功能表主键，自增")
     @Id("id")
-    public static final String COLUMN_ID = "id";
     private Integer id;
 
     /**
@@ -40,7 +38,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("上级id")
     @Column("parent_id")
-    public static final String COLUMN_PARENT_ID = "parent_id";
     private Integer parentId;
 
     /**
@@ -48,7 +45,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能唯一标识")
     @Column("name")
-    public static final String COLUMN_NAME = "name";
     private String name;
 
     /**
@@ -56,7 +52,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能路径")
     @Column("path")
-    public static final String COLUMN_PATH = "path";
     private String path;
 
     /**
@@ -64,7 +59,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能标题")
     @Column("title")
-    public static final String COLUMN_TITLE = "title";
     private String title;
 
     /**
@@ -72,7 +66,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("当前功能对应的api列表，多个用,隔开")
     @Column("contain_api")
-    public static final String COLUMN_CONTAIN_API = "contain_api";
     private String containApi;
 
     /**
@@ -80,7 +73,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能类型;0:菜单,1:按钮")
     @Column("type")
-    public static final String COLUMN_TYPE = "type";
     private Integer type;
 
     /**
@@ -98,7 +90,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能图标")
     @Column("icon")
-    public static final String COLUMN_ICON = "icon";
     private String icon;
 
     /**
@@ -106,7 +97,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能排序，数字越小越靠前")
     @Column("sort")
-    public static final String COLUMN_SORT = "sort";
     private Integer sort;
 
     /**
@@ -114,7 +104,6 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能描述")
     @Column("description")
-    public static final String COLUMN_DESCRIPTION = "description";
     private String description;
 
     /**
@@ -122,10 +111,31 @@ public class SysFunction implements Serializable {
      */
     @ApiModelProperty("功能创建时间")
     @Column("create_time")
-    public static final String COLUMN_CREATE_TIME = "create_time";
     private String createTime;
 
     private List<SysFunction> children;
 
     private static final long serialVersionUID = 1L;
+
+    public static final String COLUMN_ID = "id";
+
+    public static final String COLUMN_PARENT_ID = "parent_id";
+
+    public static final String COLUMN_NAME = "name";
+
+    public static final String COLUMN_PATH = "path";
+
+    public static final String COLUMN_TITLE = "title";
+
+    public static final String COLUMN_CONTAIN_API = "contain_api";
+
+    public static final String COLUMN_TYPE = "type";
+
+    public static final String COLUMN_ICON = "icon";
+
+    public static final String COLUMN_SORT = "sort";
+
+    public static final String COLUMN_DESCRIPTION = "description";
+
+    public static final String COLUMN_CREATE_TIME = "create_time";
 }

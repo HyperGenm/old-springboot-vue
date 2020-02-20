@@ -7,9 +7,7 @@ import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.Arrays;
@@ -56,7 +54,19 @@ public class MyBatisPlugin extends PluginAdapter {
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
         topLevelClass.addImportedType("org.apache.ibatis.type.Alias");
-
+        //将字段设置为当前类的静态常量
+        List<IntrospectedColumn> allColumns = introspectedTable.getAllColumns();
+        for (IntrospectedColumn column : allColumns) {
+            Field field = new Field();
+            String columnName = column.getActualColumnName();
+            field.setName("COLUMN_" + columnName.toUpperCase());
+            field.setInitializationString("\"" + columnName + "\"");
+            field.setType(FullyQualifiedJavaType.getStringInstance());
+            field.setVisibility(JavaVisibility.PUBLIC);
+            field.setFinal(true);
+            field.setStatic(true);
+            topLevelClass.addField(field);
+        }
         FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
         //添加@注解
         topLevelClass.addAnnotation("@JsonInclude(JsonInclude.Include.NON_NULL)");
@@ -118,8 +128,6 @@ public class MyBatisPlugin extends PluginAdapter {
         } else {
             field.addAnnotation("@Column(\"" + actualColumnName + "\")");
         }
-        //public static final String COLUMN_NAME = "name"
-        field.addAnnotation("public static final String COLUMN_" + cam1eHumpToUnderline(field.getName()) + " = \"" + actualColumnName + "\" ;");
         return true;
     }
 

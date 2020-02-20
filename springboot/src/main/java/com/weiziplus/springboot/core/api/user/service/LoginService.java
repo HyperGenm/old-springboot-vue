@@ -1,12 +1,10 @@
 package com.weiziplus.springboot.core.api.user.service;
 
 import com.github.pagehelper.util.StringUtil;
+import com.weiziplus.springboot.common.base.BaseService;
+import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.core.api.user.mapper.UserMapper;
 import com.weiziplus.springboot.common.models.User;
-import com.weiziplus.springboot.common.util.HttpRequestUtils;
-import com.weiziplus.springboot.common.util.Md5Utils;
-import com.weiziplus.springboot.common.util.ResultUtils;
-import com.weiziplus.springboot.common.util.ValidateUtils;
 import com.weiziplus.springboot.common.util.token.WebTokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class LoginService {
+public class LoginService extends BaseService {
 
     @Autowired
     UserMapper userMapper;
@@ -38,7 +36,7 @@ public class LoginService {
         if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
             return ResultUtils.error("用户名或密码为空");
         }
-        User user = userMapper.getUserInfoByUsername(username);
+        User user = baseFindOneDataByClassAndColumnAndValue(User.class, User.COLUMN_USERNAME, username);
         if (null == user) {
             return ResultUtils.error("用户名或密码错误");
         }
@@ -69,12 +67,17 @@ public class LoginService {
         if (ValidateUtils.notPassword(password)) {
             return ResultUtils.error("密码为6-20位大小写和数字");
         }
-        User user = userMapper.getUserInfoByUsername(username);
+        User user = baseFindOneDataByClassAndColumnAndValue(User.class, User.COLUMN_USERNAME, username);
         if (null != user) {
             return ResultUtils.error("用户名已存在");
         }
         String md5Pwd = Md5Utils.encode(password);
-        return ResultUtils.success(userMapper.addUser(username, md5Pwd));
+        User newUser = new User()
+                .setUsername(username)
+                .setPassword(md5Pwd)
+                .setCreateTime(DateUtils.getNowDateTime());
+        baseInsert(newUser);
+        return ResultUtils.success();
     }
 
     /**

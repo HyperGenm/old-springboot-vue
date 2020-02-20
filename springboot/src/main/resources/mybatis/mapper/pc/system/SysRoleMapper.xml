@@ -15,20 +15,9 @@
         WHERE parent_id = #{parentId}
         ORDER BY sort ASC,parent_id ASC
     </select>
-    <select id="getRoleInfoByName" resultType="SysRole">
-        SELECT *
-        FROM sys_role
-        WHERE `name` = #{name}
-        LIMIT 1
-    </select>
     <update id="changeRoleIsStopByIdAndIsStop">
         UPDATE sys_role
         SET is_stop = #{isStop}
         WHERE id = #{id}
     </update>
-    <select id="getInfoByRoleId" resultType="SysRole">
-        SELECT *
-        FROM sys_role
-        WHERE id = #{id}
-    </select>
 </mapper>

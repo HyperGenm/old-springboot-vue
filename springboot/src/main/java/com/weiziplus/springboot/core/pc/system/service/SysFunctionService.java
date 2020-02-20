@@ -309,7 +309,7 @@ public class SysFunctionService extends BaseService {
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
-        SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
+        SysFunction sysFun = baseFindOneDataByClassAndColumnAndValue(SysFunction.class,SysFunction.COLUMN_NAME,sysFunction.getName());
         if (null != sysFun) {
             return ResultUtils.error("name已存在");
         }
@@ -339,7 +339,7 @@ public class SysFunctionService extends BaseService {
         if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
-        SysFunction sysFun = mapper.getFunInfoByName(sysFunction.getName());
+        SysFunction sysFun = baseFindOneDataByClassAndColumnAndValue(SysFunction.class,SysFunction.COLUMN_NAME,sysFunction.getName());
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
         }

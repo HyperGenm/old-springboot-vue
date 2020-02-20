@@ -41,14 +41,6 @@ public interface SysRoleMapper {
     SysRole getMinParentIdRoleInfo();
 
     /**
-     * 根据name获取角色信息
-     *
-     * @param name
-     * @return
-     */
-    SysRole getRoleInfoByName(@Param("name") String name);
-
-    /**
      * 根据id和isStop修改角色状态
      *
      * @param id
@@ -56,14 +48,6 @@ public interface SysRoleMapper {
      * @return
      */
     int changeRoleIsStopByIdAndIsStop(@Param("id") Integer id, @Param("isStop") Integer isStop);
-
-    /**
-     * 根据角色id获取角色信息
-     *
-     * @param id
-     * @return
-     */
-    SysRole getInfoByRoleId(@Param("id") Integer id);
 
     /**
      * 获取所有角色列表

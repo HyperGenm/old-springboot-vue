@@ -79,14 +79,6 @@ public interface SysFunctionMapper {
     List<SysFunction> getFunNotButtonList();
 
     /**
-     * 根据name获取功能信息
-     *
-     * @param name
-     * @return
-     */
-    SysFunction getFunInfoByName(@Param("name") String name);
-
-    /**
      * 根据角色id获取功能列表
      *
      * @param roleId

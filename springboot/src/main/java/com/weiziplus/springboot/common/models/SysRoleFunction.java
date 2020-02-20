@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 系统权限表
  * sys_role_function
  * @author 16028
- * @date 2020-02-20 11:53:30
+ * @date 2020-02-20 13:48:17
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -30,7 +30,6 @@ public class SysRoleFunction implements Serializable {
      */
     @ApiModelProperty("角色功能表主键，自增")
     @Id("id")
-    public static final String COLUMN_ID = "id" ;
     private Long id;
 
     /**
@@ -38,7 +37,6 @@ public class SysRoleFunction implements Serializable {
      */
     @ApiModelProperty("角色表id")
     @Column("role_id")
-    public static final String COLUMN_ROLE_ID = "role_id" ;
     private Integer roleId;
 
     /**
@@ -46,8 +44,13 @@ public class SysRoleFunction implements Serializable {
      */
     @ApiModelProperty("功能表id")
     @Column("function_id")
-    public static final String COLUMN_FUNCTION_ID = "function_id" ;
     private Integer functionId;
 
     private static final long serialVersionUID = 1L;
+
+    public static final String COLUMN_ID = "id";
+
+    public static final String COLUMN_ROLE_ID = "role_id";
+
+    public static final String COLUMN_FUNCTION_ID = "function_id";
 }

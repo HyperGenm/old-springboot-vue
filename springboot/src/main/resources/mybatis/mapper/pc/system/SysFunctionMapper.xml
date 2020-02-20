@@ -28,12 +28,6 @@
         WHERE parent_id = #{parentId}
         ORDER BY sort ASC,create_time DESC
     </select>
-    <select id="getFunInfoByName" resultType="SysFunction">
-        SELECT *
-        FROM sys_function
-        WHERE `name` = #{name}
-        LIMIT 1
-    </select>
     <select id="getFunListByRoleId" resultType="SysFunction">
         SELECT sf.*
         FROM sys_function sf,sys_role_function srf

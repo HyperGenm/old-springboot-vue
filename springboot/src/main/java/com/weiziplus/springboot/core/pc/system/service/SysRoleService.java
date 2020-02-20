@@ -209,11 +209,11 @@ public class SysRoleService extends BaseService {
         if (null == sysRole.getParentId() || GlobalConfig.SUPER_ADMIN_ID > sysRole.getParentId()) {
             return ResultUtils.error("parentId不能为空");
         }
-        SysRole role = mapper.getRoleInfoByName(sysRole.getName());
+        SysRole role = baseFindOneDataByClassAndColumnAndValue(SysRole.class, SysRole.COLUMN_NAME, sysRole.getName());
         if (null != role && null != role.getId()) {
             return ResultUtils.error("角色名已存在");
         }
-        SysRole superRole = mapper.getInfoByRoleId(sysRole.getParentId());
+        SysRole superRole = baseFindByClassAndId(SysRole.class, sysRole.getParentId());
         if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
@@ -245,7 +245,7 @@ public class SysRoleService extends BaseService {
                 return ResultUtils.error("不能修改超级管理员角色");
             }
         }
-        SysRole role = mapper.getRoleInfoByName(sysRole.getName());
+        SysRole role = baseFindOneDataByClassAndColumnAndValue(SysRole.class, SysRole.COLUMN_NAME, sysRole.getName());
         if (null != role && null != role.getId() && !role.getId().equals(sysRole.getId())) {
             return ResultUtils.error("角色名已存在");
         }
@@ -314,8 +314,8 @@ public class SysRoleService extends BaseService {
         }
         //判断是否启用
         if (SysRole.IS_STOP_ENABLE.equals(isStop)) {
-            SysRole role = mapper.getInfoByRoleId(roleId);
-            SysRole superRole = mapper.getInfoByRoleId(role.getParentId());
+            SysRole role = baseFindByClassAndId(SysRole.class, roleId);
+            SysRole superRole = baseFindByClassAndId(SysRole.class, role.getParentId());
             if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
                 return ResultUtils.error("父级当前处于禁用状态");
             }

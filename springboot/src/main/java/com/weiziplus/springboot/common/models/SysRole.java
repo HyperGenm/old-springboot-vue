@@ -18,7 +18,7 @@ import java.util.List;
  * sys_role
  *
  * @author 16028
- * @date 2020-02-20 11:52:51
+ * @date 2020-02-20 13:47:35
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -32,7 +32,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("系统角色表主键，自增")
     @Id("id")
-    public static final String COLUMN_ID = "id";
     private Integer id;
 
     /**
@@ -40,7 +39,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("上级角色id")
     @Column("parent_id")
-    public static final String COLUMN_PARENT_ID = "parent_id";
     private Integer parentId;
 
     /**
@@ -48,7 +46,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("角色名称")
     @Column("name")
-    public static final String COLUMN_NAME = "name";
     private String name;
 
     /**
@@ -56,7 +53,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("是否启用;0:启用,1:禁用")
     @Column("is_stop")
-    public static final String COLUMN_IS_STOP = "is_stop";
     private Integer isStop;
 
     /**
@@ -74,7 +70,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("排序，数字越小越靠前")
     @Column("sort")
-    public static final String COLUMN_SORT = "sort";
     private Integer sort;
 
     /**
@@ -82,7 +77,6 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("角色描述")
     @Column("description")
-    public static final String COLUMN_DESCRIPTION = "description";
     private String description;
 
     /**
@@ -90,10 +84,23 @@ public class SysRole implements Serializable {
      */
     @ApiModelProperty("角色创建时间")
     @Column("create_time")
-    public static final String COLUMN_CREATE_TIME = "create_time";
     private String createTime;
 
     private List<SysRole> children;
 
     private static final long serialVersionUID = 1L;
+
+    public static final String COLUMN_ID = "id";
+
+    public static final String COLUMN_PARENT_ID = "parent_id";
+
+    public static final String COLUMN_NAME = "name";
+
+    public static final String COLUMN_IS_STOP = "is_stop";
+
+    public static final String COLUMN_SORT = "sort";
+
+    public static final String COLUMN_DESCRIPTION = "description";
+
+    public static final String COLUMN_CREATE_TIME = "create_time";
 }
