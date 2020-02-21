@@ -243,7 +243,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="pagination" ref="pagination">
+        <div v-if="isPagination" class="pagination" ref="pagination">
             <!--表格分页-->
             <el-pagination background layout="total, sizes, prev, pager, next, jumper"
                            :page-sizes="[10, 20, 50, 100, 200]" :page-size="pageSize" :total="total"
@@ -315,6 +315,11 @@
                 default: () => {
                 }
             },
+            // 是否展示分页
+            isPagination: {
+                type: Boolean,
+                default: true
+            },
             // 是否展示合计行
             tableShowSummary: {
                 type: Boolean,
@@ -368,7 +373,7 @@
                     let weiTableHeight = that.$refs['weiTable'].getBoundingClientRect().height;
                     let searchHeight = that.$refs['search'].getBoundingClientRect().height;
                     let headerHeight = that.$refs['header'].getBoundingClientRect().height;
-                    let paginationHeight = that.$refs['pagination'].getBoundingClientRect().height;
+                    let paginationHeight = that.isPagination ? that.$refs['pagination'].getBoundingClientRect().height : 0;
                     that.tableMaxHeight = weiTableHeight - searchHeight - headerHeight - paginationHeight - 20;
                 });
             },
@@ -394,8 +399,10 @@
                 //每个请求加上请求头
                 _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
                 let _data = that.tableDataRequest.data || {};
-                _data['pageNum'] = that.pageNum;
-                _data['pageSize'] = that.pageSize;
+                if (that.isPagination) {
+                    _data['pageNum'] = that.pageNum;
+                    _data['pageSize'] = that.pageSize;
+                }
                 _data['__t'] = (new Date()).getTime();
                 _method = _method.toUpperCase();
                 if (_method === 'GET') {
@@ -424,6 +431,13 @@
                         that.$globalFun.errorMsg(res.data['msg']);
                         that.emptyText = JSON.stringify(res['data']);
                         that.$globalFun.consoleWarnTable(`请求出错url:${_url}`, res['data']);
+                        return;
+                    }
+                    //不是分页表格
+                    if (!that.isPagination) {
+                        /**展示数据*/
+                        that.emptyText = '暂无数据';
+                        that.tableData = res.data.data;
                         return;
                     }
                     /**判断返回格式是否正确*/
