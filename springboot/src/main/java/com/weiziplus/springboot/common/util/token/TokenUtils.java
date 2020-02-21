@@ -28,7 +28,7 @@ public class TokenUtils extends BaseService {
      * @param userId---用户ID
      * @return
      */
-    public static String getAudienceRedisKey(String audience, Long userId) {
+    public static String getAudienceRedisKey(String audience, String userId) {
         //如果是生产环境
         if (GlobalConfig.isSpringProfilesPro()) {
             return Md5Utils.encode(BASE_REDIS_KEY.concat(audience).concat(":") + userId);
@@ -44,7 +44,7 @@ public class TokenUtils extends BaseService {
      * @param expireTime---过期时间
      * @return
      */
-    protected static String createToken(String audience, Long userId, Long expireTime, String ipAddress, Integer roleId) {
+    protected static String createToken(String audience, String userId, Long expireTime, String ipAddress, Integer roleId) {
         String token = JwtTokenUtils.createToken(userId, audience, ipAddress, roleId);
         StringRedisUtils.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;

@@ -39,7 +39,7 @@ public class WebTokenUtils extends JwtTokenUtils{
      * @return
      */
     public static String getAudienceRedisKey(Long userId) {
-        return TokenUtils.getAudienceRedisKey(AUDIENCE, userId);
+        return TokenUtils.getAudienceRedisKey(AUDIENCE, String.valueOf(userId));
     }
 
     /**
@@ -49,7 +49,7 @@ public class WebTokenUtils extends JwtTokenUtils{
      * @return
      */
     public static String createToken(Long userId, String ipAddress) {
-        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress, null);
+        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, ipAddress, null);
     }
 
     /**

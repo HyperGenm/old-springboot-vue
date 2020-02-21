@@ -39,10 +39,10 @@ public class JwtTokenUtils {
      * @param userId
      * @return
      */
-    protected static String createToken(Long userId, String audience, String ipAddress, Integer roleId) {
+    protected static String createToken(String userId, String audience, String ipAddress, Integer roleId) {
         return Jwts.builder()
                 //用户id
-                .setId(Base64Utils.encode(ToolUtils.valueOfString(userId)))
+                .setId(Base64Utils.encode(userId))
                 .setIssuer(Base64Utils.encode(ipAddress))
                 //用户类型，admin还是web
                 .setAudience(Base64Utils.encode(audience))

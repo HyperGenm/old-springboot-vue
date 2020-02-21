@@ -40,7 +40,7 @@ public class AdminTokenUtils extends JwtTokenUtils {
      * @return
      */
     public static String getAudienceRedisKey(Long userId) {
-        return TokenUtils.getAudienceRedisKey(AUDIENCE, userId);
+        return TokenUtils.getAudienceRedisKey(AUDIENCE, String.valueOf(userId));
     }
 
     /**
@@ -50,7 +50,7 @@ public class AdminTokenUtils extends JwtTokenUtils {
      * @return
      */
     public static String createToken(Long userId, String ipAddress, Integer roleId) {
-        return TokenUtils.createToken(AUDIENCE, userId, EXPIRE_TIME, ipAddress, roleId);
+        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, ipAddress, roleId);
     }
 
     /**
