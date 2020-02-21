@@ -44,7 +44,11 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", nowClass.getName());
+        String className = nowClass.getName();
+        if (GlobalConfig.isSpringProfilesPro()) {
+            className = Md5Utils.encode(className);
+        }
+        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", className);
         Object redisObject = RedisUtils.get(key);
         if (null != redisObject) {
             return String.valueOf(redisObject);
@@ -69,7 +73,11 @@ public class BaseService {
         if (null == object.getClass().getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + object.getClass());
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", object.getClass().getName());
+        String className = object.getClass().getName();
+        if (GlobalConfig.isSpringProfilesPro()) {
+            className = Md5Utils.encode(className);
+        }
+        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", className);
         Object redisObject = RedisUtils.get(key);
         if (null != redisObject) {
             return String.valueOf(redisObject);
@@ -89,7 +97,11 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "getPrimaryKey:", nowClass.getName());
+        String className = nowClass.getName();
+        if (GlobalConfig.isSpringProfilesPro()) {
+            className = Md5Utils.encode(className);
+        }
+        String key = createRedisKey(BASE_REDIS_KEY + "getPrimaryKey:", className);
         Object redisObject = RedisUtils.get(key);
         if (null != redisObject) {
             return String.valueOf(redisObject);
@@ -671,7 +683,7 @@ public class BaseService {
     protected String createRedisKey(String onlyPrefix, Object... objects) {
         StringBuffer stringBuffer = new StringBuffer(onlyPrefix);
         for (Object object : objects) {
-            stringBuffer.append("_&&&_").append(object);
+            stringBuffer.append(object).append("_&_");
         }
         return ToolUtils.valueOfString(stringBuffer);
     }
