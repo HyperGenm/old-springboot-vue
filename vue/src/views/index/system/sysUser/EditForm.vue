@@ -99,10 +99,14 @@
             },
             submit(form) {
                 let that = this;
+                let {username, realName, allowLogin, password} = form;
                 that.$axios({
                     url: that.$global.URL['system']['sysUser'][that.handleType],
                     method: 'post',
-                    data: form,
+                    data: {
+                        username, realName, allowLogin,
+                        password: that.$globalFun.md5(password)
+                    },
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');

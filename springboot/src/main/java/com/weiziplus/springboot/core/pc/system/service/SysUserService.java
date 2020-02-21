@@ -63,8 +63,10 @@ public class SysUserService extends BaseService {
         if (ToolUtils.isBlank(sysUser.getUsername()) || minUsernameLength > sysUser.getUsername().length()) {
             return ResultUtils.error("用户名最少两位");
         }
-        if (ValidateUtils.notPassword(sysUser.getPassword())) {
-            return ResultUtils.error("密码为6-20位大小写和数字");
+        //md5长度是32位
+        int md5Length = 32;
+        if (ToolUtils.isBlank(sysUser.getPassword()) || md5Length != sysUser.getPassword().length()) {
+            return ResultUtils.error("密码设置错误");
         }
         //正常格式真实姓名:中文或英文包括空格和点
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
@@ -196,16 +198,23 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
-        if (ValidateUtils.notPassword(oldPwd) || ValidateUtils.notPassword(newPwd)) {
-            return ResultUtils.error("密码为6-20位大小写和数字");
+        //md5长度是32位
+        int md5Length = 32;
+        if (ToolUtils.isBlank(oldPwd) || md5Length != oldPwd.length()) {
+            return ResultUtils.error("原密码错误");
+        }
+        if (ToolUtils.isBlank(newPwd) || md5Length != newPwd.length()) {
+            return ResultUtils.error("新密码错误");
         }
         Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
         if (Md5Utils.encode(oldPwd).equals(sysUser.getPassword())) {
             return ResultUtils.error("原密码错误");
         }
-        sysUser.setPassword(Md5Utils.encode(newPwd));
-        baseUpdate(sysUser);
+        SysUser newUser = new SysUser()
+                .setId(sysUser.getId())
+                .setPassword(Md5Utils.encode(newPwd));
+        baseUpdate(newUser);
         AdminTokenUtils.deleteToken(userId);
         return ResultUtils.success();
     }
@@ -222,8 +231,10 @@ public class SysUserService extends BaseService {
         if (null == userId || 0 > userId) {
             return ResultUtils.error("id不能为空");
         }
-        if (ValidateUtils.notPassword(password)) {
-            return ResultUtils.error("密码为6-20位大小写和数字");
+        //md5长度是32位
+        int md5Length = 32;
+        if (ToolUtils.isBlank(password) || md5Length != password.length()) {
+            return ResultUtils.error("密码格式不正确");
         }
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
@@ -231,10 +242,9 @@ public class SysUserService extends BaseService {
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
-        String newPwd = Md5Utils.encode(password);
         SysUser sysUser = new SysUser()
                 .setId(userId)
-                .setPassword(Md5Utils.encode(newPwd));
+                .setPassword(Md5Utils.encode(password));
         baseUpdate(sysUser);
         return ResultUtils.success();
     }

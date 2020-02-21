@@ -87,12 +87,17 @@
                         return false;
                     }
                     that.loginLoad = true;
-                    that.form['uuid'] = that.imgUUID;
+                    let {username, password, code} = that.form;
+                    let uuid = that.imgUUID;
                     that.$axios({
                         allSuccess: true,
                         url: that.$global.URL.login,
                         method: 'post',
-                        data: that.form,
+                        data: {
+                            uuid, code,
+                            username: username,
+                            password: that.$globalFun.md5(password)
+                        },
                         success(res) {
                             that.loginLoad = false;
                             //获取响应状态码

@@ -51,10 +51,14 @@
         methods: {
             submit() {
                 let that = this;
+                let {oldPwd, newPwd} = that.form;
                 that.$axios({
                     url: that.$global.URL.system.sysUser.updateUserPassword,
                     method: 'post',
-                    data: that.form,
+                    data: {
+                        oldPwd: that.$globalFun.md5(oldPwd),
+                        newPwd: that.$globalFun.md5(newPwd),
+                    },
                     success() {
                         that.$globalFun.successMsg('成功');
                         that.$emit('closeDialog');

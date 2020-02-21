@@ -1,6 +1,12 @@
 /**引入element-ui组件*/
 import {Message, MessageBox, prompt} from 'element-ui';
 
+/**引入base64*/
+const Base64 = require('js-base64').Base64;
+
+/**引入Md5*/
+import Md5 from 'js-md5';
+
 /**
  * 判断是否为空
  * @param str
@@ -210,6 +216,56 @@ function setSessionStorage(key, value = '') {
 }
 
 /**
+ * 字符串反转
+ * @param value
+ */
+function reverse(value) {
+    if (null == value) {
+        return null;
+    }
+    return value.split('').reverse().join('');
+}
+
+/**
+ * base64加密
+ * @param value
+ */
+function encode(value) {
+    if (null == value) {
+        return null;
+    }
+    //对内容进行加密
+    let encode = Base64.encode(value);
+    //对加密内容进行反转
+    return reverse(encode);
+}
+
+/**
+ * base64解密
+ * @param value
+ */
+function decode(value) {
+    if (null == value) {
+        return null;
+    }
+    //先对加密内容反转
+    let str = reverse(value);
+    //解密
+    return Base64.decode(str);
+}
+
+/**
+ * 进行md5加密
+ * @param value
+ */
+function md5(value) {
+    if (null == value) {
+        return null;
+    }
+    return Md5(value + 'weiziplus');
+}
+
+/**
  * 将方法暴露出去
  */
 export default {
@@ -222,5 +278,9 @@ export default {
     createUUID,
     consoleWarnTable,
     getSessionStorage,
-    setSessionStorage
+    setSessionStorage,
+    reverse,
+    encode,
+    decode,
+    md5
 };

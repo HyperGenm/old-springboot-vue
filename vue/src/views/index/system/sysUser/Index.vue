@@ -383,7 +383,7 @@
                                     method: 'post',
                                     data: {
                                         userId: row.id,
-                                        password: value
+                                        password: that.$globalFun.md5(value)
                                     },
                                     success() {
                                         that.$globalFun.successMsg('成功');

@@ -162,4 +162,14 @@ public class ToolUtils {
         String property = System.getProperty("user.dir");
         return Md5Utils.encode(property);
     }
+
+    /**
+     * 对字符串进行反转
+     *
+     * @param string
+     * @return
+     */
+    public static String reverse(String string) {
+        return new StringBuffer(string).reverse().toString();
+    }
 }
