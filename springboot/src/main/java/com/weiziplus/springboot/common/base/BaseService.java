@@ -673,10 +673,6 @@ public class BaseService {
         for (Object object : objects) {
             stringBuffer.append("_&&&_").append(object);
         }
-        //如果是生产环境
-        if (GlobalConfig.isSpringProfilesPro()) {
-            return Md5Utils.encode(ToolUtils.valueOfString(stringBuffer));
-        }
         return ToolUtils.valueOfString(stringBuffer);
     }
 }
