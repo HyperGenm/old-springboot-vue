@@ -99,12 +99,13 @@
                       :default-expand-all="tableOther.defaultExpandAll || true"
                       border highlight-current-row size="small">
                 <el-table-column type="selection" width="40"></el-table-column>
-                <el-table-column type="index" width="50"></el-table-column>
+                <el-table-column type="index" fixed="left" width="50"></el-table-column>
                 <slot name="startColumn"></slot>
                 <el-table-column
                         v-for="column in tableShowColumns"
                         :key="column.prop"
                         :prop="column.prop"
+                        :fixed="column.fixed || false"
                         :width="column.width"
                         min-width="80"
                         :sortable="column.sortable || false"

@@ -29,9 +29,9 @@
                     data: {}
                 },
                 tableColumns: [
-                    {label: '用户名', prop: 'username'},
-                    {label: '真实姓名', prop: 'realName'},
-                    {label: '角色', prop: 'roleName'},
+                    {label: '用户名', prop: 'username', fixed: 'left'},
+                    {label: '真实姓名', prop: 'realName', fixed: 'left'},
+                    {label: '角色', prop: 'roleName', fixed: 'left'},
                     {label: '操作', prop: 'description'},
                     {label: '参数', prop: 'param'},
                     {

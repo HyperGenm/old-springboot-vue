@@ -75,7 +75,7 @@
                     }
                 ],
                 tableColumns: [
-                    {label: '路由标题', prop: 'title', width: 210},
+                    {label: '路由标题', prop: 'title', width: 210, fixed: 'left'},
                     {label: '路径', prop: 'path'},
                     {label: '功能名', prop: 'name'},
                     {label: '对应api', prop: 'containApi'},
@@ -132,27 +132,28 @@
                 dialogDetail: false
             };
         },
-        methods: {
-            //删除方法
-            deleteFunction(ids) {
-                let that = this;
-                this.$globalFun.messageBox({
-                    message: '确定删除，该操作无法撤销',
-                    confirm() {
-                        that.$axios({
-                            url: that.$global.URL.system.sysFunction.delete,
-                            method: 'post',
-                            data: {
-                                ids
-                            },
-                            success() {
-                                that.$globalFun.successMsg('删除成功');
-                                that.$refs['table'].renderTable();
-                            }
-                        })
-                    }
-                });
+            methods: {
+                //删除方法
+                deleteFunction(ids)
+                {
+                    let that = this;
+                    this.$globalFun.messageBox({
+                        message: '确定删除，该操作无法撤销',
+                        confirm() {
+                            that.$axios({
+                                url: that.$global.URL.system.sysFunction.delete,
+                                method: 'post',
+                                data: {
+                                    ids
+                                },
+                                success() {
+                                    that.$globalFun.successMsg('删除成功');
+                                    that.$refs['table'].renderTable();
+                                }
+                            })
+                        }
+                    });
+                }
             }
         }
-    }
 </script>

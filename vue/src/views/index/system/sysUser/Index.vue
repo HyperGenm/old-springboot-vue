@@ -109,7 +109,9 @@
                         //表头名字
                         label: '用户名',
                         //对应的字段
-                        prop: 'username'
+                        prop: 'username',
+                        //固定列
+                        fixed: 'left'
                         /**
                          * 当前没有用到formatter(),如果同时存在 formatter() 和 prop  以formatter()为主
                          * formatter()方法可以返回一个dom，也可以返回String、Number
@@ -119,8 +121,8 @@
                          * }
                          */
                     },
+                    {label: '真实姓名', prop: 'realName', fixed: 'left'},
                     {label: '角色', prop: 'roleName'},
-                    {label: '真实姓名', prop: 'realName'},
                     {
                         label: '是否允许登录', prop: 'title',
                         //自定义单元格样式类型,具体参考 /src/components/table/Index.vue 123行左右

@@ -84,7 +84,7 @@
                     }
                 ],
                 tableColumns: [
-                    {label: '名称', prop: 'name', width: 210},
+                    {label: '名称', prop: 'name', width: 210, fixed: 'left'},
                     {
                         label: '状态', prop: 'isStop', type: 'tag',
                         element({isStop}) {
