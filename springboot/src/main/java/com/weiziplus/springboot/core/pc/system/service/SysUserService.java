@@ -208,7 +208,7 @@ public class SysUserService extends BaseService {
         }
         Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
-        if (Md5Utils.encode(oldPwd).equals(sysUser.getPassword())) {
+        if (!Md5Utils.encode(oldPwd).equals(sysUser.getPassword())) {
             return ResultUtils.error("原密码错误");
         }
         SysUser newUser = new SysUser()
