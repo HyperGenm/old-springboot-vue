@@ -14,7 +14,7 @@
    * ---前端运行`npm run serve`( *WebStorm* 或者 *IDEA* 可以直接点击 *package.json* 文件中第6行左边绿三角)
 
 ### 演示地址
-   * [在线演示地址](http://39.96.52.201/)    
+   * [在线演示地址](http://39.96.52.201/github/admin)    
         * 用户名:superadmin  
         * 密码:111111  
         * *tip:多个用户同时登陆可能会被顶掉*
