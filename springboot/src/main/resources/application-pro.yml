@@ -1,6 +1,9 @@
 #####################################生产版配置###########################
 server:
   port: 8080
+  servlet:
+    #添加请求前缀
+    context-path: /github
 spring:
   #生产版配置
   profiles: pro
@@ -16,8 +19,8 @@ spring:
 mybatis:
   #设置MyBatis全局变量
   configuration-properties:
-  # 文件存放域名前缀
-    filePathPrefix: http://39.96.52.201:8080
+    # 文件存放域名前缀
+    filePathPrefix: http://39.96.52.201/github
 
 #自定义全局变量*******注意:  :后面要有空格
 global:

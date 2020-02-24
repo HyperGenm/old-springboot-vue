@@ -20,7 +20,7 @@
                     {
                         path: '原始回显图片',
                         name: '回显图片.jpeg',
-                        url: that.$global.GLOBAL.base_url + '/logo.jpg'
+                        url: 'http://39.96.52.201/github/temp/logo.jpg'
                     }
                 ]
             }

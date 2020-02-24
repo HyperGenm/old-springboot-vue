@@ -90,11 +90,6 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
-        //用户名最小长度
-        int minUsernameLength = 2;
-        if (ToolUtils.isBlank(sysUser.getUsername()) || minUsernameLength > sysUser.getUsername().length()) {
-            return ResultUtils.error("用户名最少两位");
-        }
         //正常格式真实姓名:中文或英文包括空格和点
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
@@ -108,11 +103,11 @@ public class SysUserService extends BaseService {
                 return ResultUtils.errorSuspend();
             }
         }
-        SysUser user = baseFindOneDataByClassAndColumnAndValue(SysUser.class, SysUser.COLUMN_USERNAME, sysUser.getUsername());
-        if (null != user && !user.getId().equals(sysUser.getId())) {
-            return ResultUtils.error("用户名已存在");
+        SysUser user = baseFindByClassAndId(SysUser.class, sysUser.getId());
+        if (null == user) {
+            return ResultUtils.error("id错误");
         }
-        if (null != user && SysUser.ALLOW_LOGIN_DISABLE.equals(user.getAllowLogin())) {
+        if (SysUser.ALLOW_LOGIN_DISABLE.equals(user.getAllowLogin())) {
             user.setAllowLogin(null);
         }
         //如果用户禁用---强制用户下线
@@ -122,8 +117,7 @@ public class SysUserService extends BaseService {
         SysUser newUser = new SysUser()
                 .setId(sysUser.getId())
                 .setAllowLogin(sysUser.getAllowLogin())
-                .setRealName(sysUser.getRealName())
-                .setUsername(sysUser.getUsername());
+                .setRealName(sysUser.getRealName());
         return ResultUtils.success(baseUpdate(newUser));
     }
 
@@ -295,7 +289,7 @@ public class SysUserService extends BaseService {
         if (scale < minScale || scale > maxScale) {
             return ResultUtils.error("头像建议长宽比1:1");
         }
-        String path = FileUtils.upFilePc(file, "user/icon");
+        String path = FileUtils.upFile(file, "user/icon");
         if (null == path) {
             return ResultUtils.error("文件上传失败，请重试");
         }

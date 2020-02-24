@@ -10,14 +10,30 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     # 下面为连接池的补充设置，应用到上面所有数据源中
     druid:
-      # 初始化大小，最小，最大
-      initial-size: 5
-      min-idle: 5
+      # 初始化物理连接个数
+      initial-size: 2
+      # 最大连接池数量
       max-active: 20
-      # 配置获取连接等待超时的时间
+      # 最小连接池数量
+      min-idle: 5
+      # 获取连接时最大等待时间(ms)
       max-wait: 60000
-      # 配置一个连接在池中最小生存的时间，单位是毫秒
-      min-evictable-idle-time-millis: 300000
+      # 开启缓存preparedStatement(PSCache)
+      pool-prepared-statements: true
+      # 启用PSCache后，指定每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: 20
+      # 用来检测连接是否有效的sql
+      validation-query: select 1
+      # 申请连接时不检测连接是否有效
+      test-on-borrow: false
+      # 归还连接时不检测连接是否有效
+      test-on-return: false
+      # 申请连接时检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效（不影响性能）
+      test-while-idle: true
+      # 空闲连接回收的时间间隔，与test-while-idle一起使用
+      time-between-eviction-runs-millis: 300000
+      # 连接池空闲连接的有效时间
+      min-evictable-idle-time-millis: 600000
   redis:
     #索引(默认为0)
     database: 0
