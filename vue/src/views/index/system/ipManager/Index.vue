@@ -45,7 +45,7 @@
             return {
                 ipRole: '',
                 //是否可以编辑 功能对应的api
-                isAddAndDelete: false,
+                isAddAndDelete: isAddAndDelete,
                 tableDataRequest: {
                     url: that.$global.URL.dataDictionary.ipManager.getIpList,
                     data: {
