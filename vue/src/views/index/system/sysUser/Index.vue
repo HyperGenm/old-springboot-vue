@@ -257,8 +257,7 @@
                                 //下拉框对应的值
                                 value: 0
                             },
-                            {label: '禁止', value: 1},
-                            {label: '封号中', value: 2},
+                            {label: '禁止', value: 1}
                         ]
                     },
                     {type: 'datePicker', prop: 'lastActiveTime', placeholder: '最后活跃时间'},
