@@ -87,26 +87,26 @@ CREATE TABLE `sys_function`  (
 -- Records of sys_function
 -- ----------------------------
 INSERT INTO `sys_function` VALUES (1, 0, 'system', 'system', '系统管理', '', 0, 'el-icon-s-tools', 1, '后台的管理', '2019-05-09 16:55:47');
-INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 0, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
-INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getAllRoleTreePageList,/pc/sysRole/getRoleList,/pc/sysFunction/getAllFunctionTree', 0, 'el-icon-s-check', 1, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
-INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 2, '管理后台的用户', '2019-05-09 16:56:52');
-INSERT INTO `sys_function` VALUES (5, 1, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 3, '记录系统用户的操作', '2019-05-13 15:30:57');
-INSERT INTO `sys_function` VALUES (6, 1, 'dataDictionaryIpFilter', 'ipFilter', 'ip名单', '/pc/dataDictionary/ipFilter/getPageList', 0, 'el-icon-platform-eleme', 4, '对ip进行限制，白名单将不进行任何限制，黑名单将拒绝访问', '2019-08-05 10:13:42');
-INSERT INTO `sys_function` VALUES (7, 1, 'dataDictionaryAbnormalIp', 'abnormalIp', '异常ip管理', '/pc/dataDictionary/abnormalIp/getPageList', 0, 'el-icon-s-help', 5, '展示异常访问的ip，如：请求过快等，以便于进行安全排查', '2019-08-05 14:39:33');
-INSERT INTO `sys_function` VALUES (8, 2, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
-INSERT INTO `sys_function` VALUES (9, 3, 'sysRole_add', 'add', '新增', '/pc/sysRole/addRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
-INSERT INTO `sys_function` VALUES (10, 3, 'sysRole_update', 'update', '修改', '/pc/sysRole/updateRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');
-INSERT INTO `sys_function` VALUES (11, 3, 'sysRole_delete', 'delete', '删除', '/pc/sysRole/deleteRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:53');
-INSERT INTO `sys_function` VALUES (12, 3, 'sysRole_save', 'save', '修改功能', '/pc/sysRole/addRoleFun', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:07');
-INSERT INTO `sys_function` VALUES (13, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', '/pc/sysRole/changeRoleIsStop', 1, '', 4, '', '2019-05-10 15:58:15');
-INSERT INTO `sys_function` VALUES (14, 4, 'sysUser_add', 'add', '新增', '/pc/sysUser/addUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:43');
-INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_update', 'update', '修改', '/pc/sysUser/updateUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:55');
-INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_delete', 'delete', '删除', '/pc/sysUser/deleteUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
-INSERT INTO `sys_function` VALUES (17, 4, 'sysUser_role', 'role', '角色', '/pc/sysUser/updateUserRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
-INSERT INTO `sys_function` VALUES (18, 4, 'sysUser_resetPwd', 'resetPwd', '重置密码', '/pc/sysUser/resetUserPassword', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
-INSERT INTO `sys_function` VALUES (19, 0, 'tools', 'tools', '常用工具', '', 0, 'el-icon-s-promotion', 2, '进一步封装element-ui的常用组件，约定大于配置思想', '2019-08-24 16:41:28');
-INSERT INTO `sys_function` VALUES (20, 19, 'toolsUpload', 'upload', '图片上传', '', 0, 'el-icon-picture', 0, '进一步封装了图片上传，方便调用', '2019-08-24 16:41:49');
-INSERT INTO `sys_function` VALUES (21, 19, 'richText', 'richText', '富文本', '', 0, 'el-icon-s-release', 1, '进一步封装了富文本，方便调用', '2019-09-04 16:21:09');
+INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 5, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
+INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getAllRoleTreePageList,/pc/sysRole/getRoleList,/pc/sysFunction/getAllFunctionTree', 0, 'el-icon-s-check', 2, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
+INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 1, '管理后台的用户', '2019-05-09 16:56:52');
+INSERT INTO `sys_function` VALUES (5, 1, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (6, 2, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
+INSERT INTO `sys_function` VALUES (7, 3, 'sysRole_add', 'add', '新增', '/pc/sysRole/addRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
+INSERT INTO `sys_function` VALUES (8, 3, 'sysRole_update', 'update', '修改', '/pc/sysRole/updateRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');
+INSERT INTO `sys_function` VALUES (9, 3, 'sysRole_delete', 'delete', '删除', '/pc/sysRole/deleteRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:53');
+INSERT INTO `sys_function` VALUES (10, 3, 'sysRole_save', 'save', '修改功能', '/pc/sysRole/addRoleFun', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:07');
+INSERT INTO `sys_function` VALUES (11, 3, 'sysRole_status', 'status', '修改角色状态(启用/禁用)', '/pc/sysRole/changeRoleIsStop', 1, '', 4, '', '2019-05-10 15:58:15');
+INSERT INTO `sys_function` VALUES (12, 4, 'sysUser_add', 'add', '新增', '/pc/sysUser/addUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:43');
+INSERT INTO `sys_function` VALUES (13, 4, 'sysUser_update', 'update', '修改', '/pc/sysUser/updateUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:24:55');
+INSERT INTO `sys_function` VALUES (14, 4, 'sysUser_delete', 'delete', '删除', '/pc/sysUser/deleteUser', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:08');
+INSERT INTO `sys_function` VALUES (15, 4, 'sysUser_role', 'role', '角色', '/pc/sysUser/updateUserRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:43');
+INSERT INTO `sys_function` VALUES (16, 4, 'sysUser_resetPwd', 'resetPwd', '重置密码', '/pc/sysUser/resetUserPassword', 1, 'el-icon-info', 0, '', '2019-05-10 10:25:52');
+INSERT INTO `sys_function` VALUES (17, 0, 'tools', 'tools', '常用工具', '', 0, 'el-icon-s-promotion', 2, '进一步封装element-ui的常用组件，约定大于配置思想', '2019-08-24 16:41:28');
+INSERT INTO `sys_function` VALUES (18, 17, 'toolsUpload', 'upload', '图片上传', '', 0, 'el-icon-picture', 0, '进一步封装了图片上传，方便调用', '2019-08-24 16:41:49');
+INSERT INTO `sys_function` VALUES (19, 17, 'richText', 'richText', '富文本', '', 0, 'el-icon-s-release', 1, '进一步封装了富文本，方便调用', '2019-09-04 16:21:09');
+INSERT INTO `sys_function` VALUES (20, 1, 'ipManager', 'ipManager', 'ip管理', '', 0, '', 3, '对ip进行管理', '2020-02-24 20:04:42');
+INSERT INTO `sys_function` VALUES (21, 20, 'ipManager_get', 'ipManager_get', '查看', '/pc/dataDictionary/ipManager/getIpRole,/pc/dataDictionary/ipManager/getIpList', 1, '', 0, '', '2020-02-25 15:50:24');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -144,7 +144,7 @@ CREATE TABLE `sys_role`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '角色创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1000004 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000002 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -168,49 +168,53 @@ CREATE TABLE `sys_role_function`  (
   INDEX `function_id`(`function_id`) USING BTREE,
   CONSTRAINT `sys_role_function_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_role_function_ibfk_2` FOREIGN KEY (`function_id`) REFERENCES `sys_function` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 274 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 382 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_function
 -- ----------------------------
-INSERT INTO `sys_role_function` VALUES (231, 1, 1);
-INSERT INTO `sys_role_function` VALUES (232, 1, 2);
-INSERT INTO `sys_role_function` VALUES (233, 1, 3);
-INSERT INTO `sys_role_function` VALUES (235, 1, 10);
-INSERT INTO `sys_role_function` VALUES (237, 1, 7);
-INSERT INTO `sys_role_function` VALUES (238, 1, 8);
-INSERT INTO `sys_role_function` VALUES (239, 1, 4);
-INSERT INTO `sys_role_function` VALUES (240, 1, 12);
-INSERT INTO `sys_role_function` VALUES (241, 1, 13);
-INSERT INTO `sys_role_function` VALUES (242, 1, 14);
-INSERT INTO `sys_role_function` VALUES (243, 1, 15);
-INSERT INTO `sys_role_function` VALUES (244, 1, 16);
-INSERT INTO `sys_role_function` VALUES (245, 1, 5);
-INSERT INTO `sys_role_function` VALUES (246, 1, 17);
-INSERT INTO `sys_role_function` VALUES (247, 1, 18);
-INSERT INTO `sys_role_function` VALUES (248, 1, 19);
-INSERT INTO `sys_role_function` VALUES (249, 1, 20);
-INSERT INTO `sys_role_function` VALUES (250, 1, 21);
-INSERT INTO `sys_role_function` VALUES (251, 1, 6);
-INSERT INTO `sys_role_function` VALUES (255, 666, 1);
-INSERT INTO `sys_role_function` VALUES (256, 666, 7);
-INSERT INTO `sys_role_function` VALUES (257, 666, 8);
-INSERT INTO `sys_role_function` VALUES (258, 666, 4);
-INSERT INTO `sys_role_function` VALUES (259, 666, 12);
-INSERT INTO `sys_role_function` VALUES (260, 666, 13);
-INSERT INTO `sys_role_function` VALUES (261, 666, 14);
-INSERT INTO `sys_role_function` VALUES (262, 666, 15);
-INSERT INTO `sys_role_function` VALUES (263, 666, 16);
-INSERT INTO `sys_role_function` VALUES (264, 666, 5);
-INSERT INTO `sys_role_function` VALUES (265, 666, 17);
-INSERT INTO `sys_role_function` VALUES (266, 666, 18);
-INSERT INTO `sys_role_function` VALUES (267, 666, 19);
-INSERT INTO `sys_role_function` VALUES (268, 666, 20);
-INSERT INTO `sys_role_function` VALUES (269, 666, 21);
-INSERT INTO `sys_role_function` VALUES (270, 666, 6);
-INSERT INTO `sys_role_function` VALUES (274, 666, 2);
-INSERT INTO `sys_role_function` VALUES (275, 1, 9);
-INSERT INTO `sys_role_function` VALUES (276, 1, 11);
+INSERT INTO `sys_role_function` VALUES (341, 1, 1);
+INSERT INTO `sys_role_function` VALUES (342, 1, 4);
+INSERT INTO `sys_role_function` VALUES (343, 1, 12);
+INSERT INTO `sys_role_function` VALUES (344, 1, 13);
+INSERT INTO `sys_role_function` VALUES (345, 1, 14);
+INSERT INTO `sys_role_function` VALUES (346, 1, 15);
+INSERT INTO `sys_role_function` VALUES (347, 1, 16);
+INSERT INTO `sys_role_function` VALUES (348, 1, 3);
+INSERT INTO `sys_role_function` VALUES (349, 1, 7);
+INSERT INTO `sys_role_function` VALUES (350, 1, 8);
+INSERT INTO `sys_role_function` VALUES (351, 1, 9);
+INSERT INTO `sys_role_function` VALUES (352, 1, 10);
+INSERT INTO `sys_role_function` VALUES (353, 1, 11);
+INSERT INTO `sys_role_function` VALUES (354, 1, 20);
+INSERT INTO `sys_role_function` VALUES (355, 1, 21);
+INSERT INTO `sys_role_function` VALUES (356, 1, 5);
+INSERT INTO `sys_role_function` VALUES (357, 1, 2);
+INSERT INTO `sys_role_function` VALUES (358, 1, 6);
+INSERT INTO `sys_role_function` VALUES (359, 1, 17);
+INSERT INTO `sys_role_function` VALUES (360, 1, 18);
+INSERT INTO `sys_role_function` VALUES (361, 1, 19);
+INSERT INTO `sys_role_function` VALUES (362, 666, 1);
+INSERT INTO `sys_role_function` VALUES (363, 666, 4);
+INSERT INTO `sys_role_function` VALUES (364, 666, 12);
+INSERT INTO `sys_role_function` VALUES (365, 666, 13);
+INSERT INTO `sys_role_function` VALUES (366, 666, 14);
+INSERT INTO `sys_role_function` VALUES (367, 666, 15);
+INSERT INTO `sys_role_function` VALUES (368, 666, 16);
+INSERT INTO `sys_role_function` VALUES (369, 666, 3);
+INSERT INTO `sys_role_function` VALUES (370, 666, 7);
+INSERT INTO `sys_role_function` VALUES (371, 666, 8);
+INSERT INTO `sys_role_function` VALUES (372, 666, 9);
+INSERT INTO `sys_role_function` VALUES (373, 666, 10);
+INSERT INTO `sys_role_function` VALUES (374, 666, 11);
+INSERT INTO `sys_role_function` VALUES (375, 666, 20);
+INSERT INTO `sys_role_function` VALUES (376, 666, 21);
+INSERT INTO `sys_role_function` VALUES (377, 666, 5);
+INSERT INTO `sys_role_function` VALUES (378, 666, 2);
+INSERT INTO `sys_role_function` VALUES (379, 666, 6);
+INSERT INTO `sys_role_function` VALUES (380, 666, 17);
+INSERT INTO `sys_role_function` VALUES (381, 666, 18);
+INSERT INTO `sys_role_function` VALUES (382, 666, 19);
 
 -- ----------------------------
 -- Table structure for sys_user
