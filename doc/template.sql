@@ -59,7 +59,7 @@ CREATE TABLE `data_dictionary_value`  (
 -- ----------------------------
 -- Records of data_dictionary_value
 -- ----------------------------
-INSERT INTO `data_dictionary_value` VALUES (1, 'ipRole', 'white', 'ip规则', 0, 'ip限制的规则', '2020-02-24 20:20:44');
+INSERT INTO `data_dictionary_value` VALUES (1, 'ipRole', 'all', 'ip规则', 0, 'ip限制的规则', '2020-02-24 20:20:44');
 INSERT INTO `data_dictionary_value` VALUES (2, 'ipListWhite', '127.0.0.1', '本地', 0, '本地,ip白名单', '2020-02-24 20:47:02');
 INSERT INTO `data_dictionary_value` VALUES (3, 'ipListBlack', '0.0.0.0', '测试', 0, '测试数据', '2020-02-24 21:15:52');
 
