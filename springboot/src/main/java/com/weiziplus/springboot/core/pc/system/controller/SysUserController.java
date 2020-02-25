@@ -128,15 +128,6 @@ public class SysUserController {
     }
 
     /**
-     * 解除封号
-     */
-    @PostMapping("/relieveSuspend")
-    @SystemLog(description = "解除封号", type = SystemLog.TYPE_UPDATE)
-    public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
-        return service.relieveSuspend(request, userId);
-    }
-
-    /**
      * 修改头像
      *
      * @return

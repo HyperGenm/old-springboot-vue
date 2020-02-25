@@ -293,6 +293,12 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     public ResultUtils addFunction(HttpServletRequest request, SysFunction sysFunction) {
+        //如果非超级管理员  新增功能 强制用户下线
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
+        }
         if (ValidateUtils.notEnglishNumberUnderline(sysFunction.getName())) {
             return ResultUtils.error("name为英文开头，英文、数字和下划线且最少两位");
         }
@@ -301,13 +307,6 @@ public class SysFunctionService extends BaseService {
         }
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
-        }
-        //如果非超级管理员  新增功能 进行封号处理
-        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
-        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            sysUserMapper.suspendSysUser(nowUserId);
-            AdminTokenUtils.deleteToken(nowUserId);
-            return ResultUtils.errorSuspend();
         }
         SysFunction sysFun = baseFindOneDataByClassAndColumnAndValue(SysFunction.class, SysFunction.COLUMN_NAME, sysFunction.getName());
         if (null != sysFun) {
@@ -377,15 +376,14 @@ public class SysFunctionService extends BaseService {
      * @return
      */
     public ResultUtils deleteFunction(HttpServletRequest request, Integer[] ids) {
-        if (null == ids) {
-            return ResultUtils.error("ids不能为空");
-        }
-        //如果非超级管理员 删除功能 进行封号处理
+        //如果非超级管理员 删除功能 强制用户下线
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            sysUserMapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
+        }
+        if (null == ids) {
+            return ResultUtils.error("ids不能为空");
         }
         for (Integer id : ids) {
             if (null == id || 0 > id) {

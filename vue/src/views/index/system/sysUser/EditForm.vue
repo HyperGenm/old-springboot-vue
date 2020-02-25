@@ -51,31 +51,38 @@
                     {
                         //如果一行展示两项
                         items: [
-                            {type: 'input', label: '用户名', prop: 'username'},
+                            {type: 'input', label: '用户名', prop: 'username', required: true},
                             {type: 'input', label: '真实姓名', prop: 'realName', required: true},
                         ]
                     },
                     {
-                        //类型
-                        type: 'radio',
-                        //标题
-                        label: '是否允许登录',
-                        //对应字段
-                        prop: 'allowLogin',
-                        //下拉框、单选按钮的选项
-                        options: [
+                        items: [
+                            {type: 'input', label: '手机号', prop: 'phone'},
                             {
-                                //选项名称
-                                label: '允许',
-                                //选项值
-                                value: 0
-                            },
-                            {label: '禁止', value: 1}
-                        ],
-                        //是否隐藏，不设置默认显示
+                                //类型
+                                type: 'radio',
+                                //标题
+                                label: '允许登录',
+                                //对应字段
+                                prop: 'allowLogin',
+                                //下拉框、单选按钮的选项
+                                options: [
+                                    {
+                                        //选项名称
+                                        label: '允许',
+                                        //选项值
+                                        value: 0
+                                    },
+                                    {label: '禁止', value: 1}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        type: 'input', label: '密码', prop: 'password', inputType: 'password', required: true,
+                        //是否隐藏,不设置默认显示
                         hidden: false
                     },
-                    {type: 'input', label: '密码', prop: 'password', inputType: 'password'}
                 ]
             }
         },
@@ -83,28 +90,21 @@
             this.changeFormOptions();
         },
         methods: {
+            /**
+             * 根据新增还是编辑，表单部分属性改变
+             */
             changeFormOptions() {
-                if ('add' === this.handleType) {
-                    //新增
-                    this.formOptions[0]['items'][0]['disabled'] = false;
-                    this.formOptions[1]['disabled'] = false;
-                    this.formOptions[2]['hidden'] = false;
-                } else {
-                    //编辑
-                    this.formOptions[0]['items'][0]['disabled'] = true;
-                    //如果当前用户被封号------2:封号状态码
-                    this.formOptions[1]['hidden'] = 2 === this.formData['allowLogin'];
-                    this.formOptions[2]['hidden'] = true;
-                }
+                this.formOptions[0]['items'][0]['disabled'] = 'add' !== this.handleType;
+                this.formOptions[2]['hidden'] = 'add' !== this.handleType;
             },
             submit(form) {
                 let that = this;
-                let {username, realName, allowLogin, password} = form;
+                let {id, username, realName, allowLogin, password, phone} = form;
                 that.$axios({
                     url: that.$global.URL['system']['sysUser'][that.handleType],
                     method: 'post',
                     data: {
-                        username, realName, allowLogin,
+                        id, username, realName, allowLogin, phone,
                         password: that.$globalFun.md5(password)
                     },
                     success() {

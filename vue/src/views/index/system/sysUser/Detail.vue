@@ -40,13 +40,13 @@
                     },
                     {label: '真实姓名', prop: data['realName']},
                     {label: '角色名', prop: data['roleName']},
+                    {label: '手机号', prop: data['phone']},
                     {
                         label: '是否允许登录', type: 'tag',
                         element() {
                             let result = [
                                 {content: '允许'},
-                                {content: '禁止', type: 'warning'},
-                                {content: '封号中', type: 'danger'}
+                                {content: '禁止', type: 'warning'}
                             ];
                             return result[data['allowLogin']] || {
                                 content: '未知数据',
@@ -61,7 +61,6 @@
                             }
                         }
                     },
-                    {label: '封号次数', prop: 'suspendNum'},
                     {label: '最后活跃ip', prop: data['laseIpAddress']},
                     {
                         label: '最后活跃时间', prop: data['lastActiveTime'], type: 'icon', element() {

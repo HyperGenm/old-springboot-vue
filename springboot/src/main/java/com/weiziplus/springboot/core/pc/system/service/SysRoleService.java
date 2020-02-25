@@ -235,10 +235,11 @@ public class SysRoleService extends BaseService {
         if (ValidateUtils.notChinaEnglishNumberUnderline(sysRole.getName())) {
             return ResultUtils.error("角色名不能包含特殊字符");
         }
+        //判断要修改的角色是不是超级管理员
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(sysRole.getId())) {
             Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+            //非超级管理员操作，强制下线
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
             } else {
@@ -266,10 +267,11 @@ public class SysRoleService extends BaseService {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("roleId错误");
         }
+        //判断要删除的角色是不是超级管理员
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+            //非超级管理员删除超级管理员，强制用户下线
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
             } else {
@@ -299,10 +301,11 @@ public class SysRoleService extends BaseService {
         if (null == roleId || 0 >= roleId) {
             return ResultUtils.error("id不能为空");
         }
+        //判断要操作的角色是不是超级管理员
         if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
             Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+            //非超级管理员操作超级管理员，强制下线
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                sysUserMapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
             } else {

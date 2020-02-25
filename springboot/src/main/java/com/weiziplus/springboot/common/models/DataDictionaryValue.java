@@ -15,6 +15,7 @@ import java.io.Serializable;
 /**
  * 数据字典值
  * data_dictionary_value
+ *
  * @author 16028
  * @date 2020-02-20 13:44:25
  */
@@ -30,7 +31,7 @@ public class DataDictionaryValue implements Serializable {
      */
     @ApiModelProperty("自增")
     @Id("id")
-    private Long id;
+    private Integer id;
 
     /**
      * 字典编号
@@ -54,30 +55,12 @@ public class DataDictionaryValue implements Serializable {
     private String value;
 
     /**
-     * 类型(自定义)：
-     * ipFilter：ip名单---0：白名单，1：黑名单
+     * 含义自定
+     * 1:ipListAbnormal---异常次数
      */
-    @ApiModelProperty("类型(自定义)： ipFilter：ip名单---0：白名单，1：黑名单")
-    @Column("type")
-    private Integer type;
-
-    /**
-     * ipFilter白名单
-     */
-    public final static Integer TYPE_IP_FILTER_WHITE = 0;
-
-    /**
-     * ipFilter黑名单
-     */
-    public final static Integer TYPE_IP_FILTER_BLACK = 1;
-
-    /**
-     * 排序(自定义,默认为排序)
-     *  abnormalIp:异常ip---异常出错次数
-     */
-    @ApiModelProperty("排序(自定义,默认为排序)  abnormalIp:异常ip---异常出错次数")
-    @Column("order")
-    private Integer order;
+    @ApiModelProperty("含义自定   1:ipListAbnormal---异常次数")
+    @Column("num")
+    private Integer num;
 
     /**
      * 备注

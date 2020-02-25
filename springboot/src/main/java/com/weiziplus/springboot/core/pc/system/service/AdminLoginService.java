@@ -102,9 +102,6 @@ public class AdminLoginService extends BaseService {
         if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号被禁用，请联系管理员");
         }
-        if (SysUser.ALLOW_LOGIN_DISABLE.equals(sysUser.getAllowLogin())) {
-            return ResultUtils.error("账号封号中，请联系管理员");
-        }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
             return ResultUtils.error("您还没有角色，请联系管理员添加");

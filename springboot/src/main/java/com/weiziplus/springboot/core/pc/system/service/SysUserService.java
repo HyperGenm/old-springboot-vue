@@ -72,15 +72,21 @@ public class SysUserService extends BaseService {
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
+        //如果填写了手机号码
+        if (!ToolUtils.isBlank(sysUser.getPhone())) {
+            if (ValidateUtils.notPhone(sysUser.getPhone())) {
+                return ResultUtils.error("手机号码格式不正确");
+            }
+        }
         SysUser user = baseFindOneDataByClassAndColumnAndValue(SysUser.class, SysUser.COLUMN_USERNAME, sysUser.getUsername());
         if (null != user) {
             return ResultUtils.error("用户名已存在");
         }
         sysUser.setPassword(Md5Utils.encode(sysUser.getPassword()))
-                .setCreateTime(DateUtils.getNowDateTime())
-                .setSuspendNum(null)
-                .setRoleId(null);
-        return ResultUtils.success(baseInsert(sysUser));
+                .setRoleId(null)
+                .setCreateTime(DateUtils.getNowDateTime());
+        baseInsert(sysUser);
+        return ResultUtils.success();
     }
 
     /**
@@ -90,35 +96,39 @@ public class SysUserService extends BaseService {
      * @return
      */
     public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
+        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+            //非超级管理员操作超级管理员，强制下线
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
+        }
         //正常格式真实姓名:中文或英文包括空格和点
         if (ValidateUtils.notRealName(sysUser.getRealName())) {
             return ResultUtils.error("真实姓名格式错误");
         }
-        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
-        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            if (null != sysUser.getSuspendNum()
-                    || SysUser.ALLOW_LOGIN_DISABLE.equals(sysUser.getAllowLogin())) {
-                mapper.suspendSysUser(nowUserId);
-                AdminTokenUtils.deleteToken(nowUserId);
-                return ResultUtils.errorSuspend();
+        //如果填写了手机号码
+        if (!ToolUtils.isBlank(sysUser.getPhone())) {
+            if (ValidateUtils.notPhone(sysUser.getPhone())) {
+                return ResultUtils.error("手机号码格式不正确");
             }
         }
         SysUser user = baseFindByClassAndId(SysUser.class, sysUser.getId());
         if (null == user) {
             return ResultUtils.error("id错误");
         }
-        if (SysUser.ALLOW_LOGIN_DISABLE.equals(user.getAllowLogin())) {
-            user.setAllowLogin(null);
-        }
         //如果用户禁用---强制用户下线
         if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
             AdminTokenUtils.deleteToken(sysUser.getId());
         }
-        SysUser newUser = new SysUser()
-                .setId(sysUser.getId())
-                .setAllowLogin(sysUser.getAllowLogin())
-                .setRealName(sysUser.getRealName());
-        return ResultUtils.success(baseUpdate(newUser));
+        //当前几项无需修改
+        sysUser.setUsername(null)
+                .setPassword(null)
+                .setCreateTime(null)
+                .setLastActiveTime(null)
+                .setLastIpAddress(null)
+                .setUsername(null);
+        baseUpdate(sysUser);
+        return ResultUtils.success();
     }
 
     /**
@@ -132,15 +142,16 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("ids为空");
         }
         for (Long id : ids) {
-            if (GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
-                Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
-                if (GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                    return ResultUtils.error("不能删除超级管理员");
-                }
-                mapper.suspendSysUser(nowUserId);
-                AdminTokenUtils.deleteToken(nowUserId);
-                return ResultUtils.errorSuspend();
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(id)) {
+                continue;
             }
+            Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+            if (GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                return ResultUtils.error("不能删除超级管理员");
+            }
+            //非超级管理员删除超级管理员
+            AdminTokenUtils.deleteToken(nowUserId);
+            return ResultUtils.errorSuspend();
         }
         return ResultUtils.success(baseDeleteByClassAndIds(SysUser.class, ids));
     }
@@ -157,9 +168,10 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("userId不能为空");
         }
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+        //要修改的用户是超级管理员
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
+            //非超级管理员修改超级管理员的角色，强制下线
             if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-                mapper.suspendSysUser(nowUserId);
                 AdminTokenUtils.deleteToken(nowUserId);
                 return ResultUtils.errorSuspend();
             } else {
@@ -169,10 +181,15 @@ public class SysUserService extends BaseService {
         if (null == roleId || 0 > roleId) {
             return ResultUtils.error("roleId错误");
         }
-        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            mapper.suspendSysUser(nowUserId);
-            AdminTokenUtils.deleteToken(nowUserId);
-            return ResultUtils.errorSuspend();
+        //要设置的角色是超级管理员
+        if (GlobalConfig.SUPER_ADMIN_ROLE_ID.equals(roleId)) {
+            //非超级管理员设置用户为超级管理员，强制下线
+            if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
+                AdminTokenUtils.deleteToken(nowUserId);
+                return ResultUtils.errorSuspend();
+            } else {
+                return ResultUtils.error("超级管理员只能有一个");
+            }
         }
         //用户权限更改，强制下线
         AdminTokenUtils.deleteToken(userId);
@@ -231,38 +248,14 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("密码格式不正确");
         }
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
+        //非超级管理员重置超级管理员密码，强制用户下线
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId) && !GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            mapper.suspendSysUser(nowUserId);
             AdminTokenUtils.deleteToken(nowUserId);
             return ResultUtils.errorSuspend();
         }
         SysUser sysUser = new SysUser()
                 .setId(userId)
                 .setPassword(Md5Utils.encode(password));
-        baseUpdate(sysUser);
-        return ResultUtils.success();
-    }
-
-    /**
-     * 解除封号
-     *
-     * @param request
-     * @param userId
-     * @return
-     */
-    public ResultUtils relieveSuspend(HttpServletRequest request, Long userId) {
-        Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
-        if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
-            mapper.suspendSysUser(nowUserId);
-            AdminTokenUtils.deleteToken(nowUserId);
-            return ResultUtils.errorSuspend();
-        }
-        if (null == userId || 0 >= userId) {
-            return ResultUtils.error("userId错误");
-        }
-        SysUser sysUser = new SysUser()
-                .setId(userId)
-                .setAllowLogin(SysUser.ALLOW_LOGIN_ALLOW);
         baseUpdate(sysUser);
         return ResultUtils.success();
     }

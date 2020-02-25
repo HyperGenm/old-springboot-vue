@@ -24,42 +24,44 @@ DROP TABLE IF EXISTS `data_dictionary`;
 CREATE TABLE `data_dictionary`  (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增',
   `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典标识',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典名字',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字典备注',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '字典创建时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `code`(`code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
+  UNIQUE INDEX `code`(`code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_dictionary
 -- ----------------------------
-INSERT INTO `data_dictionary` VALUES (1, 'ipFilter', 'ipFilter', 'ip名单', '2019-09-18 14:43:27');
-INSERT INTO `data_dictionary` VALUES (2, 'abnormalIp', 'abnormalIp', '异常ip', '2019-09-18 15:55:16');
+INSERT INTO `data_dictionary` VALUES (1, 'ipRole', 'ip规则', 'ip规则，全部允许，只允许白名单，只限制黑名单', '2020-02-24 20:00:35');
+INSERT INTO `data_dictionary` VALUES (2, 'ipListWhite', 'ip白名单', 'ip白名单', '2020-02-24 20:46:10');
+INSERT INTO `data_dictionary` VALUES (3, 'ipListBlack', 'ip黑名单', 'ip黑名单', '2020-02-24 21:15:06');
+INSERT INTO `data_dictionary` VALUES (4, 'ipListAbnormal', '异常ip', '异常ip', '2020-02-24 21:15:29');
 
 -- ----------------------------
 -- Table structure for data_dictionary_value
 -- ----------------------------
 DROP TABLE IF EXISTS `data_dictionary_value`;
 CREATE TABLE `data_dictionary_value`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增',
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增',
   `dictionary_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '字典编号',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '值',
-  `type` tinyint(3) NOT NULL DEFAULT 0 COMMENT '类型(自定义)：\r\nipFilter：ip名单---0：白名单，1：黑名单',
-  `order` int(11) NOT NULL DEFAULT 0 COMMENT '排序(自定义,默认为排序)\r\n abnormalIp:异常ip---异常出错次数',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `num` int(11) NOT NULL DEFAULT 0 COMMENT '含义自定\r\n   1:ipListAbnormal---异常次数',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '备注',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `dictionary_code`(`dictionary_code`) USING BTREE,
-  CONSTRAINT `data_dictionary_value_ibfk_1` FOREIGN KEY (`dictionary_code`) REFERENCES `data_dictionary` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
+  CONSTRAINT `data_dictionary_value_ibfk_1` FOREIGN KEY (`dictionary_code`) REFERENCES `data_dictionary` (`code`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典值' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_dictionary_value
 -- ----------------------------
-INSERT INTO `data_dictionary_value` VALUES (1, 'ipFilter', '127.0.0.1', '127.0.0.1', 0, 0, '本地，ip白名单', '2019-09-18 14:44:08');
-INSERT INTO `data_dictionary_value` VALUES (2, 'abnormalIp', '1.1.1.1', '1.1.1.1', 0, 2, '测试ip', '2019-09-18 15:56:03');
+INSERT INTO `data_dictionary_value` VALUES (1, 'ipRole', 'white', 'ip规则', 0, 'ip限制的规则', '2020-02-24 20:20:44');
+INSERT INTO `data_dictionary_value` VALUES (2, 'ipListWhite', '127.0.0.1', '本地', 0, '本地,ip白名单', '2020-02-24 20:47:02');
+INSERT INTO `data_dictionary_value` VALUES (3, 'ipListBlack', '0.0.0.0', '测试', 0, '测试数据', '2020-02-24 21:15:52');
 
 -- ----------------------------
 -- Table structure for sys_function
@@ -220,9 +222,9 @@ CREATE TABLE `sys_user`  (
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '登录密码',
   `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户真实姓名',
   `role_id` int(7) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
-  `allow_login` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止，2:封号中',
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '/pc/user/icon/default.png' COMMENT '用户头像',
-  `suspend_num` int(5) NOT NULL DEFAULT 0 COMMENT '账户封号次数',
+  `allow_login` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止',
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '手机号码',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'logo.jpg' COMMENT '用户头像',
   `last_ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户最后活跃ip地址',
   `last_active_time` datetime(0) NULL DEFAULT NULL COMMENT '用户最后活跃时间',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
@@ -233,10 +235,12 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'superadmin', '31b08a07bafd1363869790e5f757afc1', 'superadmin', 1, 0,  '/pc/user/icon/ea6234893e1b4acc9503537dc441ef92.jpg',0, '127.0.0.1', '2019-08-06 08:56:40', '2019-05-09 16:26:15');
-INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'weiziplus', 666, 2,  '/pc/user/icon/ea6234893e1b4acc9503537dc441ef92.jpg', 7,'', '2019-08-01 17:16:24', '2019-05-10 14:30:04');
-INSERT INTO `sys_user` VALUES (1000000, 'admin', '31b08a07bafd1363869790e5f757afc1', 'qqq', 666, 0,  '/pc/user/icon/ea6234893e1b4acc9503537dc441ef92.jpg',0, '', '2019-05-13 09:14:32', '2019-08-07 09:38:16');
-INSERT INTO `sys_user` VALUES (1000003, 'qq', 'ebe0b26e0c99fbf05e44de4e118f42d2', 'qqqqqqqqqqqqq', 666, 0,  '/pc/user/icon/ea6234893e1b4acc9503537dc441ef92.jpg', 0,'', '2019-06-28 17:21:07', '2019-06-28 17:18:24');
+INSERT INTO `sys_user` VALUES (1, 'superadmin', 'c8441c790cb26e52ce5a5e99a6c1945d', 'superadmin', 1, 0, '18888888888', '/logo.jpg', '127.0.0.1', '2020-02-25 20:35:19', '2019-05-09 16:26:15');
+INSERT INTO `sys_user` VALUES (666, 'weiziplus', 'c8441c790cb26e52ce5a5e99a6c1945d', 'weiziplus', 666, 1, '18888888888', '/logo.jpg', '', '2019-08-01 17:16:24', '2019-05-10 14:30:04');
+INSERT INTO `sys_user` VALUES (1000000, 'admin', 'c8441c790cb26e52ce5a5e99a6c1945d', 'qqq', 666, 0, '', '/logo.jpg', '', '2019-05-13 09:14:32', '2019-08-07 09:38:16');
+INSERT INTO `sys_user` VALUES (1000001, 'qq', 'c8441c790cb26e52ce5a5e99a6c1945d', 'qqqqqqqqqqqqq', 666, 0, '18811111111', '/logo.jpg', '127.0.0.1', '2020-02-25 20:40:16', '2019-06-28 17:18:24');
+INSERT INTO `sys_user` VALUES (1000002, 'qq1', 'c8441c790cb26e52ce5a5e99a6c1945d', 'qq', 0, 0, '', '/logo.jpg', '', NULL, '2020-02-21 15:14:30');
+INSERT INTO `sys_user` VALUES (1000003, '用户名', 'c8441c790cb26e52ce5a5e99a6c1945d', '真实姓名', 0, 1, '', '/pc/user/icon/default.png', '', NULL, '2020-02-25 20:19:42');
 
 -- ----------------------------
 -- Table structure for user

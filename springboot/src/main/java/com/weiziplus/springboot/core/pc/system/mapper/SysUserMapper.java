@@ -34,12 +34,4 @@ public interface SysUserMapper {
     List<SysUserVo> getUserList(@Param("userName") String userName, @Param("roleId") Long roleId,
                                 @Param("allowLogin") Integer allowLogin, @Param("lastActiveTime") String lastActiveTime,
                                 @Param("createTime") String createTime);
-
-    /**
-     * 封号系统用户
-     *
-     * @param userId
-     * @return
-     */
-    int suspendSysUser(@Param("userId") Long userId);
 }

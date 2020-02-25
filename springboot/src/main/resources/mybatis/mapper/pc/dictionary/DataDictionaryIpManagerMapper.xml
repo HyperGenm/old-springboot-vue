@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.core.pc.dictionary.mapper.DataDictionaryIpManagerMapper">
+    <select id="getIpList" resultType="DataDictionaryValue">
+        SELECT *
+        FROM data_dictionary_value
+        <where>
+            <if test="null != ipAddress and '' != ipAddress">
+                POSITION(#{ipAddress} IN `value`)
+            </if>
+            <choose>
+                <when test="null != type and '' != type">
+                    AND dictionary_code = #{type}
+                </when>
+                <otherwise>
+                    AND dictionary_code IN ('iPListWhite','ipListBlack','ipListAbnormal')
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

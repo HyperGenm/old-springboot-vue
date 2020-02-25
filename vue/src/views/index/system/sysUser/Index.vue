@@ -50,9 +50,6 @@
             let SUPER_ADMIN_ID = that.$global.GLOBAL.super_admin_id;
             //获取超级管理员id(一般用不到)
             let SUPER_ADMIN_ROLE_ID = that.$global.GLOBAL.super_admin_role_id;
-            //当前页面 解除封号 按钮，只有超级管理员才拥有(其它页面一般用不到)
-            let showRelieveSuspend = (SUPER_ADMIN_ID === that.$store.state.userInfo['id']
-                || SUPER_ADMIN_ROLE_ID === that.$store.state.userInfo['roleId']);
             return {
                 //表格请求
                 tableDataRequest: {
@@ -123,6 +120,7 @@
                     },
                     {label: '真实姓名', prop: 'realName', fixed: 'left'},
                     {label: '角色', prop: 'roleName'},
+                    {label: '手机号', prop: 'phone'},
                     {
                         label: '是否允许登录', prop: 'title',
                         //自定义单元格样式类型,具体参考 /src/components/table/Index.vue 123行左右
@@ -131,8 +129,7 @@
                         element({allowLogin}) {
                             let result = [
                                 {content: '允许'},
-                                {content: '禁止', type: 'warning'},
-                                {content: '封号中', type: 'danger'}
+                                {content: '禁止', type: 'warning'}
                             ];
                             return result[allowLogin] || {
                                 content: '未知数据',
@@ -147,7 +144,6 @@
                             }
                         }
                     },
-                    {label: '封号次数', prop: 'suspendNum'},
                     {label: '用户最后活跃ip地址', prop: 'laseIpAddress'},
                     {
                         label: '用户最后活跃时间', prop: 'lastActiveTime', type: 'icon', element(row) {
@@ -227,14 +223,6 @@
                                         return;
                                     }
                                     that.resetPassword(row);
-                                }
-                            },
-                            {
-                                name: '解除封号',
-                                type: 'danger',
-                                show: showRelieveSuspend,
-                                handleClick(row) {
-                                    that.relieveSuspend(row['id']);
                                 }
                             },
                             {
@@ -333,25 +321,6 @@
                                 total -= ids.length;
                                 that.$refs['table']['tableData'] = tableData;
                                 that.$refs['table']['total'] = total;
-                            }
-                        });
-                    }
-                });
-            },
-            relieveSuspend(id) {
-                let that = this;
-                this.$globalFun.messageBox({
-                    message: '确定解封该账号,该操作无法撤销',
-                    confirm() {
-                        that.$axios({
-                            url: that.$global.URL.system.sysUser.relieveSuspend,
-                            method: 'post',
-                            data: {
-                                userId: id
-                            },
-                            success() {
-                                that.$globalFun.successMsg('解封成功');
-                                that.$refs['table'].renderTable();
                             }
                         });
                     }

@@ -16,6 +16,7 @@ import java.io.Serializable;
 /**
  * 系统用户表
  * sys_user
+ *
  * @author 16028
  * @date 2020-02-20 13:49:23
  */
@@ -63,9 +64,9 @@ public class SysUser implements Serializable {
     private Integer roleId;
 
     /**
-     * 是否允许登录;0:允许，1:禁止，2:封号中
+     * 是否允许登录;0:允许，1:禁止
      */
-    @ApiModelProperty("是否允许登录;0:允许，1:禁止，2:封号中")
+    @ApiModelProperty("是否允许登录;0:允许，1:禁止")
     @Column("allow_login")
     private Integer allowLogin;
 
@@ -80,9 +81,11 @@ public class SysUser implements Serializable {
     public final static Integer ALLOW_LOGIN_FORBID = 1;
 
     /**
-     * 2:封号
+     * 手机号
      */
-    public final static Integer ALLOW_LOGIN_DISABLE = 2;
+    @ApiModelProperty("手机号")
+    @Column("phone")
+    private String phone;
 
     /**
      * 用户头像
@@ -90,13 +93,6 @@ public class SysUser implements Serializable {
     @ApiModelProperty("用户头像")
     @Column("icon")
     private String icon;
-
-    /**
-     * 账户封号次数
-     */
-    @ApiModelProperty("账户封号次数")
-    @Column("suspend_num")
-    private Integer suspendNum;
 
     /**
      * 用户最后活跃ip地址
@@ -133,9 +129,9 @@ public class SysUser implements Serializable {
 
     public static final String COLUMN_ALLOW_LOGIN = "allow_login";
 
-    public static final String COLUMN_ICON = "icon";
+    public static final String COLUMN_PHONE = "phone";
 
-    public static final String COLUMN_SUSPEND_NUM = "suspend_num";
+    public static final String COLUMN_ICON = "icon";
 
     public static final String COLUMN_LAST_IP_ADDRESS = "last_ip_address";
 

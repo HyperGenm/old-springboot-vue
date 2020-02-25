@@ -25,11 +25,11 @@ public class SysUserVo implements Serializable {
     @ApiModelProperty("真实姓名")
     private String realName;
 
-    @ApiModelProperty("是否允许登录;0:允许，1:禁止，2:封号")
+    @ApiModelProperty("是否允许登录;0:允许，1:禁止")
     private Integer allowLogin;
 
-    @ApiModelProperty("账户封号次数")
-    private String suspendNum;
+    @ApiModelProperty("手机号")
+    private String phone;
 
     @ApiModelProperty("最后活跃时间")
     private String laseActiveTime;

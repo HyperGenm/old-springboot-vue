@@ -100,23 +100,22 @@ const URL = {
         sysLog: {
             /*查看日志列表*/
             getPageList: '/sysLog/getPageList',
-        }
+        },
     },
     /********字典管理*****************/
     dataDictionary: {
-        /*********************ip名单*****************/
-        ipFilter: {
-            /*分页数据*/
-            getPageList: '/dataDictionary/ipFilter/getPageList',
-            /*新增ip*/
-            add: '/dataDictionary/ipFilter/add',
+        /*********************ip管理*****************/
+        ipManager: {
+            /*获取ip规则*/
+            getIpRole: '/dataDictionary/ipManager/getIpRole',
+            /*更新ip规则*/
+            updateIpRole: '/dataDictionary/ipManager/updateIpRole',
+            /*获取ip名单*/
+            getIpList: '/dataDictionary/ipManager/getIpList',
             /*删除ip*/
-            delete: '/dataDictionary/ipFilter/delete'
-        },
-        /*********************异常ip管理*****************/
-        abnormalIp: {
-            /*查看分页数据*/
-            getPageList: '/dataDictionary/abnormalIp/getPageList',
+            deleteIp: '/dataDictionary/ipManager/deleteIp',
+            /*新增ip*/
+            addIp: '/dataDictionary/ipManager/addIp'
         }
     },
     /********常用工具*****************/

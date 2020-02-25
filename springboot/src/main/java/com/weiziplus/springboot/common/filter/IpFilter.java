@@ -1,13 +1,9 @@
 package com.weiziplus.springboot.common.filter;
 
 import com.weiziplus.springboot.common.base.BaseService;
-import com.weiziplus.springboot.core.pc.dictionary.mapper.DataDictionaryAbnormalIpMapper;
-import com.weiziplus.springboot.common.models.DataDictionaryValue;
-import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryAbnormalIpService;
-import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpFilterService;
-import com.weiziplus.springboot.common.util.DateUtils;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
+import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,13 +24,12 @@ import java.util.Set;
 public class IpFilter extends BaseService implements Filter {
 
     @Autowired
-    DataDictionaryIpFilterService dataDictionaryIpFilterService;
+    DataDictionaryIpManagerService dataDictionaryIpManagerService;
 
-    @Autowired
-    DataDictionaryAbnormalIpMapper dataDictionaryAbnormalIpMapper;
-
-    @Autowired
-    DataDictionaryAbnormalIpService dataDictionaryAbnormalIpService;
+    /**
+     * ipFilter基础redis的key
+     */
+    private static final String BASE_REDIS_KEY = createOnlyRedisKeyPrefix();
 
     /**
      * 10秒内多少次请求，暂时封ip
@@ -47,26 +42,42 @@ public class IpFilter extends BaseService implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         String ipAddress = HttpRequestUtils.getIpAddress(request);
-        //如果是白名单，放过
-        Set<String> ipWhiteList = dataDictionaryIpFilterService.getIpValueWhiteList();
-        if (ipWhiteList.contains(ipAddress)) {
+        //获取白名单列表
+        Set<String> ipValueListWhite = dataDictionaryIpManagerService.getIpValueListWhite();
+        //如果当前ip是白名单---直接放过
+        if (ipValueListWhite.contains(ipAddress)) {
             chain.doFilter(req, res);
             return;
         }
-        //如果在黑名单里面---直接403
-        Set<String> ipBlackList = dataDictionaryIpFilterService.getIpValueBlackList();
-        if (ipBlackList.contains(ipAddress)) {
+        //获取ip拦截规则
+        String ipRole = dataDictionaryIpManagerService.getIpRoleValue();
+        //如果只允许白名单
+        if (DataDictionaryIpManagerService.IP_ROLE_VALUE_WHITE.equals(ipRole)) {
+            //当前ip不是白名单，返回403状态码
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
+        //如果只禁止黑名单
+        if (DataDictionaryIpManagerService.IP_ROLE_VALUE_BLACK.equals(ipRole)) {
+            //查询黑名单列表
+            Set<String> ipValueListBlack = dataDictionaryIpManagerService.getIpValueListBlack();
+            //如果当前ip是黑名单，直接返回403状态码
+            if (ipValueListBlack.contains(ipAddress)) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+        }
+        /////////将访问频率过快的ip设置为异常ip
         //查看ip是否被临时封号
-        String warnRedisKey = "ip:filter:warn:" + ipAddress;
+        String warnRedisKey = BASE_REDIS_KEY + "ipWarn:" + ipAddress;
         Object warnObject = RedisUtils.get(warnRedisKey);
+        //如果ip异常，暂时返回403状态码
         if (null != warnObject) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-        String redisKey = "ip:filter:info:" + ipAddress;
+        //将当前时间访问ip次数存到redis
+        String redisKey = BASE_REDIS_KEY + "ipInfo:" + ipAddress;
         int number = 0;
         Object numberObject = RedisUtils.get(redisKey);
         if (null != numberObject) {
@@ -77,7 +88,7 @@ public class IpFilter extends BaseService implements Filter {
         if (number >= MAX_NUM) {
             //暂时封号---3分钟后恢复
             RedisUtils.set(warnRedisKey, true, 3 * 60L);
-            handleAbnormalIp(ipAddress);
+            dataDictionaryIpManagerService.handleAbnormalIp(ipAddress);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
@@ -89,27 +100,4 @@ public class IpFilter extends BaseService implements Filter {
         chain.doFilter(req, res);
     }
 
-    /**
-     * 处理异常ip
-     *
-     * @param ip
-     */
-    private void handleAbnormalIp(String ip) {
-        DataDictionaryValue oneInfoByIp = dataDictionaryAbnormalIpMapper.getOneInfoByIp(ip);
-        String nowDateTime = DateUtils.getNowDateTime();
-        if (null == oneInfoByIp) {
-            dataDictionaryAbnormalIpService.add(ip);
-            return;
-        }
-        Integer oldNumber = oneInfoByIp.getOrder();
-        //异常次数加一
-        oneInfoByIp.setOrder(oldNumber + 1);
-        oneInfoByIp.setRemark("最后一次异常时间" + nowDateTime);
-        baseUpdate(oneInfoByIp);
-        //异常最大次数---超过将自动拉黑
-        int maxNumber = 10;
-        if (maxNumber <= oldNumber) {
-            dataDictionaryIpFilterService.autoAddBlack(ip);
-        }
-    }
 }
