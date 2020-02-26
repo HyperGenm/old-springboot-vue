@@ -1,6 +1,8 @@
 package com.weiziplus.springboot.common.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -70,6 +72,7 @@ public class CorsFilter implements Filter {
         if (!isAllow) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
             return;
         }
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");

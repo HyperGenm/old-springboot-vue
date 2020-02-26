@@ -334,9 +334,14 @@
                     if (axios.isCancel(error)) {
                         return;
                     }
-                    that.$globalFun.errorMsg('文件上传失败');
                     if (error.response) {
                         error = error['response']['data'];
+                    }
+                    //限制访问
+                    if (403 === error.status) {
+                        that.$globalFun.errorMsg('您的访问可能被限制,请稍后重试' + JSON.stringify(error));
+                    } else {
+                        that.$globalFun.errorMsg('文件上传失败' + JSON.stringify(error));
                     }
                     that.$globalFun.consoleWarnTable(`文件上传失败url:${that.action}`, error);
                 });

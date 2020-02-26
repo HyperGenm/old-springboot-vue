@@ -457,12 +457,18 @@
                     if (axios.isCancel(error)) {
                         return;
                     }
-                    that.$globalFun.errorMsg('请求失败');
                     if (error.response) {
                         error = error['response']['data'];
                     }
-                    that.$globalFun.consoleWarnTable(`请求失败url:${_url}`, error);
-                    that.emptyText = JSON.stringify(error);
+                    //限制访问
+                    if (403 === error.status || 403 === error.code) {
+                        that.$globalFun.errorMsg('拒绝访问,请稍后重试,详情:' + JSON.stringify(error));
+                        that.emptyText = '拒绝访问,详情' + JSON.stringify(error);
+                    } else {
+                        that.$globalFun.errorMsg('内部服务器错误，请稍后重试,详情:' + JSON.stringify(error));
+                        that.emptyText = '内部服务器错误,详情' + JSON.stringify(error);
+                    }
+                    that.$globalFun.consoleWarnTable(`表格请求失败url:${_url}`, error);
                 });
             },
             //pageSize改变触发

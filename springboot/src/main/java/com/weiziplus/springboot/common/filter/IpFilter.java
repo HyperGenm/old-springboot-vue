@@ -1,7 +1,9 @@
 package com.weiziplus.springboot.common.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
+import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpManagerService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,7 @@ public class IpFilter extends BaseService implements Filter {
         if (DataDictionaryIpManagerService.IP_ROLE_VALUE_WHITE.equals(ipRole)) {
             //当前ip不是白名单，返回403状态码
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
             return;
         }
         //如果只禁止黑名单
@@ -64,6 +67,7 @@ public class IpFilter extends BaseService implements Filter {
             //如果当前ip是黑名单，直接返回403状态码
             if (ipValueListBlack.contains(ipAddress)) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
                 return;
             }
         }
@@ -74,6 +78,7 @@ public class IpFilter extends BaseService implements Filter {
         //如果ip异常，暂时返回403状态码
         if (null != warnObject) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
             return;
         }
         //将当前时间访问ip次数存到redis
@@ -90,6 +95,7 @@ public class IpFilter extends BaseService implements Filter {
             RedisUtils.set(warnRedisKey, true, 3 * 60L);
             dataDictionaryIpManagerService.handleAbnormalIp(ipAddress);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
             return;
         }
         if (null != numberObject) {

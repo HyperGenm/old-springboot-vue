@@ -142,7 +142,12 @@ export function weiAxios(
             if (error.response) {
                 error = error['response']['data'];
             }
-            that.$globalFun.errorMsg('内部服务器错误，请稍后重试', error);
+            //限制访问
+            if (403 === error.status || 403 === error.code) {
+                that.$globalFun.errorMsg('拒绝访问,请稍后重试,详情:' + JSON.stringify(error));
+            } else {
+                that.$globalFun.errorMsg('内部服务器错误，请稍后重试,详情:' + JSON.stringify(error));
+            }
             that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
@@ -276,7 +281,12 @@ export function weiAxiosDown(
             if (error.response) {
                 error = error['response']['data'];
             }
-            that.$globalFun.errorMsg('文件下载失败，请重试', error);
+            //限制访问
+            if (403 === error.status || 403 === error.code) {
+                that.$globalFun.errorMsg('拒绝访问,请稍后重试,详情:' + JSON.stringify(error));
+            } else {
+                that.$globalFun.errorMsg('文件下载失败，请稍后重试,详情:' + JSON.stringify(error));
+            }
             that.$globalFun.consoleWarnTable(`文件下载失败url:${url}`, error);
             fail(error);
         });
