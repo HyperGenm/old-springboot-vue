@@ -63,6 +63,57 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     }
 
     /**
+     * 判断token注解
+     *
+     * @param object
+     * @return
+     */
+    private boolean handleTokenAnnotation(Object object) {
+        HandlerMethod handlerMethod = (HandlerMethod) object;
+        Method method = handlerMethod.getMethod();
+        //如果有忽略token注解
+        if (null != handlerMethod.getBeanType().getAnnotation(AuthTokenIgnore.class)
+                || null != method.getAnnotation(AuthTokenIgnore.class)) {
+            return true;
+        }
+        //检查class或者方法是否有@AdminAuthToken和@WebAuthToken，没有的话跳过拦截
+        AdminAuthToken adminAuthTokenClass = handlerMethod.getBeanType().getAnnotation(AdminAuthToken.class);
+        AdminAuthToken adminAuthTokenMethod = method.getAnnotation(AdminAuthToken.class);
+        WebAuthToken webAuthTokenClass = handlerMethod.getBeanType().getAnnotation(WebAuthToken.class);
+        WebAuthToken webAuthTokenMethod = method.getAnnotation(WebAuthToken.class);
+        return null == adminAuthTokenClass && null == adminAuthTokenMethod
+                && null == webAuthTokenClass && null == webAuthTokenMethod;
+    }
+
+    /**
+     * 判断token是否过期
+     *
+     * @param request
+     * @return
+     */
+    private boolean handleJwtTokenNotExpiration(HttpServletRequest request) {
+        //获取头部的token
+        String token = request.getHeader(GlobalConfig.TOKEN);
+        if (ToolUtils.isBlank(token)) {
+            return false;
+        }
+        try {
+            //判断jwtToken是否过期
+            if (JwtTokenUtils.isExpiration(token)) {
+                return false;
+            }
+        } catch (Exception e) {
+            log.warn("拦截器判断jwtToken是否过期出错，详情:" + e);
+            return false;
+        }
+        //获取token中存放的issuer
+        String issuer = JwtTokenUtils.getIssuer(token);
+        //获取当前访问的ip地址
+        String ipAddress = HttpRequestUtils.getIpAddress(request);
+        return issuer.equals(ipAddress);
+    }
+
+    /**
      * 请求之前拦截
      *
      * @param request
@@ -82,69 +133,26 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.error("时间戳错误"));
             return false;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) object;
-        Method method = handlerMethod.getMethod();
-        //如果有忽略token注解
-        if (null != handlerMethod.getBeanType().getAnnotation(AuthTokenIgnore.class) || null != method.getAnnotation(AuthTokenIgnore.class)) {
+        //判断是否存在token注解
+        if (handleTokenAnnotation(object)) {
             return true;
         }
-        //检查class或者方法是否有@AdminAuthToken和@WebAuthToken，没有的话跳过拦截
-        AdminAuthToken adminAuthTokenClass = handlerMethod.getBeanType().getAnnotation(AdminAuthToken.class);
-        AdminAuthToken adminAuthTokenMethod = method.getAnnotation(AdminAuthToken.class);
-        WebAuthToken webAuthTokenClass = handlerMethod.getBeanType().getAnnotation(WebAuthToken.class);
-        WebAuthToken webAuthTokenMethod = method.getAnnotation(WebAuthToken.class);
-        if (null == adminAuthTokenClass && null == adminAuthTokenMethod && null == webAuthTokenClass && null == webAuthTokenMethod) {
-            return true;
+        //判断请求头中token是否失效
+        if (!handleJwtTokenNotExpiration(request)) {
+            handleResponse(response, ResultUtils.errorToken("token失效"));
+            return false;
         }
-        //获取头部的token
+        //获取token
         String token = request.getHeader(GlobalConfig.TOKEN);
-        if (ToolUtils.isBlank(token)) {
-            handleResponse(response, ResultUtils.errorToken("token不存在"));
-            return false;
-        }
-        try {
-            //判断jwtToken是否过期
-            if (JwtTokenUtils.isExpiration(token)) {
-                handleResponse(response, ResultUtils.errorToken("token失效"));
-                return false;
-            }
-        } catch (Exception e) {
-            handleResponse(response, ResultUtils.errorToken("token失效"));
-            return false;
-        }
-        //获取token中存放的issuer
-        String issuer = JwtTokenUtils.getIssuer(token);
-        //获取当前访问的ip地址
-        String ipAddress = HttpRequestUtils.getIpAddress(request);
-        if (!issuer.equals(ipAddress)) {
-            handleResponse(response, ResultUtils.errorToken("token失效"));
-            return false;
-        }
         //获取当前角色
         String tokenAudience = JwtTokenUtils.getUserAudienceByToken(token);
+        //角色为admin
         if (AdminTokenUtils.AUDIENCE.equals(tokenAudience)) {
-            //角色为admin
-            //查看是否有日志注解，有的话将日志信息放入数据库
-            SystemLog systemLog = method.getAnnotation(SystemLog.class);
-            if (null != systemLog) {
-                //查看是否存在忽略参数
-                String paramIgnore = systemLog.paramIgnore();
-                Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
-                //使用迭代器的remove()方法删除元素
-                parameterMap.keySet().removeIf(paramIgnore::contains);
-                SysLog sysLog = new SysLog()
-                        .setUserId(AdminTokenUtils.getUserIdByToken(token))
-                        .setDescription(systemLog.description())
-                        .setParam(JSON.toJSONString(parameterMap))
-                        .setType(systemLog.type())
-                        .setIpAddress(HttpRequestUtils.getIpAddress(request));
-                //将日志异步放入数据库
-                systemAsync.handleSysLog(sysLog);
-            }
-            return handleAdminToken(request, response, token, adminAuthTokenClass, adminAuthTokenMethod);
-        } else if (WebTokenUtils.AUDIENCE.equals(tokenAudience)) {
-            //角色为web
-            return handleWebToken(response, token, webAuthTokenClass, webAuthTokenMethod);
+            return handleAdminToken(request, response, object);
+        }
+        //角色为web
+        if (WebTokenUtils.AUDIENCE.equals(tokenAudience)) {
+            return handleWebToken(request, response, object);
         }
         //没有角色
         handleResponse(response, ResultUtils.errorToken("token不存在"));
@@ -154,17 +162,21 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     /**
      * 处理admin的token
      *
+     * @param request
      * @param response
-     * @param token
-     * @param authTokenClass
-     * @param authTokenMethod
+     * @param object
      * @return
      */
-    private boolean handleAdminToken(HttpServletRequest request, HttpServletResponse response, String token, AdminAuthToken authTokenClass, AdminAuthToken authTokenMethod) {
+    private boolean handleAdminToken(HttpServletRequest request, HttpServletResponse response, Object object) {
+        //获取token
+        String token = request.getHeader(GlobalConfig.TOKEN);
         //获取用户id
         Long userId = AdminTokenUtils.getUserIdByToken(token);
+        HandlerMethod handlerMethod = (HandlerMethod) object;
+        Method method = handlerMethod.getMethod();
         //判断当前注解是否和当前角色匹配
-        if (null == authTokenClass && null == authTokenMethod) {
+        if (null == handlerMethod.getBeanType().getAnnotation(AdminAuthToken.class)
+                && null == method.getAnnotation(AdminAuthToken.class)) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
@@ -177,6 +189,24 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (!StringRedisUtils.get(AdminTokenUtils.getAudienceRedisKey(userId)).equals(token)) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
+        }
+        ////////////token验证成功
+        //查看是否有日志注解，有的话将日志信息放入数据库
+        SystemLog systemLog = method.getAnnotation(SystemLog.class);
+        if (null != systemLog) {
+            //查看是否存在忽略参数
+            String paramIgnore = systemLog.paramIgnore();
+            Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+            //使用迭代器的remove()方法删除元素
+            parameterMap.keySet().removeIf(paramIgnore::contains);
+            SysLog sysLog = new SysLog()
+                    .setUserId(userId)
+                    .setDescription(systemLog.description())
+                    .setParam(JSON.toJSONString(parameterMap))
+                    .setType(systemLog.type())
+                    .setIpAddress(HttpRequestUtils.getIpAddress(request));
+            //将日志异步放入数据库
+            systemAsync.handleSysLog(sysLog);
         }
         //异步更新用户最后活跃时间
         systemAsync.updateLastActiveTime(userId, HttpRequestUtils.getIpAddress(request));
@@ -215,17 +245,21 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     /**
      * 处理web的token
      *
+     * @param request
      * @param response
-     * @param token
-     * @param authTokenClass
-     * @param authTokenMethod
+     * @param object
      * @return
      */
-    private boolean handleWebToken(HttpServletResponse response, String token, WebAuthToken authTokenClass, WebAuthToken authTokenMethod) {
+    private boolean handleWebToken(HttpServletRequest request, HttpServletResponse response, Object object) {
+        //获取token
+        String token = request.getHeader(GlobalConfig.TOKEN);
         //获取用户id
         Long userId = WebTokenUtils.getUserIdByToken(token);
+        HandlerMethod handlerMethod = (HandlerMethod) object;
+        Method method = handlerMethod.getMethod();
         //判断当前注解是否和当前角色匹配
-        if (null == authTokenClass && null == authTokenMethod) {
+        if (null == handlerMethod.getBeanType().getAnnotation(WebAuthToken.class)
+                && null == method.getAnnotation(WebAuthToken.class)) {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
@@ -253,4 +287,5 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     private void handleResponse(HttpServletResponse response, ResultUtils errResult) {
         HttpRequestUtils.handleErrorResponse(response, errResult, "token出错");
     }
+
 }
