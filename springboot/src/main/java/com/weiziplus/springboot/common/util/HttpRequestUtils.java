@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.common.util;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -154,4 +156,28 @@ public class HttpRequestUtils {
     public static String get(String url) {
         return get(url, null);
     }
+
+    /**
+     * 将错误信息输出到前端页面
+     *
+     * @param response
+     * @param errResult
+     */
+    public static void handleErrorResponse(HttpServletResponse response, ResultUtils errResult, String errMsg) {
+        PrintWriter out = null;
+        try {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType("application/json;charset=utf-8");
+            out = response.getWriter();
+            out.print(JSON.toJSONString(errResult));
+        } catch (Exception e) {
+            log.warn(errMsg + ",输入到前端页面出错，详情:" + e);
+        } finally {
+            if (null != out) {
+                out.flush();
+                out.close();
+            }
+        }
+    }
 }
+

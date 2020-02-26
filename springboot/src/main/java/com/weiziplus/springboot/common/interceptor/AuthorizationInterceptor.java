@@ -21,9 +21,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -231,19 +229,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * @param errResult
      */
     private void handleResponse(HttpServletResponse response, ResultUtils errResult) {
-        PrintWriter out = null;
-        try {
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.setContentType("application/json;charset=utf-8");
-            out = response.getWriter();
-            out.print(JSON.toJSONString(errResult));
-        } catch (Exception e) {
-            log.warn("token失效输入到前端页面出错，catch" + e);
-        } finally {
-            if (null != out) {
-                out.flush();
-                out.close();
-            }
-        }
+        HttpRequestUtils.handleErrorResponse(response, errResult, "token出错");
     }
 }

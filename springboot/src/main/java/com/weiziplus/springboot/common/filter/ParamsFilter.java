@@ -1,5 +1,7 @@
 package com.weiziplus.springboot.common.filter;
 
+import com.weiziplus.springboot.common.util.HttpRequestUtils;
+import com.weiziplus.springboot.common.util.ResultUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
@@ -9,6 +11,7 @@ import org.springframework.web.util.HtmlUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,7 +29,7 @@ public class ParamsFilter implements Filter {
     /**
      * 允许的url---该请求将不会过滤参数
      */
-    private final Set<String> ALLOW_URL = new HashSet<>(Arrays.asList("", ""));
+    private final Set<String> ALLOW_URL = new HashSet<>(Arrays.asList("/pc/getValidateCode", "/api/getValidateCode"));
 
     /**
      * @param servletRequest
@@ -44,7 +47,29 @@ public class ParamsFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
+        //判断时间戳是否正确
+        if (!handleTimeStamp(request)) {
+            HttpRequestUtils.handleErrorResponse((HttpServletResponse) servletResponse, ResultUtils.error("时间戳错误"), "参数过滤时间戳");
+            return;
+        }
         filterChain.doFilter(new ParamsHttpServletRequestWrapper((HttpServletRequest) servletRequest), servletResponse);
+    }
+
+    /**
+     * 处理请求的时间戳
+     * 时间戳错误返回false
+     *
+     * @param request
+     */
+    private boolean handleTimeStamp(HttpServletRequest request) {
+        String timeStamp = request.getParameter("__t");
+        if (null == timeStamp || 0 >= timeStamp.length()) {
+            return false;
+        }
+        long timeMillis = System.currentTimeMillis();
+        int allowTime = 60000;
+        //如果请求时间戳和服务器当前时间相差超过60秒，本次请求失败
+        return allowTime > Math.abs(timeMillis - Long.valueOf(timeStamp));
     }
 
     static class ParamsHttpServletRequestWrapper extends HttpServletRequestWrapper {
