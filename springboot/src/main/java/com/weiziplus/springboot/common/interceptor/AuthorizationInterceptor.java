@@ -46,6 +46,23 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     SystemAsync systemAsync;
 
     /**
+     * 处理请求的时间戳
+     * 时间戳错误返回false
+     *
+     * @param request
+     */
+    private boolean handleTimeStamp(HttpServletRequest request) {
+        String timeStamp = request.getParameter("__t");
+        if (null == timeStamp || 0 >= timeStamp.length()) {
+            return false;
+        }
+        long timeMillis = System.currentTimeMillis();
+        int allowTime = 60000;
+        //如果请求时间戳和服务器当前时间相差超过60秒，本次请求失败
+        return allowTime > Math.abs(timeMillis - Long.valueOf(timeStamp));
+    }
+
+    /**
      * 请求之前拦截
      *
      * @param request
@@ -59,6 +76,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
+        }
+        //判断时间戳有效
+        if (!handleTimeStamp(request)) {
+            handleResponse(response, ResultUtils.error("时间戳错误"));
+            return false;
         }
         HandlerMethod handlerMethod = (HandlerMethod) object;
         Method method = handlerMethod.getMethod();

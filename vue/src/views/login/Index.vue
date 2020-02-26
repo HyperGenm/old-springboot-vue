@@ -76,7 +76,7 @@
             changeCode() {
                 let uuid = this.$globalFun.createUUID();
                 let {GLOBAL, URL} = this.$global;
-                this.imgCodeUrl = GLOBAL.base_url + URL.loginValidateCode + '?uuid=' + uuid;
+                this.imgCodeUrl = GLOBAL.base_url + URL.loginValidateCode + `?uuid=${uuid}&__t=${new Date().getTime()}`;
                 this.imgUUID = uuid;
                 this.loginLoad = false;
             },
