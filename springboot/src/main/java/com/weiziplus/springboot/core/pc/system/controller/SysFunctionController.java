@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
-import com.weiziplus.springboot.common.interceptor.SystemLog;
+import com.weiziplus.springboot.common.interceptor.SysUserLog;
 import com.weiziplus.springboot.common.models.SysFunction;
 import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
@@ -35,7 +35,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getAllFunctionTreePageList")
-    @SystemLog(description = "查看功能树形数据")
+    @SysUserLog(description = "查看功能树形数据")
     public ResultUtils<PageUtils<List<SysFunction>>> getAllFunctionTreePageList() {
         return service.getAllFunctionTreePageList();
     }
@@ -46,7 +46,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getAllFunctionTree")
-    @SystemLog(description = "查看功能列表")
+    @SysUserLog(description = "查看功能列表")
     public ResultUtils<List<SysFunction>> getAllFunctionTree() {
         return service.getFunTree();
     }
@@ -57,7 +57,7 @@ public class SysFunctionController {
      * @return
      */
     @GetMapping("/getAllFunctionTreeNotButton")
-    @SystemLog(description = "查看功能列表")
+    @SysUserLog(description = "查看功能列表")
     public ResultUtils<List<SysFunction>> getAllFunctionTreeNotButton() {
         return service.getAllFunctionTreeNotButton();
     }
@@ -80,7 +80,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/addFunction")
-    @SystemLog(description = "新增功能", type = SystemLog.TYPE_INSERT)
+    @SysUserLog(description = "新增功能", type = SysUserLog.TYPE_INSERT)
     public ResultUtils addFunction(HttpServletRequest request, SysFunction sysFunction) {
         return service.addFunction(request, sysFunction);
     }
@@ -92,7 +92,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/updateFunction")
-    @SystemLog(description = "修改功能", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "修改功能", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils updateFunction(HttpServletRequest request, SysFunction sysFunction) {
         return service.updateFunction(request, sysFunction);
     }
@@ -104,7 +104,7 @@ public class SysFunctionController {
      * @return
      */
     @PostMapping("/deleteFunction")
-    @SystemLog(description = "删除功能", type = SystemLog.TYPE_DELETE)
+    @SysUserLog(description = "删除功能", type = SysUserLog.TYPE_DELETE)
     public ResultUtils deleteFunction(HttpServletRequest request, Integer[] ids) {
         return service.deleteFunction(request, ids);
     }

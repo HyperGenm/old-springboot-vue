@@ -90,7 +90,7 @@ INSERT INTO `sys_function` VALUES (1, 0, 'system', 'system', '系统管理', '',
 INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 5, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
 INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getAllRoleTreePageList,/pc/sysRole/getRoleList,/pc/sysFunction/getAllFunctionTree', 0, 'el-icon-s-check', 2, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
 INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 1, '管理后台的用户', '2019-05-09 16:56:52');
-INSERT INTO `sys_function` VALUES (5, 1, 'sysLog', 'sysLog', '日志管理', '/pc/sysLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (5, 1, 'sysUserLog', 'sysUserLog', '日志管理', '/pc/sysUserLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
 INSERT INTO `sys_function` VALUES (6, 2, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
 INSERT INTO `sys_function` VALUES (7, 3, 'sysRole_add', 'add', '新增', '/pc/sysRole/addRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
 INSERT INTO `sys_function` VALUES (8, 3, 'sysRole_update', 'update', '修改', '/pc/sysRole/updateRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');

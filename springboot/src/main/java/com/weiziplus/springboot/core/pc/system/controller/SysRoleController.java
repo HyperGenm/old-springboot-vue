@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
-import com.weiziplus.springboot.common.interceptor.SystemLog;
+import com.weiziplus.springboot.common.interceptor.SysUserLog;
 import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
@@ -32,7 +32,7 @@ public class SysRoleController {
      * @return
      */
     @GetMapping("/getAllRoleTreePageList")
-    @SystemLog(description = "查看角色树数据")
+    @SysUserLog(description = "查看角色树数据")
     public ResultUtils<PageUtils<List<SysRole>>> getAllRoleTreePageList() {
         return service.getAllRoleTreePageList();
     }
@@ -43,7 +43,7 @@ public class SysRoleController {
      * @return
      */
     @GetMapping("/getRoleTree")
-    @SystemLog(description = "查看角色树")
+    @SysUserLog(description = "查看角色树")
     public ResultUtils<List<SysRole>> getRoleTree() {
         return service.getRoleTree();
     }
@@ -54,7 +54,7 @@ public class SysRoleController {
      * @return
      */
     @GetMapping("/getRoleList")
-    @SystemLog(description = "查看角色列表")
+    @SysUserLog(description = "查看角色列表")
     public ResultUtils<List<SysRole>> getRoleList() {
         return service.getRoleList();
     }
@@ -67,7 +67,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRoleFun")
-    @SystemLog(description = "新增角色功能", type = SystemLog.TYPE_INSERT)
+    @SysUserLog(description = "新增角色功能", type = SysUserLog.TYPE_INSERT)
     public ResultUtils addRoleFun(
             @RequestParam(value = "roleId") Integer roleId,
             @RequestParam(value = "funIds", defaultValue = "") Integer[] funIds) {
@@ -81,7 +81,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/addRole")
-    @SystemLog(description = "新增角色", type = SystemLog.TYPE_INSERT)
+    @SysUserLog(description = "新增角色", type = SysUserLog.TYPE_INSERT)
     public ResultUtils addRole(SysRole sysRole) {
         return service.addRole(sysRole);
     }
@@ -93,7 +93,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/updateRole")
-    @SystemLog(description = "修改角色", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "修改角色", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils updateRole(HttpServletRequest request, SysRole sysRole) {
         return service.updateRole(request, sysRole);
     }
@@ -105,7 +105,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/deleteRole")
-    @SystemLog(description = "删除角色", type = SystemLog.TYPE_DELETE)
+    @SysUserLog(description = "删除角色", type = SysUserLog.TYPE_DELETE)
     public ResultUtils deleteRole(HttpServletRequest request, Integer roleId) {
         return service.deleteRole(request, roleId);
     }
@@ -117,7 +117,7 @@ public class SysRoleController {
      * @return
      */
     @PostMapping("/changeRoleIsStop")
-    @SystemLog(description = "改变角色状态", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "改变角色状态", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils changeRoleIsStop(HttpServletRequest request, Integer roleId, Integer isStop) {
         return service.changeRoleIsStop(request, roleId, isStop);
     }

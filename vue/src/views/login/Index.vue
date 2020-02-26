@@ -13,7 +13,7 @@
             <el-row>
                 <el-col :span="16">
                     <el-form-item prop="code">
-                        <el-input v-model="form.code" placeholder="验证码"/>
+                        <el-input @change="handleLogin" v-model="form.code" placeholder="验证码"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6" :offset="2">

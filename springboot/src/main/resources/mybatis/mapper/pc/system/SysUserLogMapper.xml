@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper">
+<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysUserLogMapper">
     <select id="getList" resultType="com.weiziplus.springboot.core.pc.system.vo.SysLogVo">
-        SELECT sl.*,su.username,su.real_name AS realName,sr.name AS roleName
-        FROM sys_log sl ,sys_user su
+        SELECT sul.*,su.username,su.real_name AS realName,sr.name AS roleName
+        FROM sys_user_log sul ,sys_user su
         LEFT JOIN sys_role sr ON sr.id = su.role_id
-        WHERE sl.user_id = su.id
+        WHERE sul.user_id = su.id
         <if test="null == isSuperAdmin or 0 != isSuperAdmin">
             AND su.id <![CDATA[>]]> 1
         </if>
@@ -18,20 +18,20 @@
             AND sr.id = #{roleId}
         </if>
         <if test="null != description and '' != description">
-            AND position(#{description} IN sl.description)
+            AND position(#{description} IN sul.description)
         </if>
         <if test="null != type">
-            AND sl.type = #{type}
+            AND sul.type = #{type}
         </if>
         <if test="null != ipAddress and '' != ipAddress">
-            AND position(#{ipAddress} IN sl.ip_address)
+            AND position(#{ipAddress} IN sul.ip_address)
         </if>
         <if test="null != startTime and '' != startTime">
-            AND sl.create_time <![CDATA[>]]> #{startTime}
+            AND sul.create_time <![CDATA[>]]> #{startTime}
         </if>
         <if test="null != endTime and '' != endTime">
-            AND sl.create_time <![CDATA[<=]]> #{endTime}
+            AND sul.create_time <![CDATA[<=]]> #{endTime}
         </if>
-        ORDER BY sl.create_time DESC
+        ORDER BY sul.create_time DESC
     </select>
 </mapper>

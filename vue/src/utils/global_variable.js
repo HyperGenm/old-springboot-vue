@@ -97,9 +97,9 @@ const URL = {
             updateIcon: '/sysUser/updateIcon'
         },
         /*********************日志管理*****************/
-        sysLog: {
+        sysUserLog: {
             /*查看日志列表*/
-            getPageList: '/sysLog/getPageList',
+            getPageList: '/sysUserLog/getPageList',
         },
     },
     /********字典管理*****************/

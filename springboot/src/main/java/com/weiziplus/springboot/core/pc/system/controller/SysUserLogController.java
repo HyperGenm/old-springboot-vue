@@ -1,10 +1,10 @@
 package com.weiziplus.springboot.core.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
-import com.weiziplus.springboot.common.interceptor.SystemLog;
+import com.weiziplus.springboot.common.interceptor.SysUserLog;
 import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
-import com.weiziplus.springboot.core.pc.system.service.SysLogService;
+import com.weiziplus.springboot.core.pc.system.service.SysUserLogService;
 import com.weiziplus.springboot.core.pc.system.vo.SysLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +23,14 @@ import java.util.List;
 @RestController
 @ApiIgnore
 @AdminAuthToken
-@RequestMapping("/pc/sysLog")
-public class SysLogController {
+@RequestMapping("/pc/sysUserLog")
+public class SysUserLogController {
 
     @Autowired
-    SysLogService service;
+    SysUserLogService service;
 
     @GetMapping("/getPageList")
-    @SystemLog(description = "查看系统日志")
+    @SysUserLog(description = "查看系统日志")
     public ResultUtils<PageUtils<List<SysLogVo>>> getPageList(
             HttpServletRequest request,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,

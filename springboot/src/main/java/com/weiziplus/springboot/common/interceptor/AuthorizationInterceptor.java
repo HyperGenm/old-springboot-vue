@@ -3,7 +3,7 @@ package com.weiziplus.springboot.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.async.SystemAsync;
 import com.weiziplus.springboot.common.config.GlobalConfig;
-import com.weiziplus.springboot.common.models.SysLog;
+import com.weiziplus.springboot.common.models.SysUserLog;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
@@ -192,14 +192,14 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         ////////////token验证成功
         //查看是否有日志注解，有的话将日志信息放入数据库
-        SystemLog systemLog = method.getAnnotation(SystemLog.class);
+        com.weiziplus.springboot.common.interceptor.SysUserLog systemLog = method.getAnnotation(com.weiziplus.springboot.common.interceptor.SysUserLog.class);
         if (null != systemLog) {
             //查看是否存在忽略参数
             String paramIgnore = systemLog.paramIgnore();
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
             //使用迭代器的remove()方法删除元素
             parameterMap.keySet().removeIf(paramIgnore::contains);
-            SysLog sysLog = new SysLog()
+            SysUserLog sysLog = new SysUserLog()
                     .setUserId(userId)
                     .setDescription(systemLog.description())
                     .setParam(JSON.toJSONString(parameterMap))

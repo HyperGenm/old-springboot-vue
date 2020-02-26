@@ -4,7 +4,7 @@ import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
-import com.weiziplus.springboot.common.models.SysLog;
+import com.weiziplus.springboot.common.models.SysUserLog;
 import com.weiziplus.springboot.common.util.DateUtils;
 import com.weiziplus.springboot.common.util.ToolUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class SystemAsync extends BaseService {
      * @param sysLog
      */
     @Async("sysLog")
-    public void handleSysLog(SysLog sysLog) {
+    public void handleSysLog(SysUserLog sysLog) {
         if (null == sysLog) {
             return;
         }

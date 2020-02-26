@@ -11,7 +11,7 @@ import java.util.List;
  * @date 2019/5/13 15:07
  */
 @Mapper
-public interface SysLogMapper {
+public interface SysUserLogMapper {
 
     /**
      * 获取日志列表

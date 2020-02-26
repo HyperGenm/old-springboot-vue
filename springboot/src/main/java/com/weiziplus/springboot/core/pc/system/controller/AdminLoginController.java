@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
-import com.weiziplus.springboot.common.interceptor.SystemLog;
+import com.weiziplus.springboot.common.interceptor.SysUserLog;
 import com.weiziplus.springboot.core.pc.system.service.AdminLoginService;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class AdminLoginController {
      * @return
      */
     @PostMapping("/login")
-    @SystemLog(description = "系统用户登录")
+    @SysUserLog(description = "系统用户登录")
     public ResultUtils login(HttpServletRequest request, String username, String password, String code, String uuid) {
         return service.login(request, username, password, code, uuid);
     }
@@ -61,7 +61,7 @@ public class AdminLoginController {
      */
     @AdminAuthToken
     @GetMapping("/logout")
-    @SystemLog(description = "系统用户退出登录")
+    @SysUserLog(description = "系统用户退出登录")
     public ResultUtils logout(HttpServletRequest request) {
         return service.logout(request);
     }

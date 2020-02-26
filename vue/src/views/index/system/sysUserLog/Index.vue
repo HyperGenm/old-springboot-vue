@@ -25,7 +25,7 @@
             let that = this;
             return {
                 tableDataRequest: {
-                    url: that.$global.URL.system.sysLog.getPageList,
+                    url: that.$global.URL.system.sysUserLog.getPageList,
                     data: {}
                 },
                 tableColumns: [

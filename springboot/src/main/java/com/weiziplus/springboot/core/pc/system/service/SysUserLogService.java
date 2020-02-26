@@ -5,7 +5,7 @@ import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
-import com.weiziplus.springboot.core.pc.system.mapper.SysLogMapper;
+import com.weiziplus.springboot.core.pc.system.mapper.SysUserLogMapper;
 import com.weiziplus.springboot.core.pc.system.vo.SysLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import java.util.List;
  * @date 2019/5/13 15:34
  */
 @Service
-public class SysLogService {
+public class SysUserLogService {
 
     @Autowired
-    SysLogMapper mapper;
+    SysUserLogMapper mapper;
 
     /**
      * 获取日志列表

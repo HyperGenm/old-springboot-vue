@@ -20,11 +20,11 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("sys_log")
+@Table("sys_user_log")
 @Accessors(chain = true)
-@Alias("SysLog")
+@Alias("SysUserLog")
 @ApiModel("系统日志表")
-public class SysLog implements Serializable {
+public class SysUserLog implements Serializable {
     /**
      * 系统日志表主键，自增
      */

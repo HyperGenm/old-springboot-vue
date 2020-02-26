@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.controller;
 
 import com.weiziplus.springboot.common.interceptor.AdminAuthToken;
-import com.weiziplus.springboot.common.interceptor.SystemLog;
+import com.weiziplus.springboot.common.interceptor.SysUserLog;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
@@ -41,7 +41,7 @@ public class SysUserController {
      * @return
      */
     @GetMapping("/getPageList")
-    @SystemLog(description = "查看用户列表")
+    @SysUserLog(description = "查看用户列表")
     public ResultUtils<PageUtils<List<SysUserVo>>> getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
@@ -60,7 +60,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/addUser")
-    @SystemLog(description = "新增用户", type = SystemLog.TYPE_INSERT)
+    @SysUserLog(description = "新增用户", type = SysUserLog.TYPE_INSERT)
     public ResultUtils addUser(SysUser sysUser) {
         return service.addUser(sysUser);
     }
@@ -72,7 +72,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUser")
-    @SystemLog(description = "更新用户", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "更新用户", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils updateUser(HttpServletRequest request, SysUser sysUser) {
         return service.updateUser(request, sysUser);
     }
@@ -84,7 +84,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/deleteUser")
-    @SystemLog(description = "删除用户", type = SystemLog.TYPE_DELETE)
+    @SysUserLog(description = "删除用户", type = SysUserLog.TYPE_DELETE)
     public ResultUtils deleteUser(
             HttpServletRequest request,
             @RequestParam(value = "ids", defaultValue = "") Long[] ids) {
@@ -99,7 +99,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateUserRole")
-    @SystemLog(description = "更新用户角色", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "更新用户角色", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils updateUserRole(HttpServletRequest request, Long userId, Integer roleId) {
         return service.updateUserRole(request, userId, roleId);
     }
@@ -113,7 +113,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updatePassword")
-    @SystemLog(description = "修改密码",type = SystemLog.TYPE_UPDATE, paramIgnore = "oldPwd,newPwd")
+    @SysUserLog(description = "修改密码",type = SysUserLog.TYPE_UPDATE, paramIgnore = "oldPwd,newPwd")
     public ResultUtils updatePassword(HttpServletRequest request, String oldPwd, String newPwd) {
         return service.updatePassword(request, oldPwd, newPwd);
     }
@@ -122,7 +122,7 @@ public class SysUserController {
      * 重置密码
      */
     @PostMapping("/resetUserPassword")
-    @SystemLog(description = "重置用户密码", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "重置用户密码", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils resetUserPassword(HttpServletRequest request, Long userId, String password) {
         return service.resetUserPassword(request, userId, password);
     }
@@ -133,7 +133,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/updateIcon")
-    @SystemLog(description = "修改头像", type = SystemLog.TYPE_UPDATE)
+    @SysUserLog(description = "修改头像", type = SysUserLog.TYPE_UPDATE)
     public ResultUtils updateIcon(HttpServletRequest request, MultipartFile file) {
         return service.updateIcon(request, file);
     }
