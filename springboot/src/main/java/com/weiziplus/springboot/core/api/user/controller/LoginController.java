@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.core.api.user.controller;
 
+import com.weiziplus.springboot.common.interceptor.UserLog;
 import com.weiziplus.springboot.core.api.user.service.LoginService;
 import com.weiziplus.springboot.common.interceptor.WebAuthToken;
 import com.weiziplus.springboot.common.util.ResultUtils;
@@ -49,6 +50,7 @@ public class LoginController {
     @WebAuthToken
     @ApiOperation(value = "退出")
     @PostMapping("/logout")
+    @UserLog(description = "退出登录", type = UserLog.TYPE_UPDATE)
     public ResultUtils logout(HttpServletRequest request) {
         return service.logout(request);
     }

@@ -96,10 +96,15 @@ const URL = {
             /*修改头像*/
             updateIcon: '/sysUser/updateIcon'
         },
-        /*********************日志管理*****************/
+        /*********************系统用户日志管理*****************/
         sysUserLog: {
             /*查看日志列表*/
             getPageList: '/sysUserLog/getPageList',
+        },
+        /*********************用户日志管理*****************/
+        userLog: {
+            /*查看日志列表*/
+            getPageList: '/userLog/getPageList',
         },
     },
     /********字典管理*****************/

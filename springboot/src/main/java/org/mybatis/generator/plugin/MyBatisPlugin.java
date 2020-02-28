@@ -30,7 +30,8 @@ public class MyBatisPlugin extends PluginAdapter {
      */
     private final List<String> IGNORE_TABLE = Arrays.asList(
             "data_dictionary", "data_dictionary_value",
-            "sys_function", "sys_log", "sys_role", "sys_role_function", "sys_user");
+            "sys_function", "sys_user_log", "sys_role", "sys_role_function", "sys_user",
+            "user_log");
 
     /**
      * 设置类的注释

@@ -1,7 +1,8 @@
 package com.weiziplus.springboot.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.weiziplus.springboot.common.async.SystemAsync;
+import com.weiziplus.springboot.common.async.LogAsync;
+import com.weiziplus.springboot.common.async.UserAsync;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUserLog;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
@@ -43,7 +44,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     SysFunctionService sysFunctionService;
 
     @Autowired
-    SystemAsync systemAsync;
+    LogAsync logAsync;
+
+    @Autowired
+    UserAsync userAsync;
 
     /**
      * 处理请求的时间戳
@@ -199,17 +203,17 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
             //使用迭代器的remove()方法删除元素
             parameterMap.keySet().removeIf(paramIgnore::contains);
-            SysUserLog sysLog = new SysUserLog()
+            SysUserLog log = new SysUserLog()
                     .setUserId(userId)
                     .setDescription(systemLog.description())
                     .setParam(JSON.toJSONString(parameterMap))
                     .setType(systemLog.type())
                     .setIpAddress(HttpRequestUtils.getIpAddress(request));
             //将日志异步放入数据库
-            systemAsync.handleSysLog(sysLog);
+            logAsync.saveSysUserLog(log);
         }
         //异步更新用户最后活跃时间
-        systemAsync.updateLastActiveTime(userId, HttpRequestUtils.getIpAddress(request));
+        userAsync.updateAdminUserLastActiveTime(userId, HttpRequestUtils.getIpAddress(request));
         //如果当前是超级管理员---直接放过
         if (GlobalConfig.SUPER_ADMIN_ID.equals(userId)) {
             //更新token过期时间
@@ -218,6 +222,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //获取当前访问的url
         String requestUrl = request.getRequestURI();
+        //如果有统一的请求前缀
+        String servletContextPath = GlobalConfig.getServletContextPath();
+        if (!ToolUtils.isBlank(GlobalConfig.getServletContextPath())) {
+            int index = requestUrl.indexOf(servletContextPath);
+            //并且是请求前缀开头的
+            if (0 == index) {
+                requestUrl = requestUrl.substring(servletContextPath.length());
+            }
+        }
         Set<String> allFunContainApi = sysFunctionService.getAllFunContainApi();
         //如果限制的功能api不包含当前url---直接放过
         if (null == allFunContainApi || !allFunContainApi.contains(requestUrl)) {
@@ -273,6 +286,26 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             handleResponse(response, ResultUtils.errorToken("token失效"));
             return false;
         }
+        ////////////token验证成功
+        //查看是否有日志注解，有的话将日志信息放入数据库
+        com.weiziplus.springboot.common.interceptor.UserLog userLog = method.getAnnotation(com.weiziplus.springboot.common.interceptor.UserLog.class);
+        if (null != userLog) {
+            //查看是否存在忽略参数
+            String paramIgnore = userLog.paramIgnore();
+            Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
+            //使用迭代器的remove()方法删除元素
+            parameterMap.keySet().removeIf(paramIgnore::contains);
+            com.weiziplus.springboot.common.models.UserLog log = new com.weiziplus.springboot.common.models.UserLog()
+                    .setUserId(userId)
+                    .setDescription(userLog.description())
+                    .setParam(JSON.toJSONString(parameterMap))
+                    .setType(userLog.type())
+                    .setIpAddress(HttpRequestUtils.getIpAddress(request));
+            //将日志异步放入数据库
+            logAsync.saveUserLog(log);
+        }
+        //异步更新用户最后活跃时间
+        userAsync.updateWebUserLastActiveTime(userId, HttpRequestUtils.getIpAddress(request));
         //更新token过期时间
         WebTokenUtils.updateExpireTime(userId);
         return true;

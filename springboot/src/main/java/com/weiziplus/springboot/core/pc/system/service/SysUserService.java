@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.service;
 
 import com.github.pagehelper.PageHelper;
-import com.weiziplus.springboot.common.async.SystemAsync;
+import com.weiziplus.springboot.common.async.FileAsync;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.models.SysUser;
@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wanglongwei
@@ -31,7 +30,7 @@ public class SysUserService extends BaseService {
     SysUserMapper mapper;
 
     @Autowired
-    SystemAsync systemAsync;
+    FileAsync fileAsync;
 
     /**
      * 获取用户列表
@@ -289,7 +288,7 @@ public class SysUserService extends BaseService {
         Long userId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
         //异步删除原来的图片
-        systemAsync.deleteFile(sysUser.getIcon());
+        fileAsync.deleteFile(sysUser.getIcon());
         sysUser.setIcon(path);
         baseUpdate(sysUser);
         return ResultUtils.success(GlobalConfig.getMybatisFilePathPrefix() + path);

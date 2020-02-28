@@ -49,6 +49,20 @@ public class User implements Serializable {
     private String password;
 
     /**
+     * 用户最后活跃ip地址
+     */
+    @ApiModelProperty("用户最后活跃ip地址")
+    @Column("last_ip_address")
+    private String lastIpAddress;
+
+    /**
+     * 用户最后活跃时间
+     */
+    @ApiModelProperty("用户最后活跃时间")
+    @Column("last_active_time")
+    private String lastActiveTime;
+
+    /**
      * 用户创建时间
      */
     @ApiModelProperty("用户创建时间")
@@ -62,6 +76,10 @@ public class User implements Serializable {
     public static final String COLUMN_USERNAME = "username";
 
     public static final String COLUMN_PASSWORD = "password";
+
+    public static final String COLUMN_LAST_IP_ADDRESS = "last_ip_address";
+
+    public static final String COLUMN_LAST_ACTIVE_TIME = "last_active_time";
 
     public static final String COLUMN_CREATE_TIME = "create_time";
 }

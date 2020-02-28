@@ -81,16 +81,16 @@ CREATE TABLE `sys_function`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '功能创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE COMMENT '功能名唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_function
 -- ----------------------------
 INSERT INTO `sys_function` VALUES (1, 0, 'system', 'system', '系统管理', '', 0, 'el-icon-s-tools', 1, '后台的管理', '2019-05-09 16:55:47');
-INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 5, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
+INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 6, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
 INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getAllRoleTreePageList,/pc/sysRole/getRoleList,/pc/sysFunction/getAllFunctionTree', 0, 'el-icon-s-check', 2, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
 INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 1, '管理后台的用户', '2019-05-09 16:56:52');
-INSERT INTO `sys_function` VALUES (5, 1, 'sysUserLog', 'sysUserLog', '日志管理', '/pc/sysUserLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
+INSERT INTO `sys_function` VALUES (5, 1, 'sysUserLog', 'sysUserLog', '系统日志管理', '/pc/sysUserLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
 INSERT INTO `sys_function` VALUES (6, 2, 'sysFunc_update', 'update', '修改', '/pc/sysFunction/updateFunction', 1, 'el-icon-info', 0, '', '2019-05-10 10:22:00');
 INSERT INTO `sys_function` VALUES (7, 3, 'sysRole_add', 'add', '新增', '/pc/sysRole/addRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:08');
 INSERT INTO `sys_function` VALUES (8, 3, 'sysRole_update', 'update', '修改', '/pc/sysRole/updateRole', 1, 'el-icon-info', 0, '', '2019-05-10 10:23:21');
@@ -107,12 +107,13 @@ INSERT INTO `sys_function` VALUES (18, 17, 'toolsUpload', 'upload', '图片上�
 INSERT INTO `sys_function` VALUES (19, 17, 'richText', 'richText', '富文本', '', 0, 'el-icon-s-release', 1, '进一步封装了富文本，方便调用', '2019-09-04 16:21:09');
 INSERT INTO `sys_function` VALUES (20, 1, 'ipManager', 'ipManager', 'ip管理', '', 0, '', 3, '对ip进行管理', '2020-02-24 20:04:42');
 INSERT INTO `sys_function` VALUES (21, 20, 'ipManager_get', 'ipManager_get', '查看', '/pc/dataDictionary/ipManager/getIpRole,/pc/dataDictionary/ipManager/getIpList', 1, '', 0, '', '2020-02-25 15:50:24');
+INSERT INTO `sys_function` VALUES (22, 1, 'userLog', 'userLog', '用户日志', '/pc/userLog/getPageList', 0, 'el-icon-s-order', 5, '用户日志', '2020-02-28 20:44:20');
 
 -- ----------------------------
--- Table structure for sys_log
+-- Table structure for sys_user_log
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_log`;
-CREATE TABLE `sys_log`  (
+DROP TABLE IF EXISTS `sys_user_log`;
+CREATE TABLE `sys_user_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '系统日志表主键，自增',
   `user_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '用户表id',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '操作描述',
@@ -122,13 +123,13 @@ CREATE TABLE `sys_log`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE,
-  CONSTRAINT `sys_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `sys_user_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sys_log
+-- Records of sys_user_log
 -- ----------------------------
-INSERT INTO `sys_log` VALUES (1, 1, '查看系统日志','127.0.0.1','{"pageSize":["20"],"pageNum":["1"]}',1,  '2019-08-06 08:55:51');
+INSERT INTO `sys_user_log` VALUES (1, 1, '查看系统日志','127.0.0.1','{"pageSize":["20"],"pageNum":["1"]}',1,  '2019-08-06 08:55:51');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -168,7 +169,7 @@ CREATE TABLE `sys_role_function`  (
   INDEX `function_id`(`function_id`) USING BTREE,
   CONSTRAINT `sys_role_function_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_role_function_ibfk_2` FOREIGN KEY (`function_id`) REFERENCES `sys_function` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 382 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 383 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_function
@@ -215,6 +216,7 @@ INSERT INTO `sys_role_function` VALUES (379, 666, 6);
 INSERT INTO `sys_role_function` VALUES (380, 666, 17);
 INSERT INTO `sys_role_function` VALUES (381, 666, 18);
 INSERT INTO `sys_role_function` VALUES (382, 666, 19);
+INSERT INTO `sys_role_function` VALUES (383, 1, 22);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -263,5 +265,27 @@ CREATE TABLE `user`  (
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:25:32');
 INSERT INTO `user` VALUES (1000001, 'ceshi', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:54:22');
+
+-- ----------------------------
+-- Table structure for user_log
+-- ----------------------------
+DROP TABLE IF EXISTS `user_log`;
+CREATE TABLE `user_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL COMMENT '用户表主键',
+  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '操作描述',
+  `param` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '当前请求的参数',
+  `type` int(2) NOT NULL DEFAULT 1 COMMENT '请求的类型,1:查询,2:新增,3:修改,4:删除',
+  `ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `user_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户日志' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_log
+-- ----------------------------
+INSERT INTO `user_log` VALUES (1, 1, '获取用户信息', '{\"pageSize\":[\"20\"],\"pageNum\":[\"1\"]}', 1, '127.0.0.1', '2020-02-28 21:02:46');
 
 SET FOREIGN_KEY_CHECKS = 1;

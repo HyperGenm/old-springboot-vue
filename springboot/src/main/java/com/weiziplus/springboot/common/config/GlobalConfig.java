@@ -78,6 +78,26 @@ public class GlobalConfig {
     }
 
     /**
+     * 统一的请求前缀
+     */
+    private static String SERVLET_CONTEXT_PATH = "";
+
+    @Value("${server.servlet.context-path:}")
+    private void setServletContextPath(String servletContextPath) {
+        GlobalConfig.SERVLET_CONTEXT_PATH = servletContextPath;
+    }
+
+    /**
+     * 统一的请求前缀
+     * 只暴露属性值，不提供修改属性的方式
+     *
+     * @return
+     */
+    public static String getServletContextPath() {
+        return SERVLET_CONTEXT_PATH;
+    }
+
+    /**
      * 当前是dev还是pro
      */
     private static String SPRING_PROFILES = "";
