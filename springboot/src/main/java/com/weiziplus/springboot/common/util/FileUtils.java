@@ -3,17 +3,15 @@ package com.weiziplus.springboot.common.util;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,16 +22,6 @@ import java.io.InputStream;
 @Slf4j
 @Component
 public class FileUtils {
-
-    @Resource
-    ResourceLoader resourceLoader;
-
-    private static FileUtils that;
-
-    @PostConstruct
-    private void init() {
-        that = this;
-    }
 
     /**
      * 文件上传
@@ -105,22 +93,21 @@ public class FileUtils {
 
     /**
      * 文件下载
+     * tip:必须在yml配置文件中指定global.base-file-path
      *
      * @param response
      * @param path
      * @throws IOException
      */
     public static void downFile(HttpServletResponse response, String path) throws IOException {
-        InputStream inputStream = null;
-        ServletOutputStream servletOutputStream = null;
         response.setContentType("application/vnd.ms-excel");
         response.addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.addHeader("charset", "utf-8");
         response.addHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment");
-        org.springframework.core.io.Resource resource = that.resourceLoader.getResource("classpath:static" + path);
-        inputStream = resource.getInputStream();
-        servletOutputStream = response.getOutputStream();
+        File file = new File(GlobalConfig.getBaseFilePath() + path);
+        InputStream inputStream = new FileInputStream(file);
+        ServletOutputStream servletOutputStream = response.getOutputStream();
         IOUtils.copy(inputStream, servletOutputStream);
         response.flushBuffer();
         if (null != servletOutputStream) {

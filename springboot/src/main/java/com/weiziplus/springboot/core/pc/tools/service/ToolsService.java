@@ -5,11 +5,9 @@ import com.weiziplus.springboot.common.util.FileUtils;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,8 +19,6 @@ import java.util.HashMap;
 @Slf4j
 @Service
 public class ToolsService extends BaseService {
-    @Resource
-    ResourceLoader resourceLoader;
 
     /**
      * 文件上传
