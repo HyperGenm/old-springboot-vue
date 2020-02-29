@@ -114,8 +114,6 @@ public class FileUtils {
             servletOutputStream.close();
         }
         inputStream.close();
-        // 召唤jvm的垃圾回收器
-        System.gc();
     }
 
 }

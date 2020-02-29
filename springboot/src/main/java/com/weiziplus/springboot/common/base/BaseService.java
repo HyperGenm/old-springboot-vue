@@ -529,10 +529,7 @@ public class BaseService {
         //此处对应自动生成的实体类常量，COLUMN_ + 数据库字段全部大写
         String prefix = "COLUMN_";
         try {
-            Field field = clazz.getDeclaredField(prefix + column.toUpperCase());
-            if (null == field) {
-                throw new RuntimeException("根据实体类、字段、值获取实体类出错---请使用类常量==========" + clazz.getName());
-            }
+            clazz.getDeclaredField(prefix + column.toUpperCase());
         } catch (NoSuchFieldException e) {
             throw new RuntimeException("根据实体类、字段、值获取实体类出错---请使用类常量==========" + clazz.getName() + "---" + e);
         }

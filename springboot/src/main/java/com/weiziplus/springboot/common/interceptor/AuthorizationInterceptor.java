@@ -61,9 +61,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return false;
         }
         long timeMillis = System.currentTimeMillis();
+        Long timeStampLong = Long.valueOf(timeStamp);
         int allowTime = 60000;
         //如果请求时间戳和服务器当前时间相差超过60秒，本次请求失败
-        return allowTime > Math.abs(timeMillis - Long.valueOf(timeStamp));
+        return allowTime > Math.abs(timeMillis - timeStampLong);
     }
 
     /**
