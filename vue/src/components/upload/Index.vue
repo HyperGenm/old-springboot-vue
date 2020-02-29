@@ -277,12 +277,19 @@
                 let headers = {
                     'Content-Type': 'multipart/form-data'
                 };
+                let url = that.$global.GLOBAL.base_url;
+                //判断请求参数是否有__t 时间戳
+                if (that.action.includes('?__t=') || that.action.includes('&__t=')) {
+                    url += that.action;
+                } else {
+                    url += `?__t=${new Date().getTime()}`;
+                }
                 //每个请求加上请求头
                 headers[that.$global.GLOBAL.token] = that.$store.state.token || '';
                 axios({
                     headers,
                     method: 'post',
-                    url: that.$global.GLOBAL.base_url + that.action,
+                    url,
                     data: formData,
                 }).then(res => {
                     /**关闭加载中动画*/
