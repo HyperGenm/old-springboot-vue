@@ -33,6 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
+                // 放过swagger-ui
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/swagger-ui.html/**")
                 .addPathPatterns("/**");
     }
 
