@@ -194,7 +194,8 @@ export function weiAxiosDown(
         let _axios = {
             url: that.$global.GLOBAL.base_url + url,
             method,
-            responseType: 'blob'
+            responseType: 'blob',
+            headers: {},
         };
         //每个请求加上请求头
         _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';

@@ -126,7 +126,9 @@ const URL = {
     /********常用工具*****************/
     tools: {
         /*文件上传*/
-        upload: '/tools/upload'
+        upload: '/tools/upload',
+        /*文件上传*/
+        downTemp: '/tools/downTemp'
     }
 };
 

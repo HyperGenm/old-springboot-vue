@@ -65,7 +65,9 @@ public class AdminLoginService extends BaseService {
         try {
             ImageIO.write((BufferedImage) validateCode.get("image"), "JPEG", response.getOutputStream());
         } catch (IOException e) {
-            log.warn("登录时生成图片验证码失败" + e);
+            log.warn("登录时生成图片验证码失败,详情:" + e);
+            HttpRequestUtils.handleErrorResponse(
+                    response, ResultUtils.error("登录时生成图片验证码失败，详情:" + e), "登录时生成图片验证码失败");
         }
     }
 

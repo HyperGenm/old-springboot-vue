@@ -277,12 +277,17 @@
                 let headers = {
                     'Content-Type': 'multipart/form-data'
                 };
-                let url = that.$global.GLOBAL.base_url;
-                //判断请求参数是否有__t 时间戳
-                if (that.action.includes('?__t=') || that.action.includes('&__t=')) {
-                    url += that.action;
-                } else {
-                    url += `?__t=${new Date().getTime()}`;
+                let url = that.$global.GLOBAL.base_url + that.action;
+                //如果请求没有__t时间戳参数
+                if (!url.includes('?__t=') && !url.includes('&__t=')) {
+                    let prefix = that.$global.GLOBAL.base_url + "?";
+                    //有参数
+                    if (0 === url.indexOf(prefix)) {
+                        url += `&__t=${new Date().getTime()}`;
+                    } else {
+                        //无参数
+                        url += `?__t=${new Date().getTime()}`;
+                    }
                 }
                 //每个请求加上请求头
                 headers[that.$global.GLOBAL.token] = that.$store.state.token || '';
