@@ -1,6 +1,6 @@
 <template>
     <div id="weiTable" ref="weiTable">
-        <div class="search" v-show="tableSearch && 0 < tableSearch.length" ref="search">
+        <div v-if="!notRequest" class="search" v-show="tableSearch && 0 < tableSearch.length" ref="search">
             <!--表格查询-->
             <el-form inline size="mini">
                 <el-form-item v-for="item in tableSearch" :key="item.prop">
@@ -71,7 +71,7 @@
                 </el-button>
             </el-form>
         </div>
-        <div class="header" ref="header">
+        <div v-if="!notRequest" class="header" ref="header">
             <!--表格头部按钮组-->
             <el-row>
                 <el-button type="primary" size="mini" icon="el-icon-refresh" @click="renderTable">刷新</el-button>
@@ -98,7 +98,7 @@
                       :row-key="tableOther.rowKey || 'id'"
                       :default-expand-all="tableOther.defaultExpandAll || true"
                       border highlight-current-row size="small">
-                <el-table-column type="selection" width="40"></el-table-column>
+                <el-table-column v-if="!notRequest" type="selection" width="40"></el-table-column>
                 <el-table-column type="index" fixed="left" width="50"></el-table-column>
                 <slot name="startColumn"></slot>
                 <el-table-column
@@ -244,7 +244,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div v-if="isPagination" class="pagination" ref="pagination">
+        <div v-if="!notRequest && isPagination" class="pagination" ref="pagination">
             <!--表格分页-->
             <el-pagination background layout="total, sizes, prev, pager, next, jumper"
                            :page-sizes="[10, 20, 50, 100, 200]" :page-size="pageSize" :total="total"
@@ -333,6 +333,16 @@
                     rowKey: 'id',
                     defaultExpandAll: true
                 })
+            },
+            //表格不需要请求
+            notRequest: {
+                type: Boolean,
+                default: false
+            },
+            //不需要请求时默认的数据
+            notRequestTableData: {
+                type: Array,
+                default: () => []
             }
         },
         data() {
@@ -361,9 +371,19 @@
                 dialogImageUrl: ''
             }
         },
+        watch: {
+            notRequestTableData(data) {
+                this.tableData = data;
+            }
+        },
         mounted() {
-            //获取数据
-            this.getTableList();
+            //如果不需要请求
+            if (this.notRequest) {
+                this.tableData = this.notRequestTableData;
+            } else {
+                //获取数据
+                this.getTableList();
+            }
             //初始化表格高度
             this.initTableMaxHeight();
         },
@@ -372,9 +392,9 @@
                 let that = this;
                 this.$nextTick(() => {
                     let weiTableHeight = that.$refs['weiTable'].getBoundingClientRect().height;
-                    let searchHeight = that.$refs['search'].getBoundingClientRect().height;
-                    let headerHeight = that.$refs['header'].getBoundingClientRect().height;
-                    let paginationHeight = that.isPagination ? that.$refs['pagination'].getBoundingClientRect().height : 0;
+                    let searchHeight = !that.notRequest ? that.$refs['search'].getBoundingClientRect().height : 0;
+                    let headerHeight = !that.notRequest ? that.$refs['header'].getBoundingClientRect().height : 0;
+                    let paginationHeight = (!that.notRequest && that.isPagination) ? that.$refs['pagination'].getBoundingClientRect().height : 0;
                     that.tableMaxHeight = weiTableHeight - searchHeight - headerHeight - paginationHeight - 20;
                 });
             },

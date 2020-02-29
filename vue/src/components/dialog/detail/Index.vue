@@ -1,7 +1,7 @@
 <template>
     <div id="wei-dialog-detail">
         <slot name="rowHead"></slot>
-        <el-row v-for="(row,index) in rows" :key="index"
+        <el-row v-for="(row,index) in rows" :key="row.label || index"
                 v-if="!row['hidden']">
             <el-col :span="colNum">
                 <div v-if="null != row.label && 7 < row.label.length">
@@ -59,6 +59,12 @@
                                 </el-image>
                             </div>
                         </template>
+                        <template v-else-if="'table' === row.type">
+                            <wei-table :notRequest="true"
+                                       :style="'height:'+(row.element(row)['height'] || '200px')"
+                                       :notRequestTableData="row.element(row)['tableData'] || []"
+                                       :tableColumns="row.element(row)['tableColumns'] || []"></wei-table>
+                        </template>
                         <template v-else><h1 style="color: #ff4949;">{{row.label}}没有指定type</h1></template>
                     </template>
                     <template v-else>
@@ -87,7 +93,8 @@
     export default {
         name: "Index",
         components: {
-            'wei-dialog': () => import('@/components/dialog/index/Index.vue')
+            'wei-dialog': () => import('@/components/dialog/index/Index.vue'),
+            'wei-table': () => import('@/components/table/Index.vue')
         },
         props: {
             rows: {
