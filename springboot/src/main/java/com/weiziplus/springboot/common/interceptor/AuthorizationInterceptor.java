@@ -16,6 +16,7 @@ import com.weiziplus.springboot.core.pc.system.service.SysFunctionService;
 import com.weiziplus.springboot.core.pc.system.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -56,6 +57,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * @param request
      */
     private boolean handleTimeStamp(HttpServletRequest request) {
+        String referer = request.getHeader(HttpHeaders.REFERER);
+        //如果不是生产环境，并且请求的是swagger-ui，不检测时间戳
+        if (!GlobalConfig.isSpringProfilesPro()
+                && !ToolUtils.isBlank(referer)
+                && referer.contains("swagger-ui.html")) {
+            return true;
+        }
         String timeStamp = request.getParameter("__t");
         if (null == timeStamp || 0 >= timeStamp.length()) {
             return false;
