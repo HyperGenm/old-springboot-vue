@@ -1,8 +1,6 @@
 package com.weiziplus.springboot.common.util.token;
 
 import com.weiziplus.springboot.common.base.BaseService;
-import com.weiziplus.springboot.common.config.GlobalConfig;
-import com.weiziplus.springboot.common.util.Md5Utils;
 import com.weiziplus.springboot.common.util.redis.StringRedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +27,6 @@ public class TokenUtils extends BaseService {
      * @return
      */
     public static String getAudienceRedisKey(String audience, String userId) {
-        //如果是生产环境
-        if (GlobalConfig.isSpringProfilesPro()) {
-            return Md5Utils.encode(BASE_REDIS_KEY.concat(audience).concat(":") + userId);
-        }
         return BASE_REDIS_KEY.concat(audience).concat(":") + userId;
     }
 

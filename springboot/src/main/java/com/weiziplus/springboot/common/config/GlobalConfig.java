@@ -98,9 +98,9 @@ public class GlobalConfig {
     }
 
     /**
-     * 当前是dev还是pro
+     * 当前是dev还是pro---默认pro
      */
-    private static String SPRING_PROFILES = "";
+    private static String SPRING_PROFILES = "pro";
 
     @Value("${spring.profiles:pro}")
     private void setSpringProfiles(String springProfiles) {
