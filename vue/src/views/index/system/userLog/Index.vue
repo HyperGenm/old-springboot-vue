@@ -30,7 +30,7 @@
                 },
                 tableColumns: [
                     {label: '用户名', prop: 'username', fixed: 'left'},
-                    {label: '操作', prop: 'description'},
+                    {label: 'url', prop: 'url'},
                     {label: '参数', prop: 'param'},
                     {
                         label: '类型', prop: 'type', type: 'tag',
@@ -48,6 +48,7 @@
                             };
                         }
                     },
+                    {label: '操作', prop: 'description'},
                     {label: 'ip地址', prop: 'ipAddress'},
                     {
                         label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
@@ -71,7 +72,7 @@
                 },
                 tableSearch: [
                     {type: 'input', prop: 'username', placeholder: '用户名'},
-                    {type: 'input', prop: 'description', placeholder: '操作'},
+                    {type: 'input', prop: 'url', placeholder: '请求的url'},
                     {
                         type: 'select', prop: 'type', placeholder: '类型',
                         options: [
@@ -81,6 +82,7 @@
                             {label: '删除', value: 4}
                         ]
                     },
+                    {type: 'input', prop: 'description', placeholder: '操作'},
                     {type: 'input', prop: 'ipAddress', placeholder: 'ip地址'},
                     {type: 'dateTimePicker', prop: 'startTime', placeholder: '开始时间'},
                     {type: 'dateTimePicker', prop: 'endTime', placeholder: '结束时间'}

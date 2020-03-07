@@ -17,14 +17,16 @@ public interface UserLogMapper {
      * 获取日志列表
      *
      * @param username
-     * @param description
+     * @param url
      * @param type
+     * @param description
      * @param ipAddress
      * @param startTime
      * @param endTime
      * @return
      */
-    List<LogVo> getList(@Param("username") String username, @Param("description") String description,
-                        @Param("type") Integer type, @Param("ipAddress") String ipAddress,
-                        @Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<LogVo> getList(@Param("username") String username, @Param("url") String url,
+                        @Param("type") Integer type, @Param("description") String description,
+                        @Param("ipAddress") String ipAddress, @Param("startTime") String startTime,
+                        @Param("endTime") String endTime);
 }

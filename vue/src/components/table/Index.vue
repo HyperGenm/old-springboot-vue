@@ -374,6 +374,8 @@
         watch: {
             notRequestTableData(data) {
                 this.tableData = data;
+                //重新渲染高度
+                this.initTableMaxHeight();
             }
         },
         mounted() {

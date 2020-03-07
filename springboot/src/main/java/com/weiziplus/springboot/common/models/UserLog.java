@@ -38,11 +38,11 @@ public class UserLog implements Serializable {
     private Long userId;
 
     /**
-     * 操作描述
+     * 请求的url
      */
-    @ApiModelProperty("操作描述")
-    @Column("description")
-    private String description;
+    @ApiModelProperty("请求的url")
+    @Column("url")
+    private String url;
 
     /**
      * 当前请求的参数
@@ -57,6 +57,13 @@ public class UserLog implements Serializable {
     @ApiModelProperty("请求的类型,1:查询,2:新增,3:修改,4:删除")
     @Column("type")
     private Integer type;
+
+    /**
+     * 操作描述
+     */
+    @ApiModelProperty("操作描述")
+    @Column("description")
+    private String description;
 
     /**
      * ip地址
@@ -78,11 +85,13 @@ public class UserLog implements Serializable {
 
     public static final String COLUMN_USER_ID = "user_id";
 
-    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_URL = "url";
 
     public static final String COLUMN_PARAM = "param";
 
     public static final String COLUMN_TYPE = "type";
+
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String COLUMN_IP_ADDRESS = "ip_address";
 

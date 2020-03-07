@@ -37,12 +37,13 @@ public class SysUserLogController {
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "roleId", required = false) Long roleId,
-            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "url", required = false) String url,
             @RequestParam(value = "type", required = false) Integer type,
+            @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "ipAddress", required = false) String ipAddress,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime) {
         return service.getPageList(request, pageNum, pageSize, username, roleId
-                , description, type, ipAddress, startTime, endTime);
+                , url, type, description, ipAddress, startTime, endTime);
     }
 }

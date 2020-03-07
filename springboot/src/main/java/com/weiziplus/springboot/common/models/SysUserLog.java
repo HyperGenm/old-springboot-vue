@@ -40,11 +40,11 @@ public class SysUserLog implements Serializable {
     private Long userId;
 
     /**
-     * 操作描述
+     * 请求的url
      */
-    @ApiModelProperty("操作描述")
-    @Column("description")
-    private String description;
+    @ApiModelProperty("请求的url")
+    @Column("url")
+    private String url;
 
     /**
      * 当前请求的参数
@@ -81,6 +81,13 @@ public class SysUserLog implements Serializable {
     public static final Integer TYPE_DELETE = 4;
 
     /**
+     * 操作描述
+     */
+    @ApiModelProperty("操作描述")
+    @Column("description")
+    private String description;
+
+    /**
      * ip地址
      */
     @ApiModelProperty("ip地址")
@@ -100,11 +107,13 @@ public class SysUserLog implements Serializable {
 
     public static final String COLUMN_USER_ID = "user_id";
 
-    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_URL = "url";
 
     public static final String COLUMN_PARAM = "param";
 
     public static final String COLUMN_TYPE = "type";
+
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String COLUMN_IP_ADDRESS = "ip_address";
 

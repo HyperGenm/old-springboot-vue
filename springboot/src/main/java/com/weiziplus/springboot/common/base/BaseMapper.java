@@ -141,7 +141,7 @@ public interface BaseMapper {
      */
     @Select("SELECT * \r\n " +
             "FROM `${TABLE_NAME}` ")
-    List<Map<String, Object>> findAll(@Param("tableName") String tableName);
+    List<Map<String, Object>> findAll(@Param("TABLE_NAME") String tableName);
 
     /**
      * 获取所有数据按照某个字段降序排列

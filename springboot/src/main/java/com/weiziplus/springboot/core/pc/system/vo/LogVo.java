@@ -33,10 +33,10 @@ public class LogVo implements Serializable {
     private String username;
 
     /**
-     * 操作描述
+     * 请求的url
      */
-    @ApiModelProperty("操作描述")
-    private String description;
+    @ApiModelProperty("请求的url")
+    private String url;
 
     /**
      * 当前请求的参数
@@ -49,6 +49,12 @@ public class LogVo implements Serializable {
      */
     @ApiModelProperty("请求的类型,1:查询,2:新增,3:修改,4:删除")
     private Integer type;
+
+    /**
+     * 操作描述
+     */
+    @ApiModelProperty("操作描述")
+    private String description;
 
     /**
      * ip地址

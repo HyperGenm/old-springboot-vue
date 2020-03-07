@@ -34,7 +34,7 @@
                     {label: '用户名', prop: data['username']},
                     {label: '真实姓名', prop: data['realName']},
                     {label: '角色', prop: data['roleName']},
-                    {label: '操作', prop: data['description']},
+                    {label: 'url', prop: data['url']},
                     {
                         label: '参数', type: 'table',
                         element() {
@@ -49,12 +49,17 @@
                                     value: paramMap[key]
                                 });
                             }
+                            //最多3行
+                            let showRow = 3 <= paramArr.length ? 3 : paramArr.length;
+                            //最少一行
+                            showRow = 0 >= showRow ? 1 : showRow;
                             return {
                                 tableData: paramArr,
                                 tableColumns: [
                                     {label: '字段', prop: 'field'},
                                     {label: '参数', prop: 'value'},
-                                ]
+                                ],
+                                height: (77 + 40 * showRow) + 'px'
                             }
                         }
                     },
@@ -73,6 +78,7 @@
                             };
                         }
                     },
+                    {label: '操作', prop: data['description']},
                     {label: 'ip地址', prop: data['ipAddress']},
                     {
                         label: '操作时间', prop: data['createTime'], type: 'icon', element() {

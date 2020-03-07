@@ -31,7 +31,7 @@ public class SysUserLogService {
      * @return
      */
     public ResultUtils<PageUtils<List<SysLogVo>>> getPageList(HttpServletRequest request, Integer pageNum, Integer pageSize, String username, Long roleId,
-                                                              String description, Integer type, String ipAddress, String startTime, String endTime) {
+                                                              String url, Integer type, String description, String ipAddress, String startTime, String endTime) {
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         //是否是超级管理员,0:是
         Integer isSuperAdmin = null;
@@ -39,7 +39,7 @@ public class SysUserLogService {
             isSuperAdmin = 0;
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<SysLogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(isSuperAdmin, username, roleId, description, type, ipAddress, startTime, endTime));
+        PageUtils<List<SysLogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(isSuperAdmin, username, roleId, url, type, description, ipAddress, startTime, endTime));
         return ResultUtils.success(pageUtil);
     }
 }

@@ -29,16 +29,17 @@ public class UserLogController {
     UserLogService service;
 
     @GetMapping("/getPageList")
-    @SysUserLog(description = "查看用户系统日志")
+    @SysUserLog(description = "查看用户日志")
     public ResultUtils<PageUtils<List<LogVo>>> getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,
-            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "url", required = false) String url,
             @RequestParam(value = "type", required = false) Integer type,
+            @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "ipAddress", required = false) String ipAddress,
             @RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime) {
-        return service.getPageList(pageNum, pageSize, username, description, type, ipAddress, startTime, endTime);
+        return service.getPageList(pageNum, pageSize, username, url, type, description, ipAddress, startTime, endTime);
     }
 }

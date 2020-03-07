@@ -19,8 +19,9 @@ public interface SysUserLogMapper {
      * @param isSuperAdmin 当前是否是超级管理员,0：是
      * @param username
      * @param roleId
-     * @param description
+     * @param url
      * @param type
+     * @param description
      * @param ipAddress
      * @param startTime
      * @param endTime
@@ -28,6 +29,7 @@ public interface SysUserLogMapper {
      */
     List<SysLogVo> getList(@Param("isSuperAdmin") Integer isSuperAdmin,
                            @Param("username") String username, @Param("roleId") Long roleId,
-                           @Param("description") String description, @Param("type") Integer type,
-                           @Param("ipAddress") String ipAddress, @Param("startTime") String startTime, @Param("endTime") String endTime);
+                           @Param("url") String url, @Param("type") Integer type,
+                           @Param("description") String description, @Param("ipAddress") String ipAddress,
+                           @Param("startTime") String startTime, @Param("endTime") String endTime);
 }

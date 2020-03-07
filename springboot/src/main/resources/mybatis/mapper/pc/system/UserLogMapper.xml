@@ -11,11 +11,14 @@
             <if test="null != username and '' != username">
                 AND POSITION(#{username} IN u.username)
             </if>
-            <if test="null != description and '' != description">
-                AND POSITION(#{description} IN ul.description)
+            <if test="null != url and '' != url">
+                AND ul.url = #{url}
             </if>
             <if test="null != type">
                 AND ul.type = #{type}
+            </if>
+            <if test="null != description and '' != description">
+                AND POSITION(#{description} IN ul.description)
             </if>
             <if test="null != ipAddress and '' != ipAddress">
                 AND POSITION(#{ipAddress} IN ul.ip_address)

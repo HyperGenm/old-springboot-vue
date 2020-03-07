@@ -214,9 +214,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             parameterMap.keySet().removeIf(paramIgnore::contains);
             SysUserLog log = new SysUserLog()
                     .setUserId(userId)
-                    .setDescription(systemLog.description())
+                    .setUrl(request.getRequestURI())
                     .setParam(JSON.toJSONString(parameterMap))
                     .setType(systemLog.type())
+                    .setDescription(systemLog.description())
                     .setIpAddress(HttpRequestUtils.getIpAddress(request));
             //将日志异步放入数据库
             logAsync.saveSysUserLog(log);
@@ -306,9 +307,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             parameterMap.keySet().removeIf(paramIgnore::contains);
             com.weiziplus.springboot.common.models.UserLog log = new com.weiziplus.springboot.common.models.UserLog()
                     .setUserId(userId)
-                    .setDescription(userLog.description())
+                    .setUrl(request.getRequestURI())
                     .setParam(JSON.toJSONString(parameterMap))
                     .setType(userLog.type())
+                    .setDescription(userLog.description())
                     .setIpAddress(HttpRequestUtils.getIpAddress(request));
             //将日志异步放入数据库
             logAsync.saveUserLog(log);

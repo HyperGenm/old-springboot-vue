@@ -29,9 +29,9 @@ public class UserLogService {
      * @param pageSize
      * @return
      */
-    public ResultUtils<PageUtils<List<LogVo>>> getPageList(Integer pageNum, Integer pageSize, String username, String description, Integer type, String ipAddress, String startTime, String endTime) {
+    public ResultUtils<PageUtils<List<LogVo>>> getPageList(Integer pageNum, Integer pageSize, String username, String url, Integer type, String description, String ipAddress, String startTime, String endTime) {
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<LogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(username, description, type, ipAddress, startTime, endTime));
+        PageUtils<List<LogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(username, url, type, description, ipAddress, startTime, endTime));
         return ResultUtils.success(pageUtil);
     }
 }

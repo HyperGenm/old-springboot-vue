@@ -17,11 +17,14 @@
         <if test="null != roleId">
             AND sr.id = #{roleId}
         </if>
-        <if test="null != description and '' != description">
-            AND position(#{description} IN sul.description)
+        <if test="null != url and '' != url">
+            AND sul.url = #{url}
         </if>
         <if test="null != type">
             AND sul.type = #{type}
+        </if>
+        <if test="null != description and '' != description">
+            AND position(#{description} IN sul.description)
         </if>
         <if test="null != ipAddress and '' != ipAddress">
             AND position(#{ipAddress} IN sul.ip_address)

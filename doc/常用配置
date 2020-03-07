@@ -12,14 +12,14 @@
         #需要压缩的MIME类型文件
         gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript image/jpeg image/gif image/png;
 
-    * 监听/pc/请求重定向到本地8080端口
+    * 监听/github/请求重定向到本地8080端口
         server {
                 listen       80;
                 server_name  ***;
 
-        		#######/pc/请求重定向到 8080 端口
-                location /pc/ {
-                    proxy_pass   http://127.0.0.1:8080;
+        		#######/github/请求重定向到 8080 端口
+                location /github/ {
+                    proxy_pass   http://127.0.0.1:8080/;
                     proxy_set_header x-forwarded-for  $remote_addr;
                 }
 
