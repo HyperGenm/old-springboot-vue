@@ -9,7 +9,6 @@ import com.weiziplus.springboot.common.util.ToolUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -521,7 +520,12 @@ public class BaseService {
         if (null == clazz.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + clazz);
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName(), column);
+        String key;
+        if (GlobalConfig.isSpringProfilesPro()) {
+            key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", Md5Utils.encode(clazz.getName()), column);
+        } else {
+            key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName(), column);
+        }
         Object redisObject = RedisUtils.get(key);
         if (null != redisObject) {
             return (Boolean) redisObject;

@@ -23,11 +23,11 @@ public class WebTokenUtils extends JwtTokenUtils{
     public final static String AUDIENCE = "web";
 
     /**
-     * web用户redis过期时间--3天过期
+     * web用户redis过期时间--1天过期
      */
-    private static Long EXPIRE_TIME = 60L * 60 * 24 * 3;
+    private static Long EXPIRE_TIME = 60L * 60 * 24;
 
-    @Value("${global.token.web-expire-time:259200}")
+    @Value("${global.token.expire-time.web:86400}")
     private void setExpireTime(String expireTime) {
         WebTokenUtils.EXPIRE_TIME = ToolUtils.valueOfLong(expireTime);
     }

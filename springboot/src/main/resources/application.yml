@@ -79,9 +79,11 @@ logging:
 #自定义全局变量*******注意:  :后面要有空格
 global:
   token:
-    #系统用户token过期时间,单位秒
-    admin-expire-time: 43200
-    #web用户token过期时间,单位秒
-    web-expire-time: 259200
+    #token过期时间,单位秒
+    expire-time:
+      #系统用户
+      admin: 10800
+      #web用户
+      web: 86400
   #10秒内超过多少次请求，暂时封ip
   ip-filter-max-num: 100
