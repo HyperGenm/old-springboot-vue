@@ -70,8 +70,6 @@ pagehelper:
   helper-dialect: mysql
   #为了使用输入页数为负或者超出最大页时候使页数为最小或最大值
   reasonable: false
-  support-methods-arguments: true
-  params: count=countSql
 #日志打印
 logging:
   config: classpath:config/logback-spring.xml

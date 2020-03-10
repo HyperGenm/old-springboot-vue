@@ -289,7 +289,7 @@ public class SysUserService extends BaseService {
         SysUser sysUser = baseFindByClassAndId(SysUser.class, userId);
         //异步删除原来的图片
         fileAsync.deleteFile(sysUser.getIcon());
-        sysUser.setIcon(path);
+        sysUser.setIcon(path).setLastActiveTime(null).setCreateTime(null);
         baseUpdate(sysUser);
         return ResultUtils.success(GlobalConfig.getMybatisFilePathPrefix() + path);
     }

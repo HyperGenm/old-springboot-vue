@@ -52,6 +52,8 @@ public class FileUtils {
         }
         //如果没有设置目录，存放到临时目录
         String resultPath = ToolUtils.isBlank(mkdir) ? "/temp/" : ("/" + mkdir + "/");
+        //分日期存放
+        resultPath += DateUtils.getNowDateNum() + "/";
         //  获取文件后缀类型
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         // 生成新文件名

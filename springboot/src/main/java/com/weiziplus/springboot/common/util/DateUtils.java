@@ -109,4 +109,16 @@ public class DateUtils {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return dateFormat.format(new Date());
     }
+
+    /**
+     * 获取当前日期
+     *
+     * @return
+     */
+    public static Integer getNowDateNum() {
+        //设置时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        return Integer.valueOf(dateFormat.format(new Date()));
+    }
 }

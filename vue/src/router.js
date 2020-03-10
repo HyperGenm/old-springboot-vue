@@ -2,6 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 
+/*浏览器上面进度条*/
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+NProgress.configure({
+    showSpinner: false, // 是否显示加载ico
+});
+
 if (process.env.NODE_ENV !== 'production') {
     Vue.use(Router);
     //解决点击当前路由报错问题
@@ -68,6 +76,8 @@ function handleRouterChildren() {
 
 router.beforeEach((to, from, next) => {
     clearAxiosCancelToken();
+    //浏览器上方显示进度条
+    NProgress.start();
     const token = store.state.token;
     if ((null == token || '' === token) && 'login' !== to.name) {
         next('/login');
@@ -88,6 +98,11 @@ router.beforeEach((to, from, next) => {
     }
     //正常放行
     next();
+});
+
+router.afterEach(transition => {
+    //关闭浏览器上方的进度条
+    NProgress.done();
 });
 
 export default router;
