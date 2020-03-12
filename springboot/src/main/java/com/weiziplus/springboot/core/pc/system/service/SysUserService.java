@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.weiziplus.springboot.common.async.FileAsync;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.enums.UserAllowLogin;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
@@ -116,7 +117,7 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("id错误");
         }
         //如果用户禁用---强制用户下线
-        if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
+        if (UserAllowLogin.FORBID.getValue().equals(sysUser.getAllowLogin())) {
             AdminTokenUtils.deleteToken(sysUser.getId());
         }
         //当前几项无需修改

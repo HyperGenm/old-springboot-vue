@@ -61,26 +61,6 @@ public class SysUserLog implements Serializable {
     private Integer type;
 
     /**
-     * 1:查询
-     */
-    public static final Integer TYPE_SELECT = 1;
-
-    /**
-     * 2:新增
-     */
-    public static final Integer TYPE_INSERT = 2;
-
-    /**
-     * 3:修改
-     */
-    public static final Integer TYPE_UPDATE = 3;
-
-    /**
-     * 4:删除
-     */
-    public static final Integer TYPE_DELETE = 4;
-
-    /**
      * 操作描述
      */
     @ApiModelProperty("操作描述")

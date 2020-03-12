@@ -52,10 +52,10 @@
                                 :disabled="item.disabled || false"></el-date-picker>
             </template>
             <template v-else-if="'timePicker' === item.type">
-                <el-date-picker :placeholder="item.placeholder || '选择时间'"
+                <el-time-picker :placeholder="item.placeholder || '选择时间'"
                                 v-model="formData[item.prop]" :size="item.size"
                                 :value-format="item.valueFormat || 'HH:mm:ss'"
-                                :disabled="item.disabled || false"></el-date-picker>
+                                :disabled="item.disabled || false"></el-time-picker>
             </template>
             <template v-else-if="'dateTimePicker' === item.type">
                 <el-date-picker type="datetime" :placeholder="item.placeholder || '选择时间'"

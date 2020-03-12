@@ -7,7 +7,7 @@
                           v-model="form.username" placeholder="用户名"/>
             </el-form-item>
             <el-form-item prop="password">
-                <el-input name="password" type="password" show-password
+                <el-input name="password" type="password" show-password @change="handleLogin"
                           v-model="form.password" placeholder="密码"/>
             </el-form-item>
             <el-row>

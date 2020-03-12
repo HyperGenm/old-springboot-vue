@@ -1,6 +1,8 @@
 package com.weiziplus.springboot.core.pc.system.service;
 
 import com.weiziplus.springboot.common.base.BaseService;
+import com.weiziplus.springboot.common.enums.RoleIsStop;
+import com.weiziplus.springboot.common.enums.UserAllowLogin;
 import com.weiziplus.springboot.common.models.SysRole;
 import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
@@ -101,14 +103,14 @@ public class AdminLoginService extends BaseService {
         if (null == sysUser || !sysUser.getPassword().equals(Md5Utils.encode(password))) {
             return ResultUtils.error("用户名或密码错误");
         }
-        if (SysUser.ALLOW_LOGIN_FORBID.equals(sysUser.getAllowLogin())) {
+        if (UserAllowLogin.FORBID.getValue().equals(sysUser.getAllowLogin())) {
             return ResultUtils.error("账号被禁用，请联系管理员");
         }
         SysRole sysRole = sysRoleMapper.getInfoByUserId(sysUser.getId());
         if (null == sysRole) {
             return ResultUtils.error("您还没有角色，请联系管理员添加");
         }
-        if (SysRole.IS_STOP_DISABLE.equals(sysRole.getIsStop())) {
+        if (RoleIsStop.DISABLE.getValue().equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
         String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request), sysRole.getId());

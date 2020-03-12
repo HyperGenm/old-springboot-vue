@@ -244,6 +244,7 @@ export function weiAxiosDown(
                             return;
                         }
                         console.log('文件下载成功回调，不是文件流', resData);
+                        success();
                     }
                 } catch (error) {
                     let blob = new Blob([data]);

@@ -2,6 +2,7 @@ package com.weiziplus.springboot.core.pc.dictionary.service;
 
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.enums.DataDictionaryCode;
 import com.weiziplus.springboot.common.models.DataDictionaryValue;
 import com.weiziplus.springboot.common.util.DateUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
@@ -26,11 +27,6 @@ import java.util.Set;
 public class DataDictionaryIpManagerService extends BaseService {
 
     /**
-     * 字典表中ip规则的code
-     */
-    private final static String IP_ROLE_CODE = "ipRole";
-
-    /**
      * ip规则:允许全部
      */
     private final static String IP_ROLE_VALUE_ALL = "all";
@@ -44,21 +40,6 @@ public class DataDictionaryIpManagerService extends BaseService {
      * ip规则:只允许黑名单
      */
     public final static String IP_ROLE_VALUE_BLACK = "black";
-
-    /**
-     * 字典表中ip白名单的code
-     */
-    private final static String IP_LIST_WHITE_CODE = "ipListWhite";
-
-    /**
-     * 字典表中ip黑名单的code
-     */
-    private final static String IP_LIST_BLACK_CODE = "ipListBlack";
-
-    /**
-     * 字典表中异常ip的code
-     */
-    private final static String IP_LIST_ABNORMAL_CODE = "ipListAbnormal";
 
     @Autowired
     DataDictionaryIpManagerMapper mapper;
@@ -80,7 +61,8 @@ public class DataDictionaryIpManagerService extends BaseService {
         if (null != object) {
             return String.valueOf(object);
         }
-        DataDictionaryValue dataDictionaryValue = baseFindOneDataByClassAndColumnAndValue(DataDictionaryValue.class, DataDictionaryValue.COLUMN_DICTIONARY_CODE, IP_ROLE_CODE);
+        DataDictionaryValue dataDictionaryValue = baseFindOneDataByClassAndColumnAndValue(
+                DataDictionaryValue.class, DataDictionaryValue.COLUMN_DICTIONARY_CODE, DataDictionaryCode.IP_ROLE.getCode());
         String value = null == dataDictionaryValue ? IP_ROLE_VALUE_ALL : dataDictionaryValue.getValue();
         RedisUtils.set(redisKey, value);
         return value;
@@ -123,7 +105,8 @@ public class DataDictionaryIpManagerService extends BaseService {
                 && !IP_ROLE_VALUE_BLACK.equals(role)) {
             return ResultUtils.error("规则错误");
         }
-        DataDictionaryValue dataDictionaryValue = baseFindOneDataByClassAndColumnAndValue(DataDictionaryValue.class, DataDictionaryValue.COLUMN_DICTIONARY_CODE, IP_ROLE_CODE);
+        DataDictionaryValue dataDictionaryValue = baseFindOneDataByClassAndColumnAndValue(
+                DataDictionaryValue.class, DataDictionaryValue.COLUMN_DICTIONARY_CODE, DataDictionaryCode.IP_ROLE.getCode());
         if (null != dataDictionaryValue) {
             dataDictionaryValue.setValue(role).setCreateTime(null);
             RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
@@ -132,7 +115,7 @@ public class DataDictionaryIpManagerService extends BaseService {
             return ResultUtils.success();
         }
         dataDictionaryValue = new DataDictionaryValue()
-                .setDictionaryCode(IP_ROLE_CODE)
+                .setDictionaryCode(DataDictionaryCode.IP_ROLE.getCode())
                 .setValue(role)
                 .setName("ip规则")
                 .setCreateTime(DateUtils.getNowDateTime())
@@ -154,9 +137,7 @@ public class DataDictionaryIpManagerService extends BaseService {
         //如果type不为空
         if (!ToolUtils.isBlank(type)) {
             //type必须是ip名单值的其中之一
-            if (!IP_LIST_WHITE_CODE.equals(type)
-                    && !IP_LIST_BLACK_CODE.equals(type)
-                    && !IP_LIST_ABNORMAL_CODE.equals(type)) {
+            if (!DataDictionaryCode.contains(type)) {
                 return ResultUtils.error("类型错误");
             }
         }
@@ -181,7 +162,7 @@ public class DataDictionaryIpManagerService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipValueList = mapper.getIpValueList(IP_LIST_WHITE_CODE);
+        Set<String> ipValueList = mapper.getIpValueList(DataDictionaryCode.IP_LIST_WHITE.getCode());
         RedisUtils.set(redisKey, ipValueList);
         return ipValueList;
     }
@@ -197,7 +178,7 @@ public class DataDictionaryIpManagerService extends BaseService {
         if (null != object) {
             return ToolUtils.objectOfSet(object, String.class);
         }
-        Set<String> ipValueList = mapper.getIpValueList(IP_LIST_BLACK_CODE);
+        Set<String> ipValueList = mapper.getIpValueList(DataDictionaryCode.IP_LIST_BLACK.getCode());
         RedisUtils.set(redisKey, ipValueList);
         return ipValueList;
     }
@@ -214,7 +195,7 @@ public class DataDictionaryIpManagerService extends BaseService {
         DataDictionaryValue dictionaryValue = mapper.getOneIpInfoByIpAddress(ipAddress);
         if (null == dictionaryValue) {
             dictionaryValue = new DataDictionaryValue()
-                    .setDictionaryCode(IP_LIST_ABNORMAL_CODE)
+                    .setDictionaryCode(DataDictionaryCode.IP_LIST_ABNORMAL.getCode())
                     .setValue(ipAddress)
                     .setNum(1)
                     .setName(ipAddress)
@@ -226,7 +207,7 @@ public class DataDictionaryIpManagerService extends BaseService {
             return;
         }
         //如果ip不是异常ip类型
-        if (!IP_LIST_ABNORMAL_CODE.equals(dictionaryValue.getDictionaryCode())) {
+        if (!DataDictionaryCode.IP_LIST_ABNORMAL.getCode().equals(dictionaryValue.getDictionaryCode())) {
             return;
         }
         Integer num = dictionaryValue.getNum();
@@ -237,7 +218,7 @@ public class DataDictionaryIpManagerService extends BaseService {
             dictionaryValue.setNum(num);
         } else {
             dictionaryValue
-                    .setDictionaryCode(IP_LIST_BLACK_CODE)
+                    .setDictionaryCode(DataDictionaryCode.IP_LIST_BLACK.getCode())
                     .setRemark("单位时间内访问频率过快的ip,异常次数过多，自动拉黑")
                     .setCreateTime(DateUtils.getNowDateTime());
         }
@@ -266,17 +247,16 @@ public class DataDictionaryIpManagerService extends BaseService {
         if (ToolUtils.isBlank(ipAddress)) {
             return ResultUtils.error("ip地址不能为空");
         }
-        if (!IP_LIST_WHITE_CODE.equals(type)
-                && !IP_LIST_BLACK_CODE.equals(type)
-                && !IP_LIST_ABNORMAL_CODE.equals(type)) {
+        //type必须是ip名单值的其中之一
+        if (!DataDictionaryCode.contains(type)) {
             return ResultUtils.error("类型错误");
         }
         DataDictionaryValue dictionaryValue = mapper.getOneIpInfoByIpAddress(ipAddress);
         if (null != dictionaryValue) {
             Map<String, String> ipListMap = new HashMap<String, String>(3) {{
-                put(IP_LIST_WHITE_CODE, "白名单");
-                put(IP_LIST_BLACK_CODE, "黑名单");
-                put(IP_LIST_ABNORMAL_CODE, "异常ip");
+                put(DataDictionaryCode.IP_LIST_WHITE.getCode(), "白名单");
+                put(DataDictionaryCode.IP_LIST_BLACK.getCode(), "黑名单");
+                put(DataDictionaryCode.IP_LIST_ABNORMAL.getCode(), "异常ip");
             }};
             return ResultUtils.error("ip存在，当前类型为" + ipListMap.get(dictionaryValue.getDictionaryCode()));
         }

@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * 系统功能表
  * sys_function
+ *
  * @author 16028
  * @date 2020-02-20 13:45:12
  */
@@ -74,16 +75,6 @@ public class SysFunction implements Serializable {
     @ApiModelProperty("功能类型;0:菜单,1:按钮")
     @Column("type")
     private Integer type;
-
-    /**
-     * 0：菜单
-     */
-    public static Integer TYPE_MENU = 0;
-
-    /**
-     * 1:按钮
-     */
-    public static Integer TYPE_BUTTON = 1;
 
     /**
      * 功能图标

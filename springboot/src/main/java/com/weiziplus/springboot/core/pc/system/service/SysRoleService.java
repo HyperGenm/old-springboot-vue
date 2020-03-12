@@ -2,6 +2,7 @@ package com.weiziplus.springboot.core.pc.system.service;
 
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.enums.RoleIsStop;
 import com.weiziplus.springboot.core.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysRoleFunctionMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysRoleMapper;
@@ -209,12 +210,15 @@ public class SysRoleService extends BaseService {
         if (null == sysRole.getParentId() || GlobalConfig.SUPER_ADMIN_ID > sysRole.getParentId()) {
             return ResultUtils.error("parentId不能为空");
         }
+        if (!RoleIsStop.contains(sysRole.getIsStop())) {
+            return ResultUtils.error("停/启用状态错误");
+        }
         SysRole role = baseFindOneDataByClassAndColumnAndValue(SysRole.class, SysRole.COLUMN_NAME, sysRole.getName());
         if (null != role && null != role.getId()) {
             return ResultUtils.error("角色名已存在");
         }
         SysRole superRole = baseFindByClassAndId(SysRole.class, sysRole.getParentId());
-        if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
+        if (RoleIsStop.DISABLE.getValue().equals(superRole.getIsStop())) {
             return ResultUtils.error("操作失败，父级处于禁用状态");
         }
         sysRole.setCreateTime(DateUtils.getNowDateTime());
@@ -316,10 +320,10 @@ public class SysRoleService extends BaseService {
             return ResultUtils.error("状态不能为空");
         }
         //判断是否启用
-        if (SysRole.IS_STOP_ENABLE.equals(isStop)) {
+        if (RoleIsStop.ENABLE.getValue().equals(isStop)) {
             SysRole role = baseFindByClassAndId(SysRole.class, roleId);
             SysRole superRole = baseFindByClassAndId(SysRole.class, role.getParentId());
-            if (SysRole.IS_STOP_DISABLE.equals(superRole.getIsStop())) {
+            if (RoleIsStop.DISABLE.getValue().equals(superRole.getIsStop())) {
                 return ResultUtils.error("父级当前处于禁用状态");
             }
         }

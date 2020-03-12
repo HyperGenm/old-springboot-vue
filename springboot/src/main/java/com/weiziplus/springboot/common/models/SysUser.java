@@ -71,16 +71,6 @@ public class SysUser implements Serializable {
     private Integer allowLogin;
 
     /**
-     * 0:允许
-     */
-    public final static Integer ALLOW_LOGIN_ALLOW = 0;
-
-    /**
-     * 1:禁止
-     */
-    public final static Integer ALLOW_LOGIN_FORBID = 1;
-
-    /**
      * 手机号
      */
     @ApiModelProperty("手机号")

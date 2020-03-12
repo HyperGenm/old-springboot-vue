@@ -2,6 +2,8 @@ package com.weiziplus.springboot.core.pc.system.service;
 
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
+import com.weiziplus.springboot.common.enums.FunctionType;
+import com.weiziplus.springboot.common.enums.RoleIsStop;
 import com.weiziplus.springboot.core.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
 import com.weiziplus.springboot.common.models.SysFunction;
@@ -268,7 +270,7 @@ public class SysFunctionService extends BaseService {
             return null;
         }
         //当前角色禁用
-        if (SysRole.IS_STOP_DISABLE.equals(sysRole.getIsStop())) {
+        if (RoleIsStop.DISABLE.getValue().equals(sysRole.getIsStop())) {
             return null;
         }
         Set<String> resultList = new HashSet<>();
@@ -308,6 +310,10 @@ public class SysFunctionService extends BaseService {
         if (ToolUtils.isBlank(sysFunction.getTitle())) {
             return ResultUtils.error("标题不能为空");
         }
+        //判断类型是否正确
+        if (!FunctionType.contains(sysFunction.getType())) {
+            return ResultUtils.error("类型错误");
+        }
         SysFunction sysFun = baseFindOneDataByClassAndColumnAndValue(SysFunction.class, SysFunction.COLUMN_NAME, sysFunction.getName());
         if (null != sysFun) {
             return ResultUtils.error("name已存在");
@@ -342,6 +348,18 @@ public class SysFunctionService extends BaseService {
         if (null != sysFun && !sysFun.getId().equals(sysFunction.getId())) {
             return ResultUtils.error("name已存在");
         }
+        if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
+            sysFunction.setContainApi(sysFunction.getContainApi()
+                    .replaceAll("[^(a-zA-Z/，,)]*", "")
+                    .replace("，", ","));
+        }
+        //如果要修改为按钮
+        if (FunctionType.BUTTON.getValue().equals(sysFunction.getType())) {
+            List<SysFunction> list = mapper.getFunListByParentId(sysFunction.getId());
+            if (null != list && 0 < list.size()) {
+                return ResultUtils.error("有下级，不能修改为按钮");
+            }
+        }
         Long nowUserId = AdminTokenUtils.getUserIdByHttpServletRequest(request);
         if (!GlobalConfig.SUPER_ADMIN_ID.equals(nowUserId)) {
             //如果不是超级管理员，不能进行下面的操作
@@ -349,18 +367,6 @@ public class SysFunctionService extends BaseService {
             sysFunction.setType(null);
             sysFunction.setParentId(null);
             sysFunction.setContainApi(null);
-        }
-        if (!ToolUtils.isBlank(sysFunction.getContainApi())) {
-            sysFunction.setContainApi(sysFunction.getContainApi()
-                    .replaceAll("[^(a-zA-Z/，,)]*", "")
-                    .replace("，", ","));
-        }
-        //如果要修改为按钮
-        if (1 == sysFunction.getType()) {
-            List<SysFunction> list = mapper.getFunListByParentId(sysFunction.getId());
-            if (null != list && 0 < list.size()) {
-                return ResultUtils.error("有下级，不能修改为按钮");
-            }
         }
         RedisUtils.setExpireDeleteLikeKey(BASE_REDIS_KEY);
         baseUpdate(sysFunction);
