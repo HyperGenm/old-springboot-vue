@@ -17,11 +17,12 @@ mybatis:
   configuration:
     #IDEA的MyBatis Log插件以及控制台sql打印
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#禁用swagger,
+knife4j:
+  production: false
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
-  #是否启用swagger
-  swagger: true
   #图片存放路径--本地项目运行的target目录
   base-file-path: F:\Workspaces\weiziplus\github\springboot\target\classes\static
   #允许跨域地址(访问的浏览器的Origin,不设置默认*)---多个地址用,(英文逗号)分隔开---可精确到端口号

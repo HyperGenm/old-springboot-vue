@@ -21,11 +21,12 @@ mybatis:
   configuration-properties:
     # 文件存放域名前缀
     filePathPrefix: http://39.96.52.201/github
+#禁用swagger,
+knife4j:
+  production: true
 
 #自定义全局变量*******注意:  :后面要有空格
 global:
-  #是否启用swagger
-  swagger: false
   #图片存放路径--项目打包后的jar包同级目录static
   base-file-path: /home/template/build/static
   #允许跨域地址(访问的浏览器的Origin,不设置默认*)---多个地址用,(英文逗号)分隔开---可精确到端口号

@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.common.config;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -27,8 +28,10 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-@ConditionalOnProperty(prefix = "global", value = {"swagger"}, havingValue = "true")
+@EnableKnife4j
+@ConditionalOnProperty(prefix = "knife4j", value = {"production"}, havingValue = "false")
 public class SwaggerConfig {
+
     @Bean
     public Docket apiDocument() {
         List<ResponseMessage> responseMessageList = new ArrayList<>(7);
@@ -49,8 +52,29 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
-                .build()
-                .securitySchemes(securitySchemes());
+                .build();
+    }
+
+    @Bean
+    public Docket createApiRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .groupName("api")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.weiziplus.springboot.core.api"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean
+    public Docket createPcRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .groupName("pc")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.weiziplus.springboot.core.pc"))
+                .paths(PathSelectors.any())
+                .build();
     }
 
     /**
@@ -63,17 +87,8 @@ public class SwaggerConfig {
                 .title("springboot利用swagger2构建api文档")
                 .description("Swagger的RESTful风格API")
                 .version("1.0")
+                .contact(new Contact("WeiziPlus","",""))
                 .build();
     }
 
-    /**
-     * 设置右上角全局token
-     *
-     * @return
-     */
-    private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeyList = new ArrayList<>(1);
-        apiKeyList.add(new ApiKey(GlobalConfig.TOKEN, GlobalConfig.TOKEN, "header"));
-        return apiKeyList;
-    }
 }

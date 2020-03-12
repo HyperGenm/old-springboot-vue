@@ -20,8 +20,9 @@
         * *tip:多个用户同时登陆可能会被顶掉*
         * *tip:演示环境已经禁止增删改操作,报错忽视即可*
         * *tip:如果有其他异常，请强制刷新页面(有可能是缓存问题)*
-   * [接口文档](http://39.96.52.201/github/swagger-ui.html)
+   * [接口文档](http://39.96.52.201/github/doc.html)
         * *swagger*
+        * *tips:请求会提示404，请在请求前面手动添加/github*
 
 ## 部署
    * springboot目录下运行`mvn clean package`命令打包,打包后生成文件在/target/build目录下

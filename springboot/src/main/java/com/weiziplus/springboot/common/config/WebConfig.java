@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
                 // 放过swagger-ui
-                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/swagger-ui.html/**")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/swagger-ui.html/**", "/doc.html/**")
                 .addPathPatterns("/**");
     }
 
@@ -56,6 +56,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");

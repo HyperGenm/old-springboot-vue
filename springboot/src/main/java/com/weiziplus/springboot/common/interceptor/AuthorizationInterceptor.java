@@ -61,7 +61,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         //如果不是生产环境，并且请求的是swagger-ui，不检测时间戳
         if (!GlobalConfig.isSpringProfilesPro()
                 && !ToolUtils.isBlank(referer)
-                && referer.contains("swagger-ui.html")) {
+                && referer.contains("/doc.html")) {
             return true;
         }
         String timeStamp = request.getParameter("__t");
