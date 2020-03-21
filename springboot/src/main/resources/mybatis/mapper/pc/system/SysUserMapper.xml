@@ -9,7 +9,7 @@
         WHERE su.username = #{username}
         limit 1
     </select>
-    <select id="getUserList" resultType="com.weiziplus.springboot.core.pc.system.vo.SysUserVo">
+    <select id="getListVo" resultType="com.weiziplus.springboot.core.pc.system.vo.SysUserVo">
         SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.phone AS phone,
         su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName,
         su.last_ip_address AS laseIpAddress,CONCAT('${filePathPrefix}',su.icon) `icon`

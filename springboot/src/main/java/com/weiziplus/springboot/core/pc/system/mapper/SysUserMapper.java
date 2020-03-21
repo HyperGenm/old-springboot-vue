@@ -31,7 +31,7 @@ public interface SysUserMapper {
      * @param createTime
      * @return
      */
-    List<SysUserVo> getUserList(@Param("userName") String userName, @Param("roleId") Long roleId,
+    List<SysUserVo> getListVo(@Param("userName") String userName, @Param("roleId") Long roleId,
                                 @Param("allowLogin") Integer allowLogin, @Param("lastActiveTime") String lastActiveTime,
                                 @Param("createTime") String createTime);
 }

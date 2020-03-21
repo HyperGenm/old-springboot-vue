@@ -81,13 +81,13 @@ CREATE TABLE `sys_function`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '功能创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE COMMENT '功能名唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统功能表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_function
 -- ----------------------------
 INSERT INTO `sys_function` VALUES (1, 0, 'system', 'system', '系统管理', '', 0, 'el-icon-s-tools', 1, '后台的管理', '2019-05-09 16:55:47');
-INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 6, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
+INSERT INTO `sys_function` VALUES (2, 1, 'sysFunction', 'sysFunction', '功能管理', '/pc/sysFunction/getAllFunctionTreePageList,/pc/sysFunction/getAllFunctionTreeNotButton', 0, 'el-icon-s-tools', 7, '管理后台的菜单、按钮等。对应api可以将权限精确到接口', '2019-05-09 16:56:10');
 INSERT INTO `sys_function` VALUES (3, 1, 'sysRole', 'sysRole', '角色管理', '/pc/sysRole/getAllRoleTreePageList,/pc/sysRole/getRoleList,/pc/sysFunction/getAllFunctionTree', 0, 'el-icon-s-check', 2, '管理后台系统的各项角色，以及角色所拥有的功能等', '2019-05-09 16:56:26');
 INSERT INTO `sys_function` VALUES (4, 1, 'sysUser', 'sysUser', '用户管理', '/pc/sysUser/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-custom', 1, '管理后台的用户', '2019-05-09 16:56:52');
 INSERT INTO `sys_function` VALUES (5, 1, 'sysUserLog', 'sysUserLog', '系统日志管理', '/pc/sysUserLog/getPageList,/pc/sysRole/getRoleList', 0, 'el-icon-s-order', 4, '记录系统用户的操作', '2019-05-13 15:30:57');
@@ -108,6 +108,7 @@ INSERT INTO `sys_function` VALUES (19, 17, 'richText', 'richText', '富文本', 
 INSERT INTO `sys_function` VALUES (20, 1, 'ipManager', 'ipManager', 'ip管理', '', 0, '', 3, '对ip进行管理', '2020-02-24 20:04:42');
 INSERT INTO `sys_function` VALUES (21, 20, 'ipManager_get', 'ipManager_get', '查看', '/pc/dataDictionary/ipManager/getIpRole,/pc/dataDictionary/ipManager/getIpList', 1, '', 0, '', '2020-02-25 15:50:24');
 INSERT INTO `sys_function` VALUES (22, 1, 'userLog', 'userLog', '用户日志', '/pc/userLog/getPageList', 0, 'el-icon-s-order', 5, '用户日志', '2020-02-28 20:44:20');
+INSERT INTO `sys_function` VALUES (23, 1, 'sysError', 'sysError', '系统异常', '/pc/sysError/getPageList', 0, 'el-icon-s-order', 7, '系统异常', '2020-02-28 20:44:20');
 
 -- ----------------------------
 -- Table structure for sys_user_log
@@ -170,7 +171,7 @@ CREATE TABLE `sys_role_function`  (
   INDEX `function_id`(`function_id`) USING BTREE,
   CONSTRAINT `sys_role_function_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sys_role_function_ibfk_2` FOREIGN KEY (`function_id`) REFERENCES `sys_function` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 383 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 385 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_function
@@ -218,6 +219,7 @@ INSERT INTO `sys_role_function` VALUES (380, 666, 17);
 INSERT INTO `sys_role_function` VALUES (381, 666, 18);
 INSERT INTO `sys_role_function` VALUES (382, 666, 19);
 INSERT INTO `sys_role_function` VALUES (383, 1, 22);
+INSERT INTO `sys_role_function` VALUES (385, 1, 23);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -259,13 +261,13 @@ CREATE TABLE `user`  (
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '密码',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1000001 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:25:32');
-INSERT INTO `user` VALUES (1000001, 'ceshi', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:54:22');
+INSERT INTO `user` VALUES (2, 'ceshi', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:54:22');
 
 -- ----------------------------
 -- Table structure for user_log

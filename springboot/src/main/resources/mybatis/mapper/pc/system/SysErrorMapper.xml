@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysErrorMapper">
+    <select id="getList" resultType="SysError">
+        SELECT *
+        FROM sys_error
+        <where>
+            <if test="null != createTime and '' != createTime">
+                create_time LIKE CONCAT(#{createTime},'%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

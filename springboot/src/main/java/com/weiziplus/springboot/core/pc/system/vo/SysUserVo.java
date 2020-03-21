@@ -32,7 +32,7 @@ public class SysUserVo implements Serializable {
     private String phone;
 
     @ApiModelProperty("最后活跃时间")
-    private String laseActiveTime;
+    private String lastActiveTime;
 
     @ApiModelProperty("创建时间")
     private String createTime;

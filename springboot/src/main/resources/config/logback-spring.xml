@@ -51,7 +51,7 @@
 
     <!-- 开发环境-->
     <springProfile name="dev">
-        <logger name="com.weiziplus" level="DEBUG" additivity="false">
+        <logger name="com.weiziplus.springboot.core" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGFILE"/>
         </logger>
@@ -59,7 +59,7 @@
 
     <!-- 生产环境-->
     <springProfile name="pro">
-        <logger name="com.weiziplus" level="DEBUG" additivity="false">
+        <logger name="com.weiziplus.springboot" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="LOGFILE"/>
         </logger>

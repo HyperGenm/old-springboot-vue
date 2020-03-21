@@ -31,8 +31,12 @@ public class FileAsync {
     @Bean("deleteFile")
     public Executor deleteFile() {
         ThreadPoolTaskExecutor executor = AsyncConfig.createExecutor();
+        //线程池创建时候初始化的线程数
+        executor.setCorePoolSize(2);
         //线程池最大的线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
-        executor.setMaxPoolSize(10);
+        executor.setMaxPoolSize(3);
+        //用来缓冲执行任务的队列
+        executor.setQueueCapacity(50);
         //线程池名的前缀
         executor.setThreadNamePrefix("async-deleteFile-");
         //在调用者线程中运行

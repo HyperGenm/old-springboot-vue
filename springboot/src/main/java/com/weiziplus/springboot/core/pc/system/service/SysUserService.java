@@ -47,7 +47,7 @@ public class SysUserService extends BaseService {
             return ResultUtils.error("pageNum,pageSize错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<SysUserVo>> pageUtil = PageUtils.pageInfo(mapper.getUserList(userName, roleId, allowLogin, lastActiveTime, createTime));
+        PageUtils<List<SysUserVo>> pageUtil = PageUtils.pageInfo(mapper.getListVo(userName, roleId, allowLogin, lastActiveTime, createTime));
         return ResultUtils.success(pageUtil);
     }
 

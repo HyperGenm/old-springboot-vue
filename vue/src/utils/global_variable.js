@@ -106,6 +106,11 @@ const URL = {
             /*查看日志列表*/
             getPageList: '/userLog/getPageList',
         },
+        /*********************系统异常*****************/
+        sysError: {
+            /*查看日志列表*/
+            getPageList: '/sysError/getPageList',
+        },
     },
     /********字典管理*****************/
     dataDictionary: {
