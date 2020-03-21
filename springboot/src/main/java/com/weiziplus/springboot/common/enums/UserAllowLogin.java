@@ -17,13 +17,43 @@ public enum UserAllowLogin {
     ALLOW("允许", 0),
     FORBID("禁止", 1);
 
-    private String status;
+    private String name;
 
     private Integer value;
 
-    UserAllowLogin(String status, Integer value) {
-        this.status = status;
+    UserAllowLogin(String name, Integer value) {
+        this.name = name;
         this.value = value;
+    }
+
+    /**
+     * 根据value获取name
+     *
+     * @param value
+     * @return
+     */
+    public static String getNameByValue(Integer value) {
+        for (UserAllowLogin userAllowLogin : UserAllowLogin.values()) {
+            if (userAllowLogin.getValue().equals(value)) {
+                return userAllowLogin.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据name获取value
+     *
+     * @param name
+     * @return
+     */
+    public static Integer getValueByName(String name) {
+        for (UserAllowLogin value : UserAllowLogin.values()) {
+            if (value.getName().equals(name)) {
+                return value.getValue();
+            }
+        }
+        return null;
     }
 
     /**

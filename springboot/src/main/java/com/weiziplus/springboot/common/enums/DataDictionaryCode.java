@@ -15,9 +15,9 @@ public enum DataDictionaryCode {
      * 字典表code枚举
      */
     IP_ROLE("ip规则", "ipRole"),
-    IP_LIST_WHITE("ip白名单","ipListWhite"),
-    IP_LIST_BLACK("ip黑名单","ipListBlack"),
-    IP_LIST_ABNORMAL("异常ip","ipListAbnormal");
+    IP_LIST_WHITE("ip白名单", "ipListWhite"),
+    IP_LIST_BLACK("ip黑名单", "ipListBlack"),
+    IP_LIST_ABNORMAL("异常ip", "ipListAbnormal");
 
     private String name;
 
@@ -26,6 +26,36 @@ public enum DataDictionaryCode {
     DataDictionaryCode(String name, String code) {
         this.name = name;
         this.code = code;
+    }
+
+    /**
+     * 根据code获取name
+     *
+     * @param code
+     * @return
+     */
+    public static String getNameByCode(String code) {
+        for (DataDictionaryCode value : DataDictionaryCode.values()) {
+            if (value.getCode().equals(code)) {
+                return value.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据name获取code
+     *
+     * @param name
+     * @return
+     */
+    public static String getCodeByName(String name) {
+        for (DataDictionaryCode value : DataDictionaryCode.values()) {
+            if (value.getName().equals(name)) {
+                return value.getCode();
+            }
+        }
+        return null;
     }
 
     /**

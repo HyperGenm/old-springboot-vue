@@ -32,8 +32,21 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "knife4j", value = {"production"}, havingValue = "false")
 public class SwaggerConfig {
 
-    @Bean
-    public Docket apiDocument() {
+    /**
+     * 设置swagger信息
+     *
+     * @return
+     */
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("springboot利用swagger2构建api文档")
+                .description("Swagger的RESTful风格API")
+                .version("1.0")
+                .contact(new Contact("WeiziPlus", "", ""))
+                .build();
+    }
+
+    private Docket apiDocument() {
         List<ResponseMessage> responseMessageList = new ArrayList<>(7);
         responseMessageList.add(new ResponseMessageBuilder().code(200).message("success").build());
         responseMessageList.add(new ResponseMessageBuilder().code(400).message("缺少参数").build());
@@ -57,8 +70,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createApiRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+        return apiDocument()
                 .groupName("api")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.weiziplus.springboot.core.api"))
@@ -68,27 +80,11 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createPcRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+        return apiDocument()
                 .groupName("pc")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.weiziplus.springboot.core.pc"))
                 .paths(PathSelectors.any())
                 .build();
     }
-
-    /**
-     * 设置swagger信息
-     *
-     * @return
-     */
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("springboot利用swagger2构建api文档")
-                .description("Swagger的RESTful风格API")
-                .version("1.0")
-                .contact(new Contact("WeiziPlus","",""))
-                .build();
-    }
-
 }

@@ -27,6 +27,36 @@ public enum RoleIsStop {
     }
 
     /**
+     * 根据value获取name
+     *
+     * @param value
+     * @return
+     */
+    public static String getNameByValue(Integer value) {
+        for (RoleIsStop roleIsStop : RoleIsStop.values()) {
+            if (roleIsStop.getValue().equals(value)) {
+                return roleIsStop.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据name获取value
+     *
+     * @param name
+     * @return
+     */
+    public static Integer getValueByName(String name) {
+        for (RoleIsStop value : RoleIsStop.values()) {
+            if (value.getName().equals(name)) {
+                return value.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
      * 判断是否存在某个值
      *
      * @param value

@@ -27,6 +27,36 @@ public enum FunctionType {
     }
 
     /**
+     * 根据value获取name
+     *
+     * @param value
+     * @return
+     */
+    public static String getNameByValue(Integer value) {
+        for (FunctionType type : FunctionType.values()) {
+            if (type.getValue().equals(value)) {
+                return type.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据name获取value
+     *
+     * @param name
+     * @return
+     */
+    public static Integer getValueByName(String name) {
+        for (FunctionType type : FunctionType.values()) {
+            if (type.getName().equals(name)) {
+                return type.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
      * 判断是否存在某个值
      *
      * @param value

@@ -29,6 +29,36 @@ public enum RequestType {
     }
 
     /**
+     * 根据value获取name
+     *
+     * @param value
+     * @return
+     */
+    public static String getNameByValue(Integer value) {
+        for (RequestType type : RequestType.values()) {
+            if (type.getValue().equals(value)) {
+                return type.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据name获取value
+     *
+     * @param name
+     * @return
+     */
+    public static Integer getValueByName(String name) {
+        for (RequestType type : RequestType.values()) {
+            if (type.getName().equals(name)) {
+                return type.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
      * 判断是否存在某个值
      *
      * @param value
@@ -42,6 +72,5 @@ public enum RequestType {
         }
         return false;
     }
-
 
 }
