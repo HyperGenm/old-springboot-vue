@@ -3,12 +3,11 @@ package com.weiziplus.springboot.common.util;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,48 +70,61 @@ public class HttpRequestUtils {
     }
 
     /**
-     * 获取请求User-Agent信息
+     * post请求
+     * 私有方法，根据实际情况自定义公共方法
      *
-     * @param request
+     * @param url
+     * @param paramsJsonStr
      * @return
      */
-    public static String getUserAgent(HttpServletRequest request) {
-        return request.getHeader("User-Agent");
-    }
-
-    public static String post(String url, List<NameValuePair> params) {
+    private static ResultUtils<String> post(String url, String paramsJsonStr) {
         CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom()
                 .setConnectionRequestTimeout(2000).setConnectTimeout(2000).setSocketTimeout(2000).build()).build();
         try {
             HttpPost post = new HttpPost(url);
-            if (null != params) {
-                UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, StandardCharsets.UTF_8);
-                post.setEntity(urlEncodedFormEntity);
+            if (!ToolUtils.isBlank(paramsJsonStr)) {
+                StringEntity stringEntity = new StringEntity(paramsJsonStr, StandardCharsets.UTF_8);
+                stringEntity.setContentEncoding(StandardCharsets.UTF_8.name());
+                stringEntity.setContentType("application/x-www-form-urlencoded;charset=utf-8");
+                post.setEntity(stringEntity);
             }
             post.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             CloseableHttpResponse response = client.execute(post);
             if (HttpServletResponse.SC_OK != response.getStatusLine().getStatusCode()) {
                 log.warn("网络请求出错:url" + url + "---状态码:" + response.getStatusLine().getStatusCode() + "---详情:" + response);
-                return null;
+                return ResultUtils.error("网络请求出错，详情:" + response);
             }
             HttpEntity entity = response.getEntity();
             if (null == entity) {
-                return null;
+                return ResultUtils.error("网络请求出错，详情:" + response);
             }
             String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
             EntityUtils.consume(entity);
-            return result;
+            return ResultUtils.success(result);
         } catch (Exception e) {
             log.warn("请求出错" + e);
-            return null;
+            return ResultUtils.error("网络请求出错，详情:" + e);
         }
     }
 
-    public static String post(String url) {
+    /**
+     * post请求无参数
+     *
+     * @param url
+     * @return
+     */
+    private static ResultUtils<String> post(String url) {
         return post(url, null);
     }
 
-    public static String get(String url, Map<String, String> params) {
+    /**
+     * get请求
+     *
+     * @param url
+     * @param params
+     * @return
+     */
+    private static ResultUtils<String> get(String url, Map<String, String> params) {
         if (null != params) {
             StringBuilder stringBuilder = new StringBuilder(url);
             boolean flag = false;
@@ -138,22 +149,28 @@ public class HttpRequestUtils {
             CloseableHttpResponse response = client.execute(get);
             if (HttpServletResponse.SC_OK != response.getStatusLine().getStatusCode()) {
                 log.warn("网络请求出错:url" + url + "---状态码:" + response.getStatusLine().getStatusCode() + "---详情:" + response);
-                return null;
+                return ResultUtils.error("网络请求出错，详情:" + response);
             }
             HttpEntity entity = response.getEntity();
             if (null == entity) {
-                return null;
+                return ResultUtils.error("网络请求出错，详情:" + response);
             }
             String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
             EntityUtils.consume(entity);
-            return result;
+            return ResultUtils.success(result);
         } catch (Exception e) {
             log.warn("请求出错" + e);
-            return null;
+            return ResultUtils.error("网络请求出错，详情:" + e);
         }
     }
 
-    public static String get(String url) {
+    /**
+     * get请求无参数
+     *
+     * @param url
+     * @return
+     */
+    private static ResultUtils<String> get(String url) {
         return get(url, null);
     }
 
