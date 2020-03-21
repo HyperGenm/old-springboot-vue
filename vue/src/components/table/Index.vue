@@ -374,8 +374,6 @@
         watch: {
             notRequestTableData(data) {
                 this.tableData = data;
-                //重新渲染高度
-                this.initTableMaxHeight();
             }
         },
         mounted() {
@@ -385,6 +383,18 @@
             } else {
                 //获取数据
                 this.getTableList();
+            }
+            let {url} = this.tableDataRequest;
+            let columns = localStorage.getItem(`wei-table-columns-${url}`);
+            //如果本地有展示的字段
+            if (null != columns && 0 < columns.length) {
+                //json字符串反序列化，字符串方法还原
+                this.tableShowColumns = JSON.parse(columns, function (k, v) {
+                    if (v.indexOf && v.indexOf('function') > -1) {
+                        return eval("(function(){return " + v + " })()")
+                    }
+                    return v;
+                });
             }
             //初始化表格高度
             this.initTableMaxHeight();
@@ -517,13 +527,21 @@
                         columns.push(tableColumns[i]);
                     }
                 }
+                if (null == columns || 0 >= columns.length) {
+                    this.$globalFun.errorMsg("至少要有一个展示的字段");
+                    return;
+                }
                 this.tableShowColumns = columns;
-                //初始化表格高度
-                this.initTableMaxHeight();
-                //重新渲染表格布局
-                this.$nextTick(() => {
-                    this.$refs['table'].doLayout()
-                });
+                let {url} = this.tableDataRequest;
+                //将展示的字段放入本地
+                //json对象序列化，并将里面的方法转为字符串
+                localStorage.setItem(`wei-table-columns-${url}`, JSON.stringify(columns, function (key, val) {
+                        if (typeof val === 'function') {
+                            return val + '';
+                        }
+                        return val;
+                    }
+                ));
                 this.columnChangeDialog = false;
             },
             //表格内部操作按钮是否折叠展示

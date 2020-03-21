@@ -1,6 +1,7 @@
 <template>
     <div id="dialog">
-        <el-dialog :title="title" :visible.sync="visible" :modal-append-to-body="modelAppendToBody"
+        <el-dialog :title="title" :visible.sync="visible"
+                   :modal-append-to-body="modelAppendToBody" :append-to-body="appendToBody"
                    @close="$emit('update:show', false)">
             <slot></slot>
         </el-dialog>
@@ -24,6 +25,10 @@
             modelAppendToBody: {
                 type: Boolean,
                 default: false
+            },
+            appendToBody: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
