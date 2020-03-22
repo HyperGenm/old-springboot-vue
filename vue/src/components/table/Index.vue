@@ -385,7 +385,8 @@
                 this.getTableList();
             }
             let {url} = this.tableDataRequest;
-            let columns = localStorage.getItem(`wei-table-columns-${url}`);
+            let {id} = this.$store.state.userInfo;
+            let columns = localStorage.getItem(`wei-table-columns-${id}-${url}`);
             //如果本地有展示的字段
             if (null != columns && 0 < columns.length) {
                 //json字符串反序列化，字符串方法还原
@@ -455,7 +456,7 @@
                         sessionStorage.setItem('loginStatus', 'logout');
                         let timer = setTimeout(() => {
                             clearTimeout(timer);
-                            that.$router.replace('login');
+                            that.$router.replace('/login');
                         }, 3000);
                         return;
                     }
@@ -533,9 +534,10 @@
                 }
                 this.tableShowColumns = columns;
                 let {url} = this.tableDataRequest;
+                let {id} = this.$store.state.userInfo;
                 //将展示的字段放入本地
                 //json对象序列化，并将里面的方法转为字符串
-                localStorage.setItem(`wei-table-columns-${url}`, JSON.stringify(columns, function (key, val) {
+                localStorage.setItem(`wei-table-columns-${id}-${url}`, JSON.stringify(columns, function (key, val) {
                         if (typeof val === 'function') {
                             return val + '';
                         }

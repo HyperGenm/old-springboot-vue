@@ -312,7 +312,7 @@
                         sessionStorage.setItem('loginStatus', 'logout');
                         let that = this;
                         let timer = setTimeout(() => {
-                            that.$router.replace('login');
+                            that.$router.replace('/login');
                             clearTimeout(timer);
                         }, 3000);
                         return;

@@ -18,15 +18,12 @@ if (process.env.NODE_ENV !== 'production') {
         return originalPush.call(this, location).catch(err => err)
     };
 }
-
-const baseRouters = [
-    {path: '/login', name: 'login', component: () => import('@/views/login/Index')}
-];
-
 const router = new Router({
     // mode: 'history',
     base: process.env.BASE_URL,
-    routes: baseRouters
+    routes: [
+        {path: '/login', name: 'login', component: () => import('@/views/login/Index')}
+    ]
 });
 
 /**
@@ -45,33 +42,71 @@ function clearAxiosCancelToken() {
  * @returns {{children: Array, haveHomePage: boolean}}
  */
 function handleRouterChildren() {
-    let routers = store.state.routers.routers;
-    let children = [];
+    let routersTree = store.state.routers.routersTree;
+    let routers = [];
     let haveHomePage = false;
-    routers.forEach((value) => {
+    routersTree.forEach((value) => {
         if ('home' === value['name']) {
             haveHomePage = true;
         }
         let router = {
-            path: value.path,
-            name: value.name,
+            path: "/" + value.path,
+            name: value.path,
             meta: {
-                title: value.meta.title,
-                icon: value.meta.icon
+                title: value.title,
+                icon: value.icon
             }
         };
-        try {
-            router['components'] = require('@/views/index/' + value.components_bak + '/Index');
-        } catch (e) {
-            console.debug(value.path, '没有找到对应组件');
-            router['components'] = require(`@/views/errorPage/404`);
+        let children = value.children;
+        //如果存在子级
+        if (null != children && 0 < children.length) {
+            router['components'] = require('@/views/station/Index.vue');
+            router['redirect'] = `/${value.path}/${children[0]['path']}`;
+            router['children'] = childrenRouter(value.path, children);
+        } else {
+            try {
+                router['components'] = require(`@/views/index/${value.path}/Index.vue`);
+            } catch (e) {
+                console.debug(value.path, '没有找到对应组件', '---详情', e);
+                router['components'] = require(`@/views/errorPage/404.vue`);
+            }
         }
-        router['components_bak'] = value.components_bak;
-        children.push(router);
+        routers.push(router);
     });
     return {
-        children, haveHomePage
+        haveHomePage,
+        children: routers
     };
+}
+
+function childrenRouter(parentPath, data) {
+    let routers = [];
+    data.forEach((value) => {
+        let router = {
+            path: value.path,
+            name: value.path,
+            meta: {
+                title: value.title,
+                icon: value.icon
+            }
+        };
+        let children = value.children;
+        //如果存在子级
+        if (null != children && 0 < children.length) {
+            router['components'] = require('@/views/station/Index.vue');
+            router['redirect'] = `/${parentPath}/${value.path}/${children[0]['path']}`;
+            router['children'] = childrenRouter(parentPath + '/' + value.path, children);
+        } else {
+            try {
+                router['components'] = require(`@/views/index/${parentPath}/${value.path}/Index.vue`);
+            } catch (e) {
+                console.debug(value.path, '没有找到对应组件', '---详情', e);
+                router['components'] = require(`@/views/errorPage/404.vue`);
+            }
+        }
+        routers.push(router);
+    });
+    return routers;
 }
 
 router.beforeEach((to, from, next) => {
@@ -88,7 +123,7 @@ router.beforeEach((to, from, next) => {
         let {children, haveHomePage} = handleRouterChildren();
         let parentRouters = [{
             path: '/',
-            components: require('@/views/layout/Index'),
+            components: require('@/views/layout/Index.vue'),
             name: 'index',
             children
         }];
@@ -100,7 +135,7 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-router.afterEach(transition => {
+router.afterEach(() => {
     //关闭浏览器上方的进度条
     NProgress.done();
 });

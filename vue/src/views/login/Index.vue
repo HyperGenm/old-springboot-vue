@@ -109,7 +109,7 @@
                             }
                             let {userInfo, token, role, routerTree} = res.data;
                             if (null == routerTree || 0 >= routerTree.length) {
-                                that.$globalFun.errorMsg("您还没有可用菜单，请联系管理员添加")
+                                that.$globalFun.errorMsg("您还没有可用菜单，请联系管理员添加");
                                 return;
                             }
                             that.$store.dispatch('setUserInfo', userInfo);
@@ -132,71 +132,73 @@
                 let routers = [];
                 let haveHomePage = false;
                 data.forEach((value) => {
+                    //如果有首页优先展示首页
                     if ('home' === value['name']) {
                         haveHomePage = true;
                     }
                     let router = {
-                        path: "/" + value.name,
-                        name: value.name,
+                        path: "/" + value.path,
+                        name: value.path,
                         meta: {
                             title: value.title,
                             icon: value.icon
                         }
                     };
                     let children = value.children;
-                    if (null == children || 0 >= children.length) {
-                        try {
-                            router['components'] = require(`@/views/index/${value.path}/Index`);
-                        } catch (e) {
-                            console.debug(value.path, '没有找到对应组件');
-                            router['components'] = require(`@/views/errorPage/404`);
-                        }
-                        router['components_bak'] = value.path;
-                        routers.push(router);
+                    //如果存在子级
+                    if (null != children && 0 < children.length) {
+                        router['components'] = require('@/views/station/Index');
+                        router['redirect'] = `/${value.path}/${children[0]['path']}`;
+                        router['children'] = that.childrenRouter(value.path, children);
                     } else {
-                        let childrenRouters = that.childrenRouter(value.path, children);
-                        routers = routers.concat(childrenRouters);
+                        try {
+                            router['components'] = require(`@/views/index/${value.path}/Index.vue`);
+                        } catch (e) {
+                            console.debug(value.path, '没有找到对应组件', '---详情', e);
+                            router['components'] = require(`@/views/errorPage/404.vue`);
+                        }
                     }
+                    routers.push(router);
                 });
                 let parentRouters = [{
                     path: '/',
-                    components: require('@/views/layout/Index'),
+                    components: require('@/views/layout/Index.vue'),
                     name: 'index',
                     children: routers
                 }];
                 this.$store.dispatch('setRouters', {
-                    routers: routers,
                     routersTree: data
                 });
                 this.$router.addRoutes(parentRouters);
                 this.$router.push(haveHomePage ? '/home' : routers[0]['path'] || '/');
             },
-            childrenRouter(parentName, data) {
+            childrenRouter(parentPath, data) {
                 let routers = [];
                 let that = this;
                 data.forEach((value) => {
                     let router = {
-                        path: "/" + value.name,
-                        name: value.name,
+                        path: value.path,
+                        name: value.path,
                         meta: {
                             title: value.title,
                             icon: value.icon
                         }
                     };
                     let children = value.children;
-                    if (null == children || 0 >= children.length) {
-                        try {
-                            router['components'] = require(`@/views/index/${parentName}/${value.path}/Index`);
-                        } catch (e) {
-                            console.debug(value.path, '没有找到对应组件');
-                            router['components'] = require(`@/views/errorPage/404`);
-                        }
-                        router['components_bak'] = parentName + '/' + value.path;
-                        routers.push(router);
+                    //如果存在子级
+                    if (null != children && 0 < children.length) {
+                        router['components'] = require('@/views/station/Index.vue');
+                        router['redirect'] = `/${parentPath}/${value.path}/${children[0]['path']}`;
+                        router['children'] = that.childrenRouter(parentPath + '/' + value.path, children);
                     } else {
-                        let childrenRouters = that.childrenRouter(parentName + '/' + value.path, children);
-                        routers = routers.concat(childrenRouters);
+                        try {
+                            router['components'] = require(`@/views/index/${parentPath}/${value.path}/Index.vue`);
+                        } catch (e) {
+                            console.debug(value.path, '没有找到对应组件', '---详情', e);
+                            router['components'] = require(`@/views/errorPage/404.vue`);
+                        }
                     }
+                    routers.push(router);
                 });
                 return routers;
             }
