@@ -292,4 +292,23 @@ CREATE TABLE `user_log`  (
 -- ----------------------------
 INSERT INTO `user_log` VALUES (1, 1, '/user/getInfo', '{\"pageSize\":[\"20\"],\"pageNum\":[\"1\"]}', 1,'获取用户信息', '127.0.0.1', '2020-02-28 21:02:46');
 
+-- ----------------------------
+-- Table structure for sys_error
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_error`;
+CREATE TABLE `sys_error`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '类名',
+  `method_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '方法名',
+  `line_number` int(11) NOT NULL DEFAULT 0 COMMENT '第几行',
+  `content` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '详情',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统异常' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_error
+-- ----------------------------
+INSERT INTO `sys_error` VALUES (1, 'org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator', 'doTranslate', 242, 'org.springframework.dao.DuplicateKeyException: \r\n### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: ', '2020-03-21 15:21:12');
+
 SET FOREIGN_KEY_CHECKS = 1;
