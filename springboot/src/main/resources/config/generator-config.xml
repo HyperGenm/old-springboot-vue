@@ -53,11 +53,11 @@
         <!--该元素有一个必选属性：
         tableName：指定要生成的表名，可以使用SQL通配符匹配多个表。
         例如要生成全部的表，可以按如下配置：-->
-        <table tableName="user" enableCountByExample="false"
+        <table tableName="t_user" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-            <!--去除生成的W前缀-->
-            <!--<domainObjectRenamingRule searchString="^W" replaceString=""/>-->
+            <!--去除生成的T前缀-->
+            <domainObjectRenamingRule searchString="^T" replaceString=""/>
         </table>
     </context>
 </generatorConfiguration>

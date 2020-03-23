@@ -58,11 +58,9 @@ public class MyBatisPlugin extends PluginAdapter {
         //将字段设置为当前类的静态常量
         List<IntrospectedColumn> allColumns = introspectedTable.getAllColumns();
         for (IntrospectedColumn column : allColumns) {
-            Field field = new Field();
             String columnName = column.getActualColumnName();
-            field.setName("COLUMN_" + columnName.toUpperCase());
+            Field field = new Field("COLUMN_" + columnName.toUpperCase(), FullyQualifiedJavaType.getStringInstance());
             field.setInitializationString("\"" + columnName + "\"");
-            field.setType(FullyQualifiedJavaType.getStringInstance());
             field.setVisibility(JavaVisibility.PUBLIC);
             field.setFinal(true);
             field.setStatic(true);

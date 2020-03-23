@@ -21,9 +21,9 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("user")
+@Table("t_user")
 @Accessors(chain = true)
-@Alias("User")
+@Alias("TUser")
 @ApiModel("用户表")
 public class User implements Serializable {
     /**

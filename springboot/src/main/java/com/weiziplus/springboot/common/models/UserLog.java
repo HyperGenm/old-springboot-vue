@@ -20,9 +20,9 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("user_log")
+@Table("t_user_log")
 @Accessors(chain = true)
-@Alias("UserLog")
+@Alias("TUserLog")
 @ApiModel("用户日志")
 public class UserLog implements Serializable {
     /**
