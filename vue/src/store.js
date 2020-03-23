@@ -10,8 +10,6 @@ let state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem(
     token: '',
     userInfo: {},
     routers: {
-        //用户路由列表
-        routers: [],
         //用户路由树
         routersTree: []
     },
@@ -45,7 +43,6 @@ export default new Vuex.Store({
         },
         clearRouters(state) {
             state.routers = {
-                routers: [],
                 routersTree: []
             };
         },
@@ -63,7 +60,6 @@ export default new Vuex.Store({
                 token: '',
                 userInfo: {},
                 routers: {
-                    routers: [],
                     routersTree: []
                 }
             };
