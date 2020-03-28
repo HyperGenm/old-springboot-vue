@@ -557,12 +557,41 @@ public class BaseService {
         String tableName = getTableName(clazz);
         //判断实体类是否包含该字段
         if (!classIsContainsColumn(clazz, column)) {
-            return null;
+            throw new RuntimeException("当前实体类" + clazz + "找不到该字段" + column + ";请使用实体类的静态常量");
         }
         Map<String, Object> byId = mapper.findOneDataByColumn(new HashMap<String, Object>(3) {{
             put("TABLE_NAME", tableName);
             put("COLUMN", column);
             put("value", object);
+        }});
+        if (null == byId) {
+            return null;
+        }
+        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+    }
+
+    /**
+     * 根据实体类和字段和值的map获取一条数据
+     *
+     * @param clazz
+     * @param map
+     * @param <T>
+     * @return
+     */
+    protected <T> T baseFindOneDataByClassAndColumnAndValueMap(Class<T> clazz, Map<String, Object> map) {
+        if (null == clazz || null == map || 0 >= map.size()) {
+            return null;
+        }
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含字段
+        for (String key : map.keySet()) {
+            if (!classIsContainsColumn(clazz, key)) {
+                throw new RuntimeException("当前实体类" + clazz + "找不到该字段" + key + ";请使用实体类的静态常量");
+            }
+        }
+        Map<String, Object> byId = mapper.findOneDataByColumnMap(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN_VALUE_MAP", map);
         }});
         if (null == byId) {
             return null;
@@ -586,7 +615,7 @@ public class BaseService {
         String tableName = getTableName(clazz);
         //判断实体类是否包含该字段
         if (!classIsContainsColumn(clazz, column)) {
-            return null;
+            throw new RuntimeException("当前实体类" + clazz + "找不到该字段" + column + ";请使用实体类的静态常量");
         }
         List<Map<String, Object>> listByColumn = mapper.findListByColumn(new HashMap<String, Object>(3) {{
             put("TABLE_NAME", tableName);
@@ -597,6 +626,35 @@ public class BaseService {
             return null;
         }
         return JSONArray.parseArray(JSON.toJSONString(listByColumn), clazz);
+    }
+
+    /**
+     * 根据实体类和字段和值map获取列表
+     *
+     * @param clazz
+     * @param map
+     * @param <T>
+     * @return
+     */
+    protected <T> List<T> baseFindListByClassAndColumnAndValueMap(Class<T> clazz, Map<String, Object> map) {
+        if (null == clazz || null == map || 0 >= map.size()) {
+            return null;
+        }
+        String tableName = getTableName(clazz);
+        //判断实体类是否包含字段
+        for (String key : map.keySet()) {
+            if (!classIsContainsColumn(clazz, key)) {
+                throw new RuntimeException("当前实体类" + clazz + "找不到该字段" + key + ";请使用实体类的静态常量");
+            }
+        }
+        List<Map<String, Object>> listByColumnMap = mapper.findListByColumnMap(new HashMap<String, Object>(2) {{
+            put("TABLE_NAME", tableName);
+            put("COLUMN_VALUE_MAP", map);
+        }});
+        if (null == listByColumnMap) {
+            return null;
+        }
+        return JSONArray.parseArray(JSON.toJSONString(listByColumnMap), clazz);
     }
 
     /**

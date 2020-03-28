@@ -122,6 +122,24 @@ public interface BaseMapper {
     Map<String, Object> findOneDataByColumn(Map<String, Object> map);
 
     /**
+     * 根据表名和字段以及值map获取一条数据
+     *
+     * @param map
+     * @return
+     */
+    @Select("<script>" +
+            "SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "<where> \r\n" +
+            "   <foreach collection='COLUMN_VALUE_MAP' index='key' item='value'  separator='AND'> \r\n" +
+            "       ${key} = #{value} \r\n" +
+            "   </foreach> \r\n" +
+            "</where> \r\n" +
+            "LIMIT 1 " +
+            "</script>")
+    Map<String, Object> findOneDataByColumnMap(Map<String, Object> map);
+
+    /**
      * 根据表名和字段以及值获取列表
      *
      * @param map
@@ -132,6 +150,23 @@ public interface BaseMapper {
             "FROM `${TABLE_NAME}` \r\n " +
             "WHERE `${COLUMN}` = #{value} \r\n ")
     List<Map<String, Object>> findListByColumn(Map<String, Object> map);
+
+    /**
+     * 根据表名和字段以及值map获取一条数据
+     *
+     * @param map
+     * @return
+     */
+    @Select("<script>" +
+            "SELECT * \r\n " +
+            "FROM `${TABLE_NAME}` \r\n " +
+            "<where> \r\n" +
+            "   <foreach collection='COLUMN_VALUE_MAP' index='key' item='value'  separator='AND'> \r\n" +
+            "       ${key} = #{value} \r\n" +
+            "   </foreach> \r\n" +
+            "</where> \r\n" +
+            "</script>")
+    List<Map<String, Object>> findListByColumnMap(Map<String, Object> map);
 
     /**
      * 获取所有数据

@@ -233,7 +233,7 @@ CREATE TABLE `sys_user`  (
   `role_id` int(7) NOT NULL DEFAULT 0 COMMENT '系统角色表id',
   `allow_login` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否允许登录;0:允许，1:禁止',
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'logo.jpg' COMMENT '用户头像',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '/logo.jpg' COMMENT '用户头像',
   `last_ip_address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户最后活跃ip地址',
   `last_active_time` datetime(0) NULL DEFAULT NULL COMMENT '用户最后活跃时间',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
