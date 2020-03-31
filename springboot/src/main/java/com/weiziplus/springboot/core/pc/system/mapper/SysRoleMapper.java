@@ -41,15 +41,6 @@ public interface SysRoleMapper {
     SysRole getMinParentIdRoleInfo();
 
     /**
-     * 根据id和isStop修改角色状态
-     *
-     * @param id
-     * @param isStop
-     * @return
-     */
-    int changeRoleIsStopByIdAndIsStop(@Param("id") Integer id, @Param("isStop") Integer isStop);
-
-    /**
      * 获取所有角色列表
      *
      * @return

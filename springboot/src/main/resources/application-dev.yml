@@ -15,7 +15,7 @@ mybatis:
   # 文件存放域名前缀
     filePathPrefix: http://127.0.0.1:8080
   configuration:
-    #IDEA的MyBatis Log插件以及控制台sql打印
+    #IDEA的MyBatis Log插件以及控制台sql打印,dev打包部署不注释该代码，sql不会保存到日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #禁用swagger,
 knife4j:

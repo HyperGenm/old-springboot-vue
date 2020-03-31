@@ -3,12 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper">
-    <select id="getInfoByUsername" resultType="SysUser">
-        SELECT CONCAT('${filePathPrefix}',icon) `icon`,su.*
-        FROM sys_user su
-        WHERE su.username = #{username}
-        limit 1
-    </select>
     <select id="getListVo" resultType="com.weiziplus.springboot.core.pc.system.vo.SysUserVo">
         SELECT su.id,su.username,su.real_name as realName,su.allow_login AS allowLogin,su.phone AS phone,
         su.last_active_time AS lastActiveTime,su.create_time AS createTime,IFNULL(sr.name,'暂无权限') AS roleName,

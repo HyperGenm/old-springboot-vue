@@ -1,6 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.service;
 
 import com.weiziplus.springboot.common.base.BaseService;
+import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.enums.RoleIsStop;
 import com.weiziplus.springboot.common.enums.UserAllowLogin;
 import com.weiziplus.springboot.common.models.SysRole;
@@ -99,7 +100,7 @@ public class AdminLoginService extends BaseService {
             RedisUtils.delete(redisKey);
             return ResultUtils.error("验证码错误");
         }
-        SysUser sysUser = sysUserMapper.getInfoByUsername(username);
+        SysUser sysUser = baseFindOneDataByClassAndColumnAndValue(SysUser.class, SysUser.COLUMN_USERNAME, username);
         if (null == sysUser || !sysUser.getPassword().equals(Md5Utils.encode(password))) {
             return ResultUtils.error("用户名或密码错误");
         }
@@ -117,7 +118,8 @@ public class AdminLoginService extends BaseService {
         if (null == token) {
             return ResultUtils.error("登录失败，请重试");
         }
-        sysUser.setPassword(null);
+        sysUser.setPassword(null)
+                .setIcon(GlobalConfig.getMybatisFilePathPrefix() + sysUser.getIcon());
         Map<String, Object> map = new HashMap<>(5);
         map.put("token", token);
         map.put("userInfo", sysUser);

@@ -15,9 +15,4 @@
         WHERE parent_id = #{parentId}
         ORDER BY sort ASC,parent_id ASC
     </select>
-    <update id="changeRoleIsStopByIdAndIsStop">
-        UPDATE sys_role
-        SET is_stop = #{isStop}
-        WHERE id = #{id}
-    </update>
 </mapper>

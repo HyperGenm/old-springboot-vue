@@ -49,20 +49,9 @@
         <appender-ref ref="LOGFILE"/>
     </root>
 
-    <!-- 开发环境-->
-    <springProfile name="dev">
-        <logger name="com.weiziplus.springboot.core" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="LOGFILE"/>
-        </logger>
-    </springProfile>
-
-    <!-- 生产环境-->
-    <springProfile name="pro">
-        <logger name="com.weiziplus.springboot" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="LOGFILE"/>
-        </logger>
-    </springProfile>
+    <logger name="com.weiziplus.springboot" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGFILE"/>
+    </logger>
 
 </configuration>

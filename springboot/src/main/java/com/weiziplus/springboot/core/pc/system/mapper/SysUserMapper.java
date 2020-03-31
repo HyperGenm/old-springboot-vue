@@ -1,6 +1,5 @@
 package com.weiziplus.springboot.core.pc.system.mapper;
 
-import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.core.pc.system.vo.SysUserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,13 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface SysUserMapper {
-    /**
-     * 根据登录名获取用户信息
-     *
-     * @param username
-     * @return
-     */
-    SysUser getInfoByUsername(@Param("username") String username);
 
     /**
      * 获取系统用户列表

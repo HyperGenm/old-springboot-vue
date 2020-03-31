@@ -331,7 +331,10 @@ public class SysRoleService extends BaseService {
         RedisUtils.setExpireDeleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
         Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         try {
-            mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
+            SysRole role = new SysRole()
+                    .setId(roleId)
+                    .setIsStop(isStop);
+            baseUpdate(role);
             for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
                 findChildrenChangeIsStop(sysRole.getId(), isStop);
             }
@@ -352,7 +355,10 @@ public class SysRoleService extends BaseService {
      * @param isStop
      */
     private void findChildrenChangeIsStop(Integer roleId, Integer isStop) throws Exception {
-        mapper.changeRoleIsStopByIdAndIsStop(roleId, isStop);
+        SysRole role = new SysRole()
+                .setId(roleId)
+                .setIsStop(isStop);
+        baseUpdate(role);
         for (SysRole sysRole : mapper.getRoleListByParentId(roleId)) {
             findChildrenChangeIsStop(sysRole.getId(), isStop);
         }
