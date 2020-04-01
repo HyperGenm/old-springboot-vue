@@ -3,12 +3,14 @@ package com.weiziplus.springboot.common.filter;
 import com.alibaba.fastjson.JSON;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
+import com.weiziplus.springboot.common.util.Md5Utils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.core.pc.dictionary.service.DataDictionaryIpManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -57,7 +59,7 @@ public class IpFilter extends BaseService implements Filter {
         if (DataDictionaryIpManagerService.IP_ROLE_VALUE_WHITE.equals(ipRole)) {
             //当前ip不是白名单，返回403状态码
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("访问频率过快,请稍后重试")));
             return;
         }
         //如果只禁止黑名单
@@ -67,22 +69,22 @@ public class IpFilter extends BaseService implements Filter {
             //如果当前ip是黑名单，直接返回403状态码
             if (ipValueListBlack.contains(ipAddress)) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
+                response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("访问频率过快,请稍后重试")));
                 return;
             }
         }
         /////////将访问频率过快的ip设置为异常ip
         //查看ip是否被临时封号
-        String warnRedisKey = BASE_REDIS_KEY + "ipWarn:" + ipAddress;
+        String warnRedisKey = createRedisKey(BASE_REDIS_KEY + "ipWarn:", ipAddress, Md5Utils.encode(request.getHeader(HttpHeaders.USER_AGENT)));
         Object warnObject = RedisUtils.get(warnRedisKey);
         //如果ip异常，暂时返回403状态码
         if (null != warnObject) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("访问频率过快,请稍后重试")));
             return;
         }
         //将当前时间访问ip次数存到redis
-        String redisKey = BASE_REDIS_KEY + "ipInfo:" + ipAddress;
+        String redisKey = createRedisKey(BASE_REDIS_KEY + "ipInfo:", ipAddress, Md5Utils.encode(request.getHeader(HttpHeaders.USER_AGENT)));
         int number = 0;
         Object numberObject = RedisUtils.get(redisKey);
         if (null != numberObject) {
@@ -95,7 +97,7 @@ public class IpFilter extends BaseService implements Filter {
             RedisUtils.set(warnRedisKey, true, 3 * 60L);
             dataDictionaryIpManagerService.handleAbnormalIp(ipAddress);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("访问频率过快,请稍后重试")));
             return;
         }
         if (null != numberObject) {

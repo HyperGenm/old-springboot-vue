@@ -72,7 +72,7 @@ public class CorsFilter implements Filter {
         if (!isAllow) {
             //如果域名不存在，返回403拒绝访问
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied")));
+            response.getWriter().print(JSON.toJSONString(ResultUtils.errorRole("access denied;拒绝访问")));
             return;
         }
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
