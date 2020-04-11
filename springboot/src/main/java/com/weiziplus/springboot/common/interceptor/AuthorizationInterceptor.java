@@ -137,6 +137,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) {
+        //springboot中tomcat内部处理404请求,放过
+        String errorPath = "/error";
+        if (errorPath.equals(request.getRequestURI())) {
+            return true;
+        }
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;
