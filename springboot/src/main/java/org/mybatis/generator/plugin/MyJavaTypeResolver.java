@@ -13,7 +13,6 @@ public class MyJavaTypeResolver extends JavaTypeResolverDefaultImpl {
         super();
         //将时间类型转为String
         super.typeMap.put(91, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("DATE", new FullyQualifiedJavaType(String.class.getName())));
-        super.typeMap.put(93, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("TIMESTAMP", new FullyQualifiedJavaType(String.class.getName())));
         //将浮点类型转为Double
         super.typeMap.put(3, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("DECIMAL", new FullyQualifiedJavaType(Double.class.getName())));
         //将tinyint和smallint和bit转为Integer

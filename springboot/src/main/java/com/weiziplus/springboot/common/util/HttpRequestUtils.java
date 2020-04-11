@@ -78,11 +78,13 @@ public class HttpRequestUtils {
      * @return
      */
     private static ResultUtils<String> post(String url, String paramsJsonStr) {
+        url = url.trim();
         CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(RequestConfig.custom()
                 .setConnectionRequestTimeout(2000).setConnectTimeout(2000).setSocketTimeout(2000).build()).build();
         try {
             HttpPost post = new HttpPost(url);
             if (!ToolUtils.isBlank(paramsJsonStr)) {
+                paramsJsonStr = paramsJsonStr.trim();
                 StringEntity stringEntity = new StringEntity(paramsJsonStr, StandardCharsets.UTF_8);
                 stringEntity.setContentEncoding(StandardCharsets.UTF_8.name());
                 stringEntity.setContentType("application/x-www-form-urlencoded;charset=utf-8");
@@ -125,11 +127,12 @@ public class HttpRequestUtils {
      * @return
      */
     private static ResultUtils<String> get(String url, Map<String, String> params) {
+        url = url.trim();
         if (null != params) {
             StringBuilder stringBuilder = new StringBuilder(url);
             boolean flag = false;
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                String value = entry.getValue();
+                String value = entry.getValue().trim();
                 String key = entry.getKey();
                 if (!flag) {
                     stringBuilder.append("?");
