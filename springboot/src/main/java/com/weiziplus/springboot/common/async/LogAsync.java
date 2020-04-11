@@ -5,6 +5,7 @@ import com.weiziplus.springboot.common.models.SysUserLog;
 import com.weiziplus.springboot.common.models.UserLog;
 import com.weiziplus.springboot.common.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
@@ -22,6 +23,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 public class LogAsync extends BaseService {
+
+    @Autowired
+    ErrorAsync errorAsync;
 
     /**
      * 存放日志
@@ -53,7 +57,8 @@ public class LogAsync extends BaseService {
         try {
             baseInsert(sysUserLog);
         } catch (Exception e) {
-            log.warn("将系统用户操作异步记录到数据库，详情:" + e);
+            log.warn("将系统用户操作异步记录到数据库出错，详情:" + e);
+            errorAsync.saveError(e, "将系统用户操作异步保存到数据库");
         }
     }
 
@@ -73,6 +78,7 @@ public class LogAsync extends BaseService {
             baseInsert(userLog);
         } catch (Exception e) {
             log.warn("将api操作异步记录到数据库，详情:" + e);
+            errorAsync.saveError(e, "将api操作异步保存到数据库");
         }
     }
 }

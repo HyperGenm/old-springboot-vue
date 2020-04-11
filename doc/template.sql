@@ -301,6 +301,7 @@ CREATE TABLE `sys_error`  (
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '类名',
   `method_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '方法名',
   `line_number` int(11) NOT NULL DEFAULT 0 COMMENT '第几行',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
   `content` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '详情',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -309,6 +310,6 @@ CREATE TABLE `sys_error`  (
 -- ----------------------------
 -- Records of sys_error
 -- ----------------------------
-INSERT INTO `sys_error` VALUES (1, 'org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator', 'doTranslate', 242, 'org.springframework.dao.DuplicateKeyException: \r\n### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: ', '2020-03-21 15:21:12');
+INSERT INTO `sys_error` VALUES (1, 'org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator', 'doTranslate', 242,'系统捕获运行时异常', 'org.springframework.dao.DuplicateKeyException: \r\n### Error updating database.  Cause: java.sql.SQLIntegrityConstraintViolationException: ', '2020-03-21 15:21:12');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -34,6 +34,7 @@
                     {label: '类名', prop: data['className']},
                     {label: '方法名', prop: data['methodName']},
                     {label: '第几行', prop: data['lineNumber']},
+                    {label: '备注', prop: data['remark']},
                     {label: '详情', prop: data['content']},
                     {
                         label: '创建时间', prop: 'createTime', type: 'icon', element() {

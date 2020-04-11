@@ -1,5 +1,6 @@
 package com.weiziplus.springboot.core.pc.system.service;
 
+import com.weiziplus.springboot.common.async.ErrorAsync;
 import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.enums.RoleIsStop;
@@ -40,6 +41,9 @@ public class SysRoleService extends BaseService {
 
     @Autowired
     SysUserMapper sysUserMapper;
+
+    @Autowired
+    ErrorAsync errorAsync;
 
     /**
      * 系统功能表中角色管理id为3
@@ -189,6 +193,7 @@ public class SysRoleService extends BaseService {
         } catch (Exception e) {
             log.warn("系统用户角色更新失败---" + e);
             TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
+            errorAsync.saveError(e, "系统用户角色更新失败");
             return ResultUtils.error("系统错误，请重试");
         }
         RedisUtils.deleteLikeKey(SysFunctionService.ROLE_FUNCTION_LIST_REDIS_KEY);
@@ -341,6 +346,7 @@ public class SysRoleService extends BaseService {
         } catch (Exception e) {
             log.warn("改变角色状态失败，详情:" + e);
             TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savepoint);
+            errorAsync.saveError(e, "改变系统用户角色状态");
             return ResultUtils.error("系统错误，请重试");
         }
         RedisUtils.deleteLikeKey(BASE_REDIS_KEY);

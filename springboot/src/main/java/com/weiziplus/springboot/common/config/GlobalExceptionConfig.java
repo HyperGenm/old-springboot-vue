@@ -35,7 +35,7 @@ public class GlobalExceptionConfig {
     @ExceptionHandler(RuntimeException.class)
     public ResultUtils runtimeExceptionHandler(RuntimeException ex) {
         ex.printStackTrace();
-        errorAsync.saveError(ex);
+        errorAsync.saveError(ex, "系统捕获运行时异常");
         if (RESPONSE_SHOW_RUNTIME_EXCEPTION) {
             return ResultUtils.errorException("系统异常，详情:" + ex.getMessage());
         } else {
@@ -52,7 +52,7 @@ public class GlobalExceptionConfig {
     @ExceptionHandler(Exception.class)
     public ResultUtils exceptionHandler(Exception ex) {
         ex.printStackTrace();
-        errorAsync.saveError(ex);
+        errorAsync.saveError(ex, "系统捕获异常");
         if (RESPONSE_SHOW_RUNTIME_EXCEPTION) {
             return ResultUtils.errorException("系统异常，详情:" + ex.getMessage());
         } else {

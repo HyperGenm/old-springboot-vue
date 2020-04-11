@@ -6,10 +6,11 @@ import com.weiziplus.springboot.common.base.Id;
 import com.weiziplus.springboot.common.base.Table;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.type.Alias;
+
+import java.io.Serializable;
 
 /**
  * 系统异常
@@ -58,6 +59,13 @@ public class SysError implements Serializable {
     private String content;
 
     /**
+     * 备注
+     */
+    @ApiModelProperty("备注")
+    @Column("remark")
+    private String remark;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
@@ -75,6 +83,8 @@ public class SysError implements Serializable {
     public static final String COLUMN_LINE_NUMBER = "line_number";
 
     public static final String COLUMN_CONTENT = "content";
+
+    public static final String COLUMN_REMARK = "remark";
 
     public static final String COLUMN_CREATE_TIME = "create_time";
 }

@@ -47,14 +47,16 @@ public class ErrorAsync extends BaseService {
      * 将系统异常异步存储到数据库
      *
      * @param ex
+     * @param remark
      */
     @Async("sysError")
-    public void saveError(RuntimeException ex) {
+    public void saveError(RuntimeException ex, String remark) {
         if (null == ex) {
             return;
         }
         try {
             SysError error = createError(ex.getStackTrace()[0])
+                    .setRemark(remark)
                     .setContent(ex.toString());
             baseInsert(error);
         } catch (Exception e) {
@@ -66,14 +68,16 @@ public class ErrorAsync extends BaseService {
      * 将系统异常异步存储到数据库
      *
      * @param ex
+     * @param remark
      */
     @Async("sysError")
-    public void saveError(Exception ex) {
+    public void saveError(Exception ex, String remark) {
         if (null == ex) {
             return;
         }
         try {
             SysError error = createError(ex.getStackTrace()[0])
+                    .setRemark(remark)
                     .setContent(ex.toString());
             baseInsert(error);
         } catch (Exception e) {
