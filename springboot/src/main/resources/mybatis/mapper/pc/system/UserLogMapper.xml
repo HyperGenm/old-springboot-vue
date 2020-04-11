@@ -5,7 +5,7 @@
 <mapper namespace="com.weiziplus.springboot.core.pc.system.mapper.UserLogMapper">
     <select id="getList" resultType="com.weiziplus.springboot.core.pc.system.vo.LogVo">
         SELECT ul.*,u.username
-        FROM user_log ul ,`user` u
+        FROM t_user_log ul ,t_user u
         <where>
             ul.user_id = u.id
             <if test="null != username and '' != username">
