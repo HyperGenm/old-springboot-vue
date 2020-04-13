@@ -44,7 +44,7 @@ public class LoginService extends BaseService {
             return ResultUtils.error("用户名或密码错误");
         }
         Map<String, Object> resMap = new HashMap<>(1);
-        String token = WebTokenUtils.createToken(user.getId(), HttpRequestUtils.getIpAddress(request));
+        String token = WebTokenUtils.createToken(user.getId(), request);
         resMap.put("token", token);
         return ResultUtils.success(resMap);
     }

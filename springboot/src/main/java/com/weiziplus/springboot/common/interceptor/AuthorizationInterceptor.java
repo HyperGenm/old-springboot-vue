@@ -121,9 +121,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         //获取token中存放的issuer
         String issuer = JwtTokenUtils.getIssuer(token);
-        //获取当前访问的ip地址
-        String ipAddress = HttpRequestUtils.getIpAddress(request);
-        return issuer.equals(ipAddress);
+        return JwtTokenUtils.createIssuer(request).equals(issuer);
     }
 
     /**
@@ -254,7 +252,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
         //获取roleId
-        Integer roleId = AdminTokenUtils.getRoleIdByToken(token);
+        Integer roleId = JwtTokenUtils.getExpandModel(token).getRoleId();
         if (null == roleId) {
             handleResponse(response, ResultUtils.errorRole("您没有权限"));
             return false;

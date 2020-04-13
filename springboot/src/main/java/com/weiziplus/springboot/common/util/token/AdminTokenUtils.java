@@ -49,8 +49,8 @@ public class AdminTokenUtils extends JwtTokenUtils {
      * @param userId
      * @return
      */
-    public static String createToken(Long userId, String ipAddress, Integer roleId) {
-        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, ipAddress, roleId);
+    public static String createToken(Long userId, HttpServletRequest request, ExpandModel expandModel) {
+        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, request, expandModel);
     }
 
     /**
@@ -93,13 +93,4 @@ public class AdminTokenUtils extends JwtTokenUtils {
         return Long.valueOf(Base64Utils.decode(getTokenBody(request.getHeader(GlobalConfig.TOKEN)).getId()));
     }
 
-    /**
-     * 根据token获取用户角色
-     *
-     * @param token
-     * @return
-     */
-    public static Integer getRoleIdByToken(String token) {
-        return ToolUtils.valueOfInteger(Base64Utils.decode(getTokenBody(token).getSubject()));
-    }
 }

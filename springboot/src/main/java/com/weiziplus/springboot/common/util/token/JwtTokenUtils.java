@@ -1,11 +1,16 @@
 package com.weiziplus.springboot.common.util.token;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.weiziplus.springboot.common.util.Base64Utils;
-import com.weiziplus.springboot.common.util.ToolUtils;
+import com.weiziplus.springboot.common.util.HttpRequestUtils;
+import com.weiziplus.springboot.common.util.Md5Utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.http.HttpHeaders;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -39,19 +44,31 @@ public class JwtTokenUtils {
      * @param userId
      * @return
      */
-    protected static String createToken(String userId, String audience, String ipAddress, Integer roleId) {
+    protected static String createToken(String userId, String audience, HttpServletRequest request, ExpandModel expand) {
         return Jwts.builder()
                 //用户id
                 .setId(Base64Utils.encode(userId))
-                .setIssuer(Base64Utils.encode(ipAddress))
+                .setIssuer(createIssuer(request))
                 //用户类型，admin还是web
                 .setAudience(Base64Utils.encode(audience))
                 .signWith(HS512, SECRET)
-                //admin的用户角色，
-                .setSubject(Base64Utils.encode(ToolUtils.valueOfString(roleId)))
+                //存放自定义内容
+                .setSubject(Base64Utils.encode(JSON.toJSONString(expand)))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .compact();
+    }
+
+    /**
+     * 创建issuer
+     *
+     * @param request
+     * @return
+     */
+    public static String createIssuer(HttpServletRequest request) {
+        return Base64Utils.encode(Md5Utils.encode(
+                HttpRequestUtils.getIpAddress(request) +
+                        request.getHeader(HttpHeaders.USER_AGENT)));
     }
 
     /**
@@ -61,7 +78,7 @@ public class JwtTokenUtils {
      * @return
      */
     public static String getIssuer(String token) {
-        return Base64Utils.decode(getTokenBody(token).getIssuer());
+        return getTokenBody(token).getIssuer();
     }
 
     /**
@@ -95,6 +112,16 @@ public class JwtTokenUtils {
      */
     public static String getUserAudienceByToken(String token) {
         return Base64Utils.decode(getTokenBody(token).getAudience());
+    }
+
+    /**
+     * 获取自定义内容
+     *
+     * @param token
+     * @return
+     */
+    public static ExpandModel getExpandModel(String token) {
+        return JSONObject.parseObject(Base64Utils.decode(getTokenBody(token).getSubject()), ExpandModel.class);
     }
 
 }

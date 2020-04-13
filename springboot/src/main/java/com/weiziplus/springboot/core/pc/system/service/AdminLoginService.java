@@ -9,6 +9,7 @@ import com.weiziplus.springboot.common.models.SysUser;
 import com.weiziplus.springboot.common.util.*;
 import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import com.weiziplus.springboot.common.util.token.AdminTokenUtils;
+import com.weiziplus.springboot.common.util.token.ExpandModel;
 import com.weiziplus.springboot.core.pc.system.mapper.SysFunctionMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysRoleMapper;
 import com.weiziplus.springboot.core.pc.system.mapper.SysUserMapper;
@@ -114,7 +115,7 @@ public class AdminLoginService extends BaseService {
         if (RoleIsStop.DISABLE.getValue().equals(sysRole.getIsStop())) {
             return ResultUtils.error("角色被禁用，请联系管理员");
         }
-        String token = AdminTokenUtils.createToken(sysUser.getId(), HttpRequestUtils.getIpAddress(request), sysRole.getId());
+        String token = AdminTokenUtils.createToken(sysUser.getId(), request, new ExpandModel().setRoleId(sysRole.getId()));
         if (null == token) {
             return ResultUtils.error("登录失败，请重试");
         }

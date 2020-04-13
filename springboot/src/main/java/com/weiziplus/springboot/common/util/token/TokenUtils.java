@@ -4,6 +4,8 @@ import com.weiziplus.springboot.common.base.BaseService;
 import com.weiziplus.springboot.common.util.redis.StringRedisUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 用户token配置
  *
@@ -38,8 +40,8 @@ public class TokenUtils extends BaseService {
      * @param expireTime---过期时间
      * @return
      */
-    protected static String createToken(String audience, String userId, Long expireTime, String ipAddress, Integer roleId) {
-        String token = JwtTokenUtils.createToken(userId, audience, ipAddress, roleId);
+    protected static String createToken(String audience, String userId, Long expireTime, HttpServletRequest request, ExpandModel expandModel) {
+        String token = JwtTokenUtils.createToken(userId, audience, request, expandModel);
         StringRedisUtils.set(getAudienceRedisKey(audience, userId), token, expireTime);
         return token;
     }

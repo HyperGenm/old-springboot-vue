@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/5/8 9:01
  */
 @Component
-public class WebTokenUtils extends JwtTokenUtils{
+public class WebTokenUtils extends JwtTokenUtils {
     /**
      * web用户
      */
@@ -48,8 +48,8 @@ public class WebTokenUtils extends JwtTokenUtils{
      * @param userId
      * @return
      */
-    public static String createToken(Long userId, String ipAddress) {
-        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, ipAddress, null);
+    public static String createToken(Long userId, HttpServletRequest request) {
+        return TokenUtils.createToken(AUDIENCE, String.valueOf(userId), EXPIRE_TIME, request, null);
     }
 
     /**
