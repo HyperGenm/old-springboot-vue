@@ -11,7 +11,7 @@
                         <wei-item v-for="(i,index) in item.items" :key="i.prop"
                                   :item="i" :formData="formData"
                                   v-if="!i['hidden']"
-                                  :style="'width:49%;float:' + (index % 2 === 0 ? 'left' : 'right')"></wei-item>
+                                  :style="itemsType(item.items)"></wei-item>
                     </div>
                 </div>
                 <!--一行展示一个-->
@@ -64,6 +64,16 @@
             }
         },
         methods: {
+            itemsType(items) {
+                let typeList = [
+                    null,
+                    'width:100%',
+                    'width:49%;float:left',
+                    'width:31%;float:left',
+                    'width:23%;float:left',
+                ];
+                return typeList[items.length];
+            },
             //下拉框值改变触发事件
             selectChange(value, prop) {
                 this.$emit('selectChange', value, prop);

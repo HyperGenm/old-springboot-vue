@@ -380,13 +380,16 @@
             //如果不需要请求
             if (this.notRequest) {
                 this.tableData = this.notRequestTableData;
-            } else {
-                //获取数据
-                this.getTableList();
+                //初始化表格高度
+                this.initTableMaxHeight();
+                return;
             }
+            //获取数据
+            this.getTableList();
             let {url} = this.tableDataRequest;
             let {id} = this.$store.state.userInfo;
-            let columns = localStorage.getItem(`wei-table-columns-${id}-${url}`);
+            let href = this.$globalFun.md5(window.location.href);
+            let columns = localStorage.getItem(`wei-table-columns-${href}-${id}-${url}`);
             //如果本地有展示的字段
             if (null != columns && 0 < columns.length) {
                 //json字符串反序列化，字符串方法还原
@@ -535,9 +538,10 @@
                 this.tableShowColumns = columns;
                 let {url} = this.tableDataRequest;
                 let {id} = this.$store.state.userInfo;
+                let href = this.$globalFun.md5(window.location.href);
                 //将展示的字段放入本地
                 //json对象序列化，并将里面的方法转为字符串
-                localStorage.setItem(`wei-table-columns-${id}-${url}`, JSON.stringify(columns, function (key, val) {
+                localStorage.setItem(`wei-table-columns-${href}-${id}-${url}`, JSON.stringify(columns, function (key, val) {
                         if (typeof val === 'function') {
                             return val + '';
                         }
