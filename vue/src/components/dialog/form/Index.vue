@@ -7,11 +7,14 @@
                  v-if="!item['hidden']">
                 <!--一行展示多个-->
                 <div v-if="null != item.items && 0 < item.items.length">
-                    <div style="overflow: hidden">
-                        <wei-item v-for="(i,index) in item.items" :key="i.prop"
+                    <div style="display: flex;">
+                        <wei-item v-for="i in item.items" :key="i.prop"
                                   :item="i" :formData="formData"
                                   v-if="!i['hidden']"
-                                  :style="itemsType(item.items)"></wei-item>
+                                  style="flex: 1;"
+                                  @inputFocus="$emit('inputFocus',i)"
+                                  @selectChange="selectChange">>
+                        </wei-item>
                     </div>
                 </div>
                 <!--一行展示一个-->
@@ -64,16 +67,6 @@
             }
         },
         methods: {
-            itemsType(items) {
-                let typeList = [
-                    null,
-                    'width:100%',
-                    'width:49%;float:left',
-                    'width:31%;float:left',
-                    'width:23%;float:left',
-                ];
-                return typeList[items.length];
-            },
             //下拉框值改变触发事件
             selectChange(value, prop) {
                 this.$emit('selectChange', value, prop);

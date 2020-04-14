@@ -2,6 +2,7 @@ package com.weiziplus.springboot.common.util.token;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.util.Base64Utils;
 import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.Md5Utils;
@@ -21,10 +22,6 @@ import java.util.Date;
  */
 public class JwtTokenUtils {
 
-    /**
-     * 发行人
-     */
-    private static final String ISSUER = "WeiziPlus";
     /**
      * 加密方式
      */
@@ -48,9 +45,11 @@ public class JwtTokenUtils {
         return Jwts.builder()
                 //用户id
                 .setId(Base64Utils.encode(userId))
+                //获取ip地址和USER_AGENT，某种程度上防止token被利用
                 .setIssuer(createIssuer(request))
                 //用户类型，admin还是web
                 .setAudience(Base64Utils.encode(audience))
+                //签名算法
                 .signWith(HS512, SECRET)
                 //存放自定义内容
                 .setSubject(Base64Utils.encode(JSON.toJSONString(expand)))
@@ -121,6 +120,17 @@ public class JwtTokenUtils {
      * @return
      */
     public static ExpandModel getExpandModel(String token) {
+        return JSONObject.parseObject(Base64Utils.decode(getTokenBody(token).getSubject()), ExpandModel.class);
+    }
+
+    /**
+     * 获取自定义内容
+     *
+     * @param request
+     * @return
+     */
+    public static ExpandModel getExpandModel(HttpServletRequest request) {
+        String token = request.getHeader(GlobalConfig.TOKEN);
         return JSONObject.parseObject(Base64Utils.decode(getTokenBody(token).getSubject()), ExpandModel.class);
     }
 

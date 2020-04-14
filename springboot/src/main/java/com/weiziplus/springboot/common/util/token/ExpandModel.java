@@ -13,6 +13,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ExpandModel {
 
+    /**
+     * 系统用户的角色id
+     */
     private Integer roleId;
 
 }
