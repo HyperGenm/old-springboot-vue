@@ -2,7 +2,7 @@
     <div class="treeMenu">
         <div v-for="item in data.children" :key="item.name">
             <el-menu-item v-if="null == item.children || 0 >= item.children.length"
-                          :index="'/' + data.path + '/' + item.path">
+                          :index="'/' + parentPath + '/' + item.path">
                 <el-tooltip :content="item.title" placement="right">
                     <div>
                         <i :class="item['icon'] || 'el-icon-s-help'"></i>
@@ -19,7 +19,7 @@
                         </div>
                     </el-tooltip>
                 </template>
-                <tree-menu :data="item"></tree-menu>
+                <tree-menu :data="item" :parentPath="parentPath + '/' + item.path"></tree-menu>
             </el-submenu>
         </div>
     </div>
@@ -32,6 +32,12 @@
             data: {
                 type: Object,
                 default: () => {
+                }
+            },
+            parentPath: {
+                type: String,
+                default: () => {
+
                 }
             }
         }

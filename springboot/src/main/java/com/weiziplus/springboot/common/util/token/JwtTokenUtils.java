@@ -65,9 +65,9 @@ public class JwtTokenUtils {
      * @return
      */
     public static String createIssuer(HttpServletRequest request) {
-        return Base64Utils.encode(Md5Utils.encode(
+        return Md5Utils.encode(
                 HttpRequestUtils.getIpAddress(request) +
-                        request.getHeader(HttpHeaders.USER_AGENT)));
+                        request.getHeader(HttpHeaders.USER_AGENT));
     }
 
     /**
