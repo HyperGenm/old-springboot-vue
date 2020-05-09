@@ -16,7 +16,7 @@
                                 <i :class="item['icon'] || 'el-icon-s-help'"></i>
                                 <span>{{item.title}}</span>
                             </template>
-                            <tree-menu :data="item"></tree-menu>
+                            <tree-menu :data="item" :parnetPath="item.path"></tree-menu>
                         </el-submenu>
                     </div>
                 </el-menu>
