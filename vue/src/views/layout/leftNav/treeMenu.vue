@@ -10,7 +10,7 @@
                     </div>
                 </el-tooltip>
             </el-menu-item>
-            <el-submenu v-else :index="`/${data.path}/${item.path}`">
+            <el-submenu v-else :index="`/${parentPath}/${item.path}`">
                 <template slot="title">
                     <el-tooltip :content="item.title" placement="right">
                         <div>
