@@ -31,7 +31,7 @@ spring:
       # 申请连接时检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效（不影响性能）
       test-while-idle: true
       # 空闲连接回收的时间间隔，与test-while-idle一起使用
-      time-between-eviction-runs-millis: 300000
+      time-between-eviction-runs-millis: 30000
       # 连接池空闲连接的有效时间
       min-evictable-idle-time-millis: 600000
   redis:

@@ -99,7 +99,11 @@ export function weiAxios(
             }
             /***请求的url如果是全部url的话,返回所有res['data']响应***/
             if (allUrl) {
-                success(res['data']);
+                try {
+                    success(res['data']);
+                } catch (e) {
+                    console.error(e)
+                }
                 return;
             }
             //获取响应状态码
@@ -115,19 +119,23 @@ export function weiAxios(
                 }, 3000);
                 return;
             }
-            /**返回所有成功回调,不包含status不是401的出错请求*/
-            if (allSuccess) {
-                success(res.data);
-                return;
+            try {
+                /**返回所有成功回调,不包含status不是401的出错请求*/
+                if (allSuccess) {
+                    success(res.data);
+                    return;
+                }
+                /**处理code不为200的出错请求*/
+                if (axios_result_code['success'] !== res.data.code) {
+                    that.$globalFun.errorMsg(res.data.msg);
+                    that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
+                    return;
+                }
+                /**成功回调*/
+                success(res.data.data);
+            } catch (e) {
+                console.error(e);
             }
-            /**处理code不为200的出错请求*/
-            if (axios_result_code['success'] !== res.data.code) {
-                that.$globalFun.errorMsg(res.data.msg);
-                that.$globalFun.consoleWarnTable(`请求出错url:${url}`, res['data']);
-                return;
-            }
-            /**成功回调*/
-            success(res.data.data);
         }).catch((error) => {
             /**关闭加载中动画*/
             clearTimeout(loadingTimer);
@@ -139,15 +147,7 @@ export function weiAxios(
                 fail(error);
                 return;
             }
-            if (error.response) {
-                error = error['response']['data'];
-            }
-            //限制访问
-            if (403 === error.status || 403 === error.code) {
-                that.$globalFun.errorMsg('拒绝访问,请稍后重试,详情:' + JSON.stringify(error));
-            } else {
-                that.$globalFun.errorMsg('内部服务器错误，请稍后重试,详情:' + JSON.stringify(error));
-            }
+            that.$globalFun.errorMsg(`<p>系统错误，请联系管理员</p>${error}`, 3000, true);
             that.$globalFun.consoleWarnTable(`请求失败url:${url}`, error);
             fail(error);
         });
@@ -244,7 +244,11 @@ export function weiAxiosDown(
                             return;
                         }
                         console.log('文件下载成功回调，不是文件流', resData);
-                        success();
+                        try {
+                            success();
+                        } catch (e) {
+                            console.error(e);
+                        }
                     }
                 } catch (error) {
                     let blob = new Blob([data]);
@@ -268,7 +272,11 @@ export function weiAxiosDown(
                     }
                 }
             };
-            success(res);
+            try {
+                success(res);
+            } catch (e) {
+                console.error(e);
+            }
         }).catch((error) => {
             /**关闭加载中动画*/
             clearTimeout(loadingTimer);
@@ -280,15 +288,7 @@ export function weiAxiosDown(
                 fail(error);
                 return;
             }
-            if (error.response) {
-                error = error['response']['data'];
-            }
-            //限制访问
-            if (403 === error.status || 403 === error.code) {
-                that.$globalFun.errorMsg('拒绝访问,请稍后重试,详情:' + JSON.stringify(error));
-            } else {
-                that.$globalFun.errorMsg('文件下载失败，请稍后重试,详情:' + JSON.stringify(error));
-            }
+            that.$globalFun.errorMsg(`<p>系统错误，请联系管理员</p>${error}`, 3000, true);
             that.$globalFun.consoleWarnTable(`文件下载失败url:${url}`, error);
             fail(error);
         });
