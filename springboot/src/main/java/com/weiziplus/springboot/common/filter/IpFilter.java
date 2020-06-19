@@ -39,7 +39,7 @@ public class IpFilter extends BaseService implements Filter {
      * 10秒内多少次请求，暂时封ip
      */
     @Value("${global.ip-filter-max-num:77}")
-    private final Integer MAX_NUM = 77;
+    private Integer maxNum = 77;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -92,7 +92,7 @@ public class IpFilter extends BaseService implements Filter {
         }
         number += 1;
         //如果访问频率过快超出限制
-        if (number >= MAX_NUM) {
+        if (number >= maxNum) {
             //暂时封号---3分钟后恢复
             RedisUtils.set(warnRedisKey, true, 3 * 60L);
             dataDictionaryIpManagerService.handleAbnormalIp(ipAddress);

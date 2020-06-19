@@ -110,6 +110,13 @@
         watch: {
             nowFileList(list) {
                 this.$emit('update:fileList', list);
+            },
+            fileList: {
+                deep: true,
+                immediate: true,
+                handler(list) {
+                    this.nowFileList = list;
+                }
             }
         },
         methods: {

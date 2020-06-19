@@ -91,6 +91,8 @@
         methods: {
             //下拉框值改变触发事件
             selectChange(value, prop) {
+                //修复选中却没有赋值问题
+                this.$forceUpdate();
                 this.$emit('selectChange', value, prop);
             },
         }
