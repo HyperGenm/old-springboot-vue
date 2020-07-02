@@ -259,15 +259,16 @@ CREATE TABLE `t_user`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户表主键，自增',
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `last_ip_address` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户最后活跃ip地址',
+  `last_active_time` datetime(0) NULL DEFAULT NULL COMMENT '用户最后活跃时间',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of user
+-- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES (1, 'weiziplus', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:25:32');
-INSERT INTO `t_user` VALUES (2, 'ceshi', 'ebe0b26e0c99fbf05e44de4e118f42d2', '2019-05-10 17:54:22');
+INSERT INTO `t_user` VALUES (1, 'weiziplus', 'B7966B0719AF24AD7CBE954DDFB32DC0', 1, '127.0.0.1', '2020-06-01 09:42:12', '2020-06-01 09:34:31');
 
 -- ----------------------------
 -- Table structure for user_log
