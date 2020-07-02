@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.util.Base64Utils;
-import com.weiziplus.springboot.common.util.HttpRequestUtils;
 import com.weiziplus.springboot.common.util.Md5Utils;
+import com.weiziplus.springboot.common.util.UserAgentUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -65,9 +64,10 @@ public class JwtTokenUtils {
      * @return
      */
     public static String createIssuer(HttpServletRequest request) {
-        return Md5Utils.encode(
-                HttpRequestUtils.getIpAddress(request) +
-                        request.getHeader(HttpHeaders.USER_AGENT));
+        String borderName = UserAgentUtils.getBorderName(request);
+        String osName = UserAgentUtils.getOsName(request);
+        String browserVersion = UserAgentUtils.getBrowserVersion(request);
+        return Md5Utils.encode(borderName + osName + browserVersion);
     }
 
     /**

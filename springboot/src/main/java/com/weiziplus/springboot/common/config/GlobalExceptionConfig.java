@@ -46,6 +46,25 @@ public class GlobalExceptionConfig {
     }
 
     /**
+     * 捕获空指针异常
+     * 因为打印信息较少，单独处理
+     *
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(NullPointerException.class)
+    public ResultUtils nullPointerException(NullPointerException ex) {
+        log.warn("系统捕获空指针异常NullPointerException,详情:", ex);
+        errorAsync.saveError(ex, "系统捕获空指针异常NullPointerException");
+        if (responseShowRuntimeException) {
+            return ResultUtils.errorException("系统异常，详情:" + ex.getMessage());
+        } else {
+            return ResultUtils.errorException("系统错误，请重试");
+        }
+    }
+
+
+    /**
      * 捕获所有异常
      *
      * @param ex

@@ -108,7 +108,8 @@
                         //对应的字段
                         prop: 'username',
                         //固定列
-                        fixed: 'left'
+                        fixed: 'left',
+                        showOverflowTooltip: true
                         /**
                          * 当前没有用到formatter(),如果同时存在 formatter() 和 prop  以formatter()为主
                          * formatter()方法可以返回一个dom，也可以返回String、Number
@@ -119,7 +120,7 @@
                          */
                     },
                     {label: '真实姓名', prop: 'realName', fixed: 'left'},
-                    {label: '角色', prop: 'roleName'},
+                    {label: '角色', prop: 'roleName', showOverflowTooltip: true},
                     {label: '手机号', prop: 'phone'},
                     {
                         label: '是否允许登录', prop: 'title',
@@ -144,9 +145,13 @@
                             }
                         }
                     },
-                    {label: '用户最后活跃ip地址', prop: 'laseIpAddress'},
+                    {label: '用户最后活跃ip地址', prop: 'laseIpAddress', showOverflowTooltip: true},
                     {
-                        label: '用户最后活跃时间', prop: 'lastActiveTime', type: 'icon', element(row) {
+                        label: '用户最后活跃时间',
+                        prop: 'lastActiveTime',
+                        showOverflowTooltip: true,
+                        type: 'icon',
+                        element(row) {
                             return {
                                 leftIcon: 'el-icon-time',
                                 content: row['lastActiveTime']
@@ -154,7 +159,7 @@
                         }
                     },
                     {
-                        label: '用户创建时间', prop: 'createTime', type: 'icon', element(row) {
+                        label: '用户创建时间', prop: 'createTime', showOverflowTooltip: true, type: 'icon', element(row) {
                             return {
                                 leftIcon: 'el-icon-time',
                                 content: row['createTime']

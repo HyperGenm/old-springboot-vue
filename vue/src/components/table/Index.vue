@@ -109,7 +109,7 @@
                         :width="column.width"
                         min-width="80"
                         :sortable="column.sortable || false"
-                        :show-overflow-tooltip="column.showOverflowTooltip || true">
+                        :show-overflow-tooltip="allShowOverflowTooltip || column.showOverflowTooltip">
                     <template slot="header" slot-scope="scope">
                         <!--自定义表头-->
                         <template v-if="column.labelFormatter">
@@ -343,6 +343,11 @@
             notRequestTableData: {
                 type: Array,
                 default: () => []
+            },
+            //表格所有列当内容过长被隐藏时显示 tooltip
+            allShowOverflowTooltip: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -433,6 +438,11 @@
                     },
                     timeout: _timeout
                 };
+                //如果是全路径
+                if (null != that.tableDataRequest.allUrl
+                    && '' !== that.tableDataRequest.allUrl) {
+                    _axios['url'] = that.tableDataRequest.allUrl;
+                }
                 //每个请求加上请求头
                 _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
                 let _data = that.tableDataRequest.data || {};
@@ -524,6 +534,11 @@
             },
             //字段展示---选择部分字段展示
             changeColumn() {
+                //判断当前环境是不是生产环境
+                if ('production' !== process.env.NODE_ENV) {
+                    this.$globalFun.errorMsg('开发环境下进行部分字段操作容易因为缓存问题，字段的修改无法正常显示', 10000);
+                    console.warn('开发环境下进行部分字段操作容易因为缓存问题，字段的修改无法正常显示');
+                }
                 let columns = [];
                 let {columnCheckBox, tableColumns} = this;
                 for (let i = 0; i < tableColumns.length; i++) {
@@ -536,6 +551,12 @@
                     return;
                 }
                 this.tableShowColumns = columns;
+                //如果全部显示，移除本地缓存
+                if (tableColumns.length === columns.length) {
+                    localStorage.removeItem(`wei-table-columns-${href}-${id}-${url}`);
+                    this.columnChangeDialog = false;
+                    return;
+                }
                 let {url} = this.tableDataRequest;
                 let {id} = this.$store.state.userInfo;
                 let href = this.$globalFun.md5(window.location.href);
@@ -635,6 +656,7 @@
 <style lang="scss">
     #weiTable {
         overflow: hidden;
+
         .search {
             .el-form-item {
                 margin-bottom: 3px;
@@ -658,8 +680,15 @@
         }
 
         /*表格树形结构，箭头错位*/
-        .el-table table tbody tr td:nth-child(3) .cell.el-tooltip {
+        .el-table table tbody tr td:nth-child(3) .cell {
             display: flex;
+        }
+
+        /*只显示一行，超出部分显示省略号*/
+        .el-table .cell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
     }
@@ -669,9 +698,11 @@
     #weiTable {
         height: 100%;
         overflow: hidden;
+
         .header {
             margin-bottom: 10px;
         }
+
         .pagination {
             float: right;
             margin-top: 7px;

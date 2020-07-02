@@ -1,12 +1,11 @@
 package com.weiziplus.springboot.common.base;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import com.weiziplus.springboot.common.util.Md5Utils;
 import com.weiziplus.springboot.common.util.ToolUtils;
-import com.weiziplus.springboot.common.util.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,9 +28,14 @@ public class BaseService {
     BaseMapper mapper;
 
     /**
-     * BaseService基础redis的key
+     * 表的主键对应实体类的字段
      */
-    private static final String BASE_REDIS_KEY = createOnlyRedisKeyPrefix();
+    private static Map<String, String> TABLE_PRIMARY_KEY_FIELD_MAP = new HashMap<>();
+
+    /**
+     * 实体类是否存在某个字段
+     */
+    private static Map<String, Boolean> CLASS_IS_CONTAINS_COLUMN_MAP = new HashMap<>();
 
     /**
      * 根据实体类class获取数据库表名
@@ -43,19 +47,8 @@ public class BaseService {
         if (null == nowClass.getAnnotation(Table.class)) {
             throw new RuntimeException("当前实体类没有设置@Table注解==========" + nowClass);
         }
-        String className = nowClass.getName();
-        if (GlobalConfig.isSpringProfilesPro()) {
-            className = Md5Utils.encode(className);
-        }
-        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", className);
-        Object redisObject = RedisUtils.get(key);
-        if (null != redisObject) {
-            return String.valueOf(redisObject);
-        }
         Table table = (Table) nowClass.getAnnotation(Table.class);
-        String value = table.value();
-        RedisUtils.set(key, value, 60L * 60 * 3);
-        return value;
+        return table.value();
     }
 
     /**
@@ -68,22 +61,7 @@ public class BaseService {
         if (null == object || null == object.getClass()) {
             throw new RuntimeException("将实体对象转为map===Object为null");
         }
-        //获取实体类对应数据库的表名
-        if (null == object.getClass().getAnnotation(Table.class)) {
-            throw new RuntimeException("当前实体类没有设置@Table注解==========" + object.getClass());
-        }
-        String className = object.getClass().getName();
-        if (GlobalConfig.isSpringProfilesPro()) {
-            className = Md5Utils.encode(className);
-        }
-        String key = createRedisKey(BASE_REDIS_KEY + "getTableName:", className);
-        Object redisObject = RedisUtils.get(key);
-        if (null != redisObject) {
-            return String.valueOf(redisObject);
-        }
-        String value = object.getClass().getAnnotation(Table.class).value();
-        RedisUtils.set(key, value, 60L * 60 * 3);
-        return value;
+        return getTableName(object.getClass());
     }
 
     /**
@@ -100,16 +78,15 @@ public class BaseService {
         if (GlobalConfig.isSpringProfilesPro()) {
             className = Md5Utils.encode(className);
         }
-        String key = createRedisKey(BASE_REDIS_KEY + "getPrimaryKey:", className);
-        Object redisObject = RedisUtils.get(key);
-        if (null != redisObject) {
-            return String.valueOf(redisObject);
+        String primaryKeyFiled = TABLE_PRIMARY_KEY_FIELD_MAP.get(className);
+        if (null != primaryKeyFiled && 0 < primaryKeyFiled.length()) {
+            return primaryKeyFiled;
         }
         Field[] fields = nowClass.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(Id.class)) {
                 String value = field.getAnnotation(Id.class).value();
-                RedisUtils.set(key, value, 60L * 60 * 3);
+                TABLE_PRIMARY_KEY_FIELD_MAP.put(className, value);
                 return value;
             }
         }
@@ -471,7 +448,7 @@ public class BaseService {
         if (null == byId) {
             return null;
         }
-        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+        return JSON.parseObject(JSON.toJSONString(byId, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -503,7 +480,7 @@ public class BaseService {
         if (null == byId) {
             return null;
         }
-        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+        return JSON.parseObject(JSON.toJSONString(byId, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -522,13 +499,13 @@ public class BaseService {
         }
         String key;
         if (GlobalConfig.isSpringProfilesPro()) {
-            key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", Md5Utils.encode(clazz.getName()), column);
+            key = createRedisKey(Md5Utils.encode(clazz.getName()), column);
         } else {
-            key = createRedisKey(BASE_REDIS_KEY + "classIsContainsColumn:", clazz.getName(), column);
+            key = createRedisKey(clazz.getName(), column);
         }
-        Object redisObject = RedisUtils.get(key);
-        if (null != redisObject) {
-            return (Boolean) redisObject;
+        Boolean isContains = CLASS_IS_CONTAINS_COLUMN_MAP.get(key);
+        if (null != isContains) {
+            return isContains;
         }
         //此处对应自动生成的实体类常量，COLUMN_ + 数据库字段全部大写
         String prefix = "COLUMN_";
@@ -537,7 +514,7 @@ public class BaseService {
         } catch (NoSuchFieldException e) {
             throw new RuntimeException("根据实体类、字段、值获取实体类出错---请使用类常量==========" + clazz.getName() + "---" + e);
         }
-        RedisUtils.set(key, true);
+        CLASS_IS_CONTAINS_COLUMN_MAP.put(key, true);
         return true;
     }
 
@@ -567,7 +544,7 @@ public class BaseService {
         if (null == byId) {
             return null;
         }
-        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+        return JSON.parseObject(JSON.toJSONString(byId, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -596,7 +573,7 @@ public class BaseService {
         if (null == byId) {
             return null;
         }
-        return JSON.parseObject(JSON.toJSONString(byId), clazz);
+        return JSON.parseObject(JSON.toJSONString(byId, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -625,7 +602,7 @@ public class BaseService {
         if (null == listByColumn) {
             return null;
         }
-        return JSONArray.parseArray(JSON.toJSONString(listByColumn), clazz);
+        return JSONObject.parseArray(JSON.toJSONString(listByColumn, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -654,7 +631,7 @@ public class BaseService {
         if (null == listByColumnMap) {
             return null;
         }
-        return JSONArray.parseArray(JSON.toJSONString(listByColumnMap), clazz);
+        return JSONObject.parseArray(JSON.toJSONString(listByColumnMap, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -668,7 +645,7 @@ public class BaseService {
         if (null == all) {
             return null;
         }
-        return JSONObject.parseArray(JSON.toJSONString(all), clazz);
+        return JSONObject.parseArray(JSON.toJSONString(all, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -690,7 +667,7 @@ public class BaseService {
         if (null == allOrderByColumnDesc) {
             return null;
         }
-        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnDesc), clazz);
+        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnDesc, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**
@@ -712,7 +689,7 @@ public class BaseService {
         if (null == allOrderByColumnAsc) {
             return null;
         }
-        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnAsc), clazz);
+        return JSONObject.parseArray(JSON.toJSONString(allOrderByColumnAsc, SerializerFeature.WriteDateUseDateFormat), clazz);
     }
 
     /**

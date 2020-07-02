@@ -99,9 +99,9 @@
                         }
                     },
                     {label: '排序', prop: 'sort'},
-                    {label: '描述', prop: 'description'},
+                    {label: '描述', prop: 'description', showOverflowTooltip: true},
                     {
-                        label: '创建时间', prop: 'createTime', type: 'icon',
+                        label: '创建时间', prop: 'createTime', showOverflowTooltip: true, type: 'icon',
                         element({createTime}) {
                             return {
                                 leftIcon: 'el-icon-time',

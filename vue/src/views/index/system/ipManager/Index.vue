@@ -13,7 +13,7 @@
         </div>
         <el-divider content-position="left">ip列表</el-divider>
         <div class="wei-table" style="height: 67%;">
-            <wei-table ref="table" :isPagination="false"
+            <wei-table ref="table" :isPagination="false" :allShowOverflowTooltip="true"
                        :tableDataRequest="tableDataRequest" :tableColumns="tableColumns"
                        :tableSearch="tableSearch" :tableHeaderButtons="tableHeaderButtons"
                        :tableOperates="tableOperates"></wei-table>

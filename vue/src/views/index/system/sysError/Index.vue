@@ -32,8 +32,8 @@
                     {label: '类名', prop: 'className'},
                     {label: '方法名', prop: 'methodName'},
                     {label: '第几行', prop: 'lineNumber'},
-                    {label: '备注', prop: 'remark'},
-                    {label: '详情', prop: 'content'},
+                    {label: '备注', prop: 'remark', showOverflowTooltip: true},
+                    {label: '详情', prop: 'content', showOverflowTooltip: true},
                     {
                         label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
                             return {

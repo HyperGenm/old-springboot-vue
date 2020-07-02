@@ -29,11 +29,11 @@
                     data: {}
                 },
                 tableColumns: [
-                    {label: '用户名', prop: 'username', fixed: 'left'},
+                    {label: '用户名', prop: 'username', showOverflowTooltip: true, fixed: 'left'},
                     {label: '真实姓名', prop: 'realName', fixed: 'left'},
                     {label: '角色', prop: 'roleName', fixed: 'left'},
-                    {label: 'url', prop: 'url'},
-                    {label: '参数', prop: 'param'},
+                    {label: 'url', prop: 'url', showOverflowTooltip: true},
+                    {label: '参数', prop: 'param', showOverflowTooltip: true},
                     {
                         label: '类型', prop: 'type', type: 'tag',
                         element({type}) {
@@ -49,10 +49,10 @@
                             };
                         }
                     },
-                    {label: '操作', prop: 'description'},
-                    {label: 'ip地址', prop: 'ipAddress'},
+                    {label: '操作', prop: 'description', showOverflowTooltip: true},
+                    {label: 'ip地址', prop: 'ipAddress', showOverflowTooltip: true},
                     {
-                        label: '创建时间', prop: 'createTime', type: 'icon', element(row) {
+                        label: '创建时间', prop: 'createTime', showOverflowTooltip: true, type: 'icon', element(row) {
                             return {
                                 leftIcon: 'el-icon-time',
                                 content: row['createTime']
