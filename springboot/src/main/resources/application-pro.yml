@@ -1,9 +1,24 @@
 #####################################生产版配置###########################
+#为了优雅关机 curl -X POST 127.0.0.1:8085/weiziplus/shutdown
+management:
+  endpoint:
+    shutdown:
+      #启用shutdown
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        #开启shutdown
+        include: shutdown
+      #自定义管理端前缀
+      base-path: /weiziplus
+  server:
+    #自定义管理端端口
+    port: 8085
+    #指定本机地址作为管理端地址，不允许远程连接，保证安全
+    address: 127.0.0.1
 server:
   port: 8080
-  servlet:
-    #添加请求前缀
-    context-path: /github
 spring:
   #生产版配置
   profiles: pro
