@@ -8,9 +8,15 @@
         gzip_disable "MSIE [1-6]\.";
         #让代理服务器上的浏览器和服务器能正确辨认gzip压缩功能.
         gzip_vary on;
+        #设置最小压缩文件大小
+        gzip_min_length 1k;
+        #压缩缓冲区大小
+        gzip_buffers 4 16k;
+        #压缩等级
+        gzip_comp_level 2;
         gzip_proxied any;
-        #需要压缩的MIME类型文件
-        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript image/jpeg image/gif image/png;
+        #需要压缩的MIME类型文件(图片不建议压缩)
+        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript;
 
     * 监听/github/请求重定向到本地8080端口
         server {
@@ -19,7 +25,9 @@
 
         		#######/github/请求重定向到 8080 端口
                 location /github/ {
-                    proxy_pass   http://127.0.0.1:8080/;
+                    #注意后面有个/
+                    proxy_pass   http://127.0.0.1:8888/;
+                    #配合后台获取到真实ip地址
                     proxy_set_header x-forwarded-for  $remote_addr;
                 }
 
