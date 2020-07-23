@@ -272,11 +272,6 @@ export function weiAxiosDown(
                     }
                 }
             };
-            try {
-                success(res);
-            } catch (e) {
-                console.error(e);
-            }
         }).catch((error) => {
             /**关闭加载中动画*/
             clearTimeout(loadingTimer);
