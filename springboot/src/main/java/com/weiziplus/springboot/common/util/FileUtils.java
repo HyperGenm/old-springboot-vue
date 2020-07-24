@@ -2,6 +2,7 @@ package com.weiziplus.springboot.common.util;
 
 import com.weiziplus.springboot.common.config.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,18 @@ public class FileUtils {
      * @return 成功返回路径，失败返回null
      */
     public static String upFile(MultipartFile file, String mkdir) {
+        return upFile(file, mkdir, null);
+    }
+
+    /**
+     * 文件上传
+     *
+     * @param file
+     * @param mkdir   如果分文件夹存放，传入文件夹
+     * @param builder
+     * @return 成功返回路径，失败返回null
+     */
+    public static String upFile(MultipartFile file, String mkdir, Thumbnails.Builder<? extends InputStream> builder) {
         if (null == file || file.isEmpty()) {
             return null;
         }
@@ -67,7 +80,29 @@ public class FileUtils {
             }
         }
         try {
-            file.transferTo(dest);
+            //如果没有自定义，使用默认
+            if (null == builder) {
+                //图片质量
+                float outputQuality = 1F;
+                long size = file.getSize() / 1024;
+                if (3072 < size) {
+                    outputQuality = 0.3F;
+                } else if (2048 < size) {
+                    outputQuality = 0.5F;
+                } else if (1024 < size) {
+                    outputQuality = 0.6F;
+                } else if (512 < size) {
+                    outputQuality = 0.7F;
+                } else if (256 < size) {
+                    outputQuality = 0.8F;
+                } else if (128 < size) {
+                    outputQuality = 0.9F;
+                }
+                builder = Thumbnails.of(file.getInputStream())
+                        .scale(1F)
+                        .outputQuality(outputQuality);
+            }
+            builder.toFile(dest);
         } catch (IOException e) {
             log.warn("文件上传失败" + e);
             return null;
