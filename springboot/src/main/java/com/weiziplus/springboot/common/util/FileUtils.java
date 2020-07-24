@@ -85,18 +85,14 @@ public class FileUtils {
                 //图片质量
                 float outputQuality = 1F;
                 long size = file.getSize() / 1024;
-                if (3072 < size) {
+                if (3072 <= size) {
+                    outputQuality = 0.2F;
+                } else if (1024 <= size) {
                     outputQuality = 0.3F;
-                } else if (2048 < size) {
+                } else if (512 <= size) {
+                    outputQuality = 0.4F;
+                } else if (64 <= size) {
                     outputQuality = 0.5F;
-                } else if (1024 < size) {
-                    outputQuality = 0.6F;
-                } else if (512 < size) {
-                    outputQuality = 0.7F;
-                } else if (256 < size) {
-                    outputQuality = 0.8F;
-                } else if (128 < size) {
-                    outputQuality = 0.9F;
                 }
                 builder = Thumbnails.of(file.getInputStream())
                         .scale(1F)
