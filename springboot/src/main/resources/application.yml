@@ -1,4 +1,12 @@
 #############################################通用配置#############################################
+#开启gzip
+server:
+  compression:
+    enabled: true
+    #压缩json
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    #需要压缩的最小值
+    min-response-size: 2048
 spring:
   #启动什么配置
   profiles:

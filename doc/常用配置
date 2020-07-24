@@ -16,7 +16,7 @@
         gzip_comp_level 2;
         gzip_proxied any;
         #需要压缩的MIME类型文件(图片不建议压缩)
-        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript;
+        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/json;
 
     * 监听/github/请求重定向到本地8080端口
         server {
