@@ -8,6 +8,9 @@
             <right-nav :menuCollapse="menuCollapse" @collapseChange="collapseChange"></right-nav>
             <div id="mainApp">
                 <router-view/>
+                <div class="my-backtop">
+                    <el-backtop target="#mainApp" :visibility-height="100"></el-backtop>
+                </div>
             </div>
             <div class="footer">
                 <span>Copyright ©{{nowYear}}</span>
@@ -51,6 +54,7 @@
 <style lang="scss" scoped>
     #layout {
         overflow: hidden;
+
         .leftNav {
             position: fixed;
             top: 0;
@@ -59,12 +63,15 @@
             height: 100%;
             overflow: hidden;
             background-color: #545c64;
+
             h2 {
                 text-align: center;
             }
         }
+
         .rightNav {
             height: 100vh;
+
             #mainApp {
                 clear: both;
                 overflow-y: scroll;
@@ -73,6 +80,7 @@
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
                 position: relative;
+
                 & > div {
                     position: absolute;
                     top: 1%;
@@ -80,7 +88,14 @@
                     bottom: 1%;
                     left: 1%;
                 }
+
+                .my-backtop .el-backtop {
+                    position: fixed;
+                    border: 1px solid;
+                    margin-bottom: 30px;
+                }
             }
+
             .footer {
                 margin-top: 7px;
                 text-align: center;
@@ -90,6 +105,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 .link {
                     margin-left: 10px;
                 }
