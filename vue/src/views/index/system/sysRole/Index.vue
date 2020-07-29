@@ -22,7 +22,7 @@
                          :expand-on-click-node="false" :data="[{title:'最高级',id:0,children:funData}]"
                          :props="{label: 'title'}"
                          :default-checked-keys="checkedRoleFunctionData"></el-tree>
-                <el-button v-if="$store.state.role['buttons']['sysRole_save']" type="primary" size="mini"
+                <el-button v-if="haveButtonMap['sysRole_save']" type="primary" size="mini"
                            @click="saveRole">保存
                 </el-button>
             </wei-dialog>
@@ -42,10 +42,14 @@
         data() {
             let that = this;
             //用户角色拥有的按钮
-            let {sysRole_add, sysRole_update, sysRole_delete, sysRole_save, sysRole_status} = this.$store.state.role.buttons;
+            let {
+                sysRole_add, sysRole_update, sysRole_delete, sysRole_save, sysRole_status
+            } = this.$globalFun.getSessionStorage('buttonMap');
             //超级管理员角色id
             let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
             return {
+                //拥有的按钮
+                haveButtonMap: that.$globalFun.getSessionStorage('buttonMap'),
                 //功能树的数据
                 funData: [],
                 funParentData: [],

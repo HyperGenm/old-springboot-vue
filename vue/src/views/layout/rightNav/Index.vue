@@ -14,7 +14,7 @@
                     <div style="border-radius: 50%;overflow: hidden;border: 1px solid #f7f61a;display: flex;align-items: center;justify-content: center;padding: 5px;margin: 0 5px;"
                          @click="updateIcon">
                         <el-image style="width: 30px;height: 30px;border-radius: 50%;"
-                                  :src="$store.state.userInfo['icon']">
+                                  :src="userInfo['icon']">
                             <div slot="error">
                                 <i style="font-size: 21px;" class="el-icon-picture-outline"></i>
                             </div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="user">
                     <el-dropdown @command="handleCommand">
-                        <span style="color: #954ae0">Hi,{{$store.state.userInfo['realName'] || $store.state.userInfo['username']}}</span>
+                        <span style="color: #954ae0">Hi,{{userInfo['realName'] || userInfo['username']}}</span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in dropdownItems" :key="item.title"
                                               :command="item.command"> {{item.title}}
@@ -62,12 +62,14 @@
             }
         },
         data() {
-            let storeState = this.$store.state;
+            const userInfo = this.$globalFun.getSessionStorage('userInfo');
+            const role = this.$globalFun.getSessionStorage('role');
             return {
+                userInfo,
                 dialogEditForm: false,
                 fullscreen: false,
                 dropdownItems: [
-                    {title: storeState.role.name},
+                    {title: role},
                     {title: '修改密码', command: 'updatePassword'},
                     {title: '安全退出', command: 'logout'}
                 ],
@@ -115,7 +117,6 @@
                     url: that.$global.URL.logout,
                     success() {
                         that.$globalFun.successMsg('注销成功，即将返回登录页面');
-                        that.$store.dispatch('resetState');
                         sessionStorage.setItem('loginStatus', 'logout');
                         let timer = setTimeout(() => {
                             clearTimeout(timer);

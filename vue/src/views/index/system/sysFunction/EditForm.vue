@@ -45,8 +45,8 @@
             let SUPER_ADMIN_ID = this.$global.GLOBAL.super_admin_id;
             let SUPER_ADMIN_ROLE_ID = this.$global.GLOBAL.super_admin_role_id;
             //是否可以编辑 功能对应的api
-            let isEditApi = (SUPER_ADMIN_ID === this.$store.state.userInfo['id']
-                || SUPER_ADMIN_ROLE_ID === this.$store.state.userInfo['roleId']);
+            let isEditApi = (SUPER_ADMIN_ID === this.$globalFun.getSessionStorage('userInfo')['id']
+                || SUPER_ADMIN_ROLE_ID === this.$globalFun.getSessionStorage('userInfo')['roleId']);
             let that = this;
             return {
                 formOptions: [
@@ -92,7 +92,7 @@
             }
         },
         mounted() {
-           this.initFunTreeSelect();
+            this.initFunTreeSelect();
         },
         methods: {
             initFunTreeSelect() {

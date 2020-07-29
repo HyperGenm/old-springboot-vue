@@ -392,7 +392,7 @@
             //获取数据
             this.getTableList();
             let {url} = this.tableDataRequest;
-            let {id} = this.$store.state.userInfo;
+            let {id} = this.$globalFun.getSessionStorage('userInfo');
             let href = this.$globalFun.md5(window.location.href);
             let columns = localStorage.getItem(`wei-table-columns-${href}-${id}-${url}`);
             //如果本地有展示的字段
@@ -444,7 +444,7 @@
                     _axios['url'] = that.tableDataRequest.allUrl;
                 }
                 //每个请求加上请求头
-                _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
+                _axios['headers'][that.$global.GLOBAL.token] = that.$globalFun.getSessionStorage(`token`) || '';
                 let _data = that.tableDataRequest.data || {};
                 if (that.isPagination) {
                     _data['pageNum'] = that.pageNum;
@@ -558,7 +558,7 @@
                     return;
                 }
                 let {url} = this.tableDataRequest;
-                let {id} = this.$store.state.userInfo;
+                let {id} = this.$globalFun.getSessionStorage('userInfo');
                 let href = this.$globalFun.md5(window.location.href);
                 //将展示的字段放入本地
                 //json对象序列化，并将里面的方法转为字符串

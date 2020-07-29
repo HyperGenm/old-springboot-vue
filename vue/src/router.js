@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 
+/**
+ * 引入全局方法
+ */
+import globalFunction from './utils/global_function';
+
 /*浏览器上面进度条*/
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -42,7 +47,7 @@ function clearAxiosCancelToken() {
  * @returns {{children: Array, haveHomePage: boolean}}
  */
 function handleRouterChildren() {
-    let routersTree = store.state.routers.routersTree;
+    let routersTree = globalFunction.getSessionStorage('menuTree');
     let routers = [];
     let haveHomePage = false;
     routersTree.forEach((value) => {
@@ -113,7 +118,7 @@ router.beforeEach((to, from, next) => {
     clearAxiosCancelToken();
     //浏览器上方显示进度条
     NProgress.start();
-    const token = store.state.token;
+    const token = globalFunction.getSessionStorage(`token`);
     if ((null == token || '' === token) && 'login' !== to.name) {
         next('/login');
         return;
@@ -128,9 +133,15 @@ router.beforeEach((to, from, next) => {
             children
         }];
         router.addRoutes(parentRouters);
+        let lastToPath = globalFunction.getSessionStorage('lastToPath');
+        if (null != lastToPath && '' !== lastToPath) {
+            next(lastToPath);
+            return;
+        }
         next(haveHomePage ? '/home' : children[0]['path'] || '/');
         return;
     }
+    globalFunction.setSessionStorage('lastToPath', to.path);
     //正常放行
     next();
 });

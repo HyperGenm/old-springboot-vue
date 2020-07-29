@@ -1,30 +1,32 @@
 <template>
     <div id="login">
-        <el-form class="login-form" ref="form" :model="form" :rules="rules" label-position="left">
-            <h3 class="title">WeiziPlus</h3>
-            <el-form-item prop="username">
-                <el-input name="username" type="text" clearable
-                          v-model="form.username" placeholder="用户名"/>
-            </el-form-item>
-            <el-form-item prop="password">
-                <el-input name="password" type="password" show-password @change="handleLogin"
-                          v-model="form.password" placeholder="密码"/>
-            </el-form-item>
-            <el-row>
-                <el-col :span="16">
-                    <el-form-item prop="code">
-                        <el-input @change="handleLogin" v-model="form.code" placeholder="验证码"/>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6" :offset="2">
-                    <div class="code" @click="changeCode">
-                        <img :src="imgCodeUrl" alt="验证码">
-                    </div>
-                </el-col>
-            </el-row>
+        <el-form ref="form" class="container" :model="form" :rules="rules">
+            <h3 class="title">系统登录</h3>
             <el-form-item>
-                <el-button v-loading="loginLoad" type="primary" class="btn" @click="handleLogin">
-                    登录
+                <el-input autocomplete placeholder="用户名"
+                          v-model="form.username"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input type="password" placeholder="密码"
+                          v-model="form.password"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-input v-model="form.code" placeholder="验证码"
+                                  @change="handleLogin"/>
+                    </el-col>
+                    <el-col :span="10" :offset="2">
+                        <img alt="验证码"
+                             :src="imgCodeUrl"
+                             @click="changeCode">
+                    </el-col>
+                </el-row>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" style="width: 100%;"
+                           :loading="loginLoad"
+                           @click="handleLogin">登录
                 </el-button>
             </el-form-item>
         </el-form>
@@ -112,16 +114,15 @@
                                 that.$globalFun.errorMsg("您还没有可用菜单，请联系管理员添加");
                                 return;
                             }
-                            that.$store.dispatch('setUserInfo', userInfo);
-                            that.$store.dispatch('setToken', token);
+                            that.$globalFun.setSessionStorage(`token`, token);
+                            that.$globalFun.setSessionStorage('userInfo', userInfo);
                             let roleButtons = {};
                             res.data['roleButtons'].forEach((value) => {
                                 roleButtons[value.name] = true;
                             });
-                            that.$store.dispatch('setRole', {
-                                name: role,
-                                buttons: roleButtons
-                            });
+                            that.$globalFun.setSessionStorage('buttonMap', roleButtons);
+                            that.$globalFun.setSessionStorage('role', role);
+                            that.$globalFun.setSessionStorage('menuTree', routerTree);
                             that.handleRouter(routerTree);
                         }
                     });
@@ -206,86 +207,37 @@
     };
 </script>
 
-<style lang="scss">
-    /* reset element-ui css */
-    #login {
-        .el-input {
-            display: inline-block;
-            height: 47px;
-            width: 90%;
-            input {
-                background: transparent;
-                border: 0;
-                -webkit-appearance: none;
-                border-radius: 0;
-                padding: 12px 5px 12px 15px;
-                color: #eee;
-                height: 47px;
-                &:-webkit-autofill {
-                    -webkit-box-shadow: 0 0 0 1000px #2d3a4b inset !important;
-                    -webkit-text-fill-color: #fff !important;
-                }
-            }
-        }
-        .el-form-item {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            color: #454545;
-        }
-    }
-</style>
-
 <style lang="scss" scoped>
     #login {
         position: fixed;
-        height: 100%;
+        top: 0;
         width: 100%;
+        bottom: 0;
         background: url("../../assets/loginBg.jpg") no-repeat;
         background-size: 100% 100%;
-        .login-form {
-            position: absolute;
-            left: 0;
-            right: 0;
-            width: 520px;
-            padding: 35px 35px 15px 35px;
-            margin: 120px auto;
-            .btn {
-                width: 100%;
-            }
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 100%;
         }
+
+        .container {
+            border-radius: 15px;
+            margin: 0 auto;
+            width: 350px;
+            padding: 35px 35px 15px 35px;
+            background: #fff;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 0 7px #cac6c6;
+        }
+
         .title {
-            font-size: 26px;
-            color: #eee;
             margin: 0 auto 40px auto;
             text-align: center;
-            font-weight: bold;
+            color: #505458;
         }
-        .code {
-            border-radius: 5px;
-            height: 47px;
-            line-height: 47px;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            img {
-                width: 100%;
-                height: 47px;
-                line-height: 47px;
-            }
-        }
-    }
 
-    @media screen and (min-width: 666px) {
-        #login .login-form {
-            width: 520px;
-        }
-    }
-
-    @media screen and (max-width: 666px) {
-        #login .login-form {
-            width: 72%;
-        }
     }
 
 </style>

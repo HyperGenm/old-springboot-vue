@@ -186,12 +186,6 @@ function consoleWarnTable(msg, object = {}) {
 }
 
 /**
- * session中存放的key前缀
- * @type {string}
- */
-const sessionStorageItemKeyPrefix = 'weiziplus_';
-
-/**
  * 获取session存储的数据
  * @param key
  * @returns {*}
@@ -200,7 +194,8 @@ function getSessionStorage(key) {
     if (null == key) {
         return null;
     }
-    return JSON.parse(sessionStorage.getItem(sessionStorageItemKeyPrefix + key));
+    key += `weiziplus-${key}`;
+    return JSON.parse(sessionStorage.getItem(key));
 }
 
 /**
@@ -212,7 +207,8 @@ function setSessionStorage(key, value = '') {
     if (null == key) {
         return;
     }
-    sessionStorage.setItem(sessionStorageItemKeyPrefix + key, JSON.stringify(value));
+    key += `weiziplus-${key}`;
+    sessionStorage.setItem(key, JSON.stringify(value));
 }
 
 /**

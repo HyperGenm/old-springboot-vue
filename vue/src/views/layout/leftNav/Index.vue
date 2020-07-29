@@ -5,7 +5,7 @@
                 <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"
                          router unique-opened
                          :default-active="$route.path" :collapse="menuCollapse">
-                    <div v-for="item in $store.state.routers.routersTree" :key="item.name">
+                    <div v-for="item in menuTree" :key="item.name">
                         <el-menu-item v-if="null == item.children || 0 >= item.children.length"
                                       :index="'/' + item.path">
                             <i :class="item['icon'] || 'el-icon-info'"></i>
@@ -36,6 +36,14 @@
                 type: Boolean,
                 default: false
             }
+        },
+        data() {
+            return {
+                menuTree: []
+            }
+        },
+        mounted() {
+            this.menuTree = this.$globalFun.getSessionStorage('menuTree');
         }
     }
 </script>

@@ -45,7 +45,7 @@
             //获取用户角色所拥有的按钮
             let {
                 sysUser_add, sysUser_update, sysUser_delete, sysUser_role, sysUser_resetPwd
-            } = that.$store.state.role['buttons'];
+            } = this.$globalFun.getSessionStorage('buttonMap');
             //获取超级用户id(一般用不到)
             let SUPER_ADMIN_ID = that.$global.GLOBAL.super_admin_id;
             //获取超级管理员id(一般用不到)

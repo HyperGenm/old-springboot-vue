@@ -297,7 +297,7 @@
                     }
                 }
                 //每个请求加上请求头
-                headers[that.$global.GLOBAL.token] = that.$store.state.token || '';
+                headers[that.$global.GLOBAL.token] = that.$globalFun.getSessionStorage(`token`) || '';
                 axios({
                     headers,
                     method: 'post',

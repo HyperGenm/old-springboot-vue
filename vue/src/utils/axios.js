@@ -75,7 +75,7 @@ export function weiAxios(
             timeout
         };
         //每个请求加上请求头
-        _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
+        _axios['headers'][that.$global.GLOBAL.token] = that.$globalFun.getSessionStorage(`token`) || '';
         /***请求的url是否为全部url***/
         if (allUrl) {
             _axios['url'] = url;
@@ -198,7 +198,7 @@ export function weiAxiosDown(
             headers: {},
         };
         //每个请求加上请求头
-        _axios['headers'][that.$global.GLOBAL.token] = that.$store.state.token || '';
+        _axios['headers'][that.$global.GLOBAL.token] = that.$globalFun.getSessionStorage(`token`) || '';
         /**axios请求参数添加随机字符串*/
         data['__t'] = (new Date()).getTime();
         /**axios请求处理不同请求方式时的参数*/
