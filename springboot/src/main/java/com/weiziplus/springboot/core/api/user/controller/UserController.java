@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author wanglongwei
@@ -47,7 +46,7 @@ public class UserController {
     })
     @GetMapping("/getUserList")
     @AuthTokenIgnore
-    public ResultUtils<PageUtils<List<User>>> getUserList(Integer pageNum, Integer pageSize) {
+    public ResultUtils<PageUtils<User>> getUserList(Integer pageNum, Integer pageSize) {
         return service.getUserList(pageNum, pageSize);
     }
 

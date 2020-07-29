@@ -33,7 +33,7 @@ public class SysRoleController {
      */
     @GetMapping("/getAllRoleTreePageList")
     @SysUserLog(description = "查看角色树数据")
-    public ResultUtils<PageUtils<List<SysRole>>> getAllRoleTreePageList() {
+    public ResultUtils<PageUtils<SysRole>> getAllRoleTreePageList() {
         return service.getAllRoleTreePageList();
     }
 

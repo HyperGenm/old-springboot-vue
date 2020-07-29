@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * @author wanglongwei
  * @date 2020/03/21 15/13
@@ -31,12 +29,12 @@ public class SysErrorService extends BaseService {
      * @param createTime
      * @return
      */
-    public ResultUtils<PageUtils<List<SysError>>> getPageList(Integer pageNum, Integer pageSize, String createTime) {
+    public ResultUtils<PageUtils<SysError>> getPageList(Integer pageNum, Integer pageSize, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtils.error("pageNum,pageSize错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<SysError>> pageUtil = PageUtils.pageInfo(mapper.getList(createTime));
+        PageUtils<SysError> pageUtil = PageUtils.pageInfo(mapper.getList(createTime));
         return ResultUtils.success(pageUtil);
     }
 }

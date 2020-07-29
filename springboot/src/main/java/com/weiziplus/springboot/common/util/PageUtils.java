@@ -30,8 +30,8 @@ public class PageUtils<T> implements Serializable {
     @ApiModelProperty("数据")
     private List list;
 
-    public static <T> PageUtils<T> pageInfo(List list) {
-        PageInfo pageInfo = new PageInfo(list);
+    public static <T> PageUtils<T> pageInfo(List<T> list) {
+        PageInfo<T> pageInfo = new PageInfo<>(list);
         PageUtils<T> pageUtil = new PageUtils<>();
         pageUtil.setPageNum(pageInfo.getPageNum());
         pageUtil.setPageSize(pageInfo.getSize());

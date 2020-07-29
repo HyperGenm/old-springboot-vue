@@ -36,7 +36,7 @@ public class SysFunctionController {
      */
     @GetMapping("/getAllFunctionTreePageList")
     @SysUserLog(description = "查看功能树形数据")
-    public ResultUtils<PageUtils<List<SysFunction>>> getAllFunctionTreePageList() {
+    public ResultUtils<PageUtils<SysFunction>> getAllFunctionTreePageList() {
         return service.getAllFunctionTreePageList();
     }
 

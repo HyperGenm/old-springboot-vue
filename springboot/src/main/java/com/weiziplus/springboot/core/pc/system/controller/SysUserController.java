@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author wanglongwei
@@ -42,7 +41,7 @@ public class SysUserController {
      */
     @GetMapping("/getPageList")
     @SysUserLog(description = "查看用户列表")
-    public ResultUtils<PageUtils<List<SysUserVo>>> getPageList(
+    public ResultUtils<PageUtils<SysUserVo>> getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "userName", required = false) String userName,

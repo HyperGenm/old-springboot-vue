@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
-
 /**
  * @author wanglongwei
  * @date 2019/5/13 15:33
@@ -30,7 +28,7 @@ public class UserLogController {
 
     @GetMapping("/getPageList")
     @SysUserLog(description = "查看用户日志")
-    public ResultUtils<PageUtils<List<LogVo>>> getPageList(
+    public ResultUtils<PageUtils<LogVo>> getPageList(
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "username", required = false) String username,

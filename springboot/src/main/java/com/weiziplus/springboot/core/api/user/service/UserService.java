@@ -49,7 +49,7 @@ public class UserService extends BaseService {
      * @param pageSize
      * @return
      */
-    public ResultUtils<PageUtils<List<User>>> getUserList(Integer pageNum, Integer pageSize) {
+    public ResultUtils<PageUtils<User>> getUserList(Integer pageNum, Integer pageSize) {
         //模拟redis使用
         String key = createRedisKey(BASE_REDIS_KEY + "getUserList", pageNum, pageSize);
         Object object = RedisUtils.get(key);
@@ -60,7 +60,7 @@ public class UserService extends BaseService {
         PageHelper.startPage(pageNum, pageSize);
         List<User> userList = baseFindAllByClass(User.class);
         RedisUtils.set(key, userList);
-        PageUtils<List<User>> pageUtil = PageUtils.pageInfo(userList);
+        PageUtils<User> pageUtil = PageUtils.pageInfo(userList);
         return ResultUtils.success(pageUtil);
     }
 

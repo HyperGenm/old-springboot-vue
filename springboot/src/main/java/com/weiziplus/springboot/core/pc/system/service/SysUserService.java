@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 /**
  * @author wanglongwei
@@ -42,12 +41,12 @@ public class SysUserService extends BaseService {
      * @param allowLogin
      * @return
      */
-    public ResultUtils<PageUtils<List<SysUserVo>>> getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
+    public ResultUtils<PageUtils<SysUserVo>> getPageList(Integer pageNum, Integer pageSize, String userName, Long roleId, Integer allowLogin, String lastActiveTime, String createTime) {
         if (0 >= pageNum || 0 >= pageSize) {
             return ResultUtils.error("pageNum,pageSize错误");
         }
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<SysUserVo>> pageUtil = PageUtils.pageInfo(mapper.getListVo(userName, roleId, allowLogin, lastActiveTime, createTime));
+        PageUtils<SysUserVo> pageUtil = PageUtils.pageInfo(mapper.getListVo(userName, roleId, allowLogin, lastActiveTime, createTime));
         return ResultUtils.success(pageUtil);
     }
 

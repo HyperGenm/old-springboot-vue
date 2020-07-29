@@ -5,12 +5,8 @@ import com.weiziplus.springboot.common.util.PageUtils;
 import com.weiziplus.springboot.common.util.ResultUtils;
 import com.weiziplus.springboot.core.pc.system.mapper.UserLogMapper;
 import com.weiziplus.springboot.core.pc.system.vo.LogVo;
-import com.weiziplus.springboot.core.pc.system.vo.SysLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author wanglongwei
@@ -29,9 +25,9 @@ public class UserLogService {
      * @param pageSize
      * @return
      */
-    public ResultUtils<PageUtils<List<LogVo>>> getPageList(Integer pageNum, Integer pageSize, String username, String url, Integer type, String description, String ipAddress, String startTime, String endTime) {
+    public ResultUtils<PageUtils<LogVo>> getPageList(Integer pageNum, Integer pageSize, String username, String url, Integer type, String description, String ipAddress, String startTime, String endTime) {
         PageHelper.startPage(pageNum, pageSize);
-        PageUtils<List<LogVo>> pageUtil = PageUtils.pageInfo(mapper.getList(username, url, type, description, ipAddress, startTime, endTime));
+        PageUtils<LogVo> pageUtil = PageUtils.pageInfo(mapper.getList(username, url, type, description, ipAddress, startTime, endTime));
         return ResultUtils.success(pageUtil);
     }
 }
