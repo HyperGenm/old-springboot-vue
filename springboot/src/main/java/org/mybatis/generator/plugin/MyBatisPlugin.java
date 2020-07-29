@@ -47,9 +47,9 @@ public class MyBatisPlugin extends PluginAdapter {
         }
         //添加import
         topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonInclude");
-        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Column");
-        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Id");
-        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.Table");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.BaseColumn");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.BaseId");
+        topLevelClass.addImportedType("com.weiziplus.springboot.common.base.BaseTable");
         topLevelClass.addImportedType("lombok.Data");
         topLevelClass.addImportedType("lombok.experimental.Accessors");
         topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
@@ -68,11 +68,11 @@ public class MyBatisPlugin extends PluginAdapter {
         }
         FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
         //添加@注解
+        topLevelClass.addAnnotation("@BaseTable(\"" + fullyQualifiedTable + "\")");
+        topLevelClass.addAnnotation("@Alias(\"" + underlineToCamelHump(fullyQualifiedTable.toString()) + "\")");
         topLevelClass.addAnnotation("@JsonInclude(JsonInclude.Include.NON_NULL)");
         topLevelClass.addAnnotation("@Data");
-        topLevelClass.addAnnotation("@Table(\"" + fullyQualifiedTable + "\")");
         topLevelClass.addAnnotation("@Accessors(chain = true)");
-        topLevelClass.addAnnotation("@Alias(\"" + underlineToCamelHump(fullyQualifiedTable.toString()) + "\")");
 
         //设置类上面的注释
         topLevelClass.addJavaDocLine("/**");
@@ -111,6 +111,12 @@ public class MyBatisPlugin extends PluginAdapter {
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
+        String actualColumnName = introspectedColumn.getActualColumnName();
+        if (introspectedTable.getPrimaryKeyColumns().contains(introspectedColumn)) {
+            field.addAnnotation("@BaseId(\"" + actualColumnName + "\")");
+        } else {
+            field.addAnnotation("@BaseColumn(\"" + actualColumnName + "\")");
+        }
         field.addJavaDocLine("/**");
         String remarks = introspectedColumn.getRemarks();
         if (StringUtility.stringHasValue(remarks)) {
@@ -121,12 +127,6 @@ public class MyBatisPlugin extends PluginAdapter {
             field.addAnnotation("@ApiModelProperty(\"" + remarks.replace("\r\n", " ") + "\")");
         }
         field.addJavaDocLine(" */");
-        String actualColumnName = introspectedColumn.getActualColumnName();
-        if (introspectedTable.getPrimaryKeyColumns().contains(introspectedColumn)) {
-            field.addAnnotation("@Id(\"" + actualColumnName + "\")");
-        } else {
-            field.addAnnotation("@Column(\"" + actualColumnName + "\")");
-        }
         return true;
     }
 
@@ -171,13 +171,4 @@ public class MyBatisPlugin extends PluginAdapter {
         return result.toString();
     }
 
-    /**
-     * 驼峰转为下划线
-     *
-     * @param str
-     * @return
-     */
-    public String cam1eHumpToUnderline(String str) {
-        return str.replaceAll("[A-Z]", "_$0").toUpperCase();
-    }
 }

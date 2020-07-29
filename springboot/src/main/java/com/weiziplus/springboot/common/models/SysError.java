@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,56 +20,56 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("sys_error")
+@BaseTable("sys_error")
 @Accessors(chain = true)
 @Alias("SysError")
 @ApiModel("系统异常")
 public class SysError implements Serializable {
     /**
      */
-    @Id("id")
+    @BaseId("id")
     private Long id;
 
     /**
      * 类名
      */
     @ApiModelProperty("类名")
-    @Column("class_name")
+    @BaseColumn("class_name")
     private String className;
 
     /**
      * 方法名
      */
     @ApiModelProperty("方法名")
-    @Column("method_name")
+    @BaseColumn("method_name")
     private String methodName;
 
     /**
      * 第几行
      */
     @ApiModelProperty("第几行")
-    @Column("line_number")
+    @BaseColumn("line_number")
     private Integer lineNumber;
 
     /**
      * 详情
      */
     @ApiModelProperty("详情")
-    @Column("content")
+    @BaseColumn("content")
     private String content;
 
     /**
      * 备注
      */
     @ApiModelProperty("备注")
-    @Column("remark")
+    @BaseColumn("remark")
     private String remark;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private static final long serialVersionUID = 1L;

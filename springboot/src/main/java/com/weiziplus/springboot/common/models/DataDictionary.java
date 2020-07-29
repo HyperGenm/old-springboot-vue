@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("data_dictionary")
+@BaseTable("data_dictionary")
 @Accessors(chain = true)
 @Alias("DataDictionary")
 @ApiModel("数据字典表")
@@ -29,35 +29,35 @@ public class DataDictionary implements Serializable {
      * 自增
      */
     @ApiModelProperty("自增")
-    @Id("id")
+    @BaseId("id")
     private Integer id;
 
     /**
      * 字典标识
      */
     @ApiModelProperty("字典标识")
-    @Column("code")
+    @BaseColumn("code")
     private String code;
 
     /**
      * 字典名字
      */
     @ApiModelProperty("字典名字")
-    @Column("name")
+    @BaseColumn("name")
     private String name;
 
     /**
      * 字典备注
      */
     @ApiModelProperty("字典备注")
-    @Column("remark")
+    @BaseColumn("remark")
     private String remark;
 
     /**
      * 字典创建时间
      */
     @ApiModelProperty("字典创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private static final long serialVersionUID = 1L;

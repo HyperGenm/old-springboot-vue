@@ -42,7 +42,7 @@ public class ToolUtils {
      * @return
      */
     public static String createUUID() {
-        return UUID.randomUUID().toString().replace("-", "");
+        return UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
 
     /**
@@ -171,5 +171,17 @@ public class ToolUtils {
      */
     public static String reverse(String string) {
         return new StringBuffer(string).reverse().toString();
+    }
+
+    /**
+     * 创建集合初始化容量
+     *
+     * @param needNum
+     * @return
+     */
+    public static int initialCapacity(int needNum) {
+        //负载因子
+        float loaderFactor = 0.75F;
+        return (int) ((float) needNum * loaderFactor + 1);
     }
 }

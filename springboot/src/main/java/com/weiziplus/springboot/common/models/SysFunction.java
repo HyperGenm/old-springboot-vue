@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("sys_function")
+@BaseTable("sys_function")
 @Accessors(chain = true)
 @Alias("SysFunction")
 @ApiModel("系统功能表")
@@ -31,77 +31,77 @@ public class SysFunction implements Serializable {
      * 系统功能表主键，自增
      */
     @ApiModelProperty("系统功能表主键，自增")
-    @Id("id")
+    @BaseId("id")
     private Integer id;
 
     /**
      * 上级id
      */
     @ApiModelProperty("上级id")
-    @Column("parent_id")
+    @BaseColumn("parent_id")
     private Integer parentId;
 
     /**
      * 功能唯一标识
      */
     @ApiModelProperty("功能唯一标识")
-    @Column("name")
+    @BaseColumn("name")
     private String name;
 
     /**
      * 功能路径
      */
     @ApiModelProperty("功能路径")
-    @Column("path")
+    @BaseColumn("path")
     private String path;
 
     /**
      * 功能标题
      */
     @ApiModelProperty("功能标题")
-    @Column("title")
+    @BaseColumn("title")
     private String title;
 
     /**
      * 当前功能对应的api列表，多个用,隔开
      */
     @ApiModelProperty("当前功能对应的api列表，多个用,隔开")
-    @Column("contain_api")
+    @BaseColumn("contain_api")
     private String containApi;
 
     /**
      * 功能类型;0:菜单,1:按钮
      */
     @ApiModelProperty("功能类型;0:菜单,1:按钮")
-    @Column("type")
+    @BaseColumn("type")
     private Integer type;
 
     /**
      * 功能图标
      */
     @ApiModelProperty("功能图标")
-    @Column("icon")
+    @BaseColumn("icon")
     private String icon;
 
     /**
      * 功能排序，数字越小越靠前
      */
     @ApiModelProperty("功能排序，数字越小越靠前")
-    @Column("sort")
+    @BaseColumn("sort")
     private Integer sort;
 
     /**
      * 功能描述
      */
     @ApiModelProperty("功能描述")
-    @Column("description")
+    @BaseColumn("description")
     private String description;
 
     /**
      * 功能创建时间
      */
     @ApiModelProperty("功能创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private List<SysFunction> children;

@@ -37,4 +37,15 @@ public class Md5Utils {
     public static String encode(Object object) {
         return encode(ToolUtils.valueOfString(object));
     }
+
+    /**
+     * 16位
+     *
+     * @param str
+     * @return
+     */
+    public static String encode16(String str) {
+        String encode = encode(str);
+        return encode.substring(8, 24);
+    }
 }

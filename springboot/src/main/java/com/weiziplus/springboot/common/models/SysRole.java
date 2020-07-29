@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("sys_role")
+@BaseTable("sys_role")
 @Accessors(chain = true)
 @Alias("SysRole")
 @ApiModel("系统角色表")
@@ -31,49 +31,49 @@ public class SysRole implements Serializable {
      * 系统角色表主键，自增
      */
     @ApiModelProperty("系统角色表主键，自增")
-    @Id("id")
+    @BaseId("id")
     private Integer id;
 
     /**
      * 上级角色id
      */
     @ApiModelProperty("上级角色id")
-    @Column("parent_id")
+    @BaseColumn("parent_id")
     private Integer parentId;
 
     /**
      * 角色名称
      */
     @ApiModelProperty("角色名称")
-    @Column("name")
+    @BaseColumn("name")
     private String name;
 
     /**
      * 是否启用;0:启用,1:禁用
      */
     @ApiModelProperty("是否启用;0:启用,1:禁用")
-    @Column("is_stop")
+    @BaseColumn("is_stop")
     private Integer isStop;
 
     /**
      * 排序，数字越小越靠前
      */
     @ApiModelProperty("排序，数字越小越靠前")
-    @Column("sort")
+    @BaseColumn("sort")
     private Integer sort;
 
     /**
      * 角色描述
      */
     @ApiModelProperty("角色描述")
-    @Column("description")
+    @BaseColumn("description")
     private String description;
 
     /**
      * 角色创建时间
      */
     @ApiModelProperty("角色创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private List<SysRole> children;

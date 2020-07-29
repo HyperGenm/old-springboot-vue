@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("data_dictionary_value")
+@BaseTable("data_dictionary_value")
 @Accessors(chain = true)
 @Alias("DataDictionaryValue")
 @ApiModel("数据字典值")
@@ -30,28 +30,28 @@ public class DataDictionaryValue implements Serializable {
      * 自增
      */
     @ApiModelProperty("自增")
-    @Id("id")
+    @BaseId("id")
     private Integer id;
 
     /**
      * 字典编号
      */
     @ApiModelProperty("字典编号")
-    @Column("dictionary_code")
+    @BaseColumn("dictionary_code")
     private String dictionaryCode;
 
     /**
      * 名称
      */
     @ApiModelProperty("名称")
-    @Column("name")
+    @BaseColumn("name")
     private String name;
 
     /**
      * 值
      */
     @ApiModelProperty("值")
-    @Column("value")
+    @BaseColumn("value")
     private String value;
 
     /**
@@ -59,21 +59,21 @@ public class DataDictionaryValue implements Serializable {
      * 1:ipListAbnormal---异常次数
      */
     @ApiModelProperty("含义自定   1:ipListAbnormal---异常次数")
-    @Column("num")
+    @BaseColumn("num")
     private Integer num;
 
     /**
      * 备注
      */
     @ApiModelProperty("备注")
-    @Column("remark")
+    @BaseColumn("remark")
     private String remark;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private static final long serialVersionUID = 1L;

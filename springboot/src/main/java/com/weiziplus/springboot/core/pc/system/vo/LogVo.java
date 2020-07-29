@@ -1,7 +1,7 @@
 package com.weiziplus.springboot.core.pc.system.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Id;
+import com.weiziplus.springboot.common.base.BaseId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class LogVo implements Serializable {
     /**
      */
-    @Id("id")
+    @BaseId("id")
     private Long id;
 
     /**

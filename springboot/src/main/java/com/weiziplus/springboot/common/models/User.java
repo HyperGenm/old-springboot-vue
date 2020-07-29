@@ -2,9 +2,9 @@ package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("t_user")
+@BaseTable("t_user")
 @Accessors(chain = true)
 @Alias("TUser")
 @ApiModel("用户表")
@@ -30,21 +30,21 @@ public class User implements Serializable {
      * 用户表主键，自增
      */
     @ApiModelProperty("用户表主键，自增")
-    @Id("id")
+    @BaseId("id")
     private Long id;
 
     /**
      * 用户名
      */
     @ApiModelProperty("用户名")
-    @Column("username")
+    @BaseColumn("username")
     private String username;
 
     /**
      * 密码
      */
     @ApiModelProperty("密码")
-    @Column("password")
+    @BaseColumn("password")
     @JsonIgnore
     private String password;
 
@@ -52,21 +52,21 @@ public class User implements Serializable {
      * 用户最后活跃ip地址
      */
     @ApiModelProperty("用户最后活跃ip地址")
-    @Column("last_ip_address")
+    @BaseColumn("last_ip_address")
     private String lastIpAddress;
 
     /**
      * 用户最后活跃时间
      */
     @ApiModelProperty("用户最后活跃时间")
-    @Column("last_active_time")
+    @BaseColumn("last_active_time")
     private String lastActiveTime;
 
     /**
      * 用户创建时间
      */
     @ApiModelProperty("用户创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private static final long serialVersionUID = 1L;

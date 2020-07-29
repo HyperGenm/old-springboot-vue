@@ -1,9 +1,9 @@
 package com.weiziplus.springboot.common.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.weiziplus.springboot.common.base.Column;
-import com.weiziplus.springboot.common.base.Id;
-import com.weiziplus.springboot.common.base.Table;
+import com.weiziplus.springboot.common.base.BaseColumn;
+import com.weiziplus.springboot.common.base.BaseId;
+import com.weiziplus.springboot.common.base.BaseTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-@Table("sys_user_log")
+@BaseTable("sys_user_log")
 @Accessors(chain = true)
 @Alias("SysUserLog")
 @ApiModel("系统日志表")
@@ -29,56 +29,56 @@ public class SysUserLog implements Serializable {
      * 系统日志表主键，自增
      */
     @ApiModelProperty("系统日志表主键，自增")
-    @Id("id")
+    @BaseId("id")
     private Long id;
 
     /**
      * 用户表id
      */
     @ApiModelProperty("用户表id")
-    @Column("user_id")
+    @BaseColumn("user_id")
     private Long userId;
 
     /**
      * 请求的url
      */
     @ApiModelProperty("请求的url")
-    @Column("url")
+    @BaseColumn("url")
     private String url;
 
     /**
      * 当前请求的参数
      */
     @ApiModelProperty("当前请求的参数")
-    @Column("param")
+    @BaseColumn("param")
     private String param;
 
     /**
      * 请求的类型,1:查询,2:新增,3:修改,4:删除
      */
     @ApiModelProperty("请求的类型,1:查询,2:新增,3:修改,4:删除")
-    @Column("type")
+    @BaseColumn("type")
     private Integer type;
 
     /**
      * 操作描述
      */
     @ApiModelProperty("操作描述")
-    @Column("description")
+    @BaseColumn("description")
     private String description;
 
     /**
      * ip地址
      */
     @ApiModelProperty("ip地址")
-    @Column("ip_address")
+    @BaseColumn("ip_address")
     private String ipAddress;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    @Column("create_time")
+    @BaseColumn("create_time")
     private String createTime;
 
     private static final long serialVersionUID = 1L;
