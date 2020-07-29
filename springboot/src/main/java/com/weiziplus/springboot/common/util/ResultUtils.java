@@ -56,7 +56,7 @@ public class ResultUtils<T> implements Serializable {
     /**
      * 成功
      */
-    private static final Integer SUCCESS_CODE = 200;
+    public static final Integer SUCCESS_CODE = 200;
 
     /**
      * 成功

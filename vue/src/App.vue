@@ -31,8 +31,6 @@
         height: 100%;
     }
 
-    $loadingWidth: 500;
-
     /*指令加载中动画*/
     .el-loading-mask.is-fullscreen {
         background-color: #3b2d47 !important;
@@ -45,13 +43,11 @@
             i {
                 background: url("./assets/image/loading.gif") no-repeat;
                 background-size: 100% 100%;
-                width: $loadingWidth + px;
-                height: $loadingWidth + px;
                 position: absolute;
-                left: 50%;
-                margin-left: - ($loadingWidth / 2) + px;
-                top: 50%;
-                margin-top: - ($loadingWidth / 2) + px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
                 &:before {
                     content: none;
                 }

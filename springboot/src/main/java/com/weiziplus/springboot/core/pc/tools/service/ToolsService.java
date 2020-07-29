@@ -26,12 +26,12 @@ public class ToolsService extends BaseService {
      * @return
      */
     public ResultUtils upload(MultipartFile file) {
-        String path = FileUtils.upFile(file);
-        if (null == path) {
-            return ResultUtils.error("文件上传失败，请重试");
+        ResultUtils<String> stringResultUtils = FileUtils.upImage(file);
+        if (!ResultUtils.SUCCESS_CODE.equals(stringResultUtils.getCode())) {
+            return ResultUtils.error(stringResultUtils.getMsg());
         }
         return ResultUtils.success(new HashMap<String, String>(1) {{
-            put("path", path);
+            put("path", stringResultUtils.getData());
         }});
     }
 
