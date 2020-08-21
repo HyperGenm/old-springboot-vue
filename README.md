@@ -1,7 +1,7 @@
 # springboot2-vue3
 *一款基于springboot2和vue3的后台通用模板，没有多余的功能，只有 *权限管理* 和常用功能* 。前后端分离项目，代码通过90% *阿里巴巴编码规约扫描* 、 *findbugs*
 
-# [新版地址](https://gitee.com/WeiziPlus/springboot-vue)   
+# [新版地址](https://gitee.com/WeiziPlus/muteki)   
     * 本项目不再维护，请关注新版
 
 ## 上手指南
